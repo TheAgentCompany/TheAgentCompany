@@ -2,7 +2,7 @@ version: '0.1'
 services:
   gitlab:
     build:
-      context: ./gitlab  # Assuming the Dockerfile is in a subdirectory named 'gitlab'
+      context: ./gitlab
     container_name: gitlab
     ports:
       - '8929:8929'
