@@ -1,15 +1,16 @@
 SHELL = /bin/bash
-.SHELLFLAGS = -x -e
 
 GITLAB_HOME?=/home/fangzhex/ogma3/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/fangzhex/ogma3/jobbench_nextcloud
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
 
+.PHONY: init start-all stop-all start-nextcloud stop-nextcloud start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password
+
 init:
-	@export GITLAB_HOME
-	@export NEXTCLOUD_HOME
-	@export HOSTNAME
+	$(eval export GITLAB_HOME)
+	$(eval export NEXTCLOUD_HOME)
+	$(eval export HOSTNAME)
 
 start-all: init
 	docker compose up
