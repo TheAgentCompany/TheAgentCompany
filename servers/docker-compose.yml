@@ -1,0 +1,15 @@
+version: '0.1'
+services:
+  gitlab:
+    build:
+      context: ./gitlab  # Assuming the Dockerfile is in a subdirectory named 'gitlab'
+    container_name: gitlab
+    ports:
+      - '8929:8929'
+      - '443:443'
+      - '2424:22'
+    volumes:
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
+    shm_size: '256m'
