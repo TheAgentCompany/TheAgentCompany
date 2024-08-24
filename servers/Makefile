@@ -4,6 +4,8 @@ GITLAB_HOME?=/home/fangzhex/ogma3/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/fangzhex/ogma3/jobbench_nextcloud
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
+NEXTCLOUD_BACKUP_VOLUME_NAME=nextcloud_aio_backupdir
+NEXTCLOUD_BACKUP_VOLUME_PATH=/home/yufansong/data/backup
 
 .PHONY: init start-all stop-all start-nextcloud stop-nextcloud start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password
 
@@ -18,12 +20,35 @@ start-all: init
 stop-all:
 	docker compose down
 
-start-nextcloud:
+# Nextcloud
+create-nextcloud-backup-volume:
+	docker volume create \
+		--driver local \
+		--name $(NEXTCLOUD_BACKUP_VOLUME_NAME) \
+		-o device=$(NEXTCLOUD_BACKUP_VOLUME_PATH) \
+		-o type="none" \
+		-o o="bind"
+
+rm-nextcloud-backup-volume:
+	docker volume rm $(NEXTCLOUD_BACKUP_VOLUME_NAME)
+
+rm-nextcloud-volume: rm-nextcloud-side-container
+	docker volume ls -q --filter "name=nextcloud" | grep -v "nextcloud_aio_backupdir" | xargs -r docker volume rm
+
+stop-nextcloud-side-container:
+	docker ps -q --filter "name=nextcloud" | xargs -r docker stop
+
+rm-nextcloud-side-container: stop-nextcloud-side-container
+	docker ps -a -q --filter "name=nextcloud" | xargs -r docker rm
+
+start-nextcloud: rm-nextcloud-volume
 	cd nextcloud && docker compose up -d
 
 stop-nextcloud:
 	cd nextcloud && docker compose down
+	$(MAKE) rm-nextcloud-volume
 
+# File server
 start-file-server:
 	cd static && python3 -m http.server 8081 -d files/ &
 
@@ -31,6 +56,7 @@ stop-file-server:
 	@echo "Killing process on port $(FILE_SERVER_PORT)"
 	@lsof -ti :$(FILE_SERVER_PORT) | xargs kill -9 || echo "No process found on port $(FILE_SERVER_PORT)"
 
+# GitLab
 start-gitlab: init
 	docker compose up gitlab
 
