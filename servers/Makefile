@@ -23,7 +23,7 @@ init:
 	$(eval export NEXTCLOUD_PORT)
 
 start-all: init
-	docker compose up
+	docker compose up -d
 
 stop-all: init rm-nextcloud-volume
 	docker compose down
@@ -56,6 +56,15 @@ get-nextcloud-config:
 enter-nextcloud-container:
 	docker exec -it nextcloud-aio-mastercontainer /bin/bash
 
+start-nextcloud: init create-nextcloud-backup-volume
+	docker compose up nextcloud -d
+
+stop-nextcloud: init stop-nextcloud-side-container
+	docker compose stop nextcloud
+
+rm-nextcloud: init rm-nextcloud-volume
+	docker compose rm nextcloud
+
 # File server
 start-file-server:
 	cd static && python3 -m http.server 8081 -d files/ &
@@ -66,10 +75,13 @@ stop-file-server:
 
 # GitLab
 start-gitlab: init
-	docker compose up gitlab
+	docker compose up gitlab -d
 
 stop-gitlab:
-	docker compose down gitlab
+	docker compose stop gitlab
+
+rm-gitlab:
+	docker compose rm gitlab
 
 gitlab-root-password:
 	docker exec -it gitlab bash -c "grep -oP 'Password:\s*\K\S+' /etc/gitlab/initial_root_password"

@@ -20,7 +20,7 @@ services:
       - '$GITLAB_HOME/logs:/var/log/gitlab'
       - '$GITLAB_HOME/data:/var/opt/gitlab'
     shm_size: '256m'
-  nextcloud-aio-mastercontainer:
+  nextcloud:
     image: nextcloud/all-in-one:$NEXTCLOUD_IMAGE_TAG
     init: true
     restart: always
