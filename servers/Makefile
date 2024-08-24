@@ -10,9 +10,9 @@ NEXTCLOUD_BACKUP_VOLUME_PATH=/home/yufansong/data/backup
 NEXTCLOUD_IMAGE_TAG=20240808_083748
 NEXTCLOUD_PORT=8090
 
-.PHONY: init start-all stop-all start-nextcloud stop-nextcloud start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password \
-		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container rm-nextcloud-side-container \
-		get-nextcloud-config enter-nextcloud-container
+.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password \
+		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
+		 rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container
 
 init:
 	$(eval export GITLAB_HOME)
@@ -55,13 +55,6 @@ get-nextcloud-config:
 
 enter-nextcloud-container:
 	docker exec -it nextcloud-aio-mastercontainer /bin/bash
-
-start-nextcloud: init
-	cd nextcloud && docker compose up -d
-
-stop-nextcloud: init rm-nextcloud-volume
-	cd nextcloud && docker compose down
-	$(MAKE) rm-nextcloud-volume
 
 # File server
 start-file-server:
