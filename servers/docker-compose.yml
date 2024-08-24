@@ -12,7 +12,8 @@ services:
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
     ports:
       - '8929:8929'
-      - '443:443'
+      # this port will also used by nextcloud, need to map to another port
+      - '8930:443' 
       - '2424:22'
     volumes:
       - '$GITLAB_HOME/config:/etc/gitlab'

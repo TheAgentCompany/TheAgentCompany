@@ -7,6 +7,19 @@ export NEXTCLOUD_HOME=/home/fangzhex/ogma3/jobbench_nextcloud
 docker compose up -d
 docker ps
 ```
+visit https://ogma.lti.cs.cmu.edu:8090
+
+
+docker exec -it nextcloud-aio-mastercontainer /bin/bash
+docker exec nextcloud-aio-mastercontainer cat /mnt/docker-aio-config/data/configuration.json
+
+data storage in `/mnt/docker-aio-config/data/configuration.json` in docker. 
+
+Instruction about how to reset the nextcloud:
+https://github.com/nextcloud/all-in-one#how-to-properly-reset-the-instance
+
+volume:
+nextcloud_aio_mastercontainer
 
 ### Import data
 
