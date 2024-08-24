@@ -4,8 +4,18 @@ services:
     build:
       context: ./gitlab
     container_name: gitlab
+    restart: always
+    hostname: '$HOSTNAME'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://$HOSTNAME:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
     ports:
       - '8929:8929'
       - '443:443'
       - '2424:22'
+    volumes:
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
     shm_size: '256m'
