@@ -12,6 +12,8 @@ make start-gitlab
 make gitlab-root-password
 ```
 
+Then you can navigate to http://$HOSTNAME:8929 to visit GitLab on your browser.
+
 ### Import data
 
 Check out `gitlab_import` directory.
