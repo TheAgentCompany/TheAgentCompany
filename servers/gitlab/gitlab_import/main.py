@@ -7,13 +7,11 @@ import os
 import pandas as pd
 import sys
 from csv import writer
-from dotenv import load_dotenv
-
-load_dotenv()
-# sys.stdout = open('out.txt', 'a')
 
 GITLAB_ACCESS_TOKEN = os.environ['GITLAB_TOKEN']
 GITHUB_ACCESS_TOKEN = os.environ['GITHUB_TOKEN']
+HOSTNAME = os.environ['HOSTNAME'] or 'ogma.lti.cs.cmu.edu'
+PORT = os.environ['GITLAB_PORT'] or 8929
 
 ROOT_HEADER = {'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN, 'Sudo': 'root'}
 GITHUB_HEADER = {
@@ -34,7 +32,7 @@ def get_github_profile(username):
     return resp['name'], resp['email'], extras
 
 def create_user(username, name, email=None, bio=None, loc=None, org=None):
-    url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users'
+    url = f'http://{HOSTNAME}:{PORT}/api/v4/users'
     body = {
         'email': f'{username}@fakegithub.com' if not email else email,
         'name': name if name else username,
@@ -77,7 +75,7 @@ def get_user_id(username):
     return int(user_id) if script_resp.returncode == 0 else -1
 
 def create_project(user_id, proj_name):
-    project_url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/user/{user_id}'
+    project_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/user/{user_id}'
     body2 = {
         'user_id': user_id,
         'name': proj_name,
@@ -90,7 +88,7 @@ def clone_and_push(username, proj_name):
         subprocess.run(['git', 'clone', '--mirror', f'https://github.com/{username}/{proj_name}'], check=True,
                         stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         subprocess.run(['git', 'remote', 'add', 'gitlab', 
-                        f'http://root:{ACCESS_TOKEN}@ogma.lti.cs.cmu.edu:8929/{username}/{proj_name}.git'],
+                        f'http://root:{ACCESS_TOKEN}@{HOSTNAME}:{PORT}/{username}/{proj_name}.git'],
                         cwd=f'{proj_name}.git', check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         subprocess.run(['git', 'push', '--mirror', 'gitlab'], cwd=f'{proj_name}.git', check=True,
                        stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
@@ -101,7 +99,7 @@ def clone_and_push(username, proj_name):
         shutil.rmtree(f'{proj_name}.git')
 
 def mirror(username, repo_id):
-    mirror_url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/import/github'
+    mirror_url = f'http://{HOSTNAME}:{PORT}/api/v4/import/github'
     body = {
         'personal_access_token': GITHUB_ACCESS_TOKEN,
         'repo_id': repo_id,
@@ -187,7 +185,7 @@ def star_repo(user_id, username, repo_path):
         imp_token = df_filter.token[0]
     else:
         for _ in range(2):
-            imp_url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/{user_id}/impersonation_tokens'
+            imp_url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}/impersonation_tokens'
             body = {
                 'user_id': int(user_id),
                 'name': f'imp_token_{username}',
@@ -201,7 +199,7 @@ def star_repo(user_id, username, repo_path):
                 if isinstance(res, list) and len(res) > 0:   
                     for imp in res:
                         impid = imp['id']
-                        url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/{int(user_id)}/impersonation_tokens/{int(impid)}'
+                        url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{int(user_id)}/impersonation_tokens/{int(impid)}'
                         requests.delete(url, headers=ROOT_HEADER)
             else:
                 break
@@ -213,7 +211,7 @@ def star_repo(user_id, username, repo_path):
             writer_object.writerow(List)
         
     impersonation_header = {'PRIVATE-TOKEN': imp_token}
-    star_url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/{repo_path}/star'
+    star_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{repo_path}/star'
     body2 = {
         'id': repo_path
     }
@@ -265,7 +263,7 @@ def star_with_users_from_list(users_list, repo_path):
         star_repo(user_id, username, repo_path)
     
 def delete_project(username, repo):
-    delete_url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/{username}%2F{repo}'
+    delete_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{username}%2F{repo}'
     body = {
         'id': f'{username}%2F{repo}'
     }
@@ -317,7 +315,7 @@ def get_commits_from_repo():
     
     commit_log = collections.defaultdict(list)
     for project_id in project_ids:    
-        url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/{project_id}/repository/commits'
+        url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{project_id}/repository/commits'
         r = requests.get(url, headers=ROOT_HEADER)
         resp = json.loads(r.text)
         # get the user name and email from the commit
@@ -328,7 +326,7 @@ def get_commits_from_repo():
         json.dump(commit_log, f, indent=4)
 
 def get_all_users():
-    url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users'
+    url = 'http://{HOSTNAME}:{PORT}/api/v4/users'
     users = []
     page = 1
     while True:
@@ -343,7 +341,7 @@ def get_all_users():
         json.dump(users, f, indent=4)
 
 def get_all_projects():
-    url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/projects'
+    url = 'http://{HOSTNAME}:{PORT}/api/v4/projects'
     projects = []
     page = 1
     while True:
@@ -385,14 +383,14 @@ def import_missing_commit_users():
         # update the email of the existing user 
         else:
             user_id = name_to_user[name]['id']
-            url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/{user_id}/emails'
+            url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}/emails'
             # add the email as secondary email
             body = {
                 'email': email,
             }
             r = requests.post(url, json=body, headers=ROOT_HEADER)
             # make the email as primary email
-            url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/{user_id}'
+            url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}'
             body = {
                 'email': email,
                 'commit_email': email,
@@ -408,28 +406,6 @@ def import_missing_commit_users():
                 print(f"Error: {r.status_code}")
     print(f"Added users: {add_num}, Modified users: {modify_num}")
 
-# def tmp():
-#     url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/51/emails'
-#     r = requests.post(url, json={'email': 'shakee.zatsxxx@gmail.com'}, headers=ROOT_HEADER)
-#     r = requests.get(url, headers=ROOT_HEADER)
-#     print(r.text)
-#     exit()
-#     url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/51'
-#     r = requests.put(url, json={'email': 'primary_email@gmail.com', 'skip_reconfirmation': True}, headers=ROOT_HEADER)
-#     print(r.status_code)
-#     url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/51'
-#     r = requests.get(url, headers=ROOT_HEADER)
-#     print(r.json()['email'])
-#     # delete the first email from the list
-#     # get the email id
-#     # r = requests.get(url, headers=ROOT_HEADER)
-#     # email_id = '2684'
-#     # url = f'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/1958/emails/{email_id}'
-#     # r = requests.delete(url, headers=ROOT_HEADER)
-#     # print(r.text)
-#     # url = 'http://ogma.lti.cs.cmu.edu:8929/api/v4/users/1958/emails'
-#     # r = requests.get(url, headers=ROOT_HEADER)
-#     # print(r.text)
  
 if __name__ == '__main__':
     import_missing_commit_users()
