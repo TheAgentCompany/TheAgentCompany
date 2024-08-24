@@ -7,7 +7,8 @@ export NEXTCLOUD_HOME=/home/fangzhex/ogma3/jobbench_nextcloud
 docker compose up -d
 docker ps
 # Some useful command
-# create volume for backup, remeber change the 
+# create volume for backup, remeber change the device path
+# the name nextcloud_aio_backupdir is suggested by official doc, if you don't know what it is, keep it unchange.
 docker volume create \
     --driver local \
     --name nextcloud_aio_backupdir \
