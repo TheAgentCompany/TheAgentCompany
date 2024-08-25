@@ -5,10 +5,10 @@ NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
 GITLAB_PORT?=8929
-NEXTCLOUD_BACKUP_VOLUME_NAME=nextcloud_aio_backupdir
-NEXTCLOUD_BACKUP_VOLUME_PATH=/home/yufansong/data/backup
-NEXTCLOUD_IMAGE_TAG=20240808_083748
-NEXTCLOUD_PORT=8090
+NEXTCLOUD_BACKUP_VOLUME_NAME?=nextcloud_aio_backupdir
+NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
+NEXTCLOUD_IMAGE_TAG?=20240808_083748
+NEXTCLOUD_PORT?=8090
 
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
