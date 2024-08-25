@@ -33,3 +33,9 @@ RUN mkdir -p /workspace
 
 # set the working directory
 WORKDIR /workspace
+
+# COPY file into working directory
+COPY *py /workspace
+
+# keep the container running
+CMD ["tail", "-f", "/dev/null"]
