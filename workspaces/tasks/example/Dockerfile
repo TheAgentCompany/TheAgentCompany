@@ -36,6 +36,7 @@ WORKDIR /workspace
 
 # COPY file into working directory
 COPY *py /workspace
+COPY *sh /workspace
 
 # keep the container running
 CMD ["tail", "-f", "/dev/null"]

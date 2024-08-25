@@ -46,18 +46,30 @@ def test_wiki():
     return
 
 # test access specific internet
+def test_black_white_list():
+    white_list = ['https://www.google.com', 'https://www.github.com']
+    black_list = ['https://www.youtube.com', 'https://www.reddit.com']
+    for url in white_list:
+        if not can_access_website(url):
+            logger.error(f"should can access {url}")
+    for url in black_list:
+        if can_access_website(url):
+            logger.error(f"should not access {url}")
+    return
+
+
 # test block specific internet
-def can_access_website():
+def can_access_website(url):
     try:
-        response = requests.get('https://www.google.com', timeout=5)
+        response = requests.get(url, timeout=5)
         if response.status_code == 200:
-            logger.info("can visit google")
+            logger.info(f"can visit {url}")
             return True
         else:
-            logger.Error("cannot access google")
+            logger.Error(f"cannot access {url}")
             return False
     except requests.RequestException as e:
-        logger.Error("cannot access google")
+        logger.Error(f"cannot access {url}")
         return False
 
 # test mock local API
@@ -66,4 +78,4 @@ def can_access_website():
 if __name__ == "__main__":
     # test_pull_repository()
     # test_wiki()
-    can_access_website()
+    test_black_white_list()
