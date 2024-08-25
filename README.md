@@ -1,5 +1,9 @@
 # JobBench
-A benchmark for agents that could do professional jobs! The main goal is to evaluate AI progress on "AI workers".
+A benchmark for agents that could do professional jobs! The main goal is to evaluate AI progress on "AI workers". This project is funded by Open Philanthropy.
+
+Open Phil Call for Proposal: https://www.openphilanthropy.org/rfp-llm-benchmarks/ 
+
+Our Project: https://www.openphilanthropy.org/grants/carnegie-mellon-university-benchmark-for-web-based-tasks/
 
 Project tracker document: https://docs.google.com/document/d/1w8vjsha5tRHYkLgpJwruFIlsrjNLtH3X_PICpsGW04U/edit?usp=sharing
 
