@@ -5,13 +5,14 @@ import subprocess
 import shutil
 import os
 import pandas as pd
-import sys
+import logging
 from csv import writer
 
-GITLAB_ACCESS_TOKEN = os.environ['GITLAB_TOKEN']
-GITHUB_ACCESS_TOKEN = os.environ['GITHUB_TOKEN']
-HOSTNAME = os.environ['HOSTNAME'] or 'ogma.lti.cs.cmu.edu'
-PORT = os.environ['GITLAB_PORT'] or 8929
+
+GITLAB_ACCESS_TOKEN = os.getenv('GITLAB_TOKEN')
+GITHUB_ACCESS_TOKEN = os.getenv('GITHUB_TOKEN')
+HOSTNAME = os.getenv('HOSTNAME', 'ogma.lti.cs.cmu.edu')
+PORT = int(os.getenv('GITLAB_PORT', 8929))
 
 ROOT_HEADER = {'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN, 'Sudo': 'root'}
 GITHUB_HEADER = {
@@ -408,6 +409,11 @@ def import_missing_commit_users():
 
  
 if __name__ == '__main__':
+    if not GITLAB_ACCESS_TOKEN:
+        raise ValueError("GITLAB_ACCESS_TOKEN cannot be empty or unset.")
+
+    logging.info(f'HOSTNAME: {HOSTNAME}, PORT: {PORT}, GITLAB TOKEN: {GITLAB_ACCESS_TOKEN}')
+
     import_missing_commit_users()
     # import_missing_commit_users()
     # get_all_users()
