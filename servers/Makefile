@@ -10,7 +10,7 @@ NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
 NEXTCLOUD_IMAGE_TAG?=20240808_083748
 NEXTCLOUD_PORT?=8090
 
-.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab gitlab-root-password \
+.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		 rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container
 
@@ -82,6 +82,3 @@ stop-gitlab:
 
 rm-gitlab:
 	docker compose rm gitlab
-
-gitlab-root-password:
-	docker exec -it gitlab bash -c "grep -oP 'Password:\s*\K\S+' /etc/gitlab/initial_root_password"
