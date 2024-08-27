@@ -1,4 +1,3 @@
-version: '0.1'
 services:
   gitlab:
     build:
@@ -21,6 +20,7 @@ services:
       - '$GITLAB_HOME/config:/etc/gitlab'
       - '$GITLAB_HOME/logs:/var/log/gitlab'
       - '$GITLAB_HOME/data:/var/opt/gitlab'
+      - '$GITLAB_HOME/exports:/etc/gitlab_exports'
     shm_size: '256m'
   nextcloud:
     image: nextcloud/all-in-one:$NEXTCLOUD_IMAGE_TAG
