@@ -29,6 +29,14 @@ def check_download():
     else:
         return False
 
+def check_readme_update():
+    # check path exists
+    if os.path.exists('/workspace/janusgraph'):
+        with open('/workspace/janusgraph/README.MD') as f:
+            code_content = f.read()
+            if f"[![JanusGraph logo](new_logo.jpg)](https://janusgraph.org/)" in code_content:
+                return True
+    return False
 def are_images_equal(image_path1, image_path2):
     img1 = Image.open(image_path1)
     img2 = Image.open(image_path2)
@@ -41,3 +49,4 @@ if __name__ == "__main__":
     print(check_url(["ACTION: goto('http://ogma.lti.cs.cmu.edu:8929/root/api-server')","ACTION: goto('https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/')"]))
     print(check_code_clone())
     print(check_download())
+    print(check_readme_update())
