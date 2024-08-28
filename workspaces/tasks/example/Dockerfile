@@ -23,6 +23,9 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python requests library
+RUN pip install requests
+
 RUN mkdir -p -m0755 /var/run/sshd
 
 # symlink python3 to python
