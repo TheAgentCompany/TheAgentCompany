@@ -41,7 +41,9 @@ traffic and might be slow.
 be slow.
 4. Put the downloaded tar file under `servers/gitlab/exports` folder. Note that all tar files are
 ignored by git.
-5. Include the file as part of the Docker image build process.
+5. Include the file as part of the Docker image build process. If you have the image
+built locally before, you may want to remove the old one by running
+`docker container prune; docker image rm servers-gitlab`.
 
 As you can see, the steps 1-3 essentially do a data conversion, transforming data
 from an external source (GitHub) to GitLab proprietary format. In the future, we
