@@ -21,6 +21,7 @@ init:
 	$(eval export GITLAB_PORT)
 	$(eval export NEXTCLOUD_IMAGE_TAG)
 	$(eval export NEXTCLOUD_PORT)
+	@echo "Initialization done."
 
 start-all: init
 	docker compose up -d
