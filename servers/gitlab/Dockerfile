@@ -1,7 +1,11 @@
 FROM gitlab/gitlab-ce:17.3.1-ce.0
 
-COPY custom_wrapper.sh /assets/custom_wrapper.sh
-RUN chmod +x /assets/custom_wrapper.sh
+ENV GITLAB_SKIP_TAIL_LOGS=true
+ENV GITLAB_ROOT_EMAIL="root@local"
+ENV GITLAB_ROOT_PASSWORD="JobBench"
 
-# Use the custom wrapper as the entrypoint
-ENTRYPOINT ["/assets/custom_wrapper.sh"]
+# Copy data and scripts to the image
+COPY . /assets
+
+RUN chmod +x /assets/custom_wrapper.sh
+CMD ["/assets/custom_wrapper.sh"]

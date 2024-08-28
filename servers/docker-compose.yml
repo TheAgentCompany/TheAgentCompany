@@ -6,8 +6,6 @@ services:
     restart: always
     hostname: '$HOSTNAME'
     environment:
-      GITLAB_ROOT_EMAIL: "root@local"
-      GITLAB_ROOT_PASSWORD: "JobBench"
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://$HOSTNAME:$GITLAB_PORT'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
@@ -20,7 +18,6 @@ services:
       - '$GITLAB_HOME/config:/etc/gitlab'
       - '$GITLAB_HOME/logs:/var/log/gitlab'
       - '$GITLAB_HOME/data:/var/opt/gitlab'
-      - '$GITLAB_HOME/exports:/etc/gitlab_exports'
     shm_size: '256m'
   nextcloud:
     image: nextcloud/all-in-one:$NEXTCLOUD_IMAGE_TAG

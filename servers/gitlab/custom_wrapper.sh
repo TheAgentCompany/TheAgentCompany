@@ -1,19 +1,12 @@
 #!/bin/bash
-
-# Make sure we start from a clean state
-rm -rf /etc/gitlab
-rm -rf /var/log/gitlab
-rm -rf /var/opt/gitlab
+set -ex
 
 # Run the original wrapper script, but remove the last five lines
-# NOTE: this magic number 5 comes from the fact that 17.3.1-ce.0 version's
-# Dockerfile has last 5 lines of "tailing logs" and "waiting for SIGTERM",
+# NOTE: this magic number 2 comes from the fact that 17.3.1-ce.0 version's
+# wrapper file has last 2 lines of "waiting for SIGTERM",
 # which we'd like to get rid of
-head -n -5 /assets/wrapper > /tmp/modified_wrapper
+head -n -2 /assets/wrapper > /tmp/modified_wrapper
 source /tmp/modified_wrapper
-
-# Tail all logs (from the original wrapper script)
-gitlab-ctl tail &
 
 echo "GitLab is up and running. Performing post-launch actions..."
 
