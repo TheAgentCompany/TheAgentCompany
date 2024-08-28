@@ -27,7 +27,7 @@ curl --request PUT --header "PRIVATE-TOKEN: root-token" \
 # devnote: add new projects (that are exported from GitLab) here if you'd like to add
 # more repos to the benchmark
 curl --request POST --header "PRIVATE-TOKEN: root-token" --form "path=janusgraph" \
-     --form "file=@/etc/gitlab_exports/janusgraph.tar.gz" "http://localhost:8929/api/v4/projects/import"
+     --form "file=@/assets/exports/janusgraph.tar.gz" "http://localhost:8929/api/v4/projects/import"
 
 # Keep the container running
 wait
