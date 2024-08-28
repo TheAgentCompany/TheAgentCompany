@@ -10,3 +10,16 @@ See instruction here `https://github.com/makeplane/plane/tree/preview/deploy/sel
 First make sure you already run the cluster. Then run `./setup.sh` and choose `3` stop the cluster. 
 Secondly run `./restore.sh <path to backup folder containing *.tar.gz files>`
 In the end, start the cluster again.
+
+# NOTE
+Follow the instruction here: https://docs.plane.so/self-hosting/methods/docker-compose
+How to download the plane:
+```
+curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
+```
+
+# TODO
+Solve the licence problem
+1. Remove `setup.sh` file from a fix version url, change it into curl command
+2. Remove `docker-compose.yaml` Replace the ${APP_RELEASE:-stable} in dockerfile, may need to figure out the how to set the `web_url`
+3. Remove `restore.sh`, let user download it via `setup.sh`
