@@ -83,3 +83,22 @@ stop-gitlab:
 
 rm-gitlab:
 	docker compose rm gitlab
+
+# RocketChat
+start-rocketchat: init
+	docker compose up rocketchat -d
+
+stop-rocketchat:
+	docker compose stop rocketchat
+
+rm-rocketchat:
+	docker compose rm rocketchat
+
+clean-rocketchat-data:
+	docker volume rm rocketchat_mongodb_data
+
+restore-rocketchat:
+	docker exec -i rocketchat-mongodb-1 sh -c 'mongorestore --archive' < db.dump
+
+backup-rocketchat:
+	docker exec rocketchat-mongodb-1 sh -c 'mongodump --archive' > db.dump

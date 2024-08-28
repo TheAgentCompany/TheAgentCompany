@@ -1,5 +1,5 @@
 # How to run
-run `make run` to start the server
+Try make `start-rocketchat` under server directory. It will start at `http://localhost:3000` which is `http://ogma.lti.cs.cmu.edu:3000/` when you launch in server.
 
 # How to backup
 run `make backup` and in the local directory you will get `db.dump`
