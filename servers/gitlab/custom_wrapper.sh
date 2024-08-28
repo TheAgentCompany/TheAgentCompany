@@ -16,10 +16,11 @@ gitlab-rails runner "token = User.find_by_username('root').personal_access_token
     token.set_token('root-token'); \
     token.save!"
 
-# Change configs to enable import from GitLab exports and GitHub
+# Change configs to enable import from GitLab exports
 # in addition, enable project export
+# TODO: figure out how to allow github imports as well
 curl --request PUT --header "PRIVATE-TOKEN: root-token" \
-    "http://localhost:8929/api/v4/application/settings?import_sources=gitlab_project&import_sources=github&project_export_enabled=true"
+    "http://localhost:8929/api/v4/application/settings?import_sources=gitlab_project&project_export_enabled=true"
 
 # Import projects (please make sure they are available at the mounted location)
 # this way, we can build and ship a GitLab image with pre-imported repos
