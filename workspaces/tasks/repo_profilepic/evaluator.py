@@ -3,9 +3,13 @@ import os
 
 from PIL import Image
 import numpy as np
+HOSTNAME = os.getenv('HOSTNAME')
+GITLAB_PORT = os.getenv('GITLAB_PORT'}
+GITLAB_USER = "root"
+GITLAB_URL = f"http://{HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
 def check_url(browser_logs):
-    return "http://ogma.lti.cs.cmu.edu:8929/root/janusgraph" and "https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/" in browser_logs
+    return f"{GITLAB_URL}/root/janusgraph" and "https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/" in browser_logs
 
 def check_code_clone():
     # check path exists
@@ -46,7 +50,7 @@ def are_images_equal(image_path1, image_path2):
 
 
 if __name__ == "__main__":
-    print(check_url(["ACTION: goto('http://ogma.lti.cs.cmu.edu:8929/root/api-server')","ACTION: goto('https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/')"]))
+    print(check_url([f"ACTION: goto('{GITLAB_URL}/root/api-server')","ACTION: goto('https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/')"]))
     print(check_code_clone())
     print(check_download())
     print(check_readme_update())
