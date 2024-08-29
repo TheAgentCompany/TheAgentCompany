@@ -45,4 +45,4 @@ COPY *py /workspace
 COPY *sh /workspace
 
 # keep the container running
-CMD ["tail", "-f", "/dev/null"]
+CMD sh run.sh
