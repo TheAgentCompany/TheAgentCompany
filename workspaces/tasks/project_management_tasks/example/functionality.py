@@ -2,12 +2,20 @@ import os
 import subprocess
 import requests
 import logging
+from rocketchat_API.rocketchat import RocketChat
 
 ############################# init variable ##################################### 
+# HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+# ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 HOSTNAME = 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = '3000'
 CHANNEL_NAME = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
+ADMIN_USERNAME = 'jobbench'
+ADMIN_PASS = 'jobbench'
+
+# Initialize the RocketChat client with username and password
+rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 ############################# util function #####################################  
 # Set up logging
@@ -20,36 +28,23 @@ logging.basicConfig(level=logging.INFO,
     ])
 logger = logging.getLogger("Functionality Test")
 
-def get_headers():
-    """Function to get headers required for API requests."""
-    token = os.getenv('ROCKETCHAT_AUTH_TOKEN') or 'vn_Tadey_p7fHnMExAIpgwxFKjpsW4j4-kCpdmB3epq'
-    user_id = os.getenv('ROCKETCHAT_USER_ID') or 'qgyxXGaG3uzLq7gDt'
-    return {
-        'X-Auth-Token': token,
-        'X-User-Id': user_id,
-        'Content-type': 'application/json',
-    }
-
 ############################# Test function ##################################### 
 
-def find_channel():
-    """Find the #general channel in Rocket.Chat."""
-    response = requests.get(f"{ROCKETCHAT_URL}/api/v1/directory", headers=get_headers())
-    if response.status_code == 200:
-        logger.info("Successfully accessed the channel directory.")
+def find_channel(channel_name):
+    """Find the channel in Rocket.Chat."""
+    response = rocket.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        logger.info(f"Channel #{channel_name} found.")
         return True
     else:
-        logger.error("Failed to access the channel directory.")
+        logger.error(f"Failed to find the #{channel_name} channel.")
         return False
 
+
 def send_message(channel_name, message):
-    """Send a 'Hi' message to the #general channel."""
-    response = requests.post(
-        f"{ROCKETCHAT_URL}/api/v1/chat.postMessage",
-        headers=get_headers(),
-        json={"channel": f"#{channel_name}", "text": message}
-    )
-    if response.status_code == 200:
+    """Send a message to the specified channel."""
+    response = rocket.chat_post_message(message, channel=f"#{channel_name}").json()
+    if response.get('success'):
         logger.info(f"Successfully sent '{message}' to the #{channel_name} channel.")
         return True
     else:
@@ -57,5 +52,6 @@ def send_message(channel_name, message):
         return False
 
 if __name__ == "__main__":
-    if find_channel():
-        send_message(CHANNEL_NAME, "Hi")
+    channel_name = "general"
+    if find_channel(channel_name):
+        send_message(channel_name, "Hi")

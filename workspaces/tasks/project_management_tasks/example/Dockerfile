@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python requests library
 RUN pip install requests
+RUN pip install requests rocketchat_API
 
 RUN mkdir -p -m0755 /var/run/sshd
 
