@@ -13,7 +13,9 @@ Project tracker document: https://docs.google.com/document/d/1w8vjsha5tRHYkLgpJw
 Check the backgroup, detail proposal and design details in [BACKGRROUND.md](./BACKGROUND.md)
 
 ## How to Contribute
-For details, please check [CONTRIBUTING.md](./CONTRIBUTING.md).
+For how to do contribution, please check [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+For how to edit the source code on server side and task image, check [DEVELOPMENT.md](./DEVELOPMENT.md)
 
 ## License
 Distributed under the [MIT](./LICENSE) License. See LICENSE for more information.

@@ -3,6 +3,8 @@
 Thanks for your interest in contributing to JobBench! We welcome and appreciate contributions.
 To report bugs, create a [GitHub issue](https://github.com/neulab/JobBench/issues/new).
 
+If want to know how to edit code on serer side or task image, please echeck [DEVELOPMENT.md](./DEVELOPMENT.md)
+
 ## Contribution Guide
 ### For the member of our internal team
 If you already have the access to this repository and can create branch on main repository. Git clone it, create your branch and open pull request for it.
