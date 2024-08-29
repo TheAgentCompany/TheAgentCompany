@@ -12,7 +12,8 @@ NEXTCLOUD_PORT?=8090
 
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
-		 rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container
+		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
+		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume restore-rocketchat backup-rocketchat
 
 init:
 	$(eval export GITLAB_HOME)
@@ -29,6 +30,7 @@ start-all: init
 stop-all: init rm-nextcloud-volume
 	docker compose down
 	$(MAKE) rm-nextcloud-volume
+	$(MAKE) rm-rocketchat-volume
 
 # Nextcloud
 create-nextcloud-backup-volume:
@@ -66,14 +68,6 @@ stop-nextcloud: init stop-nextcloud-side-container
 rm-nextcloud: init rm-nextcloud-volume
 	docker compose rm nextcloud
 
-# File server
-start-file-server:
-	cd static && python3 -m http.server 8081 -d files/ &
-
-stop-file-server:
-	@echo "Killing process on port $(FILE_SERVER_PORT)"
-	@lsof -ti :$(FILE_SERVER_PORT) | xargs kill -9 || echo "No process found on port $(FILE_SERVER_PORT)"
-
 # GitLab
 start-gitlab: init
 	docker compose up gitlab -d
@@ -94,7 +88,7 @@ stop-rocketchat:
 rm-rocketchat:
 	docker compose rm rocketchat
 
-clean-rocketchat-data:
+rm-rocketchat-volume:
 	docker volume rm rocketchat_mongodb_data
 
 restore-rocketchat:
