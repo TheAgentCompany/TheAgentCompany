@@ -1,40 +1,51 @@
 import requests
 import os
+from rocketchat_API.rocketchat import RocketChat
+
+# Rocket.Chat server URL and admin credentials
+ROCKETCHAT_URL = "http://ogma.lti.cs.cmu.edu:3000"
+HOSTNAME = 'ogma.lti.cs.cmu.edu'
+ROCKETCHAT_PORT = '3000'
+channel_name = "general"
+ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
+ADMIN_USERNAME = 'jobbench'
+ADMIN_PASS = 'jobbench'
+
+# Initialize the RocketChat client with username and password
+rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def check_url_1(browser_logs):
-    return "http://ogma.lti.cs.cmu.edu:3000/directory/channels" in browser_logs
+    return f"{ROCKETCHAT_URL}/directory/channels" in browser_logs
 
 def check_url_2(browser_logs):
-    return "http://ogma.lti.cs.cmu.edu:3000/channel/general" in browser_logs
+    return f"{ROCKETCHAT_URL}/channel/general" in browser_logs
 
 
-def check_message_sent():
-    # This function checks if the message "Hi" was sent to the #general channel.
-    # Call Rocket.Chat's API to check recent messages
-    # in the #general channel and confirm if "Hi" was sent by the agent.
-    
-    rocketchat_url = "http://ogma.lti.cs.cmu.edu:3000/api/v1/channels.history"
-    channel_name = "general"
-    token = os.getenv('ROCKETCHAT_AUTH_TOKEN') or 'vn_Tadey_p7fHnMExAIpgwxFKjpsW4j4-kCpdmB3epq'
-    user_id = os.getenv('ROCKETCHAT_USER_ID') or 'qgyxXGaG3uzLq7gDt'
-    
-    headers = {
-        'X-Auth-Token': token,
-        'X-User-Id': user_id,
-        'Content-type': 'application/json',
-    }
-    
-    response = requests.get(f"{rocketchat_url}?roomName={channel_name}", headers=headers)
-    
-    if response.status_code == 200:
-        messages = response.json().get('messages', [])
-        for message in messages:
-            if message.get('msg') == 'Hi':
+def get_channel_room_id(channel_name):
+    """Get the room_id for a specific channel by its name."""
+    response = rocket.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return response['channel']['_id']
+    return None
+
+def check_message_sent(channel_name, message, username):
+    room_id = get_channel_room_id(channel_name)
+    if not room_id:
+        print(f"Failed to find room ID for channel #{channel_name}.")
+        return False
+
+    # Fetch message history for the channel using room_id (channel_id)
+    response = rocket.channels_history(room_id=room_id).json()
+
+    if response.get('success'):
+        messages = response.get('messages', [])
+        # Check if the message 'Hi' is in the most recent messages from a specific user
+        for msg in messages:
+            if msg.get('msg') == message and msg.get('u', {}).get('username') == username:
                 return True
     return False
-
 
 if __name__ == "__main__":
     print(check_url_1("ACTION: goto('http://ogma.lti.cs.cmu.edu:3000/directory/channels')"))
     print(check_url_2("ACTION: goto('http://ogma.lti.cs.cmu.edu:3000/channel/general')"))
-    print(check_message_sent())
+    print(check_message_sent("general", "Hi", "jobbench"))
