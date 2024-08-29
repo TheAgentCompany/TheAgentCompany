@@ -38,5 +38,9 @@ WORKDIR /workspace
 COPY *py /workspace
 COPY *sh /workspace
 
+# download img locally
+RUN curl -o reference.jpg https://example.com/path/to/reference.jpg
+
+
 # keep the container running
 CMD ["tail", "-f", "/dev/null"]
