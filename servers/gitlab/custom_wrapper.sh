@@ -24,21 +24,24 @@ curl --request PUT --header "PRIVATE-TOKEN: root-token" \
 
 # Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
-export_dir="/assets/exports"
+if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
+    for file in $(ls /assets/exports/*.tar.gz); do
+        # Extract the filename without the path and extension
+        filename=$(basename "$file" .tar.gz)
 
-# Iterate over all .tar.gz files in the export directory
-for file in "$export_dir"/*.tar.gz; do
-    # Extract the filename without the path and extension
-    filename=$(basename "$file" .tar.gz)
-    
-    curl --request POST \
-         --header "PRIVATE-TOKEN: root-token" \
-         --form "path=$filename" \
-         --form "file=@$file" \
-         "http://localhost:8929/api/v4/projects/import"
-    
-    echo "Imported $filename"
-done
+        echo "Importing $filename..."
+
+        curl --request POST \
+             --header "PRIVATE-TOKEN: root-token" \
+             --form "path=$filename" \
+             --form "file=@$file" \
+             "http://localhost:8929/api/v4/projects/import"
+    done
+else
+    echo "No .tar.gz file found in /assets/exports/. Nothing to import."
+fi
+
+echo "Finished importing all repos"
 
 # TODO: change authorship of issues/prs/commits
 
