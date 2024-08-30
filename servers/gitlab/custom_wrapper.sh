@@ -43,6 +43,13 @@ fi
 
 echo "Finished importing all repos"
 
+# Create a dedicated project to place all wiki (company-wide doc)
+curl --request POST --header "PRIVATE-TOKEN: root-token" \
+     --header "Content-Type: application/json" --data '{
+        "name": "Documentation", "description": "Wiki for company-wide doc", "path": "doc",
+        "initialize_with_readme": "true", "wiki_access_level": "enabled"}' \
+     --url "http://localhost:8929/api/v4/projects/"
+
 # TODO: change authorship of issues/prs/commits
 
 # Keep the container running
