@@ -5,7 +5,6 @@ import subprocess
 import shutil
 import os
 import pandas as pd
-from tenacity import *
 from csv import writer
 
 
@@ -51,7 +50,6 @@ def create_user(username, name, email=None, bio=None, loc=None, org=None):
     resp = json.loads(r.text)
     return int(resp['id']) if 'id' in resp else -1
 
-@retry(wait=wait_random_exponential(multiplier=1, max=60))
 def get_public_repos(username):
     github_url = f'https://api.github.com/users/{username}/repos'
     r = requests.get(github_url, headers=GITHUB_HEADER)
