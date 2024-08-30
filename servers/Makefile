@@ -83,7 +83,7 @@ reset-gitlab:
 	echo "remove built gitlab image..."
 	docker image rm servers-gitlab
 	echo "remove existing gitlab data..."
-	sudo rm -rf $GITLAB_HOME
+	sudo rm -rf $(GITLAB_HOME)
 	echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
