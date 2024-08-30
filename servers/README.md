@@ -23,7 +23,7 @@ Below are the addresses, usernames, and passwords for each service:
     * volume name: nextcloud_aio_backupdir
     * password: d352748d4845e6a70d0517c568b879d1e3dba54deb0b7e6c
 
-## Plane:
+## Plane
 * http://ogma.lti.cs.cmu.edu:8091
 * email: job@bench.com
 * password: jobbenchJobBench
