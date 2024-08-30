@@ -1,8 +1,5 @@
-from utils import import_repos, export_repos
+from utils import import_repos
 
 if __name__ == '__main__':
-    # Note: since gitlab import is asynchronous, we should either only
-    # run import or only run export at a time
-    # TODO: add argparser
+    # Note: gitlab import is asynchronous and happens in GitLab server background process
     import_repos()
-    # export_repos()

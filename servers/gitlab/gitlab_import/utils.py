@@ -4,6 +4,7 @@ import requests
 import subprocess
 import shutil
 import os
+import logging
 import pandas as pd
 from csv import writer
 
@@ -269,9 +270,6 @@ def delete_project(username, repo):
     }
     r = requests.delete(delete_url, json=body, headers=ROOT_HEADER)
     print(json.loads(r.text))
-
-def export_repos():
-    pass
 
 def import_repos(repo_file='repo_sample_1.csv'):
     print(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}\n', flush=True)

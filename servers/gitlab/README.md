@@ -33,7 +33,7 @@ the below steps:
 
 1. Launch a GitLab server. It can be any GitLab instance at any place. The preferred
 version is 17.3.1-ce.0 for best compatibility with the version used in our server image.
-2. Import repos from outside, e.g. GitHub. You should do so [programmatically](https://docs.gitlab.com/ee/api/import.html). Alternatively,
+2. Import repos from outside, e.g. GitHub. Alternatively,
 you could also create a new repo on your own. Note, this involves a lot of Internet
 traffic and might be slow.
 3. [Export](https://docs.gitlab.com/ee/user/project/settings/import_export.html#export-a-project-and-its-data) repo from GitLab. A tar file would be generated and you could download to your local machine. Note, this might
@@ -46,4 +46,5 @@ built locally before, you may want to remove the old one by running
 
 As you can see, the steps 1-3 essentially do a data conversion, transforming data
 from an external source (GitHub) to GitLab proprietary format. You could leverage
-`github2gitlab.py` to automate these steps.
+`github2gitlab.py` to automate steps 1 & 2. Unfortunately, GitLab does not provide
+API to export to local disks, so you have to do step 3 manually.
