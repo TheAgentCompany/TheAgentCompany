@@ -17,7 +17,7 @@ For how to do contribution, please check [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 For how to edit the source code on server side and task image, check [DEVELOPMENT.md](./DEVELOPMENT.md)
 
-For how to access each service, see [here](./servers/README)
+For how to access each service, see [here](./servers/README.md)
 
 ## License
 Distributed under the [MIT](./LICENSE) License. See LICENSE for more information.

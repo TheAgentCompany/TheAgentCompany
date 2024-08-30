@@ -24,7 +24,7 @@ This guide is for people working on JobBench and editing the source code. If you
 ## Start the server for development
 For the internal team members, in general, you don't have to launch the server if you can visit the CMU server. We already host the service on the CMU server. If you find the service has broken down or cannot visit it, please ask @Frank Xu, @Yufan Song, or @Boxuan Li. If you want to set up the server in your own cluster, follow the instructions below.
 
-For how to access each service, see [here](./servers/README)
+For how to access each service, see [here](./servers/README.md)
 
 ### 1. Requirements
 * Linux, Mac OS, or [WSL on Windows](https://learn.microsoft.com/en-us/windows/wsl/install)
