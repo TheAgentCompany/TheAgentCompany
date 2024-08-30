@@ -86,9 +86,6 @@ reset-gitlab: init
 	else \
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
-	# @echo "remove existing gitlab data..."
-	# sudo rm -rf $(GITLAB_HOME)
-	# mkdir -p $(GITLAB_HOME)
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
