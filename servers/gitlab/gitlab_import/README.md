@@ -1,3 +1,7 @@
+## Intro
+
+Utilities to prepare for GitLab data. Still under heavy construction.
+
 ## Details
 - `repo_sample_1.csv` and `repo_sample_2.csv` contains the sampled repositories used for dumping information into Gitlab, within which `repo_not_used_1.txt` and `repo_not_used_2.txt` contain the repos not used from the respective samples lists due to various errors or failures.
 - `utils.py` is the Python script used to interact with Gitlab for various purposes, indicated by the function names.
