@@ -5,7 +5,7 @@ import subprocess
 import shutil
 import os
 import pandas as pd
-import logging
+from tenacity import *
 from csv import writer
 
 
@@ -51,6 +51,7 @@ def create_user(username, name, email=None, bio=None, loc=None, org=None):
     resp = json.loads(r.text)
     return int(resp['id']) if 'id' in resp else -1
 
+@retry(wait=wait_random_exponential(multiplier=1, max=60))
 def get_public_repos(username):
     github_url = f'https://api.github.com/users/{username}/repos'
     r = requests.get(github_url, headers=GITHUB_HEADER)
@@ -271,10 +272,12 @@ def delete_project(username, repo):
     r = requests.delete(delete_url, json=body, headers=ROOT_HEADER)
     print(json.loads(r.text))
 
-def run_e2e():
+def export_repos():
+    pass
+
+def import_repos(repo_file='repo_sample_1.csv'):
     print(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}\n', flush=True)
     print(f'Github Access Token Used: {GITHUB_ACCESS_TOKEN}\n', flush=True) 
-    repo_file = 'repo_sample_1.csv' # or 'repo_sample_2.csv' or any file of the same format
     
     i = 0 # Start idx of the repo_file
     df = pd.read_csv(repo_file).iloc[i:]
@@ -305,7 +308,6 @@ def run_e2e():
         users_list.extend(create_users_from_issues(USERNAME, REPO))
         users_list = list(set(users_list))
         mirror(USERNAME, REPO_ID)
-        star_with_users_from_list(users_list, f'{USERNAME}%2F{REPO}')
 
 def get_commits_from_repo():
     # get all commit users from all repos
@@ -406,10 +408,3 @@ def import_missing_commit_users():
             else:
                 print(f"Error: {r.status_code}")
     print(f"Added users: {add_num}, Modified users: {modify_num}")
-
- 
-if __name__ == '__main__':
-    if not GITLAB_ACCESS_TOKEN:
-        raise ValueError("GITLAB_ACCESS_TOKEN cannot be empty or unset.")
-
-    logging.info(f'HOSTNAME: {HOSTNAME}, PORT: {PORT}, GITLAB TOKEN: {GITLAB_ACCESS_TOKEN}')

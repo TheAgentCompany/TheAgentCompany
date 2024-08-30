@@ -10,7 +10,7 @@ COPY custom_wrapper.sh /assets
 
 # Copy repo data to the image
 # "exports" folder contains all repos [reponame.tar.gz] in GitLab proprietary format
-# they are either exported manually or via github2gitlab.sh
+# they are either exported manually or via gitlab_import/github2gitlab.py
 COPY exports /assets
 
 RUN chmod +x /assets/custom_wrapper.sh
