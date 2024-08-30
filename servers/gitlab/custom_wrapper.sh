@@ -22,14 +22,23 @@ gitlab-rails runner "token = User.find_by_username('root').personal_access_token
 curl --request PUT --header "PRIVATE-TOKEN: root-token" \
     "http://localhost:8929/api/v4/application/settings?import_sources=gitlab_project&project_export_enabled=true"
 
-# Import projects (please make sure they are available at the mounted location)
+# Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
-#
-# devnote: add new projects (that are exported from GitLab) here if you'd like to add
-# more repos to the benchmark
-# TODO: iterate over exports folder rather than hard-coding
-curl --request POST --header "PRIVATE-TOKEN: root-token" --form "path=janusgraph" \
-     --form "file=@/assets/exports/janusgraph.tar.gz" "http://localhost:8929/api/v4/projects/import"
+export_dir="/assets/exports"
+
+# Iterate over all .tar.gz files in the export directory
+for file in "$export_dir"/*.tar.gz; do
+    # Extract the filename without the path and extension
+    filename=$(basename "$file" .tar.gz)
+    
+    curl --request POST \
+         --header "PRIVATE-TOKEN: root-token" \
+         --form "path=$filename" \
+         --form "file=@$file" \
+         "http://localhost:8929/api/v4/projects/import"
+    
+    echo "Imported $filename"
+done
 
 # TODO: change authorship of issues/prs/commits
 
