@@ -80,8 +80,12 @@ reset-gitlab:
 	docker compose stop gitlab
 	echo "remove gitlab container..."
 	docker compose rm gitlab
-	echo "remove built gitlab image..."
-	docker image rm servers-gitlab
+	@if docker image inspect servers-gitlab >/dev/null 2>&1; then \
+		echo "Image servers-gitlab exists. Removing..."; \
+		docker image rm servers-gitlab; \
+	else \
+		echo "Image servers-gitlab does not exist. Skipping removal."; \
+	fi
 	echo "remove existing gitlab data..."
 	sudo rm -rf $(GITLAB_HOME)
 	mkdir -p $(GITLAB_HOME)
