@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-GITLAB_HOME?=/home/fangzhex/ogma3/jobbench_gitlab
+GITLAB_HOME?=/home/boxuanli/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
