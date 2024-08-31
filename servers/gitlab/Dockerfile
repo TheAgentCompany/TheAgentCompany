@@ -9,19 +9,13 @@ ENV GITLAB_ROOT_PASSWORD="JobBench"
 # This script includes setting up GitLab and populating data
 COPY custom_wrapper.sh /assets
 
-# Copy wikis to the image (if exists)
-RUN mkdir -p /assets/wikis && \
-    if [ -d wikis ] && [ "$(ls -A wikis)" ]; then \
-        cp -r wikis/* /assets/wikis/; \
-    fi
+# Copy wikis to the image
+COPY wikis /assets/wikis
 
 # Copy repo data to the image
 # "exports" folder contains all repos [reponame.tar.gz] in GitLab proprietary format
 # they are exported manually from GitLab server(s)
-RUN mkdir -p /assets/exports && \
-    if [ -d exports ] && [ "$(ls -A exports)" ]; then \
-        cp -r exports/* /assets/exports/; \
-    fi
+COPY exports /assets/exports
 
 RUN chmod +x /assets/custom_wrapper.sh
 CMD ["/assets/custom_wrapper.sh"]
