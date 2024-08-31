@@ -40,7 +40,7 @@ curl --request POST --header "PRIVATE-TOKEN: root-token" \
 curl --request POST --header "PRIVATE-TOKEN: root-token" \
      --header "Content-Type: application/json" --data '{
         "branch": "main", "author_email": "root@local", "author_name": "Administrator",
-        "content": "Welcome to Documentation hub. Please navigate to [wiki](/wikis/home) to find all documentation.",
+        "content": "Welcome to Documentation hub. Please navigate to [wiki](../../wikis) to find all documentation.",
         "commit_message": "Add README"}' \
      --url "http://localhost:8929/api/v4/projects/1/repository/files/README.md"
 
