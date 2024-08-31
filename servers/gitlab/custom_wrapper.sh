@@ -27,6 +27,16 @@ gitlab-rails runner "token = User.find_by_username('root').personal_access_token
 curl --request PUT --header "PRIVATE-TOKEN: root-token" \
     "http://localhost:8929/api/v4/application/settings?import_sources=gitlab_project&project_export_enabled=true"
 
+# Create a dedicated project to place all wiki (company-wide doc)
+# NOTE: this project is created first such that its ID is always 1
+curl --request POST --header "PRIVATE-TOKEN: root-token" \
+     --header "Content-Type: application/json" --data '{
+        "name": "Documentation", "description": "Wiki for company-wide doc", "path": "doc",
+        "wiki_access_level": "enabled", "with_issues_enabled": "false",
+        "with_merge_requests_enabled": "false",
+        "visibility": "public"}' \
+     --url "http://localhost:8929/api/v4/projects/"
+
 # Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
 if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
@@ -47,14 +57,25 @@ fi
 
 echo "Finished importing all repos"
 
-# Create a dedicated project to place all wiki (company-wide doc)
-curl --request POST --header "PRIVATE-TOKEN: root-token" \
-     --header "Content-Type: application/json" --data '{
-        "name": "Documentation", "description": "Wiki for company-wide doc", "path": "doc",
-        "wiki_access_level": "enabled", "with_issues_enabled": "false",
-        "with_merge_requests_enabled": "false",
-        "visibility": "public"}' \
-     --url "http://localhost:8929/api/v4/projects/"
+# Import wikis
+if ls /assets/wikis/*.md 1> /dev/null 2>&1; then
+    for file in $(ls /assets/wikis/*.md); do
+        # Extract the filename without the path and extension
+        title=$(basename "$file" .md)
+
+        # Read the content of the file and URL encode it
+        content=$(cat "$file" | jq -sRr @uri)
+
+        curl --data "title=$title&content=$content" \
+             --header "PRIVATE-TOKEN: root-token" \
+             "http://localhost:8929/api/v4/projects/1/wikis"
+
+        echo "Uploaded $title"
+    done
+else
+    echo "No .md file found in /assets/wikis/. Nothing to import."
+fi
+
 # TODO: change authorship of issues/prs/commits
 
 # Keep the container running
