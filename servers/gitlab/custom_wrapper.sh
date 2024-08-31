@@ -37,6 +37,13 @@ curl --request POST --header "PRIVATE-TOKEN: root-token" \
         "visibility": "public"}' \
      --url "http://localhost:8929/api/v4/projects/"
 
+curl --request POST --header "PRIVATE-TOKEN: root-token" \
+     --header "Content-Type: application/json" --data '{
+        "branch": "main", "author_email": "root@local", "author_name": "Administrator",
+        "content": "Welcome to Documentation hub. Please navigate to [wiki](/wikis/home) to find all documentation.",
+        "commit_message": "Add README"}' \
+     --url "http://localhost:8929/api/v4/projects/1/repository/files/README.md"
+
 # Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
 if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
