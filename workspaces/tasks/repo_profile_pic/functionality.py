@@ -11,7 +11,6 @@ GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 TEST_REPO_NAME="api-server"
-WIKI_REPO_NAME="yufan-test"
 
 ############################# util function #####################################  
 # Set up logging
