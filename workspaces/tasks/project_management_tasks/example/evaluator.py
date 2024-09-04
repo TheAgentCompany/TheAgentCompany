@@ -45,6 +45,8 @@ def check_message_sent(channel_name, message, username):
     return False
 
 if __name__ == "__main__":
-    print(check_url_1("ACTION: goto('http://ogma.lti.cs.cmu.edu:3000/directory/channels')"))
-    print(check_url_2("ACTION: goto('http://ogma.lti.cs.cmu.edu:3000/channel/general')"))
+    test_url_1 = f"{ROCKETCHAT_URL}/directory/channels"
+    test_url_2 = f"{ROCKETCHAT_URL}/channel/general"
+    print(check_url_1(f"ACTION: goto('{test_url_1}')"))
+    print(check_url_2(f"ACTION: goto('{test_url_2}')"))
     print(check_message_sent("general", "Hi", "jobbench"))
