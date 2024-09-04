@@ -1,3 +1,8 @@
+# This file is the test for initialization. 
+# You can manually or programmatically guarantee your initialization is correct. Programmatically is prefer.
+# For example, if you prepared a jpg file inside docker, this file can check whether the file exist.
+# In general, this file will not be run. Maybe we will figure out a way to add it into CI/CD
+
 import os
 import subprocess
 import requests
@@ -11,7 +16,7 @@ GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 TEST_REPO_NAME="api-server"
-WIKI_REPO_NAME="yufan-test"
+WIKI_REPO_NAME="wiki-test"
 
 ############################# util function #####################################  
 # Set up logging
@@ -30,6 +35,7 @@ def execute_command(command):
     return
 
 ############################# Test function ##################################### 
+################### Please delete the test you don't need #######################
 
 # test pull repository from the gitlab server
 def test_pull_repository():

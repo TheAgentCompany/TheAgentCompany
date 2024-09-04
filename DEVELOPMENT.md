@@ -103,7 +103,7 @@ To execute a Python file:
 2. Add a command for copying it into the `Dockerfile`.
 3. Add a command for executing it in `run.sh`.
 
-Take `update_hosts.sh`, `functionality.py`, and `evaluator.py` as examples.
+Take `initialization.sh`, `initialization.py`, `test_setup`, and `evaluator.py` as examples.
 
 ### 5. Perform partial checkpoint
 Similar to the `evaluator.py`, you need to determine how to check the task you designed, either by verifying whether the final result exists or through other means.

@@ -1,6 +1,6 @@
 # do initialization
-sh update_hosts.sh
-python functionality.py
+sh initialization.sh
+python initialization.py
 
 # sleep and run evaluactor
 sleep 10 && python evaluator.py
