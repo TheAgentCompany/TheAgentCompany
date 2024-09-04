@@ -23,9 +23,6 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python requests library
-RUN pip install requests
-
 RUN mkdir -p -m0755 /var/run/sshd
 
 # symlink python3 to python
@@ -42,6 +39,7 @@ WORKDIR /workspace
 
 # Install Python requests library
 RUN pip install requests
+RUN pip install rocketchat_API==1.32.0
 
 # COPY file into working directory
 COPY *py /workspace

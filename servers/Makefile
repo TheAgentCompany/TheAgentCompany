@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-GITLAB_HOME?=/home/fangzhex/ogma3/jobbench_gitlab
+GITLAB_HOME?=/home/boxuanli/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
@@ -10,9 +10,10 @@ NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
 NEXTCLOUD_IMAGE_TAG?=20240808_083748
 NEXTCLOUD_PORT?=8090
 
-.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab \
+.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab reset-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
-		 rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container
+		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
+		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume restore-rocketchat backup-rocketchat
 
 init:
 	$(eval export GITLAB_HOME)
@@ -21,6 +22,7 @@ init:
 	$(eval export GITLAB_PORT)
 	$(eval export NEXTCLOUD_IMAGE_TAG)
 	$(eval export NEXTCLOUD_PORT)
+	@echo "Initialization done."
 
 start-all: init
 	docker compose up -d
@@ -28,6 +30,7 @@ start-all: init
 stop-all: init rm-nextcloud-volume
 	docker compose down
 	$(MAKE) rm-nextcloud-volume
+	$(MAKE) rm-rocketchat-volume
 
 # Nextcloud
 create-nextcloud-backup-volume:
@@ -65,14 +68,6 @@ stop-nextcloud: init stop-nextcloud-side-container
 rm-nextcloud: init rm-nextcloud-volume
 	docker compose rm nextcloud
 
-# File server
-start-file-server:
-	cd static && python3 -m http.server 8081 -d files/ &
-
-stop-file-server:
-	@echo "Killing process on port $(FILE_SERVER_PORT)"
-	@lsof -ti :$(FILE_SERVER_PORT) | xargs kill -9 || echo "No process found on port $(FILE_SERVER_PORT)"
-
 # GitLab
 start-gitlab: init
 	docker compose up gitlab -d
@@ -80,5 +75,35 @@ start-gitlab: init
 stop-gitlab:
 	docker compose stop gitlab
 
-rm-gitlab:
+reset-gitlab: init
+	@echo "stopping existing gitlab instance..."
+	docker compose stop gitlab
+	@echo "remove gitlab container..."
 	docker compose rm gitlab
+	@if docker image inspect servers-gitlab >/dev/null 2>&1; then \
+		echo "Image servers-gitlab exists. Removing..."; \
+		docker image rm servers-gitlab; \
+	else \
+		echo "Image servers-gitlab does not exist. Skipping removal."; \
+	fi
+	@echo "start gitlab from clean state..."
+	docker compose up gitlab -d
+
+# RocketChat
+start-rocketchat: init
+	docker compose up rocketchat -d
+
+stop-rocketchat:
+	docker compose stop rocketchat
+
+rm-rocketchat:
+	docker compose rm rocketchat
+
+rm-rocketchat-volume:
+	docker volume rm rocketchat_mongodb_data
+
+restore-rocketchat:
+	docker exec -i rocketchat-mongodb-1 sh -c 'mongorestore --archive' < db.dump
+
+backup-rocketchat:
+	docker exec rocketchat-mongodb-1 sh -c 'mongodump --archive' > db.dump

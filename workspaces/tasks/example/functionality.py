@@ -66,10 +66,10 @@ def can_access_website(url):
             logger.info(f"can visit {url}")
             return True
         else:
-            logger.Error(f"cannot access {url}")
+            logger.error(f"cannot access {url}")
             return False
     except requests.RequestException as e:
-        logger.Error(f"cannot access {url}")
+        logger.error(f"cannot access {url}")
         return False
 
 # test mock local API

@@ -1,8 +1,12 @@
 FROM gitlab/gitlab-ce:17.3.1-ce.0
+RUN apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
 
-# TODO: populate data
+ENV GITLAB_SKIP_TAIL_LOGS=true
+ENV GITLAB_ROOT_EMAIL="root@local"
+ENV GITLAB_ROOT_PASSWORD="JobBench"
 
-# create token "root-token" with sudo and api permissions
-RUN gitlab-rails runner "token = User.find_by_username('root').personal_access_tokens.create(scopes: ['api', 'sudo', 'admin', 'read_user', 'read_api'], name: 'root token', expires_at: 365.days.from_now); token.set_token('root-token'); token.save!"
+# Copy start script and data to the image
+COPY . /assets
 
-CMD ["/assets/wrapper"]
+RUN chmod +x /assets/custom_wrapper.sh
+CMD ["/assets/custom_wrapper.sh"]
