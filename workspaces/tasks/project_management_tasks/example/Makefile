@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-example-image
-CONTAINER_NAME=job-bench-pm-example
+IMAGE_NAME=job-bench-pm-send-hello-message-image
+CONTAINER_NAME=job-bench-pm-send-hello-message
 
 .PHONY: build run
 

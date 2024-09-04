@@ -5,10 +5,8 @@ import logging
 from rocketchat_API.rocketchat import RocketChat
 
 ############################# init variable ##################################### 
-# HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-# ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-HOSTNAME = 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = '3000'
+HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
@@ -53,5 +51,6 @@ def send_message(channel_name, message):
 
 if __name__ == "__main__":
     channel_name = "general"
-    if find_channel(channel_name):
-        send_message(channel_name, "Hi")
+    # Uncomment below while testing not initilisation
+    # if find_channel(channel_name):
+    #     send_message(channel_name, "Hi")
