@@ -39,7 +39,6 @@ def check_user_added(channel_name, username):
         return False
     members = rocket.channels_members(channel=channel_name).json()
     users_list = members.get("members")
-    ipdb.set_trace()
     return any(user['username'] == username for user in users_list)
 
 

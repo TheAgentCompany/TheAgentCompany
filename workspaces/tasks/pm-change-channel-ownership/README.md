@@ -2,9 +2,12 @@
 
 ## Full Intent
 
-Create a public #webagent channel in our company's platform directory http://ogma.lti.cs.cmu.edu:3000/home and invite Kritanjali Jain to the channel.
+Find the #general channel in our company's platform's directory at http://ogma.lti.cs.cmu.edu:3000/home and assign the user 'jobbench' as the owner
+
 
 ## Checkpoints
-1. Go to the home page to create a new channel http://ogma.lti.cs.cmu.edu:3000/home 
-2. Create the public #webagents channel (http://ogma.lti.cs.cmu.edu:3000/channel/webagents) and invite Kritanjali Jain
+1. Go to the home page http://ogma.lti.cs.cmu.edu:3000/home 
+2. Navigate to the general channel (http://ogma.lti.cs.cmu.edu:3000/channel/general) 
+3. Assign 'jobbench' as owner
+
 
