@@ -1,0 +1,3 @@
+1. Get the correct codebase http://ogma.lti.cs.cmu.edu:8929/root/api-server (1pt)
+2. Local workspace contains api-server code (1pt)
+3. Curl APIs and test if running sucessfully (2pts)

@@ -70,49 +70,5 @@ For GitLab, Nextcloud, and Rocket.Chat, you can directly execute `make stop-all`
 For Plane, run [setup.sh](./servers/plane/setup.sh) and choose "stop."
 
 ## How to build a task image
-If you want to create a task for benchmarking, here is an instruction on how to implement the action you want.
-
-### 1. Build from the base image
-In the [Example Dockerfile](./workspaces/tasks/example/Dockerfile), we provide a basic Dockerfile for the task image. We use Ubuntu as the base image, install the necessary packages, install Python packages, and create the workspace directory. Local files are then copied into the task image.
-
-**NOTE:** Please try to add commands around the end of the Dockerfile whenever possible. This allows the previous layer cache to be used when building a new image, making it easier for us to review and integrate the Dockerfile.
-
-In [Example Makefile](./workspaces/tasks/example/Makefile):
-* `IMAGE_NAME` and `CONTAINER_NAME` define the task image name and container name.
-* Execute `make build` to build the image. 
-* Execute `make run` to run the container. 
-* Execute `make stop` to stop and remove the container. 
-* Execute `make attach` to run into container
-
-### 2. Setup the envrionment
-Use `RUN apt-get update && apt-get install -y {package name}` to install the linux package you want.
-
-Use `RUN pip install {package name}` to install the python package you want.
-
-### 3. Prepare the neccessary file
-Use the following method to copy the neccessary file into docker image under `/workspace` directory.
-```
-COPY *py /workspace
-COPY *sh /workspace
-```
-### 4. Perform workflow inside the Docker container
-Follow the logic in [run.sh](./workspaces/tasks/example/run.sh), which is the entry point of the Docker container. Docker will execute `run.sh` when it starts. You can add anything you want here.
-
-To execute a Python file:
-1. Write the code.
-2. Add a command for copying it into the `Dockerfile`.
-3. Add a command for executing it in `run.sh`.
-
-Take `initialization.sh`, `initialization.py`, `test_setup`, and `evaluator.py` as examples.
-
-### 5. Perform partial checkpoint
-Similar to the `evaluator.py`, you need to determine how to check the task you designed, either by verifying whether the final result exists or through other means.
-
-#### 1. TODO: How to trigger the evaluation process
-Currently, the `evaluator.py` is simply executed after a 10-second delay. We need to find a better way to trigger it, such as hosting a service within the task image.
-
-#### 2. Check whether file exist in image
-Check [evaluator.py](./workspaces/tasks/example/evaluator.py) function `check_code_clone` as example.
-
-#### 3. TODO: Check result in gitlab, nextcloud, plane, rocketchat 
+If you want to create a task for benchmarking, please read [this](./workspaces/README.md).
 

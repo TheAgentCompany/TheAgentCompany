@@ -82,6 +82,7 @@ def can_access_website(url):
 # test prepared file
 
 if __name__ == "__main__":
+    # TODO: polish this file so that people could use it to testify their env setup
     # test_pull_repository()
     # test_wiki()
     test_black_white_list()

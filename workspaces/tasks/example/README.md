@@ -1,15 +1,19 @@
-## Example Task
+# Example Task
 
-## Full Intent
+This is the README for this example task. Other tasks shall not have this README file.
 
-Find our company's API server codebase in our internal wiki at http://ogma.lti.cs.cmu.edu:8000/, and start up the API server locally.
+## Task (Full Intent)
 
-## Checkpoints
-1. Get the correct codebase http://ogma.lti.cs.cmu.edu:8929/root/api-server
-2. Local workspace contains api-server code
-3. Curl APIs and test if running sucessfully.
+Every task folder should have a `task.md` that describes the task. It shall not
+contain detailed step-by-step guidelines unless absolutely necessary. It shall not
+contain rubrics used for grading.
 
+## Checkpoints (Evaluator)
 
-## Requirement
-Please note down the requirement for setup, for example, you need to populate any project into gitlab, or craete any channel, doc, user in rocketchat service etc.
-Then we can check whether they are ready in service and make sure data get backup.
+Every task folder may have a `checkpoints.md` that documents the checkpoint rubrics.
+This is optional, but strongly recommended.
+
+Every task folder must have an `evaluator.py` that can be run to grade the
+examinee's work. It must take exactly one CLI argument that is a path to the
+trajectory file. There's no specific format requirement on the trajectory file,
+but it MUST document the necessary steps conducted by the examinee.
