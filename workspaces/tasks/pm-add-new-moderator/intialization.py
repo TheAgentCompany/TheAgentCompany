@@ -34,6 +34,18 @@ def execute_command(command):
     logger.info(process.stdout)
     return
 
+def populate_data():
+    user_name = "Kritanjali Jain"
+    user_password = 'hello'
+    user_email = 'spoof123@gmail.com'
+    user_username = 'kritanjali.jain'
+    response = rocket.users_create(user_email,user_name,user_password, user_username).json()
+    if response.get('success'):
+        logger.info(f"Successfully created user.")
+        return True
+    else:
+        logger.error(f"{response.get('error')}")
+        return False
 
 if __name__ == "__main__":
-    pass
+    populate_data()
