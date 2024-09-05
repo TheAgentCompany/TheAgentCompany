@@ -53,7 +53,7 @@ This step varies among examinees. We use OpenHands, a platform for software deve
 agents powered by AI.
 
 OpenHands requires a sandbox environment that the agent needs to run in. It allows
-users to provide a custom sandbox image, and thus we will use the `example_task_image`
+users to provide a custom sandbox image, and thus we will use the `example-exam-image`
 we just built.
 
 Clone `OpenHands` repo and create a `config.toml` in the OpenHands directory:
@@ -62,7 +62,7 @@ Clone `OpenHands` repo and create a `config.toml` in the OpenHands directory:
 [core]
 workspace_base="/workspace"
 run_as_openhands=true
-sandbox_base_container_image="example_task_image"
+sandbox_base_container_image="example-exam-image"
 ```
 
 Please note you also need to add LLM keys to `config.toml`. Please follow OpenHands
