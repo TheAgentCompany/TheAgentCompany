@@ -70,5 +70,5 @@ For GitLab, Nextcloud, and Rocket.Chat, you can directly execute `make stop-all`
 For Plane, run [setup.sh](./servers/plane/setup.sh) and choose "stop."
 
 ## How to build a task image
-If you want to create a task for benchmarking, please read [this](./workspaces/README.md).
+If you want to create a task for benchmarking, please read [this](./workspaces/tasks/example/README.md).
 

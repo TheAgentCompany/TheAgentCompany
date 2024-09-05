@@ -1,6 +1,7 @@
 # Example Task
 
-This is the README for this example task. Other tasks shall not have this README file.
+This is the documentation on how to create a task. In this doc we will be using
+this folder as an example task. Other tasks shall not have this README file.
 
 ## Task (Full Intent)
 
