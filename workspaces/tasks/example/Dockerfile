@@ -14,4 +14,5 @@ RUN chmod +x /init.sh
 RUN sh /init.sh
 RUN python /init.py
 
+# keep the container running (optional)
 CMD ["tail", "-f","/dev/null"]
