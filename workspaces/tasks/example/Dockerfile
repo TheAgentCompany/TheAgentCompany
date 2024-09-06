@@ -4,5 +4,10 @@ COPY evaluator.py /evaluation/
 
 COPY task.md /instruction/
 
-# requests library needed for evaluation
+# requests library is needed for evaluation
 RUN pip install requests
+
+# initialization code
+RUN sh run.sh
+
+
