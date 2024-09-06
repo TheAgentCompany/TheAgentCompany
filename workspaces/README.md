@@ -77,7 +77,7 @@ Once the examinee has finished its work (as of now, we don't enforce timing),
 run the below command in the exam container to grade the exam:
 
 ```bash
-python /evaluation/evaluator.py <trajectory_file_path>
+python /evaluation/evaluator.py <optional_trajectory_file_path>
 ```
 
 Note that the trajectory file path must be an absolute path to the trajectory
@@ -86,3 +86,5 @@ but it MUST record all steps conducted by the examinee (no matter it's agent or
 human being). Benchmark users are allowed to inspect checkpoint rubrics to ensure
 the trajectory contains all necessary information used in graders, but examinees
 (e.g. agents) are not allowed to read checkpoint rubrics or evaluation code.
+
+Note that trajectory file is optional. It is often used to grant partial credits.
