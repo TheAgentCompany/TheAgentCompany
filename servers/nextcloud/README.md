@@ -1,7 +1,5 @@
-## Server: nextcloud
-
-
-### Starting up server
+# Server: nextcloud
+## Starting up server
 ```
 export NEXTCLOUD_HOME=/home/fangzhex/ogma3/jobbench_nextcloud
 docker compose up -d
@@ -30,9 +28,9 @@ docker exec nextcloud-aio-mastercontainer cat /mnt/docker-aio-config/data/config
 Instruction about how to reset the nextcloud:
 https://github.com/nextcloud/all-in-one#how-to-properly-reset-the-instance
 
-# remember use the correct port
+## remember use the correct port
 visit https://ogma.lti.cs.cmu.edu:8090
 
-### Import data
+## Import data
 
 Check out `gitlab_import` directory.

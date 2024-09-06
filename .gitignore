@@ -1,3 +1,4 @@
 *.tar.gz
 *db.dump
-*DS_Store
+__pycache__
+*.DS_Store

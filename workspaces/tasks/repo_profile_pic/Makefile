@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-example-image
-CONTAINER_NAME=job-bench-example
+IMAGE_NAME=job-bench-repo-profile-pic-image
+CONTAINER_NAME=job-bench-repo-profile-pic
 
 .PHONY: build run
 

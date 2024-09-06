@@ -4,14 +4,14 @@ import requests
 import subprocess
 import shutil
 import os
-import pandas as pd
 import logging
+import pandas as pd
 from csv import writer
 
 
-GITLAB_ACCESS_TOKEN = os.getenv('GITLAB_TOKEN')
+GITLAB_ACCESS_TOKEN = os.getenv('GITLAB_TOKEN', 'root-token')
 GITHUB_ACCESS_TOKEN = os.getenv('GITHUB_TOKEN')
-HOSTNAME = os.getenv('HOSTNAME', 'ogma.lti.cs.cmu.edu')
+HOSTNAME = os.getenv('HOSTNAME', 'localhost')
 PORT = int(os.getenv('GITLAB_PORT', 8929))
 
 ROOT_HEADER = {'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN, 'Sudo': 'root'}
@@ -271,10 +271,9 @@ def delete_project(username, repo):
     r = requests.delete(delete_url, json=body, headers=ROOT_HEADER)
     print(json.loads(r.text))
 
-def run_e2e():
+def import_repos(repo_file='repo_sample_1.csv'):
     print(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}\n', flush=True)
     print(f'Github Access Token Used: {GITHUB_ACCESS_TOKEN}\n', flush=True) 
-    repo_file = 'repo_sample_1.csv' # or 'repo_sample_2.csv' or any file of the same format
     
     i = 0 # Start idx of the repo_file
     df = pd.read_csv(repo_file).iloc[i:]
@@ -305,7 +304,6 @@ def run_e2e():
         users_list.extend(create_users_from_issues(USERNAME, REPO))
         users_list = list(set(users_list))
         mirror(USERNAME, REPO_ID)
-        star_with_users_from_list(users_list, f'{USERNAME}%2F{REPO}')
 
 def get_commits_from_repo():
     # get all commit users from all repos
@@ -406,19 +404,3 @@ def import_missing_commit_users():
             else:
                 print(f"Error: {r.status_code}")
     print(f"Added users: {add_num}, Modified users: {modify_num}")
-
- 
-if __name__ == '__main__':
-    if not GITLAB_ACCESS_TOKEN:
-        raise ValueError("GITLAB_ACCESS_TOKEN cannot be empty or unset.")
-
-    logging.info(f'HOSTNAME: {HOSTNAME}, PORT: {PORT}, GITLAB TOKEN: {GITLAB_ACCESS_TOKEN}')
-
-    import_missing_commit_users()
-    # import_missing_commit_users()
-    # get_all_users()
-    # get_commits_from_repo()
-    # get_commits_from_repo()
-    # create_user("kilian", "Kilian Valkhof", email="kilian@kilianvalkhof.com")
-    # create_user("cooper", "Cooper Hollmaier", "53924848+chollma@users.noreply.github.com")
-    # create_user("haha", "Prae Songprasit", email="3898139+praesongprasit@users.noreply.github.com")
