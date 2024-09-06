@@ -68,8 +68,10 @@ sandbox_base_container_image="example-exam-image"
 Please note you also need to add LLM keys to `config.toml`. Please follow OpenHands
 documentation to complete the setup.
 
-Then you can launch the agent and prompt it with the task. The examinee is required
-to do all the work and persist them under `/workspace` directory.
+Then you can launch the agent and prompt it with the task. At the moment, with
+OpenHands, you need to do it manually. You could prompt the agent with, say,
+
+> Complete the task in /instruction/task.md
 
 ### Step 4: Run Evaluation
 
