@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-example2-image
-CONTAINER_NAME=job-bench-pm-example2
+IMAGE_NAME=job-bench-pm-create-plane-issue-image
+CONTAINER_NAME=job-bench-pm-create-plane-issue
 
 .PHONY: build run
 

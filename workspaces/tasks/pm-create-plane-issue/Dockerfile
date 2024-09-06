@@ -25,7 +25,6 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python requests library
 RUN pip install requests
-RUN pip install requests rocketchat_API
 
 RUN mkdir -p -m0755 /var/run/sshd
 
@@ -43,4 +42,4 @@ COPY *py /workspace
 COPY *sh /workspace
 
 # keep the container running
-CMD ["tail", "-f", "/dev/null"]
+CMD sh run.sh
