@@ -12,7 +12,7 @@ headers = {
         "Content-Type": "application/json"
 }
 
-def check_url_1(browser_logs, project_id):
+def check_url_1(project_id, browser_logs):
     return f"{PLANE_BASEURL}/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues" in browser_logs
 
 
@@ -39,6 +39,6 @@ def check_issue(project_id, issue_text):
     return False
 
 if __name__ == "__main__":
-    project_id = get_project_id("webarena")
-    print(check_url_1(f"ACTION: goto('{PLANE_BASEURL}/projects/{project_id}/issues"))
+    project_id = get_project_id("WEBARENA")
+    print(check_url_1(project_id, f"ACTION: goto('{PLANE_BASEURL}/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues"))
     print(check_issue(project_id, "Fix page loading performance"))
