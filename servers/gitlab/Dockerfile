@@ -8,5 +8,10 @@ ENV GITLAB_ROOT_PASSWORD="JobBench"
 # Copy start script and data to the image
 COPY . /assets
 
-RUN chmod +x /assets/custom_wrapper.sh
-CMD ["/assets/custom_wrapper.sh"]
+RUN chmod +x /assets/init.sh
+RUN bash "/assets/init.sh"
+
+CMD ["/assets/wrapper"]
+
+HEALTHCHECK --interval=60s --timeout=30s --retries=5 \
+CMD /opt/gitlab/bin/gitlab-healthcheck --fail --max-time 10

@@ -1,11 +1,6 @@
 #!/bin/bash
 set -ex
 
-# start from a clean state without any configs or data
-rm -rf /etc/gitlab/*
-rm -rf /var/log/gitlab/*
-rm -rf /var/opt/gitlab/*
-
 # Run the original wrapper script, but remove the last five lines
 # NOTE: this magic number 2 comes from the fact that 17.3.1-ce.0 version's
 # wrapper file has last 2 lines of "waiting for SIGTERM",
@@ -25,7 +20,7 @@ gitlab-rails runner "token = User.find_by_username('root').personal_access_token
 # in addition, enable project export
 # TODO: figure out how to allow github imports as well
 curl --request PUT --header "PRIVATE-TOKEN: root-token" \
-    "http://localhost:8929/api/v4/application/settings?import_sources=gitlab_project&project_export_enabled=true"
+    "http://0.0.0.0/api/v4/application/settings?import_sources=gitlab_project&project_export_enabled=true"
 
 # Create a dedicated project to place all wiki (company-wide doc)
 # NOTE: this project is created first such that its ID is always 1
@@ -35,14 +30,14 @@ curl --request POST --header "PRIVATE-TOKEN: root-token" \
         "wiki_access_level": "enabled", "with_issues_enabled": "false",
         "with_merge_requests_enabled": "false",
         "visibility": "public"}' \
-     --url "http://localhost:8929/api/v4/projects/"
+     --url "http://0.0.0.0/api/v4/projects/"
 
 curl --request POST --header "PRIVATE-TOKEN: root-token" \
      --header "Content-Type: application/json" --data '{
         "branch": "main", "author_email": "root@local", "author_name": "Administrator",
         "content": "Welcome to Documentation hub. Please navigate to [wiki](../../wikis) to find all documentation.",
         "commit_message": "Add README"}' \
-     --url "http://localhost:8929/api/v4/projects/1/repository/files/README.md"
+     --url "http://0.0.0.0/api/v4/projects/1/repository/files/README.md"
 
 # Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
@@ -56,7 +51,7 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
              --header "PRIVATE-TOKEN: root-token" \
              --form "path=$filename" \
              --form "file=@$file" \
-             "http://localhost:8929/api/v4/projects/import"
+             "http://0.0.0.0/api/v4/projects/import"
     done
 else
     echo "No .tar.gz file found in /assets/exports/. Nothing to import."
@@ -75,7 +70,7 @@ if ls /assets/wikis/*.md 1> /dev/null 2>&1; then
 
         curl --data "title=$title&content=$content" \
              --header "PRIVATE-TOKEN: root-token" \
-             "http://localhost:8929/api/v4/projects/1/wikis"
+             "http://0.0.0.0/api/v4/projects/1/wikis"
 
         echo "Uploaded $title"
     done
@@ -84,6 +79,3 @@ else
 fi
 
 # TODO: change authorship of issues/prs/commits
-
-# Keep the container running
-wait
