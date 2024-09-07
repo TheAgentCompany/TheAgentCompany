@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-# Run the original wrapper script, but remove the last five lines
+# Run the original wrapper script, but remove the last 2 lines
 # NOTE: this magic number 2 comes from the fact that 17.3.1-ce.0 version's
 # wrapper file has last 2 lines of "waiting for SIGTERM",
 # which we'd like to get rid of
