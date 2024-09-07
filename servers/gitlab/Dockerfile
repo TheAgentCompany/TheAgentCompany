@@ -8,10 +8,10 @@ ENV GITLAB_ROOT_PASSWORD="JobBench"
 # Copy start script and data to the image
 COPY . /assets
 
+# Start GitLab service, change configs and populate data during image build time
 RUN chmod +x /assets/init.sh
 RUN bash "/assets/init.sh"
 
+# This is the original CMD used by gitlab-ce image
+# During container run time, this will be executed to launch GitLab service
 CMD ["/assets/wrapper"]
-
-HEALTHCHECK --interval=60s --timeout=30s --retries=5 \
-CMD /opt/gitlab/bin/gitlab-healthcheck --fail --max-time 10
