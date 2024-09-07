@@ -20,7 +20,6 @@ from sotopia.samplers import BaseSampler, EnvAgentCombo
 from sotopia.server import arun_one_episode
 from sotopia.envs.parallel import ParallelSotopiaEnv
 from sotopia.envs.evaluators import EvaluationForTwoAgents
-from .bridge_env import BridgeEnv
 
 ObsType = TypeVar("ObsType")
 ActType = TypeVar("ActType")
