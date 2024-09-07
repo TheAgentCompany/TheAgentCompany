@@ -1,6 +1,5 @@
 import json
 
-from sotopia_bridge.env_agent import EmailServerAgent
 from .rocketchat_agent import RocketChatAgent
 from typing import Literal, Type, cast, Any, Generator, TypeVar
 
@@ -139,8 +138,6 @@ async def run_bridge_server(
     ) -> Type[BaseAgent[Observation, AgentAction]]:
         if model_name == "rocketchat":
             return RocketChatAgent
-        elif model_name == "email_server":
-            return EmailServerAgent
         else:
             if agent_role == "human":
                 return LLMAgent
