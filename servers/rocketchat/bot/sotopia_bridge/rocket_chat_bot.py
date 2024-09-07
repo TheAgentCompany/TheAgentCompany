@@ -110,14 +110,6 @@ class RocketChatBot(object):
             print("No message received, waiting...")
             sleep(1)
 
-# import os
-# botname = os.getenv('BOTNAME') or "rocket.cat"
-# botpassword = os.getenv('BOTPASSWORD') or "jobbench"
-# server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
-# # server_url = 'ogma.lti.cs.cmu.edu:3000'
-# bot = RocketChatBot(botname, botpassword, server_url)
-# bot.run()
-
 """
 message format
 {
@@ -147,4 +139,16 @@ message format
   ]
 }
 
+"""
+
+"""
+# Useage
+
+import os
+botname = os.getenv('BOTNAME') or "rocket.cat"
+botpassword = os.getenv('BOTPASSWORD') or "jobbench"
+server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
+# server_url = 'ogma.lti.cs.cmu.edu:3000'
+bot = RocketChatBot(botname, botpassword, server_url)
+bot.run()
 """
