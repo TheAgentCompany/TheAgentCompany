@@ -7,23 +7,24 @@ You can call `RocketChatBot` to use.
 See [here](https://developer.rocket.chat/docs/develop-a-rocketchat-sdk-bot) for instuction.
 
 # sotopia-bridge
-Connect sotopia with matterbridge
-
-## Getting Started
-
+## python environment
 ```
-conda create -n bridge python=3.11; conda activate bridge;  curl -sSL https://install.python-poetry.org | python3
+conda create -n bridge python=3.11; conda activate bridge;  
+# option 1: use peotry
+curl -sSL https://install.python-poetry.org | python3
 poetry install
+# option 2: use pip
+pip install sotopia=="0.1.0-rc.1"
 ```
 
-
-You need to have a pre-exposed [API](https://github.com/42wim/matterbridge/wiki/Api) from matterbridge to use this agent.
-(Basically if you are in this project, you should ask for the API)
+## OPENAI_API_KEY
 
 OpenAI key is required to run the code. Please set the environment variable `OPENAI_API_KEY` to your key. The recommend way is to add the key to the conda environment:
 ```bash
 conda env config vars set OPENAI_API_KEY=your_key
 ```
+
+## Redis
 
 A redis-stack server is required to run the code.
 Here are four lines of code to create a redis-stack server:
@@ -31,22 +32,14 @@ Here are four lines of code to create a redis-stack server:
 curl -fsSL https://packages.redis.io/redis-stack/redis-stack-server-7.2.0-v10.focal.x86_64.tar.gz -o redis-stack-server.tar.gz
 tar -xvf redis-stack-server.tar.gz
 pip install redis
-./redis-stack-server-7.2.0-v10/bin/redis-stack-server --daemonize yes
+echo -e "port 8092\nrequirepass jobbench\nuser jobbench on >jobbench ~* +@all" > redis-stack-server.conf
+./redis-stack-server-7.2.0-v10/bin/redis-stack-server redis-stack-server.conf --daemonize yes
 ```
 
 The `REDIS_OM_URL` need to be set before loading and saving agents:
 ```bash
 conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
 ```
-## Set up the matterbridge API
-You also need to set up the matterbridge API:
-Download binary from `https://github.com/42wim/matterbridge/releases/tag/v1.26.0`. E.g.,
-
-```bash
-cd matterbridge; wget https://github.com/42wim/matterbridge/releases/download/v1.26.0/matterbridge-1.26.0-linux-64bit
-```
-
-There is the configuration file `matterbridge.toml` under folder `matterbridge`, and then inside the folder run `./matterbridge-1.26.0-linux-64bit` to start the bridge.
 
 ## Usage
 

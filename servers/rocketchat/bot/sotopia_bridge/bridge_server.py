@@ -1,7 +1,6 @@
 import json
 
 from sotopia_bridge.env_agent import EmailServerAgent
-from .bridge_agent import MatterbridgeAgent
 from .rocketchat_agent import RocketChatAgent
 from typing import Literal, Type, cast, Any, Generator, TypeVar
 
@@ -139,9 +138,7 @@ async def run_bridge_server(
         model_name: str,
         agent_role: str,
     ) -> Type[BaseAgent[Observation, AgentAction]]:
-        if model_name == "bridge":
-            return MatterbridgeAgent
-        elif model_name == "rocketchat":
+        if model_name == "rocketchat":
             return RocketChatAgent
         elif model_name == "email_server":
             return EmailServerAgent
@@ -164,7 +161,7 @@ async def run_bridge_server(
             n_agent=len(agents_model_dict),
             env_params=env_params,
             agents_params=[
-                {"model_name": model_name} if model_name not in ["bridge", "rocketchat"]  else {}
+                {"model_name": model_name} if model_name != "rocketchat"  else {}
                 for model_name in agents_model_dict.values()
             ],
         )
