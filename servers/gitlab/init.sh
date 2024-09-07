@@ -10,6 +10,15 @@ source /tmp/modified_wrapper
 
 echo "GitLab is up and running. Performing post-launch actions..."
 
+# Function to check GitLab import status
+check_import_status() {
+    local id=$1
+    local status=$(curl --silent --header "PRIVATE-TOKEN: root-token" \
+                        "http://0.0.0.0/api/v4/projects/${id}/import" |
+                        jq -r '.import_status')
+    echo $status
+}
+
 # Create token "root-token" with sudo and api permissions
 gitlab-rails runner "token = User.find_by_username('root').personal_access_tokens\
     .create(scopes: ['api', 'read_user', 'read_api', 'read_repository', 'write_repository', 'sudo', 'admin_mode'], name: 'root-token', expires_at: 365.days.from_now); \
@@ -42,6 +51,7 @@ curl --request POST --header "PRIVATE-TOKEN: root-token" \
 # Import projects (please make sure they are available under local exports directory)
 # this way, we can build and ship a GitLab image with pre-imported repos
 if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
+    project_id=2
     for file in $(ls /assets/exports/*.tar.gz); do
         # Extract the filename without the path and extension
         filename=$(basename "$file" .tar.gz)
@@ -52,6 +62,33 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
              --form "path=$filename" \
              --form "file=@$file" \
              "http://0.0.0.0/api/v4/projects/import"
+
+        # Store project IDs in an array
+        project_ids+=($project_id)
+        ((project_id++))
+    done
+
+    echo "Waiting for all imports to complete..."
+
+    # Wait for all imports to complete
+    while true; do
+        all_complete=true
+        for id in "${project_ids[@]}"; do
+            status=$(check_import_status $id)
+            if [ "$status" != "finished" ]; then
+                all_complete=false
+                echo "Project $id import status: $status"
+                break
+            fi
+        done
+
+        if $all_complete; then
+            echo "All imports completed successfully!"
+            break
+        fi
+
+        echo "Waiting 10 seconds for imports to complete..."
+        sleep 10
     done
 else
     echo "No .tar.gz file found in /assets/exports/. Nothing to import."
