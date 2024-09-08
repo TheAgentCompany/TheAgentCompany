@@ -114,7 +114,7 @@ services:
   redis-stack:
     image: redis/redis-stack-server:7.4.0-v0
     ports:
-      - "8092:6379"
+      - "6379:6379"
     environment:
       - REDIS_ARGS=--requirepass jobbench --user jobbench on >jobbench ~* &* +@all
 
