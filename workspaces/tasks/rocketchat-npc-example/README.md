@@ -1,9 +1,15 @@
-# How to run dockerfile
-1. change the `OPENAI_API_KEY` in dockerfile
+# Solution 1: How to run dockerfile
+1. Set the correct configuration
+    1. Set the `OPENAI_API_KEY`. You should use your own key.
+    2. Set the `REDIS_OM_URL` as you want. We already host it on ogma server. You can use the default value
+    3. Set `BOT_URL` as the rocketchat URL. We already host it on ogma server. You can use the default value
+    4. Set `BOT_NAME` and `BOT_PASSWORD` as the NPC you want to simulate.
+    5. Change the `scenarios.json` file to your customized setting. See here for [guideline](./NPC_GUIDELINE.md).
+    6. TODO: We will working on provide more predefined NPCs for choice
 2. `make build`
 3. `make run`
 
-# How to run code locally
+# Solution 2: How to run code locally
 ## python environment
 ```
 conda create -n bridge python=3.11; conda activate bridge;  
@@ -39,6 +45,7 @@ echo -e "port 8092\nrequirepass jobbench\nuser jobbench on >jobbench ~* +@all" >
 The `REDIS_OM_URL` need to be set before loading and saving agents:
 ```bash
 conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
+# For example
 conda env config vars set REDIS_OM_URL="redis://jobbench:jobbench@localhost:8092"
 ```
 
@@ -48,12 +55,11 @@ conda env config vars set REDIS_OM_URL="redis://jobbench:jobbench@localhost:8092
 python run.py
 ```
 
-
-# How to run RocketChat simple example without NPC 
-## Python package
+## Reference
+### RocketChat bot Python package
 We copy code from [here](https://github.com/jadolg/RocketChatBot).
 Do little refactor to solve bug.
 You can call `RocketChatBot` to use.
 
-## How to launch Node.JS version
+## RocketChat bot Node.JS package
 See [here](https://developer.rocket.chat/docs/develop-a-rocketchat-sdk-bot) for instuction.
