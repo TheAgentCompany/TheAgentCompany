@@ -25,6 +25,9 @@ conda env config vars set OPENAI_API_KEY=your_key
 ```
 
 ## Redis
+You can directly launch the server docker compose file. We already config the redis server there. Port is 8092, username is `jobbench` and password is `jobbench`
+
+If you don't want to use it, you can config it follow this doc for linux.
 
 A redis-stack server is required to run the code.
 Here are four lines of code to create a redis-stack server:
