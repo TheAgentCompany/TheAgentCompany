@@ -118,3 +118,11 @@ restore-rocketchat:
 
 backup-rocketchat:
 	docker exec rocketchat-mongodb-1 sh -c 'mongodump --archive' > db.dump
+
+
+# Redis
+start-redis: init
+	docker compose up redis-stack -d
+
+stop-redis:
+	docker compose stop redis-stack
