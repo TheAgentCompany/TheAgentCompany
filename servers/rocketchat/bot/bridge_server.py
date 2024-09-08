@@ -1,6 +1,6 @@
 import json
 
-from .rocketchat_agent import RocketChatAgent
+from rocketchat_agent import RocketChatAgent
 from typing import Literal, Type, cast, Any, Generator, TypeVar
 
 from beartype import beartype
@@ -46,7 +46,7 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         assert (
             len(agents_params) == n_agent
         ), f"agents_params should be a list of length {n_agent}"
-        filename = './data/scenarios.json'
+        filename = 'scenarios.json'
         with open(filename, 'r') as file:
             env_profiles_json = json.load(file)
         env_profile = EnvironmentProfile.parse_obj(

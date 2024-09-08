@@ -16,7 +16,7 @@ from datetime import datetime
 from typing import Any
 from datetime import datetime
 import os
-from .rocket_chat_bot import RocketChatBot
+from rocket_chat_bot import RocketChatBot
 
 botname = os.getenv('BOTNAME') or "rocket.cat"
 botpassword = os.getenv('BOTPASSWORD') or "jobbench"
