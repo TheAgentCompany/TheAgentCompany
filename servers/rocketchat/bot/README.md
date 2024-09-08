@@ -1,3 +1,8 @@
+# How to run dockerfile
+1. change the `OPENAI_API_KEY` in dockerfile
+2. `make build`
+3. `make run`
+
 # How to run Python package
 We copy code from [here](https://github.com/jadolg/RocketChatBot).
 Do little refactor to solve bug.

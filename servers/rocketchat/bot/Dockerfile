@@ -42,14 +42,12 @@ RUN pip install requests
 RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
 
-COPY data/  /workspace
-COPY run.py /workspace
-COPY sotopia_bridge /workspace
+COPY *.json  /workspace
+COPY *.py /workspace
 
-ENV REDIS_OM_URL redis://default:jobbench@localhost:8092
+# Docker bridge network: 172.17.0.1
+ENV REDIS_OM_URL redis://default:jobbench@172.17.0.1:8092
 # ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 
-
 # keep the container running (optional)
-# CMD python run.py
-CMD ["tail", "-f","/dev/null"]
+CMD python main.py
