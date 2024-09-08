@@ -39,6 +39,7 @@ echo -e "port 8092\nrequirepass jobbench\nuser jobbench on >jobbench ~* +@all" >
 The `REDIS_OM_URL` need to be set before loading and saving agents:
 ```bash
 conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
+conda env config vars set REDIS_OM_URL="redis://jobbench:jobbench@localhost:8092"
 ```
 
 ## Usage

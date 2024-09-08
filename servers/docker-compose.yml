@@ -110,6 +110,13 @@ services:
       MONGODB_ADVERTISED_HOSTNAME: ${MONGODB_ADVERTISED_HOSTNAME:-mongodb}
       MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
+
+  redis-stack:
+    image: redis/redis-stack-server:7.4.0-v0
+    ports:
+      - "8092:6379"
+    environment:
+      - REDIS_ARGS=--requirepass jobbench --user jobbench on >jobbench ~* &* +@all
 volumes: # If you want to store the data on a different drive, see https://github.com/nextcloud/all-in-one#how-to-store-the-filesinstallation-on-a-separate-drive
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer # This line is not allowed to be changed as otherwise the built-in backup solution will not work
