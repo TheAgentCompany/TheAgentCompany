@@ -3,15 +3,7 @@
 2. `make build`
 3. `make run`
 
-# How to run Python package
-We copy code from [here](https://github.com/jadolg/RocketChatBot).
-Do little refactor to solve bug.
-You can call `RocketChatBot` to use.
-
-# How to launch Node.JS version
-See [here](https://developer.rocket.chat/docs/develop-a-rocketchat-sdk-bot) for instuction.
-
-# sotopia-bridge
+# How to run code locally
 ## python environment
 ```
 conda create -n bridge python=3.11; conda activate bridge;  
@@ -55,3 +47,13 @@ conda env config vars set REDIS_OM_URL="redis://jobbench:jobbench@localhost:8092
 ```bash
 python run.py
 ```
+
+
+# How to run RocketChat simple example without NPC 
+## Python package
+We copy code from [here](https://github.com/jadolg/RocketChatBot).
+Do little refactor to solve bug.
+You can call `RocketChatBot` to use.
+
+## How to launch Node.JS version
+See [here](https://developer.rocket.chat/docs/develop-a-rocketchat-sdk-bot) for instuction.

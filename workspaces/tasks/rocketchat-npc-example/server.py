@@ -89,7 +89,7 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
 
 
 @beartype
-async def run_bridge_server(
+async def run_server(
     model_dict: dict[str, LLM_Name],
     agents_roles: dict[str, str],
     sampler: BaseSampler[Observation, AgentAction] = BridgeSampler(),

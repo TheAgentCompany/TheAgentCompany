@@ -18,8 +18,8 @@ from datetime import datetime
 import os
 from rocket_chat_bot import RocketChatBot
 
-botname = os.getenv('BOTNAME') or "rocket.cat"
-botpassword = os.getenv('BOTPASSWORD') or "jobbench"
+botname = os.getenv('BOT_NAME') or "rocket.cat"
+botpassword = os.getenv('BOT_PASSWORD') or "jobbench"
 server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
 
 def parse_obj(obj: dict[str, Any]) -> "RocketChatMessageTransaction":
