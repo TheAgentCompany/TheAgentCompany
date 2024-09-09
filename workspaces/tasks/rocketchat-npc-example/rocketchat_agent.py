@@ -83,7 +83,6 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         self.session_id = session_id or str(uuid4())
         self.sender_id = str(uuid4())
         print("step 1: connect to the server")
-        print("Yufan",agent_profile.first_name)
         username, password = get_credentials(agent_profile.first_name)
         self.bot = RocketChatBot(username, password, server_url)
         self.send_init_message()
@@ -100,7 +99,6 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         obs: Observation,
     ) -> AgentAction:
         self.recv_message("Environment", obs)
-        print("Enter function")
         if len(obs.available_actions) == 1 and "none" in obs.available_actions:
             print("No available actions.")
             if obs.turn_number == 0:
