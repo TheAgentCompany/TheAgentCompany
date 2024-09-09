@@ -1,4 +1,5 @@
 import json
+import os
 
 from rocketchat_agent import RocketChatAgent
 from typing import Literal, Type, cast, Any, Generator, TypeVar
@@ -22,6 +23,27 @@ from sotopia.envs.evaluators import EvaluationForTwoAgents
 
 ObsType = TypeVar("ObsType")
 ActType = TypeVar("ActType")
+
+scenarios_file_path = os.getenv('SCENARIOS_FILE_PATH') or 'scenarios.json'
+
+def get_scenarios(agent_first_name):
+    # Attempt to get the user's scenarios based on the provided key
+    with open(scenarios_file_path, 'r') as file:
+        json_data = json.load(file)
+    
+    agent_goal = json_data.get(agent_first_name)
+    
+    if not agent_goal:
+        raise RuntimeError("Didn't find the NPC scenarios in file")
+
+    return  {
+        "codename": "working_space_1"+agent_first_name,
+        "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
+        "agent_goals": [
+            agent_goal,
+            "You need to help the other agent with something about work."
+        ]
+    }
 
 
 class BridgeSampler(BaseSampler[ObsType, ActType]):
@@ -47,11 +69,8 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         assert (
             len(agents_params) == n_agent
         ), f"agents_params should be a list of length {n_agent}"
-        filename = 'scenarios.json'
-        with open(filename, 'r') as file:
-            env_profiles_json = json.load(file)
         env_profile = EnvironmentProfile.parse_obj(
-            env_profiles_json['work_space_1']
+            get_scenarios(agent_first_name)
         )
         env = ParallelSotopiaEnv(env_profile=env_profile, **env_params)
         agent_profiles = [
