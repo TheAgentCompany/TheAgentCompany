@@ -10,10 +10,8 @@ COPY *.py /workspace
 # Redis Username: default, Password: jobbench
 # Redis service URL: ogma.lti.cs.cmu.edu/:6379
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
-# RocketChat NPC name, password, RocketChat service URL
-ENV BOT_NAME rocket.cat
-ENV BOT_PASSWORD jobbench
+# RocketChat service URL
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
 ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 # keep the container running (optional)
-CMD python main.py
+CMD python main.py --agent_first_name=John
