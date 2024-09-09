@@ -4,8 +4,11 @@ FROM base-image
 RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
 
-COPY *.json  /workspace
-COPY *.py /workspace
+# create npc directory (examinee MUST not access this directory)
+RUN mkdir -p /npc
+
+COPY *.json  /npc
+COPY *.py /npc
 
 # Redis Username: default, Password: jobbench
 # Redis service URL: ogma.lti.cs.cmu.edu/:6379
