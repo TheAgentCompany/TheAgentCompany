@@ -54,27 +54,8 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         )
         env = ParallelSotopiaEnv(env_profile=env_profile, **env_params)
         agent_profiles = [
-            AgentProfile.parse_obj(
-                {
-                    "first_name": "John",
-                    "last_name": "Doe",
-                    "age": 30,
-                    "occupation": "Software Engineer",
-                }
-            ),
-            AgentProfile.parse_obj(
-                {
-                    "first_name": "X",
-                    "last_name": "AI",
-                    "occupation": "AI Assistant",
-                }
-            ),
-            AgentProfile.parse_obj(
-                {  
-                    "first_name": "Email",
-                    "last_name": "Server",
-                }
-            ),
+            AgentProfile.find(AgentProfile.first_name == 'X'),
+            AgentProfile.find(AgentProfile.first_name == 'John'),
         ]
         for _ in range(size):
             agents = [

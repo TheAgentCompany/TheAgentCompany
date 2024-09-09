@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-rocketchat-npc
-CONTAINER_NAME=job-bench-rocketchat-npc
+IMAGE_NAME=job-bench-rocketchat-npc-populate-data
+CONTAINER_NAME=job-bench-rocketchat-npc-populate-data
 
 .PHONY: build run
 
