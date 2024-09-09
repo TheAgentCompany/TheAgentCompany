@@ -1,7 +1,7 @@
 FROM base-npc-image
 
 # Step1: Set OPENAI API KEY
-ENV OPENAI_API_KEY sk-AkN51Iu09G5lKoGZK2_As-lO8dqKyyWWysP4bdljoMT3BlbkFJa92oLQHtXfhP3ylgAVPLJ9jkB7BJTGVV1aFvofHTcA
+ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 
 # Step2: Change the scenarios.json to use your own definition
 COPY scenarios.json /npc
