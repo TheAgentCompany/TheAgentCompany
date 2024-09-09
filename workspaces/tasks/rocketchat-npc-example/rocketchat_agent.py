@@ -119,8 +119,11 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
     async def send_message(self,obs: Observation):
         # 1. post observation to the message list
         print("step 2: post observation to the message list:",obs.last_turn)
-        last_timestamp = current_timestamp = datetime.now()
-        self.bot.send_message(obs.last_turn)
+        last_timestamp = datetime.now()
+        if obs.last_turn:
+            self.bot.send_message(obs.last_turn)
+        else:
+            print("Sotopia NPC decide to reply Empty String. Chenge to not send.")
         return last_timestamp
     
     async def get_action_from_message(self,last_timestamp):

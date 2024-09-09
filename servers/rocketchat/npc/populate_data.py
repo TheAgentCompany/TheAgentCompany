@@ -15,6 +15,12 @@ agent_definitions = [
         "last_name": "Doe",
         "age": 30,
         "occupation": "Software Engineer",
+    },
+    {
+        "first_name": "rocket",
+        "last_name": "cat",
+        "age": 30,
+        "occupation": "Software Engineer",
     }
 ]
 
