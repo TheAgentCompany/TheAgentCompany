@@ -15,7 +15,14 @@ COPY *.py /npc
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 # RocketChat service URL
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
-ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
-# keep the container running (optional)
-# CMD cd /npc && python run_multi_npc.py
-CMD ["tail", "-f","/dev/null"]
+ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
+ENV SCENARIOS_FILE_PATH /npc/scenarios.json
+# If you want to launch the rocketchat npc, you need to do the following thing in your examinee
+
+# Step1: set OPENAI API KEY
+# ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
+
+# Step2: COPY scenarios.json to docker with your own definition
+
+# Step3: execute the run_multi_npc.py in npc directory.
+# CMD python /npc/run_multi_npc.py

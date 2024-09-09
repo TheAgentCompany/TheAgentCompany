@@ -1,5 +1,5 @@
-IMAGE_NAME=base-npc-image
-CONTAINER_NAME=base-npc-image
+IMAGE_NAME=job-bench-rocketchat-npc-example
+CONTAINER_NAME=job-bench-rocketchat-npc-example
 
 .PHONY: build run
 
@@ -8,6 +8,7 @@ build:
 
 run:
 	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker logs $(CONTAINER_NAME)
 
 stop:
 	docker stop $(CONTAINER_NAME)
