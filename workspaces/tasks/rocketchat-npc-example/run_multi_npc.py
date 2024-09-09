@@ -17,4 +17,5 @@ for name in names:
     subprocess.Popen(command, shell=True)
 
 # Use following code to kill the backgroup npc
+# pkill -f 'python run_one_npc.py'
 # ps aux | grep 'python run_one_npc.py'

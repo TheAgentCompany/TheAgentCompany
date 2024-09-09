@@ -17,4 +17,4 @@ ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
 ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 # keep the container running (optional)
-CMD python main.py --agent_first_name=John
+CMD python run_multi_npc.py
