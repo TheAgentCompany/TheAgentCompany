@@ -1,5 +1,5 @@
-IMAGE_NAME=base-image
-CONTAINER_NAME=base-image
+IMAGE_NAME=job-bench-example
+CONTAINER_NAME=job-bench-example
 
 .PHONY: build run
 
@@ -8,6 +8,7 @@ build:
 
 run:
 	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker logs $(CONTAINER_NAME)
 
 stop:
 	docker stop $(CONTAINER_NAME)
@@ -15,6 +16,3 @@ stop:
 
 attach:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
-
-kill-npc:
-	pkill -f 'python run_one_npc.py'

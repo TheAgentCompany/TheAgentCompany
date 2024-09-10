@@ -18,3 +18,6 @@ Every task folder must have an `evaluator.py` that can be run to grade the
 examinee's work. It must take exactly one CLI argument that is a path to the
 trajectory file. There's no specific format requirement on the trajectory file,
 but it MUST document the necessary steps conducted by the examinee.
+
+## NPC
+If you want to launch NPC, see details [here](./NPC.md)

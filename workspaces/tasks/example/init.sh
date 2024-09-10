@@ -8,23 +8,11 @@ fi
 
 
 
-################### Example about block host ############################
+################### Example about Launch NPC ############################
 ############### Please delete it if you don't need ######################
 
 
 BLOCKED_DOMAINS=${BLOCKED_DOMAINS:-"youtube.com reddit.com"}
 
-cp /etc/hosts /etc/hosts.backup
-
-for domain in $BLOCKED_DOMAINS; do
-    if ! grep -q "$domain" /etc/hosts; then
-        echo "127.0.0.1 $domain" >> /etc/hosts
-        echo "127.0.0.1 www.$domain" >> /etc/hosts
-        echo "Blocked: $domain"
-    else
-        echo "$domain is already in hosts file"
-    fi
-done
-
-rm /etc/hosts.backup
+python /npc/run_multi_npc.py
 echo "Hosts file updated successfully"
