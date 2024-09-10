@@ -1,7 +1,7 @@
 # Contributing
 
-Thanks for your interest in contributing to JobBench! We welcome and appreciate contributions.
-To report bugs, create a [GitHub issue](https://github.com/neulab/JobBench/issues/new).
+Thanks for your interest in contributing to The Agent Company! We welcome and appreciate contributions.
+To report bugs, create a [GitHub issue](https://github.com/neulab/TheAgentCompany/issues/new).
 
 If want to know how to edit code on serer side or task image, please echeck [DEVELOPMENT.md](./DEVELOPMENT.md)
 
@@ -13,11 +13,11 @@ If you already have the access to this repository and can create branch on main 
 
 #### 1. Fork the Official Repository
 
-Fork [JobBnech repository](https://https://github.com/neulab/JobBench) into your own account.
+Fork [JobBnech repository](https://https://github.com/neulab/TheAgentCompany) into your own account.
 Clone your own forked repository into your local environment.
 
 ```shell
-git clone git@github.com:<YOUR-USERNAME>/JobBench.git
+git clone git@github.com:<YOUR-USERNAME>/TheAgentCompany.git
 ```
 
 #### 2. Configure Git
@@ -26,8 +26,8 @@ Set the official repository as your [upstream](https://www.atlassian.com/git/tut
 Add the original repository as upstream
 
 ```shell
-cd JobBench
-git remote add upstream git@github.com:neulab/JobBench.git
+cd TheAgentCompany
+git remote add upstream git@github.com:neulab/TheAgentCompany.git
 ```
 
 Verify that the remote is set.
@@ -47,9 +47,9 @@ git push origin main
 ```
 
 #### 4. Create a New Branch And Open a Pull Request
-After you finish implementation, open forked repository. The source branch is your new branch, and the target branch is `neulab/JobBench` `main` branch. Then PR should appears in [JobBench PRs](https://github.com/neulab/JobBench/pulls).
+After you finish implementation, open forked repository. The source branch is your new branch, and the target branch is `neulab/TheAgentCompany` `main` branch. Then PR should appears in [TheAgentCompany PRs](https://github.com/neulab/TheAgentCompany/pulls).
 
-Then JobBench team will review your code.
+Then The Agent Company team will review your code.
 
 ## PR Rules
 
@@ -72,9 +72,9 @@ For example, a PR title could be:
 - `refactor: modify package path`
 - `feat(frontend): xxxx`, where `(frontend)` means that this PR mainly focuses on the frontend component.
 
-You may also check out previous PRs in the [PR list](https://github.com/neulab/JobBench/pulls).
+You may also check out previous PRs in the [PR list](https://github.com/neulab/TheAgentCompany/pulls).
 
-As described in [here](https://github.com/neulab/JobBench/labels), we create several labels. Every PR should better tag with corresponding labels.
+As described in [here](https://github.com/neulab/TheAgentCompany/labels), we create several labels. Every PR should better tag with corresponding labels.
 
 ### 2. Pull Request description
 
