@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from uuid import uuid4
+import json
 
 import aiohttp
 import pydantic
@@ -18,9 +19,24 @@ from datetime import datetime
 import os
 from rocket_chat_bot import RocketChatBot
 
-botname = os.getenv('BOT_NAME') or "rocket.cat"
-botpassword = os.getenv('BOT_PASSWORD') or "jobbench"
 server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
+credential_file_path = os.getenv('CREDENTIAL_FILE_PATH') or 'npc_credential.json'
+
+def get_credentials(user_key):
+    # Attempt to get the user's credentials based on the provided key
+    with open(credential_file_path, 'r') as file:
+        json_data = json.load(file)
+    
+    user_info = json_data.get(user_key)
+    
+    if user_info:
+        username = user_info.get('username')
+        password = user_info.get('password')
+        return username, password
+    else:
+        raise RuntimeError("Didn't find the NPC credential in file")
+        return None, None  # Return None if the key doesn't exist
+
 
 def parse_obj(obj: dict[str, Any]) -> "RocketChatMessageTransaction":
     if obj:
@@ -67,7 +83,8 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         self.session_id = session_id or str(uuid4())
         self.sender_id = str(uuid4())
         print("step 1: connect to the server")
-        self.bot = RocketChatBot(botname, botpassword, server_url)
+        username, password = get_credentials(agent_profile.first_name)
+        self.bot = RocketChatBot(username, password, server_url)
         self.send_init_message()
         logging.info(f"Session ID: {self.session_id}")
 
@@ -82,7 +99,6 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         obs: Observation,
     ) -> AgentAction:
         self.recv_message("Environment", obs)
-        print("Enter function")
         if len(obs.available_actions) == 1 and "none" in obs.available_actions:
             print("No available actions.")
             if obs.turn_number == 0:
@@ -103,8 +119,11 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
     async def send_message(self,obs: Observation):
         # 1. post observation to the message list
         print("step 2: post observation to the message list:",obs.last_turn)
-        last_timestamp = current_timestamp = datetime.now()
-        self.bot.send_message(obs.last_turn)
+        last_timestamp = datetime.now()
+        if obs.last_turn:
+            self.bot.send_message(obs.last_turn)
+        else:
+            print("Sotopia NPC decide to reply Empty String. Chenge to not send.")
         return last_timestamp
     
     async def get_action_from_message(self,last_timestamp):

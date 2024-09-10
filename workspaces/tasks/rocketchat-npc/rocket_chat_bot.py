@@ -1,10 +1,11 @@
 from pprint import pprint
 from random import choice
-# from threading import Thread
 from time import sleep
+import os
 
 from rocketchat_API.rocketchat import RocketChat
 
+agent_username = os.getenv('AGENT_USERNAME') or 'jobbench'
 
 class RocketChatBot(object):
     def __init__(self, botname, passwd, server, command_character=None):
@@ -13,6 +14,7 @@ class RocketChatBot(object):
         self.lastts = {}
         self.command_character = command_character
         self.last_channel_id = "GENERAL"
+        self.username = self.api.me().json()['username']
 
     def get_status(self, auser):
         return self.api.users_get_presence(username=auser)
@@ -25,7 +27,8 @@ class RocketChatBot(object):
         for message in messages['messages']:
             if message['u']['username'] != self.botname:
                 pprint(message)
-                if message['u']['username'] == 'rocket.cat':
+                # filter out the message not from jobbench
+                if message['u']['username'] != agent_username:
                     continue
                 return message['msg']
         return None

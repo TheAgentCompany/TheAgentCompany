@@ -3,7 +3,7 @@
 This directory contains code & configs needed to run all services,
 including GitLab, NextCloud, Plane, and RocketChat. All services
 are launched and running on CMU ogma server, but if you'd like
-to launch them by yourself, please refer to [Development Guide](https://github.com/neulab/JobBench/blob/main/DEVELOPMENT.md).
+to launch them by yourself, please refer to [Development Guide](https://github.com/neulab/TheAgentCompany/blob/main/DEVELOPMENT.md).
 
 Below are the addresses, usernames, and passwords for each service:
 

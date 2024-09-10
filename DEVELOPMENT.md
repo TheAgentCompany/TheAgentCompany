@@ -1,5 +1,5 @@
 # Development Guide
-This guide is for people working on JobBench and editing the source code. If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRIBUTING.md) on how to clone and set up the project initially before moving on. Otherwise, you can clone the JobBench project directly.
+This guide is for people working on TheAgentCompany and editing the source code. If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRIBUTING.md) on how to clone and set up the project initially before moving on. Otherwise, you can clone TheAgentCompany project directly.
 
 ## Table of Contents
 
@@ -33,7 +33,6 @@ For how to access each service, see [here](./servers/README.md)
 ### 2. Initialize parameters
 In the [Makefile](./servers/Makefile), we create several environment parameters, like below
 ```
-GITLAB_HOME?=/home/fangzhex/ogma3/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081

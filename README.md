@@ -1,4 +1,5 @@
-# JobBench
+# The Agent Company
+
 ## Introduction
 A benchmark for agents that could do professional jobs! The main goal is to evaluate AI progress on "AI workers". This project is funded by [Open Philanthropy](https://www.openphilanthropy.org/).
 

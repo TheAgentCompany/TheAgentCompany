@@ -1,4 +1,5 @@
 import json
+import os
 
 from rocketchat_agent import RocketChatAgent
 from typing import Literal, Type, cast, Any, Generator, TypeVar
@@ -23,6 +24,27 @@ from sotopia.envs.evaluators import EvaluationForTwoAgents
 ObsType = TypeVar("ObsType")
 ActType = TypeVar("ActType")
 
+scenarios_file_path = os.getenv('SCENARIOS_FILE_PATH') or 'scenarios.json'
+
+def get_scenarios(agent_first_name):
+    # Attempt to get the user's scenarios based on the provided key
+    with open(scenarios_file_path, 'r') as file:
+        json_data = json.load(file)
+    
+    agent_goal = json_data.get(agent_first_name)
+    
+    if not agent_goal:
+        raise RuntimeError("Didn't find the NPC scenarios in file")
+
+    return  {
+        "codename": "working_space_1"+agent_first_name,
+        "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
+        "agent_goals": [
+            agent_goal,
+            "You need to help the other agent with something about work."
+        ]
+    }
+
 
 class BridgeSampler(BaseSampler[ObsType, ActType]):
     def sample(
@@ -34,6 +56,7 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         size: int = 1,
         env_params: dict[str, Any] = {},
         agents_params: list[dict[str, Any]] = [{}, {}],
+        agent_first_name: str = "",
     ) -> Generator[EnvAgentCombo[ObsType, ActType], None, None]:
         # This is a simplified version of the original function
         # The original function is not provided in the snippet
@@ -46,35 +69,15 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         assert (
             len(agents_params) == n_agent
         ), f"agents_params should be a list of length {n_agent}"
-        filename = 'scenarios.json'
-        with open(filename, 'r') as file:
-            env_profiles_json = json.load(file)
         env_profile = EnvironmentProfile.parse_obj(
-            env_profiles_json['work_space_1']
+            get_scenarios(agent_first_name)
         )
         env = ParallelSotopiaEnv(env_profile=env_profile, **env_params)
         agent_profiles = [
-            AgentProfile.parse_obj(
-                {
-                    "first_name": "John",
-                    "last_name": "Doe",
-                    "age": 30,
-                    "occupation": "Software Engineer",
-                }
-            ),
-            AgentProfile.parse_obj(
-                {
-                    "first_name": "X",
-                    "last_name": "AI",
-                    "occupation": "AI Assistant",
-                }
-            ),
-            AgentProfile.parse_obj(
-                {  
-                    "first_name": "Email",
-                    "last_name": "Server",
-                }
-            ),
+            # Only get the first result. If not item in list, should raise error
+            # Please check the redis server, you should populate data before running
+            AgentProfile.find(AgentProfile.first_name == 'X').execute()[0],
+            AgentProfile.find(AgentProfile.first_name == agent_first_name).execute()[0],
         ]
         for _ in range(size):
             agents = [
@@ -98,6 +101,7 @@ async def run_server(
     tag: str | None = None,
     push_to_db: bool = False,
     using_async: bool = True,
+    agent_first_name: str = "",
 ) -> list[list[tuple[str, str, Message]]]:
     """
     Doc incomplete
@@ -160,6 +164,7 @@ async def run_server(
                 {"model_name": model_name} if model_name != "rocketchat"  else {}
                 for model_name in agents_model_dict.values()
             ],
+            agent_first_name = agent_first_name,
         )
     episode_futures = [
         arun_one_episode(
