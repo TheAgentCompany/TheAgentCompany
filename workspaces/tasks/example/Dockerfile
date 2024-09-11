@@ -22,6 +22,5 @@ RUN chmod +x /init.sh
 RUN sh /init.sh
 RUN python /init.py
 
-# keep the container running (optional)
-CMD python /npc/run_multi_npc.py && sleep 1000000
-# CMD ["tail", "-f","/dev/null"]
+# Set up NPC environment and keep the container running (optional)
+CMD python /npc/run_multi_npc.py && tail -f /dev/null
