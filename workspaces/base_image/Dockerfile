@@ -28,7 +28,7 @@ COPY *.py /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
-ENV OPENAI_API_KEY sk-AkN51Iu09G5lKoGZK2_As-lO8dqKyyWWysP4bdljoMT3BlbkFJa92oLQHtXfhP3ylgAVPLJ9jkB7BJTGVV1aFvofHTcA
+ENV OPENAI_API_KEY <YOUR OPENAI KEY>
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
 
