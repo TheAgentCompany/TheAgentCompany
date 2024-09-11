@@ -1,4 +1,3 @@
-################## BASE IMAGE ######################
 FROM python:3
 
 # create evaluation directory (examinee MUST not access this directory)
@@ -12,9 +11,12 @@ COPY test_setup.py /instruction
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
-################## BASE NPC IMAGE ######################
+################## NPC SETUP ######################
+# For simplicity, we set up necessary environments needed
+# by NPCs in the base image, even though some simple tasks
+# don't require NPCs
 
-# Install Python requests library
+# Install Python libraries needed to launch NPCs
 RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
 
@@ -26,3 +28,8 @@ COPY *.py /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
+ENV OPENAI_API_KEY sk-AkN51Iu09G5lKoGZK2_As-lO8dqKyyWWysP4bdljoMT3BlbkFJa92oLQHtXfhP3ylgAVPLJ9jkB7BJTGVV1aFvofHTcA
+ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
+ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
+
+################## NPC SETUP ######################
