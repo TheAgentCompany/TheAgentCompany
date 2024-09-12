@@ -40,8 +40,9 @@ def get_scenarios(agent_first_name):
         "codename": "working_space_1"+agent_first_name,
         "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
         "agent_goals": [
-            agent_goal,
-            "You need to help the other agent with something about work."
+            "You goal is to instruct the other agent to help with you something about work.",
+            "<extra_info>" + agent_goal["extra_info"] + "</extra_info>",
+            "<strategy_hint>" + agent_goal["strategy_hint"] + "</strategy_hint>"
         ]
     }
 
