@@ -10,9 +10,13 @@ NOTE: If you want to use an existing NPC that is already in
 [npc_credential.json](../../base_image/npc_credential.json), you can skip this step.
 
 Otherwise, if you'd like to create a new NPC account, please do so in the hosted RocketChat service.
-As of now, this is a manual step that you have to do via web GUI. Please then add
-the username and password to [npc_credential.json](../../base_image/npc_credential.json)
-using the following format:
+As of now, this is a manual step that you have to do via web GUI. The idea is that
+NPCs are like normal employees in the company and thus their RocketChat accounts
+as well as their personalities are shared across all tasks.
+
+After account crreation, please add the username and password to
+[npc_credential.json](../../base_image/npc_credential.json)
+in the following format:
 
 ```json
  "<first_name>" : {
