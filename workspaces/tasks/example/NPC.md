@@ -4,20 +4,42 @@ Target audience of this doc: benchmark developers that would like to incorporate
 
 ## How to start NPC
 
-### Step 1: Register the NPC in rocketchat
-NOTE: If you want to use an existing user in [npc_credential.json](../../base_image/npc_credential.json), you can skip this step.
+### Step 1: Create NPC accounts in RocketChat
 
-Make sure you already create the NPC account in rocketchat. In [npc_credential.json](../../base_image/npc_credential.json), you should create records for username and password. The Key is first name. All data are case sensitive.
+NOTE: If you want to use an existing NPC that is already in
+[npc_credential.json](../../base_image/npc_credential.json), you can skip this step.
 
-### Step 2: Populate NPC definition in Redis
-NOTE: If you already populate the NPC data, or use an existing NPC definition, you can skip this step.
+Otherwise, if you'd like to create a new NPC account, please do so in the hosted RocketChat service.
+As of now, this is a manual step that you have to do via web GUI. Please then add
+the username and password to [npc_credential.json](../../base_image/npc_credential.json)
+using the following format:
 
-In [populate_data.py](../../../servers/rocketchat/npc/populate_data.py), we define the agent definitons. Execute the code, all data will popuate into redis. Pay attention, this data should match with NPC first name in rocketchat.
+```json
+ "<First Name>" : {
+        "username": "<username>",
+        "password": "<password>"
+    },
+```
 
-### Step 3: Build base-npc-image
-If you changed [npc_credential.json](../../base_image/npc_credential.json), you should rebuild it. Go `rocketchat-npc` directory and run `make build`
+where `<First Name>` MUST be unique. It is used as a global identifier which is
+also referenced in each individual task's `scenarios.json` and server's
+[npc_definition.json](../../../servers/rocketchat/npc/npc_definition.json).
+Everything in the credential file is case sensitive.
 
-### Step 4: Define the NPC you want to involve
+### Step 2: Populate NPC definition to Sotopia
+
+NPCs are powered by [sotopia](https://github.com/sotopia-lab/sotopia/commits),
+which stores NPCs' definitions in a Redis server.
+
+NOTE: If you want to use an existing NPC, you can skip this step.
+
+Otherwise, please add NPC definition in [npc_definition.json](../../../servers/rocketchat/npc/npc_definition.json)
+and then run [populate_data.py](../../../servers/rocketchat/npc/populate_data.py)
+on the server side to populate data into Redis. The script is designed to be idempotent.
+The complete schema of NPC definition can be found in [NPC_CONFIG.md](../../../servers/rocketchat/npc/NPC_CONFIG.md).
+
+### Step 3: Define the NPC involved in this task
+
 In this directory, we provide an example for you. You can directly run it.
 
 When try to build your own customized image:
