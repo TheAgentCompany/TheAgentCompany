@@ -26,23 +26,32 @@ ActType = TypeVar("ActType")
 
 scenarios_file_path = os.getenv('SCENARIOS_FILE_PATH') or 'scenarios.json'
 
-def get_scenarios(agent_first_name):
+def get_scenarios(npc_first_name):
     # Attempt to get the user's scenarios based on the provided key
     with open(scenarios_file_path, 'r') as file:
         json_data = json.load(file)
-    
-    agent_goal = json_data.get(agent_first_name)
-    
-    if not agent_goal:
+
+    agent_scenario = json_data.get(npc_first_name)
+    if not agent_scenario:
         raise RuntimeError("Didn't find the NPC scenarios in file")
 
+    agent_goal = "You goal is offer help and guidance to another agent about work."
+    if "extra_info" in agent_scenario:
+        agent_goal += " <extra_info>" + agent_goal["extra_info"] + "</extra_info>"
+    if "strategy_hint" in agent_scenario:
+        agent_goal += " <strategy_hint>" + agent_goal["strategy_hint"] + "</strategy_hint>"
+
+    # sotopia is an agent-agent interaction framework, but here we are using it between
+    # agent (NPC) and examinee. The framework requires us to define a goal for both
+    # counter-parties, even though sotopia doesn't really control examinee.
+    examinee_goal = "You need to seek help from another agent to complete your work."
+
     return  {
-        "codename": "working_space_1"+agent_first_name,
+        "codename": "working_space_1" + npc_first_name,
         "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
         "agent_goals": [
-            "You goal is to instruct the other agent to help with you something about work.",
-            "<extra_info>" + agent_goal["extra_info"] + "</extra_info>",
-            "<strategy_hint>" + agent_goal["strategy_hint"] + "</strategy_hint>"
+            agent_goal,
+            examinee_goal
         ]
     }
 
