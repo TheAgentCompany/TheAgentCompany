@@ -4,6 +4,7 @@ FROM base-image
 RUN pip install sotopia==0.1.0-rc.1
 
 COPY *.py /workspace
+COPY *.json /workspace
 
 # Redis Username: default, Password: jobbench
 # Redis service URL: ogma.lti.cs.cmu.edu/:6379

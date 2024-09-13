@@ -1,7 +1,17 @@
 FROM base-image
 
-# persist evaluator and task files in the exam image
-COPY evaluator.py /evaluation/
+# persist utilities files in the exam image
+COPY evaluator.py /utils/
+COPY init.sh /utils/
+RUN chmod +x /utils/init.sh
+
+# This task needs to do some sanity checks when the container spins up
+# those files are optional and benchmark developers should customize according
+# to their tasks' needs
+COPY pre_init.py /utils/
+COPY post_init.py /utils/
+
+# persist instruction files needed by the examinee
 COPY task.md /instruction/
 
 # requests library is needed for this task's evaluation
@@ -9,26 +19,7 @@ COPY task.md /instruction/
 # to their tasks' needs
 RUN pip install requests
 
-# copy and run initialization code (optional)
-
-COPY init.sh /
-COPY init.py /
-
-# Run init scripts (optional)
-RUN chmod +x /init.sh
-RUN sh /init.sh
-RUN python /init.py
-
-############## TEMPLATE 1: NPC is required ###################
-# Set up task-specific NPC ENV
+# NPCs are needed in this task, so we need to persist "scenarios.json"
+# this is optional and benchmark developers should customize according
+# to their tasks' needs
 COPY scenarios.json /npc
-
-# Set up NPC environment and keep the container running (optional)
-CMD python /npc/run_multi_npc.py && tail -f /dev/null
-##############################################################
-
-
-############## TEMPLATE 2: NPC not needed  ###################
-# Keep the container running (optional)
-# CMD ["tail", "-f","/dev/null"]
-##############################################################
