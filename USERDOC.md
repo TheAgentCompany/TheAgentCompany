@@ -18,7 +18,7 @@ This step only needs to be done once across all tasks. It builds a base image
 that can be used by all exam (task) images.
 
 ```bash
-docker build -t base-image workspaces/base_image
+docker build -t base-image workspaces/base_image --no-cache
 ```
 
 ### Step 2: Build Exam Image
@@ -26,21 +26,21 @@ docker build -t base-image workspaces/base_image
 An exam image is the image used for a specific task. It can be built via:
 
 ```bash
-docker build -t example-exam-image workspaces/tasks/example
+docker build -t example-exam-image workspaces/tasks/example --no-cache
 ```
 
 An examinee should finish all its work in a container created out of this image.
 The built container is analagous to a laptop used in an interview or daily work.
 
-As a benchmark user (e.g. you'd like to evaluate an agent), you could run
+Note that the task image is guaranteed to NOT have any `RUN` or `ENTRYPOINT` instruction, but
+it MAY contain an initialization script `/utils/init.sh`.  As a benchmark user
+(e.g. you are the one who'd like to evaluate an agent), you should run
 
 ```bash
-python /evaluation/test_setup.py
+python /utils/init.py
 ```
 
-in the exam container to testify the environment,
-including but not limited to the connections between the task container and the
-services hosted in separate containers or remotely.
+After you start the container and before you let the examinee start the task.
 
 ### Step 3: Launch Agent
 
@@ -50,6 +50,10 @@ agents powered by AI.
 OpenHands requires a sandbox environment that the agent needs to run in. It allows
 users to provide a custom sandbox image, and thus we will use the `example-exam-image`
 we just built.
+
+Note: we are working on a programmatic evaluation harness to run
+the benchmark with OpenHands automatically. As of now, you'd need
+to run OpenHands manually as follows.
 
 Clone `OpenHands` repo and create a `config.toml` in the OpenHands directory:
 
@@ -63,10 +67,15 @@ sandbox_base_container_image="example-exam-image"
 Please note you also need to add LLM keys to `config.toml`. Please follow OpenHands
 documentation to complete the setup.
 
-Then you can launch the agent and prompt it with the task. At the moment, with
-OpenHands, you need to do it manually. You could prompt the agent with, say,
+Then you can launch OpenHands platform. IMPORTANT: once you see an openhands container
+has spun up, you need to manually enter that container and run `python /utils/init.py`
+as mentioned before.
+
+Finally, you could now prompt the agent running on OpenHands with the task.
+You could prompt the agent with, say,
 
 > Complete the task in /instruction/task.md
+
 
 ### Step 4: Run Evaluation
 
@@ -74,7 +83,7 @@ Once the examinee has finished its work (as of now, we don't enforce timing),
 run the below command in the exam container to grade the exam:
 
 ```bash
-python /evaluation/evaluator.py <optional_trajectory_file_path>
+python /utils/evaluator.py <optional_trajectory_file_path>
 ```
 
 Note that the trajectory file path must be an absolute path to the trajectory

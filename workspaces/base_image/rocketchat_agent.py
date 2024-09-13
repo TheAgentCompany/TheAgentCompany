@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Any
 from datetime import datetime
 import os
-from rocket_chat_bot import RocketChatBot
+from rocketchat_bot import RocketChatBot
 
 server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
 credential_file_path = os.getenv('CREDENTIAL_FILE_PATH') or 'npc_credential.json'
@@ -34,7 +34,7 @@ def get_credentials(user_key):
         password = user_info.get('password')
         return username, password
     else:
-        raise RuntimeError("Didn't find the NPC credential in file")
+        raise RuntimeError(f"Didn't find the NPC credential:{user_key} in file")
         return None, None  # Return None if the key doesn't exist
 
 
@@ -73,6 +73,7 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         uuid_str: str | None = None,
         session_id: str | None = None,
         agent_profile: AgentProfile | None = None,
+        first_name: str | None = None,
     ) -> None:
         super().__init__(
             agent_name=agent_name,
@@ -82,8 +83,8 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         # super().__init__(agent_name=agent_name, uuid_str=uuid_str)
         self.session_id = session_id or str(uuid4())
         self.sender_id = str(uuid4())
-        print("step 1: connect to the server")
-        username, password = get_credentials(agent_profile.first_name)
+        print(f"step 1: connect to the server: user first name: {first_name}")
+        username, password = get_credentials(first_name)
         self.bot = RocketChatBot(username, password, server_url)
         self.send_init_message()
         logging.info(f"Session ID: {self.session_id}")

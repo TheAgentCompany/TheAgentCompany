@@ -21,7 +21,7 @@ examinee's work. It must take exactly one CLI argument that is a path to the
 trajectory file. There's no specific format requirement on the trajectory file,
 but it MUST document the necessary steps conducted by the examinee.
 
-## Dockerfile
+## Build time (Dockerfile)
 
 Every task folder should have a `Dockerfile` that will be used to build a container
 where the examinee shall finish its task. Think of it as a PC environment you'd like
@@ -43,17 +43,38 @@ container start-up time as short as possible. Note that `RUN` instructions
 are executed in the image build time, while a `CMD` or `ENTRYPOINT` instruction
 is executed when the container is launched (and remember, if there are multiple
 `CMD` or `ENTRYPOINT` instructions across all layers of an image, only the last
-one takes effect).
+one takes effect). For consistency, please DO NOT put any `CMD` or `ENTRYPOINT`
+instructions into the task Dockerfile.
 
-## Initialization scripts (optional)
+## Run time (init scripts, optional)
 
-The example task contains an `init.py` and `init.sh`, and you can see they are
-used in `RUN` instructions in the sample Dockerfile. These are optional and you
-only need them if you need to set up some environments or pre-populate some data.
-Remember, if you put them in `RUN` instructions, then they are only executed during
-image build time, not container run time. If you, for example, attempt to launch
-an HTTP server that is needed by the examinee, you shall put it as part of last
-`CMD` or `ENTRYPOINT` instruction.
+The example task contains `init.sh`, which calls `pre_init.py` and `post_init.py`.
+These are optional and you only need them if you need to set up some environments,
+or run sanity checks. If you, for example, attempt to launch an HTTP server that
+is needed by the examinee, you shall put it as part of `init.sh`.
+
+`pre_init.py` and `post_init.py` are optional. You could remove them or rewrite
+them as shell scripts or any other executable. A common use case for `pre_init.py`
+is to check whether services involved in the task are ready and in a clean state.
+For example, it could check access to a wiki page, check existence 
+of some repository, issue, pull request in GitLab, and check existence of an user in
+RocketChat. If sanity checks fail, it could either fail the whole script, or
+attempt to fix/reset the environment.
+
+A common use case for `post_init.py` is to validate the initialization process.
+For example, in the task image, initialization step launches NPC(s). Post-init
+step could check if the OpenAI key is valid and NPCs are working. Another common
+scenario is the initialization process might involve some task-specific data population
+steps. Post-init step could check if the data is correctly populated to the task
+container. If not, it could choose to fail the script.
+
+Benchmark developers only need to provide the `init.sh`, but not execute them
+as part of `RUN` or `ENTRYPOINT` instructions in the Dockerfile. It is benchmark users'
+responsibility to run them before the examinee starts its task. The reason is some
+agent frameworks might choose to override `CMD` or `ENTRYPOINT` instruction in
+their customized images built on top of task images. For consistency and simplicitly,
+it is required that all benchmark developers shall avoid including any runtime
+instructions in their task Dockerfile.
 
 ## NPC (optional)
 

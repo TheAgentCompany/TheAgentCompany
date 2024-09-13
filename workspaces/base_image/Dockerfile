@@ -1,13 +1,12 @@
 FROM python:3
 
-# create evaluation directory (examinee MUST not access this directory)
-RUN mkdir -p /evaluation
+# create utils directory (examinee MUST not access this directory)
+RUN mkdir -p /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
-COPY test_setup.py /instruction
 
-# create and set up working directory
+# create and set up working directory (for examinee to complete its task)
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
