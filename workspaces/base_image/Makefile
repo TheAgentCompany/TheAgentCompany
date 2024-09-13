@@ -15,6 +15,3 @@ stop:
 
 attach:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
-
-kill-npc:
-	pkill -f 'python run_one_npc.py'

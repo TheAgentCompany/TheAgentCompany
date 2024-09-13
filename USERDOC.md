@@ -18,7 +18,7 @@ This step only needs to be done once across all tasks. It builds a base image
 that can be used by all exam (task) images.
 
 ```bash
-docker build -t base-image workspaces/base_image
+docker build -t base-image workspaces/base_image --no-cache
 ```
 
 ### Step 2: Build Exam Image
@@ -26,7 +26,7 @@ docker build -t base-image workspaces/base_image
 An exam image is the image used for a specific task. It can be built via:
 
 ```bash
-docker build -t example-exam-image workspaces/tasks/example
+docker build -t example-exam-image workspaces/tasks/example --no-cache
 ```
 
 An examinee should finish all its work in a container created out of this image.
