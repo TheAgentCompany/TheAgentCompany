@@ -1,34 +1,26 @@
 FROM base-image
+################### BUILD TIME ###################
+# All build time work should did by writing dockerfile
 
 # persist evaluator and task files in the exam image
 COPY evaluator.py /evaluation/
 COPY task.md /instruction/
+COPY init.sh /workspace
+RUN chmod +x /workspace/init.sh
+# Optional for benchmark developers
+COPY prerequisite.py /workspace/ 
 
 # requests library is needed for this task's evaluation
 # this is optional and benchmark developers should customize according
 # to their tasks' needs
 RUN pip install requests
 
-# copy and run initialization code (optional)
-
-COPY init.sh /
-COPY init.py /
-
-# Run init scripts (optional)
-RUN chmod +x /init.sh
-RUN sh /init.sh
-RUN python /init.py
-
-############## TEMPLATE 1: NPC is required ###################
-# Set up task-specific NPC ENV
+# Set up task-specific NPC ENV, and Run it in init.sh
+# this is optional and benchmark developers should customize according
+# to their tasks' needs
 COPY scenarios.json /npc
 
-# Set up NPC environment and keep the container running (optional)
-CMD python /npc/run_multi_npc.py && tail -f /dev/null
-##############################################################
-
-
-############## TEMPLATE 2: NPC not needed  ###################
-# Keep the container running (optional)
-# CMD ["tail", "-f","/dev/null"]
-##############################################################
+################### RUN TIME ###################
+# The benchmark task builder should put all run time work into init.sh, and NOT execute it via CMD.
+# The bencgmark user should execute init.sh by themselves.
+CMD sh /workspace/init.sh

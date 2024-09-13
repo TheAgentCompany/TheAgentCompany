@@ -21,7 +21,7 @@ examinee's work. It must take exactly one CLI argument that is a path to the
 trajectory file. There's no specific format requirement on the trajectory file,
 but it MUST document the necessary steps conducted by the examinee.
 
-## Dockerfile
+## Build time (Dockerfile)
 
 Every task folder should have a `Dockerfile` that will be used to build a container
 where the examinee shall finish its task. Think of it as a PC environment you'd like
@@ -45,15 +45,14 @@ is executed when the container is launched (and remember, if there are multiple
 `CMD` or `ENTRYPOINT` instructions across all layers of an image, only the last
 one takes effect).
 
-## Initialization scripts (optional)
+## Run time (init scripts, optional)
 
-The example task contains an `init.py` and `init.sh`, and you can see they are
-used in `RUN` instructions in the sample Dockerfile. These are optional and you
-only need them if you need to set up some environments or pre-populate some data.
-Remember, if you put them in `RUN` instructions, then they are only executed during
-image build time, not container run time. If you, for example, attempt to launch
-an HTTP server that is needed by the examinee, you shall put it as part of last
-`CMD` or `ENTRYPOINT` instruction.
+The example task contains `init.sh`. These are optional and you only need them if 
+you need to set up some environments or pre-populate some data. If you, for example, 
+attempt to launch an HTTP server that is needed by the examinee, you shall put it 
+as part of `init.sh`. Because the CMD may be overlapped. So the benchmark builders are
+only responsible for provide the `init.sh` in `CMD` or `ENTRYPOINT` instruction.
+If benchmark user overlap it by themselves, they should figure out how to run it again.
 
 ## NPC (optional)
 
@@ -70,3 +69,11 @@ boss NPC, who has some context of the task and would respond in a improvised, bu
 generally pre-defined fashion. This context is defined in each individual task image.
 
 If your task needs to involve NPCs, please see details [here](./NPC.md)
+
+## prerequisite (Optional)
+In `prerequisite.py`, it will check the local environment and the server environment.
+The checkpoints are decide by your task. For example, access to a wiki page, check existence 
+of some repository, issue, pull request in gitlab, check existence of user in rocketchat.
+If the check pass, it means evnironment initialization state is clean. If fails, the server 
+need to reset. You are not required to check every details. A general check may good enough to 
+catch most errors. This file is not required, but encourage to have.
