@@ -37,9 +37,9 @@ def get_scenarios(npc_first_name):
 
     agent_goal = "You goal is offer help and guidance to another agent about work."
     if "extra_info" in agent_scenario:
-        agent_goal += " <extra_info>" + agent_goal["extra_info"] + "</extra_info>"
+        agent_goal += " <extra_info>" + agent_scenario["extra_info"] + "</extra_info>"
     if "strategy_hint" in agent_scenario:
-        agent_goal += " <strategy_hint>" + agent_goal["strategy_hint"] + "</strategy_hint>"
+        agent_goal += " <strategy_hint>" + agent_scenario["strategy_hint"] + "</strategy_hint>"
 
     # sotopia is an agent-agent interaction framework, but here we are using it between
     # agent (NPC) and examinee. The framework requires us to define a goal for both
