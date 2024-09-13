@@ -167,7 +167,7 @@ async def run_server(
             n_agent=len(agents_model_dict),
             env_params=env_params,
             agents_params=[
-                {"model_name": model_name} if model_name != "rocketchat"  else {}
+                {"model_name": model_name} if model_name != "rocketchat"  else {"first_name": agent_first_name}
                 for model_name in agents_model_dict.values()
             ],
             agent_first_name = agent_first_name,
