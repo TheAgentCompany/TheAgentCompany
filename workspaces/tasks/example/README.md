@@ -58,13 +58,15 @@ them as shell scripts or any other executable. A common use case for `pre_init.p
 is to check whether services involved in the task are ready and in a clean state.
 For example, it could check access to a wiki page, check existence 
 of some repository, issue, pull request in GitLab, and check existence of an user in
-RocketChat. If sanity checks fail, it could either fail the whole container, or
-attempt to fix them.
+RocketChat. If sanity checks fail, it could either fail the whole script, or
+attempt to fix/reset the environment.
 
 A common use case for `post_init.py` is to validate the initialization process.
 For example, in the task image, initialization step launches NPC(s). Post-init
-step could check if the OpenAI key is valid and NPCs are working. If not, it
-would fail the container.
+step could check if the OpenAI key is valid and NPCs are working. Another common
+scenario is the initialization process might involve some task-specific data population
+steps. Post-init step could check if the data is correctly populated to the task
+container. If not, it could choose to fail the script.
 
 Benchmark developers only need to provide the `init.sh`, but not execute them
 as part of `RUN` or `ENTRYPOINT` instructions in the Dockerfile. It is benchmark users'
