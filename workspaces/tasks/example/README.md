@@ -89,11 +89,3 @@ boss NPC, who has some context of the task and would respond in a improvised, bu
 generally pre-defined fashion. This context is defined in each individual task image.
 
 If your task needs to involve NPCs, please see details [here](./NPC.md)
-
-## prerequisite (Optional)
-In `prerequisite.py`, it will check the local environment and the server environment.
-The checkpoints are decide by your task. For example, access to a wiki page, check existence 
-of some repository, issue, pull request in gitlab, check existence of user in rocketchat.
-If the check pass, it means evnironment initialization state is clean. If fails, the server 
-need to reset. You are not required to check every details. A general check may good enough to 
-catch most errors. This file is not required, but encourage to have.
