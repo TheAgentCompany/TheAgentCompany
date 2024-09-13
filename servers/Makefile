@@ -1,6 +1,5 @@
 SHELL = /bin/bash
 
-GITLAB_HOME?=/home/boxuanli/jobbench_gitlab
 NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
@@ -10,13 +9,12 @@ NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
 NEXTCLOUD_IMAGE_TAG?=20240808_083748
 NEXTCLOUD_PORT?=8090
 
-.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab reset-gitlab \
+.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
 		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume restore-rocketchat backup-rocketchat
 
 init:
-	$(eval export GITLAB_HOME)
 	$(eval export NEXTCLOUD_HOME)
 	$(eval export HOSTNAME)
 	$(eval export GITLAB_PORT)
@@ -75,7 +73,9 @@ start-gitlab: init
 stop-gitlab:
 	docker compose stop gitlab
 
-reset-gitlab: init
+# rebuild destroys the gitlab image and start from scratch
+# useful when you have new data to bake into the image
+rebuild-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
 	@echo "remove gitlab container..."
@@ -86,6 +86,17 @@ reset-gitlab: init
 	else \
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
+	@echo "start gitlab from clean state..."
+	docker compose up gitlab -d
+
+# reset stops the gitlab container, destroys and starts again
+# any changes to gitlab will disappear, and the container will start
+# in a clean state (with pre-populated data)
+reset-gitlab: init
+	@echo "stopping existing gitlab instance..."
+	docker compose stop gitlab
+	@echo "remove gitlab container..."
+	docker compose rm gitlab
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
@@ -107,3 +118,11 @@ restore-rocketchat:
 
 backup-rocketchat:
 	docker exec rocketchat-mongodb-1 sh -c 'mongodump --archive' > db.dump
+
+
+# Redis
+start-redis: init
+	docker compose up redis-stack -d
+
+stop-redis:
+	docker compose stop redis-stack
