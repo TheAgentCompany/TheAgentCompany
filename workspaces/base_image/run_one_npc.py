@@ -11,14 +11,18 @@ def main():
     # Run the asyncio task
     asyncio.run(
         run_server(
+            # The agent1 is the examinee
+            # The agent2 is the sotopia NPC
+            # This should match the profile and goals order
             model_dict={
                 "env": "gpt-4-turbo",
                 "agent1": "rocketchat",
                 "agent2": "gpt-4-turbo",
             },
+            # Agent Roles are uesless here.
             agents_roles={
-                "agent1": "human",
-                "agent2": "ai",
+                "agent1": "",
+                "agent2": "",
             },
             agent_first_name = args.agent_first_name
         )

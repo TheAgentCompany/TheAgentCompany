@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Any
 from datetime import datetime
 import os
-from rocket_chat_bot import RocketChatBot
+from rocketchat_bot import RocketChatBot
 
 server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
 credential_file_path = os.getenv('CREDENTIAL_FILE_PATH') or 'npc_credential.json'
