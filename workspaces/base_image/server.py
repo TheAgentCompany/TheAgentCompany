@@ -35,7 +35,7 @@ def get_scenarios(npc_first_name):
     if not agent_scenario:
         raise RuntimeError("Didn't find the NPC scenarios in file")
 
-    agent_goal = "You goal is offer help and guidance to another agent about work."
+    agent_goal = "You goal is to instruct the other agent to help with you something about work."
     if "extra_info" in agent_scenario:
         agent_goal += " <extra_info>" + agent_scenario["extra_info"] + "</extra_info>"
     if "strategy_hint" in agent_scenario:
@@ -45,13 +45,12 @@ def get_scenarios(npc_first_name):
     # agent (NPC) and examinee. The framework requires us to define a goal for both
     # counter-parties, even though sotopia doesn't really control examinee.
     examinee_goal = "You need to seek help from another agent to complete your work."
-
     return  {
         "codename": "working_space_1" + npc_first_name,
         "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
         "agent_goals": [
-            agent_goal,
-            examinee_goal
+            examinee_goal,
+            agent_goal
         ]
     }
 
@@ -153,10 +152,7 @@ async def run_server(
         if model_name == "rocketchat":
             return RocketChatAgent
         else:
-            if agent_role == "human":
-                return LLMAgent
-            else:
-                return LLMAgent
+            return LLMAgent
 
     if env_agent_combo_list:
         assert (

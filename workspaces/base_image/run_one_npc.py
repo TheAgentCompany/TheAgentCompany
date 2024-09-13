@@ -13,8 +13,8 @@ def main():
         run_server(
             model_dict={
                 "env": "gpt-4-turbo",
-                "agent1": "gpt-4-turbo",
-                "agent2": "rocketchat",
+                "agent1": "rocketchat",
+                "agent2": "gpt-4-turbo",
             },
             agents_roles={
                 "agent1": "human",
