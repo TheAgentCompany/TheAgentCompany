@@ -1,8 +1,3 @@
-# This file is the test for initialization. 
-# You can manually or programmatically guarantee your initialization is correct. Programmatically is prefer.
-# For example, if you prepared a jpg file inside docker, this file can check whether the file exist.
-# In general, this file will not be run. Maybe we will figure out a way to add it into CI/CD
-
 import os
 import subprocess
 import requests

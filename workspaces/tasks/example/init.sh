@@ -1,11 +1,17 @@
-################### RUN TIME ###################
-############## TEMPLATE 1: NPC is required ###################
-# Set up task-specific NPC ENV
-python /npc/run_multi_npc.py && tail -f /dev/null
-##############################################################
+########## PRE INIT PHASE ############
+python /utils/pre_init.py
+######################################
 
 
-############## TEMPLATE 2: NPC not needed  ###################
-# Keep the container running (optional)
+########## RUN INITIALIZATION ########
+# set up task-specific NPC ENV, only if NPC is required
+python /npc/run_multi_npc.py
+######################################
+
+
+########## POST INIT PHASE ###########
+python /utils/post_init.py
+######################################
+
+# optional: keep the container running
 tail -f /dev/null
-##############################################################
