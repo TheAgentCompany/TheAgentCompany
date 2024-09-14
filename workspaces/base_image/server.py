@@ -35,7 +35,7 @@ def get_scenarios(npc_first_name):
     if not agent_scenario:
         raise RuntimeError("Didn't find the NPC scenarios in file")
 
-    agent_goal = "You goal is to instruct the other agent to help with you something about work."
+    agent_goal = "You goal is to collaborate with AI agent in the working space."
     if "extra_info" in agent_scenario:
         agent_goal += " <extra_info>" + agent_scenario["extra_info"] + "</extra_info>"
     if "strategy_hint" in agent_scenario:
@@ -48,6 +48,8 @@ def get_scenarios(npc_first_name):
     # counter-parties, even though sotopia doesn't really control examinee.
     examinee_goal = "You need to seek help from another agent to complete your work."
     return  {
+        "codename": "working_space_1" + npc_first_name,
+        "scenario": "People are working in a startup communicating through rocketchat. There is an AI agent working with them.",
         "agent_goals": [
             examinee_goal,
             agent_goal
