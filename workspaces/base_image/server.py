@@ -48,8 +48,6 @@ def get_scenarios(npc_first_name):
     # counter-parties, even though sotopia doesn't really control examinee.
     examinee_goal = "You need to seek help from another agent to complete your work."
     return  {
-        "codename": "working_space_1" + npc_first_name,
-        "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
         "agent_goals": [
             examinee_goal,
             agent_goal
