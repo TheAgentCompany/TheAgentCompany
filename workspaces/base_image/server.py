@@ -7,7 +7,7 @@ from typing import Literal, Type, cast, Any, Generator, TypeVar
 from beartype import beartype
 from tqdm.asyncio import tqdm_asyncio
 
-from sotopia.agents import LLMAgent
+from human_user_agent import HumanUserAgent
 from sotopia.agents.base_agent import BaseAgent
 from sotopia.envs.evaluators import (
     ReachGoalLLMEvaluator,
@@ -154,7 +154,7 @@ async def run_server(
         if model_name == "rocketchat":
             return RocketChatAgent
         else:
-            return LLMAgent
+            return HumanUserAgent
 
     if env_agent_combo_list:
         assert (
