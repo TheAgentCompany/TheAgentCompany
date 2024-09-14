@@ -1,6 +1,17 @@
 import asyncio
 from server import run_server
 import argparse
+import logging
+
+FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+logging.basicConfig(
+    level=15,
+    format=FORMAT,
+    datefmt="[%X]",
+    handlers=[
+        logging.StreamHandler(),
+    ],
+) 
 
 def main():
     # Use argparse to capture command-line arguments

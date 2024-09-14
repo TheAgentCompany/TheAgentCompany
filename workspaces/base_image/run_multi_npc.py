@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 
+
 scenarios_file_path = os.getenv('SCENARIOS_FILE_PATH') or 'scenarios.json'
 
 # Load the JSON file
