@@ -7,7 +7,7 @@ build:
 	docker build -t $(IMAGE_NAME) .
 
 run:
-	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME) sleep 10000
+	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
 	docker logs $(CONTAINER_NAME)
 
 stop:
