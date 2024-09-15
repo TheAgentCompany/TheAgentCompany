@@ -55,5 +55,6 @@ def can_access_website(url):
 # test prepared file
 
 if __name__ == "__main__":
+    pass
     # test_pull_repository()
     # can_access_website("https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/")
