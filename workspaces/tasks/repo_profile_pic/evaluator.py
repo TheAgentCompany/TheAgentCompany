@@ -35,7 +35,7 @@ def check_code_clone():
 def check_download():
     if os.path.exists("/workspace/janusgraph/new_logo.jpg"):
         image1 = "/workspace/janusgraph/new_logo.jpg"
-        image2 = "/workspace/reference.jpg"
+        image2 = "/utils/reference.jpg"
         print(are_images_equal(image1, image2))
 
         return True
