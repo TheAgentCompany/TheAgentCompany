@@ -15,6 +15,3 @@ python /npc/run_multi_npc.py
 ########## POST INIT PHASE ###########
 python /utils/post_init.py
 ######################################
-
-# optional: keep the container running
-tail -f /dev/null
