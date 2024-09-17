@@ -40,9 +40,9 @@ def grade_final_checkpoint():
     for msg in messages:
         message_text = msg.get('msg', '').lower()
         if all(keyword in message_text for keyword in followup_keywords):
-            return True
+            return 2
         elif any(keyword in message_text for keyword in followup_keywords):
-            return 0.5
+            return 1
     
     return False
     
@@ -83,5 +83,5 @@ if __name__ == "__main__":
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
     passed3 = grade_final_checkpoint()
-    points = 4 if passed3 else int(passed1) + int(passed2)
-    print(f"Final points for task Example: {points}")
+    points = (int(passed3) + int(passed1) + int(passed2) ) if passed3 >= 1 else int(passed1) + int(passed2)
+    print(f"Final points for task Check High Priority Issue: {points}")

@@ -10,6 +10,6 @@ Check if the janusgraph gitlab repo has been in the log, and if the open issues 
 
 In the janusgraph channel, there has been a new message about following up on open issues.
 
-## Final checkpoint (1pt)
+## Final checkpoint (2pt)
 
 The new message contains issues #4641, #4658, #4622, #4595 and #4583. If not fully covering these issues, partial credits are given.

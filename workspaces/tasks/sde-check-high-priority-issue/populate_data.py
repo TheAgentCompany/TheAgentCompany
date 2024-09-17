@@ -34,7 +34,7 @@ def execute_command(command):
     logger.info(process.stdout)
     return
 
-def populate_data():
+def create_user():
     user_name = "Colby Devin"
     user_password = 'Colby@Devin'
     user_email = 'Colby.Devin@andrew.cmu.edu'
@@ -47,5 +47,25 @@ def populate_data():
         logger.error(f"{response.get('error')}")
         return False
 
+
+def check_channel_exists(channel_name):
+    channels = rocket.channels_list().json()
+    channel_names = channels.get("channels")
+    return any(current_channel['name'] == channel_name for current_channel in channel_names)
+
+
+def create_channel(channel_name):
+    if check_channel_exists(channel_name) == True:
+        logger.info("Channel already exists")
+        return False
+    response = rocket.channels_create(channel_name).json()
+    if response.get('success'):
+        logger.info(f"Successfully created channel.")
+        return True
+    else:
+        logger.error(f"{response.get('error')}")
+        return False
+
 if __name__ == "__main__":
-    populate_data()
+    create_channel("Janusgraph")
+    create_user()

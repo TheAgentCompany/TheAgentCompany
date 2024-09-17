@@ -118,4 +118,3 @@ if __name__ == "__main__":
     channel_name = "Janusgraph"
     username = 'Colby.Devin'
     print(add_user_to_channel(channel_name, username))
-    print(add_user_role_moderator(channel_name, username))
