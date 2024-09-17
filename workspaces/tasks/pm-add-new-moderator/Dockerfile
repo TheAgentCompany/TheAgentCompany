@@ -1,49 +1,16 @@
-FROM ubuntu:22.04
+FROM base-image
 
-# install basic packages
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    git \
-    vim \
-    nano \
-    unzip \
-    zip \
-    python3 \
-    python3-pip \
-    python3-venv \
-    python3-dev \
-    build-essential \
-    openssh-server \
-    sudo \
-    gcc \
-    jq \
-    g++ \
-    make \
-    iproute2 \
-    && rm -rf /var/lib/apt/lists/*
+# persist utilities files in the exam image
+COPY evaluator.py /utils/
+COPY init.sh /utils/
+RUN chmod +x /utils/init.sh
+COPY pre_init.py /utils/
+COPY post_init.py /utils/
+COPY populate_data.py /utils/
 
-RUN mkdir -p -m0755 /var/run/sshd
+# persist instruction files needed by the examinee
+COPY task.md /instruction/
 
-# symlink python3 to python
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
-# create workspace and related files
-RUN mkdir -p /workspace
-
-# set the working directory
-WORKDIR /workspace
-
-# Please keep above command unchange unless necessary.
-# Add change below.
-
-# Install Python requests library
+# install libraries needed for evaluation
 RUN pip install requests
 RUN pip install rocketchat_API==1.32.0
-
-# COPY file into working directory
-COPY *py /workspace
-COPY *sh /workspace
-
-# keep the container running
-CMD sh run.sh

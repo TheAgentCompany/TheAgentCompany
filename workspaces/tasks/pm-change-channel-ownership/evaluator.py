@@ -1,7 +1,5 @@
-import requests
 import os
 from rocketchat_API.rocketchat import RocketChat
-import ipdb
 
 # Rocket.Chat server URL and admin credentials
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
