@@ -45,7 +45,7 @@ def can_access_website(url):
             logger.info(f"can visit {url}")
             return True
         else:
-            logger.Error(f"cannot access {url}")
+            logger.error(f"cannot access {url}")
             return False
     except requests.RequestException as e:
         logger.Error(f"cannot access {url}")
@@ -55,5 +55,6 @@ def can_access_website(url):
 # test prepared file
 
 if __name__ == "__main__":
-    test_pull_repository()
-    can_access_website("https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/")
+    pass
+    # test_pull_repository()
+    # can_access_website("https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/")

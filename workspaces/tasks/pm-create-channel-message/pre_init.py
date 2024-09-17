@@ -82,8 +82,8 @@ def add_user_to_channel(channel_name, username):
 
 
 if __name__ == "__main__":
+    pass
     # channel_name = "webagents"
     # username = 'kritanjali.jain'
     # print(create_channel(channel_name))
     # print(add_user_to_channel(channel_name, username))
-

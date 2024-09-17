@@ -5,12 +5,9 @@ set -ex
 python /utils/pre_init.py
 ######################################
 
-
 ########## RUN INITIALIZATION ########
-# set up task-specific NPC ENV, only if NPC is required
-python /npc/run_multi_npc.py
+python /utils/populate_data.py
 ######################################
-
 
 ########## POST INIT PHASE ###########
 python /utils/post_init.py

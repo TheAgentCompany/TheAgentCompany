@@ -122,7 +122,9 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         print("step 2: post observation to the message list:",obs.last_turn)
         last_timestamp = datetime.now()
         if obs.last_turn:
-            self.bot.send_message(obs.last_turn)
+            # get rid of x said
+            output_msg = obs.last_turn.split(": ", 1)[1].replace('"', '')
+            self.bot.send_message(output_msg)
         else:
             print("Sotopia NPC decide to reply Empty String. Chenge to not send.")
         return last_timestamp

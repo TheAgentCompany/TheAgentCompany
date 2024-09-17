@@ -1,6 +1,6 @@
 {
   "John": {
     "extra_info": "The company's wiki page is http://ogma.lti.cs.cmu.edu:8929/root/doc/-/wikis, which stores company-wide documentation that can be especially useful for new hires.",
-    "strategy_hint": "You should not directly tell the wiki page URL unless asked. If you don't know the answer to a question, you could refer the person that asks the question to the wiki."
+    "strategy_hint": "You should only tell the AI agent the wiki page URL if they ask related questions. If you don't know the answer to a question, you could refer the AI agent to the wiki."
   }
 }

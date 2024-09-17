@@ -7,7 +7,7 @@ from typing import Literal, Type, cast, Any, Generator, TypeVar
 from beartype import beartype
 from tqdm.asyncio import tqdm_asyncio
 
-from sotopia.agents import LLMAgent
+from human_user_agent import HumanUserAgent
 from sotopia.agents.base_agent import BaseAgent
 from sotopia.envs.evaluators import (
     ReachGoalLLMEvaluator,
@@ -35,11 +35,13 @@ def get_scenarios(npc_first_name):
     if not agent_scenario:
         raise RuntimeError("Didn't find the NPC scenarios in file")
 
-    agent_goal = "You goal is to instruct the other agent to help with you something about work."
+    agent_goal = "You goal is to collaborate with AI agent in the working space."
     if "extra_info" in agent_scenario:
         agent_goal += " <extra_info>" + agent_scenario["extra_info"] + "</extra_info>"
     if "strategy_hint" in agent_scenario:
         agent_goal += " <strategy_hint>" + agent_scenario["strategy_hint"] + "</strategy_hint>"
+    if "clarification_hint" in agent_scenario:
+        agent_goal += " <clarification_hint>" + agent_scenario["clarification_hint"] + "</clarification_hint>"
 
     # sotopia is an agent-agent interaction framework, but here we are using it between
     # agent (NPC) and examinee. The framework requires us to define a goal for both
@@ -47,7 +49,7 @@ def get_scenarios(npc_first_name):
     examinee_goal = "You need to seek help from another agent to complete your work."
     return  {
         "codename": "working_space_1" + npc_first_name,
-        "scenario": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
+        "scenario": "People are working in a startup communicating through rocketchat. There is an AI agent working with them.",
         "agent_goals": [
             examinee_goal,
             agent_goal
@@ -152,7 +154,7 @@ async def run_server(
         if model_name == "rocketchat":
             return RocketChatAgent
         else:
-            return LLMAgent
+            return HumanUserAgent
 
     if env_agent_combo_list:
         assert (
