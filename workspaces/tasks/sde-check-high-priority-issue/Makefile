@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-check-issue-image
-CONTAINER_NAME=job-bench-sde-check-issue
+IMAGE_NAME=job-bench-pm-send-hello-message-image
+CONTAINER_NAME=job-bench-pm-send-hello-message
 
 .PHONY: build run
 

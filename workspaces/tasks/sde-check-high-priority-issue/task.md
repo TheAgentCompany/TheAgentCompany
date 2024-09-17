@@ -1,0 +1,1 @@
+Find open and high-priority issues on this gitlab repo http://ogma.lti.cs.cmu.edu:8929/root/janusgraph that is created in less than 1 month and send them to the working group in rocket chat. Ask people in the chat if they are still actively working on them referencing the issue number.
