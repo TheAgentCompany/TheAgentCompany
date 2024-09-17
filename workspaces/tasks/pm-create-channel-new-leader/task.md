@@ -1,0 +1,2 @@
+Create a public #visualwebagent channel in our company's platform directory http://ogma.lti.cs.cmu.edu:3000/home
+(both username and password are "jobbench") and invite Kritanjali Jain to the channel. Make her the channel leader.
