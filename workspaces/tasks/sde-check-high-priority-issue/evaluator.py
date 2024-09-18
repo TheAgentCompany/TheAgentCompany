@@ -83,5 +83,5 @@ if __name__ == "__main__":
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
     passed3 = grade_final_checkpoint()
-    points = (int(passed3) + int(passed1) + int(passed2) ) if passed3 >= 1 else int(passed1) + int(passed2)
+    points = (int(passed3) + 2) if passed3 >= 1 else int(passed1) + int(passed2)
     print(f"Final points for task Check High Priority Issue: {points}")
