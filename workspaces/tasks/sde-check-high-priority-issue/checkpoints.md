@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 3 points in total.
+This task has 4 points in total. If the final checkpoint passes, then full credit is given regardless of checkpoint 1 & 2.
 
 ## Checkpoint 1 (1pt)
 
