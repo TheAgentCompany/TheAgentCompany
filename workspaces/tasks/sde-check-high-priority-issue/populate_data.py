@@ -65,7 +65,23 @@ def create_channel(channel_name):
     else:
         logger.error(f"{response.get('error')}")
         return False
+    
+def add_user_to_channel(channel_name, username):
+    response_user = rocket.users_info(username = username).json()
+    user_id = response_user['user']['_id']
+    response_channel = rocket.channels_info(channel=channel_name).json()
+    channel_id = response_channel['channel']['_id']
+    response = rocket.channels_invite(channel_id, user_id).json()
+    if response.get('success'):
+        logger.info(f"Successfully added {username} to '{channel_name}'.")
+        return True
+    else:
+        logger.error(f"Failed to add {username}  to '{channel_name}' channel.")
+        return False
 
 if __name__ == "__main__":
     create_channel("Janusgraph")
     create_user()
+    channel_name = "Janusgraph"
+    username = 'Colby.Devin'
+    print(add_user_to_channel(channel_name, username))
