@@ -8,7 +8,7 @@ Check the Release v1.1.0 milestone page for WIP merge requests: http://ogma.lti.
 
 ## Checkpoint 2 (1pt)
 
-The status of the issue 4567 became merged: http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657
+The status of the issue 4657 became merged: http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657
 
 ## Final checkpoint (3pt)
 
