@@ -17,10 +17,11 @@ ADMIN_PASS = 'jobbench'
 # Plane variables
 PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
+PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
+
 API_KEY = os.getenv('PLANE_API') 
 
 
@@ -53,53 +54,67 @@ def check_url_1():
     return check_channel_exists('sprint-planning') and requests.get(url).status_code == 200
 
 # Plane checks
-def get_project_id(project_identifier):
-    """Get the project_id for a specific project by its identifier."""
+def get_project_id(project_name):
+    """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    response = requests.request("GET", url, headers=headers)
+    response = requests.get(url, headers=headers)
+    #print(response.json())
+    
     if response.status_code == 200:
-        projects = response.json().get("results", [])
+        data = response.json()
+        projects = data.get('results', [])
+        
         for project in projects:
-            if project.get('identifier') == project_identifier:
+            if project.get('name') == project_name:
                 return project.get('id')
+        
+        print(f"Project with name '{project_name}' not found.")
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
     return None
 
 def check_url_2(project_id):
     """Check that the project can be accessed at its URL."""
-    url = f"{PLANE_BASEURL}/{PLANE_WORKSPACE_SLUG}/projects/{project_id}"
+    url = f"{PLANE_BASEURL}/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     return requests.get(url).status_code == 200
 
-def check_members(project_id, members):
-    """Check if all participants are added as project members."""
-    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/members"
-    response = requests.request("GET", url, headers=headers)
-    if response.status_code == 200:
-        project_members = response.json().get("results", [])
-        project_member_names = [member['user']['username'] for member in project_members]
-        return all(member in project_member_names for member in members)
-    return False
-
-def check_issue_created(project_id, issue_text):
-    """Check if an issue with a specific name exists in a project."""
+def check_issue_created(project_id, issue_name):
+    """Check if an issue with a specific name exists in a project using the Plane API."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.request("GET", url, headers=headers)
+    response = requests.get(url, headers=headers)
+
     if response.status_code == 200:
-        issues = response.json().get("results", [])
+        data = response.json()
+        issues = data.get("results", [])
         for issue in issues:
-            if issue.get('name') == issue_text:
+            if issue.get('name') == issue_name:
+                print(f"Issue '{issue_name}' found.")
                 return True
+        print(f"Issue '{issue_name}' not found.")
+    else:
+        print(f"Error fetching issues: {response.status_code}, {response.text}")
     return False
 
 def check_issue_assigned(project_id, issue_text, assignee):
     """Check if the issue is assigned to the correct participant."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.request("GET", url, headers=headers)
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         issues = response.json().get("results", [])
         for issue in issues:
             if issue.get('name') == issue_text:
-                assigned_users = [assignee_info['user']['username'] for assignee_info in issue.get('assignees', [])]
-                return assignee in assigned_users
+                assignees = issue.get('assignees', [])
+                # The assignees field contains user IDs, not usernames
+                # We need to compare the assignee parameter with these IDs
+                if assignee in assignees:
+                    print(f"Issue '{issue_text}' is assigned to '{assignee}'.")
+                    return True
+                else:
+                    print(f"Issue '{issue_text}' is not assigned to '{assignee}'. Assigned to: {assignees}")
+                    return False
+        print(f"Issue '{issue_text}' not found.")
+    else:
+        print(f"Error fetching issues: {response.status_code}, {response.text}")
     return False
 
 ############################# Evaluator #####################################
@@ -115,7 +130,8 @@ def evaluate_task():
         print("Checkpoint 1 failed: Channel 'sprint-planning' is not accessible.")
     
     # Checkpoint 2: Created the project in Plane
-    project_id = get_project_id("Sprint-Frontend-Backend-Enhancements")
+    project_id = get_project_id("Sprint - Frontend and Backend Enhancements")
+    print(f"Retrieved project_id: {project_id}")  # Debug print
     if project_id and check_url_2(project_id):
         print("Checkpoint 2 passed: Project 'Sprint - Frontend and Backend Enhancements' created.")
         points += 1
@@ -123,13 +139,8 @@ def evaluate_task():
         print("Checkpoint 2 failed: Project 'Sprint - Frontend and Backend Enhancements' not found or not accessible.")
     
     # Checkpoint 3: Added all participants as project members
-    members = ['kritanjali.jain', 'John.Doe', 'rocket.cat']
-    if project_id and check_members(project_id, members):
-        print("Checkpoint 3 passed: All participants are added as project members.")
-        points += 1
-    else:
-        print("Checkpoint 3 failed: Some participants are missing from the project.")
-    
+    # Passes if Final Checkpoint part 2 passes
+
     # Final Checkpoint part 1 : Created issues with appropriate titles
     issues = [
         ('Implement new navigation bar', 'kritanjali.jain'),
@@ -148,8 +159,13 @@ def evaluate_task():
         points += 1
     
     # Final Checkpoint part 2 : Assigned tasks to the correct individuals
+    issues_and_assignees = [
+        ('Implement new navigation bar', '84fc8acf-5167-47c1-afc3-b1c484cd49f7'),
+        ('Set up backend API', '427323d8-8a42-4445-8c72-93d997f27f35'),
+        ('Write unit tests for authentication', '4b52537b-5bec-49b3-b3ed-41fa601f4287')
+    ]
     all_issues_assigned = True
-    for issue_text, assignee in issues:
+    for issue_text, assignee in issues_and_assignees:
         if not check_issue_assigned(project_id, issue_text, assignee):
             print(f"Final checkpoint part 2 failed: Issue '{issue_text}' not assigned to '{assignee}'.")
             all_issues_assigned = False
@@ -157,7 +173,7 @@ def evaluate_task():
             print(f"Final checkpoint part 2 passed: Issue '{issue_text}' assigned to '{assignee}'.")
 
     if all_issues_assigned:
-        points += 1
+        points += 2
 
     # Final result
     print(f"Evaluation completed. Final score: {points}/5")
