@@ -48,13 +48,10 @@ def grade_final_checkpoint():
         message_text = msg.get('msg', '').lower()
         if all(keyword in message_text for keyword in meeting_agenda):
             score[0] = 1
-            continue
         if all(keyword in message_text for keyword in merge_conflit):
             score[1] = 1
-            continue
         if "4456" in message_text:
             score[2] = 1
-            continue 
     
     return sum(score)
     
