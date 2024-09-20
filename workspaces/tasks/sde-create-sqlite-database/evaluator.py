@@ -1,6 +1,5 @@
 """Evaluator for sde-create-sqlite-database."""
 
-import sqlite3
 import os
 import sys
 import logging
@@ -12,7 +11,16 @@ def grade_checkpoint2():
     return os.path.exists('/workspace/July-September 2024 Financials.ods')
 
 def grade_checkpoint3():
+    # Check if sqlite3 is installed
     try:
+        import sqlite3
+        return True
+    except ImportError:
+        return False 
+
+def grade_checkpoint4():
+    try:
+        import sqlite3
         conn = sqlite3.connect('financial_report.db')
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -22,8 +30,9 @@ def grade_checkpoint3():
     except sqlite3.Error:
         return False
 
-def grade_checkpoint4():
+def grade_checkpoint5():
     try:
+        import sqlite3
         conn = sqlite3.connect('financial_data.db')
         cursor = conn.cursor()
         cursor.execute("PRAGMA table_info(financial_categories);")
@@ -33,8 +42,9 @@ def grade_checkpoint4():
     except sqlite3.Error:
         return False
 
-def grade_checkpoint5():
+def grade_checkpoint6():
     try:
+        import sqlite3
         conn = sqlite3.connect('financial_data.db')
         cursor = conn.cursor()
         cursor.execute("PRAGMA table_info(financial_details);")
@@ -44,8 +54,9 @@ def grade_checkpoint5():
     except sqlite3.Error:
         return False
 
-def grade_checkpoint6():
+def grade_checkpoint7():
     try:
+        import sqlite3
         conn = sqlite3.connect('financial_data.db')
         cursor = conn.cursor()
         cursor.execute("""
@@ -62,8 +73,9 @@ def grade_checkpoint6():
     except sqlite3.Error:
         return False
 
-def grade_checkpoint7():
+def grade_checkpoint8():
     try:
+        import sqlite3
         conn = sqlite3.connect('financial_data.db')
         cursor = conn.cursor()
         cursor.execute("""
@@ -98,7 +110,8 @@ if __name__ == "__main__":
         grade_checkpoint4(),
         grade_checkpoint5(),
         grade_checkpoint6(),
-        grade_checkpoint7()
+        grade_checkpoint7(),
+        grade_checkpoint8()
     ])
 
     print(f"Final points for task: {points}")

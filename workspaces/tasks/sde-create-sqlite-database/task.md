@@ -15,7 +15,7 @@ The financial_details table has the following columns:
 
 - detail_id
 - category_id
-- month
+- month (strings in the format YYYY-MM)
 - actual
 - budget
 - variance
