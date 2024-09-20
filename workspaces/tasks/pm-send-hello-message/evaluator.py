@@ -3,20 +3,17 @@ import os
 from rocketchat_API.rocketchat import RocketChat
 
 # Rocket.Chat server URL and admin credentials
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
-ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
 # Initialize the RocketChat client with username and password
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
-def check_url_1(browser_logs):
-    return f"{ROCKETCHAT_URL}/directory/channels" in browser_logs
-
-def check_url_2(browser_logs):
+def check_url(browser_logs):
     return f"{ROCKETCHAT_URL}/channel/general" in browser_logs
 
 
@@ -45,8 +42,6 @@ def check_message_sent(channel_name, message, username):
     return False
 
 if __name__ == "__main__":
-    test_url_1 = f"{ROCKETCHAT_URL}/directory/channels"
-    test_url_2 = f"{ROCKETCHAT_URL}/channel/general"
-    print(check_url_1(f"ACTION: goto('{test_url_1}')"))
-    print(check_url_2(f"ACTION: goto('{test_url_2}')"))
+    test_url = f"{ROCKETCHAT_URL}/channel/general"
+    print(check_url(f"ACTION: goto('{test_url}')"))
     print(check_message_sent("general", "Hi", "jobbench"))
