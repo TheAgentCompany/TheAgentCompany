@@ -3,10 +3,10 @@ import os
 from PIL import Image
 import numpy as np
 
-HOSTNAME = os.getenv("HOSTNAME")
+SERVER_HOSTNAME = os.getenv("SERVER_HOSTNAME")
 GITLAB_PORT = os.getenv("GITLAB_PORT")
 GITLAB_USER = "root"
-GITLAB_URL = f"http://{HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
+GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
 
 def check_url(browser_logs):

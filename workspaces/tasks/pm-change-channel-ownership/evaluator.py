@@ -2,10 +2,10 @@ import os
 from rocketchat_API.rocketchat import RocketChat
 
 # Rocket.Chat server URL and admin credentials
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
-ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
