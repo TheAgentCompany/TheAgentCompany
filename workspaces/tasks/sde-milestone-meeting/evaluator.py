@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
+from bs4 import BeautifulSoup
 
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
@@ -14,19 +15,27 @@ ADMIN_PASS = 'jobbench'
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def grade_checkpoint1(trajectory):
-    return f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/issues/?sort=priority_desc&state=opened&first_page_size=20" in trajectory
+    urls = [f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
+            f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
+    return any(url in trajectory for url in urls)
 
 def grade_checkpoint2():
-    messages = get_message("janusgraph")
-    if not messages:
-        return False
-    
-    followup_keywords = ['follow up', 'issues', 'gitlab repo']
+    url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
+    pat = os.getenv("GITLAB_ACCESS_TOKEN")
 
-    for msg in messages:
-        message_text = msg.get('msg', '').lower()
-        if all(keyword in message_text for keyword in followup_keywords):
-            return True
+    headers = {
+        'PRIVATE-TOKEN': pat
+    }
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        elements = soup.find_all("div", class_="js-mr-header")
+        for element in elements:
+            if element and element['data-state'] == "merged":
+                return True
+    else:
+        print(f"Failed to fetch the webpage: {response.status_code}")
 
     return False
 
@@ -35,16 +44,23 @@ def grade_final_checkpoint():
     if not messages:
         return False
     
-    followup_keywords = ['4641', '4658', '4622', '4595', '4583']
+    meeting_agenda = ['release v1.1.0', 'milestone']
+    merge_conflit = ['conflict', 'merge', 'request']
+    score = [0] * 3
 
     for msg in messages:
         message_text = msg.get('msg', '').lower()
-        if all(keyword in message_text for keyword in followup_keywords):
-            return 2
-        elif any(keyword in message_text for keyword in followup_keywords):
-            return 1
+        if all(keyword in message_text for keyword in meeting_agenda):
+            score[0] = 1
+            continue
+        if all(keyword in message_text for keyword in merge_conflit):
+            score[1] = 1
+            continue
+        if "4456" in message_text:
+            score[2] = 1
+            continue 
     
-    return False
+    return sum(score)
     
 def get_message(channel):
     response = rocket.channels_info(channel=channel).json()
@@ -83,5 +99,5 @@ if __name__ == "__main__":
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
     passed3 = grade_final_checkpoint()
-    points = (int(passed3) + 2) if passed3 >= 1 else int(passed1) + int(passed2)
+    points = sum([passed1, passed2, passed3])
     print(f"Final points for task Check High Priority Issue: {points}")

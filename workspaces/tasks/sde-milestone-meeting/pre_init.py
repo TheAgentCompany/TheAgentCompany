@@ -3,6 +3,7 @@ import subprocess
 import requests
 import logging
 from rocketchat_API.rocketchat import RocketChat
+from bs4 import BeautifulSoup
 
 ############################# init variable ##################################### 
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'

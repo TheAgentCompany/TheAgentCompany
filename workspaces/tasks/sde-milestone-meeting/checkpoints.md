@@ -4,7 +4,7 @@ This task has 5 points in total.
 
 ## Checkpoint 1 (1pt)
 
-Check the Release v1.1.0 milestone page for WIP merge requests: http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests 
+Check the Release v1.1.0 milestone page for WIP merge requests: http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests or http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0
 
 ## Checkpoint 2 (1pt)
 
