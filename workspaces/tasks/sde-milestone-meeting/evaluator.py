@@ -11,7 +11,6 @@ channel_name = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
-GITLAB_ACCESS_TOKEN = os.getenv("GITLAB_ACCESS_TOKEN")
 
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
@@ -23,10 +22,7 @@ def grade_checkpoint1(trajectory):
 def grade_checkpoint2():
     url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
 
-    headers = {
-        'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN
-    }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url)
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
