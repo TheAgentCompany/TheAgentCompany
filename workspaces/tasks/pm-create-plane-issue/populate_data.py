@@ -6,7 +6,7 @@ import logging
 HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
+PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
 API_KEY = os.getenv('PLANE_API')
 headers = {
         "x-api-key": API_KEY,
@@ -44,23 +44,20 @@ def create_project(project_name, project_identifer):
         print(response.status_code, url)
         logger.error(f"Failed to create {project_name} project.")
         return False
-
-
-def create_issue(project_id, issue):
-    """Create an issue in plane"""
-    payload = {"name": issue}
-    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.request("POST", url, json=payload, headers=headers)
-    if response.status_code == 201:
-        logger.info(f"Successfully created issue")
-        return True
-    else:
-        logger.error(f"Failed to create issue")
-        return False
-
+    
+# def create_issue(project_id, issue):
+#     """Create an issue in plane"""
+#     payload = {"name": issue}
+#     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+#     response = requests.request("POST", url, json=payload, headers=headers)
+#     if response.status_code == 201:
+#         logger.info(f"Successfully created issue")
+#         return True
+#     else:
+#         logger.error(f"Failed to create issue")
+#         return False
+    
 if __name__ == "__main__":
-    project_name = "WebArena Test Project"
-    project_identifer = "webarena"
+    project_name = "Web Dashboard"
+    project_identifer = "wdash"
     project = create_project(project_name, project_identifer)
-    if project:
-        create_issue(project, "Fix page loading performance")
