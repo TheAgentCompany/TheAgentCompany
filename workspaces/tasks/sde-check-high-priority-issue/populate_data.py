@@ -1,3 +1,4 @@
+# You should do the initialization work in this python file to set up the environment you need
 import os
 import subprocess
 import requests
@@ -28,32 +29,30 @@ logger = logging.getLogger("Functionality Test")
 
 ############################# Test function ##################################### 
 
+def execute_command(command):
+    process = subprocess.run(command, shell=True, check=True)
+    logger.info(process.stdout)
+    return
 
-
-def find_channel(channel_name):
-    """Find the channel in Rocket.Chat."""
-    response = rocket.channels_info(channel=channel_name).json()
+def create_user():
+    user_name = "Colby Devin"
+    user_password = 'Colby@Devin'
+    user_email = 'Colby.Devin@andrew.cmu.edu'
+    user_username = 'Colby.Devin'
+    response = rocket.users_create(user_email,user_name,user_password, user_username).json()
     if response.get('success'):
-        logger.info(f"Channel #{channel_name} found.")
+        logger.info(f"Successfully created user.")
         return True
     else:
-        logger.error(f"Failed to find the #{channel_name} channel.")
+        logger.error(f"{response.get('error')}")
         return False
+
 
 def check_channel_exists(channel_name):
     channels = rocket.channels_list().json()
     channel_names = channels.get("channels")
     return any(current_channel['name'] == channel_name for current_channel in channel_names)
 
-def send_message(channel_name, message):
-    """Send a message to the specified channel."""
-    response = rocket.chat_post_message(message, channel=f"#{channel_name}").json()
-    if response.get('success'):
-        logger.info(f"Successfully sent '{message}' to the #{channel_name} channel.")
-        return True
-    else:
-        logger.error(f"Failed to send '{message}' to the #{channel_name} channel.")
-        return False
 
 def create_channel(channel_name):
     if check_channel_exists(channel_name) == True:
@@ -61,12 +60,12 @@ def create_channel(channel_name):
         return False
     response = rocket.channels_create(channel_name).json()
     if response.get('success'):
-        logger.info(f"Successfully created '{channel_name}' channel.")
+        logger.info(f"Successfully created channel.")
         return True
     else:
-        logger.error(f"Failed to create '{channel_name}' channel.")
+        logger.error(f"{response.get('error')}")
         return False
-
+    
 def add_user_to_channel(channel_name, username):
     response_user = rocket.users_info(username = username).json()
     user_id = response_user['user']['_id']
@@ -80,10 +79,9 @@ def add_user_to_channel(channel_name, username):
         logger.error(f"Failed to add {username}  to '{channel_name}' channel.")
         return False
 
-
 if __name__ == "__main__":
-    pass
-    # channel_name = "webagents"
-    # username = 'kritanjali.jain'
-    # print(create_channel(channel_name))
-    # print(add_user_to_channel(channel_name, username))
+    create_channel("Janusgraph")
+    create_user()
+    channel_name = "Janusgraph"
+    username = 'Colby.Devin'
+    print(add_user_to_channel(channel_name, username))

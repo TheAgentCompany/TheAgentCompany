@@ -28,29 +28,6 @@ logger = logging.getLogger("Functionality Test")
 
 ############################# Test function ##################################### 
 
-def find_channel(channel_name):
-    """Find the channel in Rocket.Chat."""
-    response = rocket.channels_info(channel=channel_name).json()
-    if response.get('success'):
-        logger.info(f"Channel #{channel_name} found.")
-        return True
-    else:
-        logger.error(f"Failed to find the #{channel_name} channel.")
-        return False
-
-
-def send_message(channel_name, message):
-    """Send a message to the specified channel."""
-    response = rocket.chat_post_message(message, channel=f"#{channel_name}").json()
-    if response.get('success'):
-        logger.info(f"Successfully sent '{message}' to the #{channel_name} channel.")
-        return True
-    else:
-        logger.error(f"Failed to send '{message}' to the #{channel_name} channel.")
-        return False
 
 if __name__ == "__main__":
-    channel_name = "general"
-    # Uncomment below while testing not initilisation
-    # if find_channel(channel_name):
-    #     send_message(channel_name, "Hi")
+    pass
