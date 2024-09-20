@@ -1,2 +1,2 @@
-In the "Web Dashboard" project in the plane app, create an issue "Fix page loading performance".
+For the 'Web Dashboard' project in Plane, create a new issue titled 'Improve page loading speed'.
 
