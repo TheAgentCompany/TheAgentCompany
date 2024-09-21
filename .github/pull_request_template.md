@@ -4,4 +4,4 @@
 
 
 ---
-**Evidence (e.g. screenshots) of you getting full credits for evaluation**
+**Evidence/screenshots of you getting full credits for evaluation (only if you create/modify a task)**
