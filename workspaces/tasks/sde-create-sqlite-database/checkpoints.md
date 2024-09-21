@@ -1,6 +1,7 @@
 # Checkpoints
 
-There are 7 checkpoints in total.
+There are 8 checkpoints in total. Checkpoint 1's credit is granted as long as
+either checkpoint 1 or checkpoint 2 passes.
 
 ## Checkpoint 1 (1pt)
 
