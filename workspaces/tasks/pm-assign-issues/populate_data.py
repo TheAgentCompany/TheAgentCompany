@@ -4,10 +4,10 @@ import logging
 from rocketchat_API.rocketchat import RocketChat
 
 ############################# Initialization Variables #####################################
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "sprint-planning"
-ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 

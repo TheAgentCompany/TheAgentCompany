@@ -4,13 +4,13 @@ from rocketchat_API.rocketchat import RocketChat
 
 ############################# Init Variables #####################################
 # Rocket.Chat variables
-ROCKETCHAT_HOSTNAME = os.getenv('ROCKETCHAT_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 
 
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 
-ROCKETCHAT_URL = f"http://{ROCKETCHAT_HOSTNAME}:{ROCKETCHAT_PORT}"
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
@@ -51,16 +51,19 @@ def get_channel_room_id(channel_name):
 def check_url_1():
     """Check that the channel can be accessed at its URL."""
     url = f"{ROCKETCHAT_URL}/channel/sprint-planning"
-    return check_channel_exists('sprint-planning') and requests.get(url).status_code == 200
+    try:
+        return check_channel_exists('sprint-planning') and requests.get(url).status_code == 200
+    except requests.RequestException as e:
+        print(f"Error checking URL: {e}")
+        return False
 
 # Plane checks
 def get_project_id(project_name):
     """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    response = requests.get(url, headers=headers)
-    #print(response.json())
-    
-    if response.status_code == 200:
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
         data = response.json()
         projects = data.get('results', [])
         
@@ -69,21 +72,25 @@ def get_project_id(project_name):
                 return project.get('id')
         
         print(f"Project with name '{project_name}' not found.")
-    else:
-        print(f"Error: {response.status_code}, {response.text}")
+    except requests.RequestException as e:
+        print(f"Error: {e}")
     return None
 
 def check_url_2(project_id):
     """Check that the project can be accessed at its URL."""
     url = f"{PLANE_BASEURL}/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    return requests.get(url).status_code == 200
+    try:
+        return requests.get(url).status_code == 200
+    except requests.RequestException as e:
+        print(f"Error checking URL: {e}")
+        return False
 
 def check_issue_created(project_id, issue_name):
     """Check if an issue with a specific name exists in a project using the Plane API."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
         data = response.json()
         issues = data.get("results", [])
         for issue in issues:
@@ -91,15 +98,16 @@ def check_issue_created(project_id, issue_name):
                 print(f"Issue '{issue_name}' found.")
                 return True
         print(f"Issue '{issue_name}' not found.")
-    else:
-        print(f"Error fetching issues: {response.status_code}, {response.text}")
+    except requests.RequestException as e:
+        print(f"Error fetching issues: {e}")
     return False
 
 def check_issue_assigned(project_id, issue_text, assignee):
     """Check if the issue is assigned to the correct participant."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
         issues = response.json().get("results", [])
         for issue in issues:
             if issue.get('name') == issue_text:
@@ -113,8 +121,8 @@ def check_issue_assigned(project_id, issue_text, assignee):
                     print(f"Issue '{issue_text}' is not assigned to '{assignee}'. Assigned to: {assignees}")
                     return False
         print(f"Issue '{issue_text}' not found.")
-    else:
-        print(f"Error fetching issues: {response.status_code}, {response.text}")
+    except requests.RequestException as e:
+        print(f"Error fetching issues: {e}")
     return False
 
 ############################# Evaluator #####################################
