@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-create-sqlite-database-image
-CONTAINER_NAME=sde-create-sqlite-database
+IMAGE_NAME=example-exam-image
+CONTAINER_NAME=example-exam
 
 .PHONY: build run stop
 

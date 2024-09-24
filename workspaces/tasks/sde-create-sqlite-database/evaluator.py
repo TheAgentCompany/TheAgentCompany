@@ -103,9 +103,13 @@ if __name__ == "__main__":
             print(f"Error reading trajectory file: {e}")
             exit(1)
 
+    # if pass checkpoint2, then give full credit for checkpoint1
+    grade_checkpoint1 = grade_checkpoint1(trajectory)
+    grade_checkpoint2 = grade_checkpoint2()
+    first_two_checkpoints = grade_checkpoint2 + max(grade_checkpoint1, grade_checkpoint2)
+
     points = sum([
-        grade_checkpoint1(trajectory),
-        grade_checkpoint2(),
+        first_two_checkpoints,
         grade_checkpoint3(),
         grade_checkpoint4(),
         grade_checkpoint5(),
