@@ -1,0 +1,1 @@
+Find all open issues on this gitlab repo http://ogma.lti.cs.cmu.edu:8929/root/janusgraph that is created after Aug 1st, 2024, and send a summary of these open issues and the discussions to the corresponding working group in rocketchat for other devs an easier overview.
