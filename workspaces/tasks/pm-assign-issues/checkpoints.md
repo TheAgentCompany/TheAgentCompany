@@ -6,7 +6,7 @@ This task has 5 points in total. If the last check passes, then full credits are
 Successfully accessed the #sprint-planning channel in Rocket.chat. at http://ogma.lti.cs.cmu.edu:3000/channel/sprint-planning
 
 ## Checkpoint 2 (1pt)
-Created the project in Plane titled 'Sprint - Frontend and Backend Enhancements' at http://ogma.lti.cs.cmu.edu:8091/cmu/projects/ 
+Created the project in Plane titled 'Frontend and Backend Enhancements' at http://ogma.lti.cs.cmu.edu:8091/cmu/projects/ 
 
 ## Checkpoint 3 (1pt)
 Added all participants from the Rocket.chat conversation as project members.

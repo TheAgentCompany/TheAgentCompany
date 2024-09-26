@@ -138,13 +138,13 @@ def evaluate_task():
         print("Checkpoint 1 failed: Channel 'sprint-planning' is not accessible.")
     
     # Checkpoint 2: Created the project in Plane
-    project_id = get_project_id("Sprint - Frontend and Backend Enhancements")
+    project_id = get_project_id("Frontend and Backend Enhancements")
     print(f"Retrieved project_id: {project_id}")  # Debug print
     if project_id and check_url_2(project_id):
-        print("Checkpoint 2 passed: Project 'Sprint - Frontend and Backend Enhancements' created.")
+        print("Checkpoint 2 passed: Project 'Frontend and Backend Enhancements' created.")
         points += 1
     else:
-        print("Checkpoint 2 failed: Project 'Sprint - Frontend and Backend Enhancements' not found or not accessible.")
+        print("Checkpoint 2 failed: Project 'Frontend and Backend Enhancements' not found or not accessible.")
     
     # Checkpoint 3: Added all participants as project members
     # Passes if Final Checkpoint part 2 passes
