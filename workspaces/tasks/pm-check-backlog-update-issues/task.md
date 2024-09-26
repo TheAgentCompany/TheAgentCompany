@@ -1,5 +1,5 @@
 
-Your task is to monitor the "Sprint - Frontend and Backend Enhancements" project for backlog issues and follow up on Rocket.Chat.
+Your task is to monitor the "Frontend and Backend Enhancements" project for backlog issues and follow up on Rocket.Chat.
 
 #### Steps:
 

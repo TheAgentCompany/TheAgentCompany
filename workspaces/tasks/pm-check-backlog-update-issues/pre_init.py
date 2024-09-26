@@ -106,7 +106,7 @@ def pre_init_checks():
         print("User 'rocket.cat' is added to the channel.")
 
     # Check Plane project and issues
-    project_name = "Sprint - Frontend and Backend Enhancements"
+    project_name = "Frontend and Backend Enhancements"
     project_id = get_project_id(project_name)
     if not project_id:
         print(f"Project '{project_name}' not found in Plane.")

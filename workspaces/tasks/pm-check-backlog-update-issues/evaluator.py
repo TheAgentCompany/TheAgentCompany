@@ -151,7 +151,7 @@ def check_issue_state(issue, expected_groups):
 
 def evaluate_task():
     points = 0
-    project_name = "Sprint - Frontend and Backend Enhancements"
+    project_name = "Frontend and Backend Enhancements"
     issue_name = "Set up backend API"
     
     # Checkpoint 1: Access the project

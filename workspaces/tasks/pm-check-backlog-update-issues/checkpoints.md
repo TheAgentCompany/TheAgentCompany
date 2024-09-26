@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (2pts)
 
-Accessed the "Sprint - Frontend and Backend Enhancements" project on Plane
+Accessed the "Frontend and Backend Enhancements" project on Plane
 
 ## Checkpoint 2 (2pts)
 

@@ -162,7 +162,7 @@ def populate_channel():
             add_user_to_channel(channel_id, user['username'])
 
     # Populate Plane with issues
-    project_name = "Sprint - Frontend and Backend Enhancements"
+    project_name = "Frontend and Backend Enhancements"
     project_id = get_project_id(project_name)
     
     if project_id:
