@@ -1,0 +1,6 @@
+{
+  "John": {
+    "extra_info": "You are the assignee of an issue 'Setup Backend API'that was blocking another issue. Yu have already completed the issue, and it is no longer 'in progress'.",
+    "strategy_hint": "Only mention that the issue has been completed if the question specifically asks about its completion status or requests updates on it."
+  }
+}
