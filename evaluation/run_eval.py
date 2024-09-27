@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--task_image_name',
         type=str,
-        default='ghcr.io/neulab/TheAgentCompany_Example',
+        default='example-exam-image',
         help='Task image name',
     )
     args, _ = parser.parse_known_args()

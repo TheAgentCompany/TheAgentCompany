@@ -1,0 +1,22 @@
+[core]
+max_iterations = 100
+workspace_base="./workspace"
+run_as_openhands=true
+#sandbox_base_container_image="example-exam-image"
+
+[llm]
+model="gpt-4o"
+# my own
+api_key="sk-proj-33ThNqDIA6eUxSGSfBbsT3BlbkFJ8R5PEYnXkpe2LML76FV1"
+embedding_model="openai"
+
+[llm.gpt4o]
+model="gpt-4o"
+# my own
+api_key="sk-proj-33ThNqDIA6eUxSGSfBbsT3BlbkFJ8R5PEYnXkpe2LML76FV1"
+embedding_model="openai"
+
+[llm.claude]
+model="openai/neulab/claude-3-5-sonnet-20240620"
+base_url="https://cmu.litellm.ai"
+api_key="sk-Xl5yRpr5JpnwXBpUnNhmJQ"

@@ -11,6 +11,4 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
-
-[tool.poetry.group.evaluation.dependencies]
-openhands-ai = "*"
+openhands-ai-test = "*"
