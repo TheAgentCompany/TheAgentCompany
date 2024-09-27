@@ -35,11 +35,15 @@ Below are the addresses, usernames, and passwords for each service:
 
 Note that only NextCloud is hosted on SSL-enabled address, starting with `https`.
 Other services are only accessible via `http` protocol. Sometimes your browser
-might force you to use `https`, and you would see SSL-related errors. In such cases,
+might force you to use `https`, and you would see SSL-related errors. 
+In such cases,
 you need to delete domain security policies. For example, if you are using Chrome,
-you could visit `chrome://net-internals/#hsts` and make the following change:
+you could visit `chrome://net-internals/#hsts` and make the following change to remove the domain from the list by entering domain name under *Delete domain security policies* and press the Delete button:
 
 ![image](https://github.com/user-attachments/assets/a8657d53-313e-4b02-ac26-b551273f9277)
+
+Then, go to chrome://settings/clearBrowserData, tick *only* the box Cached images and files and press click the button Clear data.
+
 
 Now you should be able to use `http` protocol to visit the services.
 
