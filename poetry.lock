@@ -3062,13 +3062,13 @@ datalib = ["numpy (>=1)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)"]
 
 [[package]]
 name = "openhands-ai-test"
-version = "0.9.5"
+version = "0.9.6"
 description = "OpenHands: Code Less, Make More"
 optional = false
 python-versions = "<4.0,>=3.11"
 files = [
-    {file = "openhands_ai_test-0.9.5-py3-none-any.whl", hash = "sha256:c29a52ee696694ac2601853d98f8371708b6b2a63ea5b4308174e12a5272055a"},
-    {file = "openhands_ai_test-0.9.5.tar.gz", hash = "sha256:7af357c54484dd9a4208e0569da261944060b9c5d427e72051ad99d0e2e7c3d2"},
+    {file = "openhands_ai_test-0.9.6-py3-none-any.whl", hash = "sha256:8b8d950630f3e5dfd63a8b2a204dff8ad37a551bb7defca22cf63fbed0e42773"},
+    {file = "openhands_ai_test-0.9.6.tar.gz", hash = "sha256:4ad4fd0020e7c51d85b736334618beb739d1d7d6530c06544d6dc644c5febcc2"},
 ]
 
 [package.dependencies]
