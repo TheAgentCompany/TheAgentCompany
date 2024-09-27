@@ -11,7 +11,7 @@ Our Project: https://www.openphilanthropy.org/grants/carnegie-mellon-university-
 Project tracker document: https://docs.google.com/document/d/1w8vjsha5tRHYkLgpJwruFIlsrjNLtH3X_PICpsGW04U/edit?usp=sharing
 
 ## Backgroud
-Check the backgroup, detail proposal and design details in [BACKGRROUND.md](./BACKGROUND.md)
+Check the backgroup, detail proposal and design details in [BACKGROUND.md](./BACKGROUND.md)
 
 ## Contribute
 For how to do contribution, please check [CONTRIBUTING.md](./CONTRIBUTING.md).

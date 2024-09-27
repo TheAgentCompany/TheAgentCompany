@@ -1,5 +1,11 @@
 # Development Guide
-This guide is for people working on TheAgentCompany and editing the source code. If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRIBUTING.md) on how to clone and set up the project initially before moving on. Otherwise, you can clone TheAgentCompany project directly.
+
+Target audience: benchmark developers.
+
+TODO: polish the doc and remove CMU internal guidelines before public release.
+TODO: some content in this doc is actually user doc rather than dev doc. We need to split them.
+
+If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRIBUTING.md) on how to clone and set up the project initially before moving on. Otherwise, you can clone TheAgentCompany project directly.
 
 ## Table of Contents
 
@@ -63,7 +69,8 @@ For Plane, you need to execute [setup.sh](./servers/plane/setup.sh), then choose
 **Rocket.Chat:** After the service starts, run `backup-rocketchat` to back up the service, and run `restore-rocketchat` to restore the service.
 
 Plane: see [here](./servers/plane/README.md) for more details.
-### 4. Stop the servers
+
+### 5. Stop the servers
 For GitLab, Nextcloud, and Rocket.Chat, you can directly execute `make stop-all` in the servers directory. This will stop all three servers.
 
 For Plane, run [setup.sh](./servers/plane/setup.sh) and choose "stop."
