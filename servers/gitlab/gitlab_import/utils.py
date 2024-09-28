@@ -5,12 +5,17 @@ import subprocess
 import shutil
 import os
 import logging
+import time
 import pandas as pd
 from csv import writer
 
-
+# Note: if you use the GitLab image we build, then 'root-token' is already
+# set up. Otherwise, please set up GitLab token by yourself.
 GITLAB_ACCESS_TOKEN = os.getenv('GITLAB_TOKEN', 'root-token')
+
+# To migrate from GitHub to GitLab, please provide a GitHub token
 GITHUB_ACCESS_TOKEN = os.getenv('GITHUB_TOKEN')
+
 HOSTNAME = os.getenv('HOSTNAME', 'localhost')
 PORT = int(os.getenv('GITLAB_PORT', 8929))
 
@@ -19,11 +24,15 @@ GITHUB_HEADER = {
     'Authorization': f'token {GITHUB_ACCESS_TOKEN}'
 }
 
+def _check_status_code(status_code):
+    if status_code != 200:
+        logging.warning(f'API call status is {status_code}, sleep for 10 seconds...')
+        time.sleep(10)
+
 def get_github_profile(username):
     url = f'https://api.github.com/users/{username}'
     r = requests.get(url, headers=GITHUB_HEADER)
-    if r.status_code != 200:
-        print(f'CHANGE GITHUB TOKEN!!! CODE {r.status_code}')
+    _check_status_code(r.status_code)
     resp = json.loads(r.text)
     extras = {
         'bio': resp['bio'],
@@ -54,8 +63,7 @@ def create_user(username, name, email=None, bio=None, loc=None, org=None):
 def get_public_repos(username):
     github_url = f'https://api.github.com/users/{username}/repos'
     r = requests.get(github_url, headers=GITHUB_HEADER)
-    if r.status_code != 200:
-        print(f'CHANGE GITHUB TOKEN!!! CODE {r.status_code}')
+    _check_status_code(r.status_code)
     resp = json.loads(r.text)
     return [(info['name'], info['id']) for info in resp]
 
@@ -117,8 +125,7 @@ def mirror(username, repo_id):
 def create_users_from_pulls(username, repo):
     pulls_url = f'http://api.github.com/repos/{username}/{repo}/pulls'
     r = requests.get(pulls_url, headers=GITHUB_HEADER)
-    if r.status_code != 200:
-        print(f'CHANGE GITHUB TOKEN!!! CODE {r.status_code}')
+    _check_status_code(r.status_code)
     resp = json.loads(r.text)
     users_list = []
     for pull in resp:
@@ -157,8 +164,7 @@ def create_users_from_pulls(username, repo):
 def create_users_from_issues(username, repo):
     issues_url = f'http://api.github.com/repos/{username}/{repo}/issues'
     r = requests.get(issues_url, headers=GITHUB_HEADER)
-    if r.status_code != 200:
-        print(f'CHANGE GITHUB TOKEN!!! CODE {r.status_code}')
+    _check_status_code(r.status_code)
     resp = json.loads(r.text)
     users_list = []
     for issue in resp:
@@ -244,25 +250,6 @@ def star_with_users_from_pulls(username, repo):
             if user_id > 0:
                 star_repo(user_id, user, repo_path)
 
-def star_with_users_from_issues(username, repo):
-    repo_path = f'{username}%2F{repo}'
-    issues_url = f'http://api.github.com/repos/{username}/{repo}/issues'
-    r = requests.get(issues_url, headers=GITHUB_HEADER)
-    resp = json.loads(r.text)
-    for issue in resp:
-        user = issue['user']['login']
-        user_id = get_user_id(user)
-        if user_id > 0:
-            star_repo(user_id, user, repo_path)
-        for assginee in issue['assignees']:
-            user = assginee['login']
-            if user_id > 0:
-                star_repo(user_id, user, repo_path)
-
-def star_with_users_from_list(users_list, repo_path):
-    for username, user_id in users_list:
-        star_repo(user_id, username, repo_path)
-    
 def delete_project(username, repo):
     delete_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{username}%2F{repo}'
     body = {
@@ -271,15 +258,12 @@ def delete_project(username, repo):
     r = requests.delete(delete_url, json=body, headers=ROOT_HEADER)
     print(json.loads(r.text))
 
-def import_repos(repo_file='repo_sample_1.csv'):
-    print(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}\n', flush=True)
-    print(f'Github Access Token Used: {GITHUB_ACCESS_TOKEN}\n', flush=True) 
+def import_repos(repos):
+    logging.info(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}')
+    logging.info(f'Github Access Token Used: {GITHUB_ACCESS_TOKEN}') 
     
-    i = 0 # Start idx of the repo_file
-    df = pd.read_csv(repo_file).iloc[i:]
-    for USERNAME, REPO in df.name.map(lambda x: x.split('/')):
-        print(f'Row Number: {i}')
-        i += 1
+    for USERNAME, REPO in repos:
+        # username might be a person, or an org
         repos = get_public_repos(USERNAME)
         REPO_ID = -1
         for proj, repo_id in repos:
@@ -287,19 +271,9 @@ def import_repos(repo_file='repo_sample_1.csv'):
                 REPO_ID = repo_id
         
         if REPO_ID < 0:
-            print(f'Repo: {REPO} Not Found for {USERNAME}!!\n', flush=True)
-            with open('repo_not_found.txt', 'a') as f:
-                f.write(f'{i-1}\n')
+            logging.error(f'Repo: {REPO} Not Found for {USERNAME}!!')
             continue
         
-        name, email, extras = get_github_profile(USERNAME)
-        USER_ID = create_user(USERNAME, name, email, **extras)
-        if USER_ID < 0:
-            USER_ID = get_user_id(USERNAME)
-            print(f'User: {USERNAME} cannot be created!! User Id obtained through script: {USER_ID}\n', flush=True)
-        else:
-            print(f'User: {USERNAME} created!\n', flush=True)
-            
         users_list = create_users_from_pulls(USERNAME, REPO)
         users_list.extend(create_users_from_issues(USERNAME, REPO))
         users_list = list(set(users_list))
@@ -353,54 +327,3 @@ def get_all_projects():
     with open("all_projects.json", 'w') as f:
         print(len(projects))
         json.dump(projects, f, indent=4)
-
-def import_missing_commit_users():
-    with open("all_users.json", 'r') as f:
-        users = json.load(f)
-    name_to_user = {x['name']: x for x in users}
-    print(f"Total users: {len(users)}")
-    
-    with open("commit_log.json", 'r') as f:
-        commit_log = json.load(f)
-
-    # get the number of unique users for commit
-    unique_commit_users = set()
-    for value in commit_log.values():
-        for commit in value:
-            unique_commit_users.add(f'{commit[0]} || {commit[1]}')
-    print(f"Unique commit users: {len(unique_commit_users)}")
-
-    add_num = 0
-    modify_num = 0
-    # add users
-    for unique_user in unique_commit_users:
-        name, email = unique_user.split(' || ')
-        if name not in name_to_user: # create user
-            username = name.lower().replace(' ', '_')
-            user_id = create_user(username=username, name=name, email=email)
-            add_num += 1
-        # update the email of the existing user 
-        else:
-            user_id = name_to_user[name]['id']
-            url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}/emails'
-            # add the email as secondary email
-            body = {
-                'email': email,
-            }
-            r = requests.post(url, json=body, headers=ROOT_HEADER)
-            # make the email as primary email
-            url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}'
-            body = {
-                'email': email,
-                'commit_email': email,
-                'skip_reconfirmation': True
-            }
-            print(requests.get(f"{url}/emails", headers=ROOT_HEADER).json())
-            r = requests.put(url, json=body, headers=ROOT_HEADER)
-            if r.status_code == 200:
-                print(r.json()['email'])
-                print(name, user_id)
-                modify_num += 1
-            else:
-                print(f"Error: {r.status_code}")
-    print(f"Added users: {add_num}, Modified users: {modify_num}")
