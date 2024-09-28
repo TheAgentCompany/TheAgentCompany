@@ -1,8 +1,5 @@
-import collections
 import json
 import requests
-import subprocess
-import shutil
 import os
 import logging
 import time
@@ -165,33 +162,3 @@ def import_repos(repos):
         users_list.extend(create_users_from_issues(USERNAME, REPO))
         users_list = list(set(users_list))
         mirror(USERNAME, REPO_ID)
-
-def get_all_users():
-    url = 'http://{HOSTNAME}:{PORT}/api/v4/users'
-    users = []
-    page = 1
-    while True:
-        r = requests.get(url, headers=ROOT_HEADER, params={'per_page': 100, 'page': page})
-        resp = json.loads(r.text)
-        if len(resp) == 0:
-            break
-        users.extend(resp)
-        page += 1
-    with open("all_users.v2.json", 'w') as f:
-        print(len(users))
-        json.dump(users, f, indent=4)
-
-def get_all_projects():
-    url = 'http://{HOSTNAME}:{PORT}/api/v4/projects'
-    projects = []
-    page = 1
-    while True:
-        r = requests.get(url, headers=ROOT_HEADER, params={'per_page': 100, 'page': page})
-        resp = json.loads(r.text)
-        if len(resp) == 0:
-            break
-        projects.extend(resp)
-        page += 1
-    with open("all_projects.json", 'w') as f:
-        print(len(projects))
-        json.dump(projects, f, indent=4)
