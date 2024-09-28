@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # instead, we simply return after initiating the import process
     # TODO: move some logic from utils to here, and make helper functions in utils irrelevant to business logic
     repos = [
-        ('microsoft', 'graphrag'),
+        # ('microsoft', 'graphrag'),
         ('opensearch-project', 'OpenSearch'),
         ('ggerganov', 'llama.cpp'),
         ('gocolly', 'colly'),

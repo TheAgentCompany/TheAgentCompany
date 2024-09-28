@@ -19,7 +19,7 @@ PORT = int(os.getenv('GITLAB_PORT', 8929))
 
 ROOT_HEADER = {'PRIVATE-TOKEN': GITLAB_ACCESS_TOKEN, 'Sudo': 'root'}
 GITHUB_HEADER = {
-    'Authorization': f'token {GITHUB_ACCESS_TOKEN}'
+    'Authorization': f'Bearer {GITHUB_ACCESS_TOKEN}'
 }
 
 def _check_status_code(status_code):
@@ -131,15 +131,15 @@ def create_users_from_issues(username, repo):
     return users_list
     
 def get_github_repo_id(USERNAME, REPO):
-    repo_url = f'http://api.github.com/repos/{USERNAME}/{REPO}'
+    repo_url = f'https://api.github.com/repos/{USERNAME}/{REPO}'
     r = requests.get(repo_url, headers=GITHUB_HEADER)
     _check_status_code(r.status_code)
     resp = json.loads(r.text)
     return resp['id']
 
 def import_repos(repos):
-    logger.info(f'Gitlab Access Token Used: {GITLAB_ACCESS_TOKEN}')
-    logger.info(f'Github Access Token Used: {GITHUB_ACCESS_TOKEN}') 
+    logger.info(f'GitLab Access Token Used: {GITLAB_ACCESS_TOKEN}')
+    logger.info(f'GitHub Access Token Used: {GITHUB_ACCESS_TOKEN}')
     
     for USERNAME, REPO in repos:
         # username might be a person, or an org
