@@ -6,8 +6,6 @@ import shutil
 import os
 import logging
 import time
-import pandas as pd
-from csv import writer
 
 # Note: if you use the GitLab image we build, then 'root-token' is already
 # set up. Otherwise, please set up GitLab token by yourself.
@@ -67,46 +65,6 @@ def get_public_repos(username):
     resp = json.loads(r.text)
     return [(info['name'], info['id']) for info in resp]
 
-# Get user_id
-def get_user_id(username):
-    df = pd.read_csv('users.csv', index_col='username')
-    df_filter = df.filter(items=[username], axis=0)
-    if df_filter.shape[0] > 0:
-        return df_filter.user_id[0]
-    
-    script_resp = subprocess.run(['./script.sh', username], capture_output=True)
-    if script_resp.returncode == 0:
-        user_id = int(script_resp.stdout)
-        with open('users.csv', 'a') as f:
-            List = [username, user_id]
-            writer_object = writer(f)
-            writer_object.writerow(List)
-    return int(user_id) if script_resp.returncode == 0 else -1
-
-def create_project(user_id, proj_name):
-    project_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/user/{user_id}'
-    body2 = {
-        'user_id': user_id,
-        'name': proj_name,
-        'visibility': 'public'
-    }
-    requests.post(project_url, json=body2, headers=ROOT_HEADER)
-
-def clone_and_push(username, proj_name):
-    try:
-        subprocess.run(['git', 'clone', '--mirror', f'https://github.com/{username}/{proj_name}'], check=True,
-                        stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        subprocess.run(['git', 'remote', 'add', 'gitlab', 
-                        f'http://root:{ACCESS_TOKEN}@{HOSTNAME}:{PORT}/{username}/{proj_name}.git'],
-                        cwd=f'{proj_name}.git', check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        subprocess.run(['git', 'push', '--mirror', 'gitlab'], cwd=f'{proj_name}.git', check=True,
-                       stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-    except Exception as e:
-        print(e, '\n', username, proj_name, '\n\n')
-    
-    if os.path.exists(f'{proj_name}.git'):
-        shutil.rmtree(f'{proj_name}.git')
-
 def mirror(username, repo_id):
     mirror_url = f'http://{HOSTNAME}:{PORT}/api/v4/import/github'
     body = {
@@ -132,14 +90,12 @@ def create_users_from_pulls(username, repo):
         user = pull['user']['login']
         name, email, extras = get_github_profile(user)
         user_id = create_user(user, name, email, **extras)
-        user_id = get_user_id(user) if user_id < 0 else user_id
         if user_id > 0:
             users_list.append((user, user_id))
         for assginee in pull['assignees']:
             user = assginee['login']
             name, email, extras = get_github_profile(user)
             user_id = create_user(user, name, email, **extras)
-            user_id = get_user_id(user) if user_id < 0 else user_id
             if user_id > 0:
                 users_list.append((user, user_id))
             
@@ -147,7 +103,6 @@ def create_users_from_pulls(username, repo):
             user = reviewer['login']
             name, email, extras = get_github_profile(user)
             user_id = create_user(user, name, email, **extras)
-            user_id = get_user_id(user) if user_id < 0 else user_id    
             if user_id > 0:
                 users_list.append((user, user_id))
         
@@ -155,7 +110,6 @@ def create_users_from_pulls(username, repo):
             user = pull['head']['user']['login']
             name, email, extras = get_github_profile(user)
             user_id = create_user(user, name, email, **extras)
-            user_id = get_user_id(user) if user_id < 0 else user_id
             if user_id > 0:
                 users_list.append((user, user_id))
         
@@ -171,7 +125,6 @@ def create_users_from_issues(username, repo):
         user = issue['user']['login']
         name, email, extras = get_github_profile(user)
         user_id = create_user(user, name, email, **extras)
-        user_id = get_user_id(user) if user_id < 0 else user_id
         if user_id > 0:
             users_list.append((user, user_id))
     
@@ -179,77 +132,11 @@ def create_users_from_issues(username, repo):
             user = assginee['login']
             name, email, extras = get_github_profile(user)
             user_id = create_user(user, name, email, **extras)
-            user_id = get_user_id(user) if user_id < 0 else user_id
             if user_id > 0:
                 users_list.append((user, user_id))
     
     return users_list
     
-def star_repo(user_id, username, repo_path):
-    df = pd.read_csv('impersonation.csv', index_col='username')
-    df_filter = df.filter(items=[username], axis=0)
-    if df_filter.shape[0] > 0:
-        imp_token = df_filter.token[0]
-    else:
-        for _ in range(2):
-            imp_url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{user_id}/impersonation_tokens'
-            body = {
-                'user_id': int(user_id),
-                'name': f'imp_token_{username}',
-                'scopes': ['api'],
-                'state': 'active'
-            }
-            r = requests.post(imp_url, json=body, headers=ROOT_HEADER)
-            resp = json.loads(r.text)
-            if 'token' not in resp:
-                res = json.loads(requests.get(imp_url, json=body, headers=ROOT_HEADER).text)
-                if isinstance(res, list) and len(res) > 0:   
-                    for imp in res:
-                        impid = imp['id']
-                        url = f'http://{HOSTNAME}:{PORT}/api/v4/users/{int(user_id)}/impersonation_tokens/{int(impid)}'
-                        requests.delete(url, headers=ROOT_HEADER)
-            else:
-                break
-                
-        imp_token = resp['token']
-        with open('impersonation.csv', 'a') as f:
-            List = [username, user_id, repo_path, imp_token]
-            writer_object = writer(f)
-            writer_object.writerow(List)
-        
-    impersonation_header = {'PRIVATE-TOKEN': imp_token}
-    star_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{repo_path}/star'
-    body2 = {
-        'id': repo_path
-    }
-    requests.post(star_url, json=body2, headers=impersonation_header)
-    
-def star_with_users_from_pulls(username, repo):
-    repo_path = f'{username}%2F{repo}'
-    pulls_url = f'http://api.github.com/repos/{username}/{repo}/pulls'
-    r = requests.get(pulls_url, headers=GITHUB_HEADER)
-    resp = json.loads(r.text)
-    for pull in resp:
-        user = pull['user']['login']
-        user_id = get_user_id(user)
-        if user_id > 0:
-            star_repo(user_id, user, repo_path)
-        for assginee in pull['assignees']:
-            user = assginee['login']
-            user_id = get_user_id(user)
-            if user_id > 0:
-                star_repo(user_id, user, repo_path)
-        for reviewer in pull['requested_reviewers']:
-            user = reviewer['login']
-            user_id = get_user_id(user)
-            if user_id > 0:
-                star_repo(user_id, user, repo_path)
-        if pull['head'] and pull['head']['user']:
-            user = pull['head']['user']['login']
-            user_id = get_user_id(user)
-            if user_id > 0:
-                star_repo(user_id, user, repo_path)
-
 def delete_project(username, repo):
     delete_url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{username}%2F{repo}'
     body = {
@@ -278,25 +165,6 @@ def import_repos(repos):
         users_list.extend(create_users_from_issues(USERNAME, REPO))
         users_list = list(set(users_list))
         mirror(USERNAME, REPO_ID)
-
-def get_commits_from_repo():
-    # get all commit users from all repos
-    with open("./all_projects.json", 'r') as f:
-        d = json.load(f)
-
-    project_ids = [x['id'] for x in d]
-    
-    commit_log = collections.defaultdict(list)
-    for project_id in project_ids:    
-        url = f'http://{HOSTNAME}:{PORT}/api/v4/projects/{project_id}/repository/commits'
-        r = requests.get(url, headers=ROOT_HEADER)
-        resp = json.loads(r.text)
-        # get the user name and email from the commit
-        for commit in resp:
-            commit_log[project_id].append([commit[k] for k in ['author_name', 'author_email', 'committer_name', 'committer_email']])
-            
-    with open("commit_log.json", 'w') as f:
-        json.dump(commit_log, f, indent=4)
 
 def get_all_users():
     url = 'http://{HOSTNAME}:{PORT}/api/v4/users'
