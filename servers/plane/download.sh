@@ -1,3 +1,6 @@
+# This file try to download the necessary file when using plane to avoid license problem
+# The backup data should manually put under this directory
+
 ROOT_PATH=$(git rev-parse --show-toplevel)
 PLANE_INSTALL_DIR=$ROOT_PATH/servers/plane
 BRANCH=master
