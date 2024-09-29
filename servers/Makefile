@@ -128,3 +128,6 @@ start-redis: init
 
 stop-redis:
 	docker compose stop redis-stack
+
+rm-redis:
+	docker rm servers-redis-stack-1
