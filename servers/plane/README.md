@@ -21,9 +21,3 @@ How to download the plane:
 ```
 curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
 ```
-
-# TODO
-Solve the licence problem
-1. Remove `setup.sh` file from a fix version url, change it into curl command
-2. Remove `docker-compose.yaml` Replace the ${APP_RELEASE:-stable} in dockerfile, may need to figure out the how to set the `web_url`
-3. Remove `restore.sh`, let user download it via `setup.sh`
