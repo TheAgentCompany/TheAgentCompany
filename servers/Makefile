@@ -125,9 +125,15 @@ backup-rocketchat:
 # Redis
 start-redis: init
 	docker compose up redis-stack -d
+	docker compose up redis-stack-npc-data-population -d
 
 stop-redis:
 	docker compose stop redis-stack
+	docker compose stop redis-stack-npc-data-population
 
 rm-redis:
 	docker rm servers-redis-stack-1
+	docker rm redis-stack-npc-data-population
+
+attach-redis:
+	docker exec -it servers-redis-stack-1 /bin/bash
