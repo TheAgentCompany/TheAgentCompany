@@ -1,5 +1,6 @@
 # This dockerfile build from redis image, and will populate data into redis
 # If you want to use it, you need to pay attention to json and python code file path
+# Also there still need to hack the redis entrypoint file to make redis can launch while building
 FROM redis/redis-stack-server:7.4.0-v0
 
 # Install Python requests library
