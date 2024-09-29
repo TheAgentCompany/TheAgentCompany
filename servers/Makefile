@@ -8,6 +8,8 @@ NEXTCLOUD_BACKUP_VOLUME_NAME?=nextcloud_aio_backupdir
 NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
 NEXTCLOUD_IMAGE_TAG?=20240808_083748
 NEXTCLOUD_PORT?=8090
+PLANE_DOCKER_FILE_PATH=./plane/plane-app/docker-compose.yaml
+PLANE_DOCKER_ENV_PATH=./plane/plane-app/plane.env
 
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
@@ -139,3 +141,13 @@ rm-redis:
 
 attach-redis:
 	docker exec -it servers-redis-stack-1 /bin/bash
+
+# Plane
+download-plane:
+	sh ./plane/download.sh
+
+start-plane:
+	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH)  up -d --quiet-pull
+
+stop-plane:
+	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
