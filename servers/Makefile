@@ -147,6 +147,7 @@ download-plane:
 	sh ./plane/download.sh
 
 start-plane:
+	sh ./plane/download.sh
 	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH)  up -d --quiet-pull
 
 stop-plane:
@@ -160,3 +161,9 @@ rm-plane-volume:
 	docker volume rm plane-app_pgdata
 	docker volume rm plane-app_redisdata
 	docker volume rm plane-app_uploads
+
+reset-plane:
+	make stop-plane
+	./plane/restore.sh ./plane/
+	make start-plane
+	
