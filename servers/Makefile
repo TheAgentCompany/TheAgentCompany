@@ -106,12 +106,14 @@ start-rocketchat: init
 
 stop-rocketchat:
 	docker compose stop rocketchat
+	docker compose stop mongodb
 
 rm-rocketchat:
-	docker compose rm rocketchat
+	docker compose rm -f rocketchat
+	docker compose rm -f mongodb
 
 rm-rocketchat-volume:
-	docker volume rm rocketchat_mongodb_data
+	docker volume rm servers_mongodb_data
 
 restore-rocketchat:
 	docker exec -i rocketchat-mongodb-1 sh -c 'mongorestore --archive' < db.dump
