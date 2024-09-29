@@ -3,7 +3,6 @@ import requests
 import os
 
 url = "http://localhost:3000"
-timeout = 5  # Interval between checks in seconds
 
 def wait_for_rocketchat(retries=300, delay=3):
     while True:
