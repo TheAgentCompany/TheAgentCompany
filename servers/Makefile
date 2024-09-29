@@ -151,3 +151,12 @@ start-plane:
 
 stop-plane:
 	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
+
+rm-plane-volume:
+	docker volume rm plane-app_logs_api
+	docker volume rm plane-app_logs_beat-worker
+	docker volume rm plane-app_logs_migrator
+	docker volume rm plane-app_logs_worker
+	docker volume rm plane-app_pgdata
+	docker volume rm plane-app_redisdata
+	docker volume rm plane-app_uploads
