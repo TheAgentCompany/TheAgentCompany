@@ -32,7 +32,7 @@ Below are the addresses, usernames, and passwords for each service:
 # Troubleshooting
 
 ## SSL Error
-
+Solution 1 (temporarily):
 Note that only NextCloud is hosted on SSL-enabled address, starting with `https`.
 Other services are only accessible via `http` protocol. Sometimes your browser
 might force you to use `https`, and you would see SSL-related errors. 
@@ -47,3 +47,8 @@ Then, go to chrome://settings/clearBrowserData, tick *only* the box Cached image
 
 Now you should be able to use `http` protocol to visit the services.
 
+Solution 2 (for all url):
+Open chrome://settings/security and disable "Always use secure connections". It will disable the redirect in ALL web url.
+
+Solution 3 (for a single url, recommend):
+When use open the web using chrome, it will show `Not Secure` beside the url. Click it, select the "site settings", set `Insecure Content` into allow. It will disable the redirect only in this web url.
