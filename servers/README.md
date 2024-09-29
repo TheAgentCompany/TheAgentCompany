@@ -54,7 +54,12 @@ Open chrome://settings/security and disable "Always use secure connections". It 
 ### Solution 3 (for a single url, recommend):
 * When use open the web using chrome, it will show `Not Secure` beside the url. 
 * Click it, select the "site settings". 
-![image](https://github.com/user-attachments/assets/24452c97-f16d-444b-9b24-3bb733622a24)
+
+
+<img src="https://github.com/user-attachments/assets/24452c97-f16d-444b-9b24-3bb733622a24" width="300" alt="image">
+
+
 
 * Set `Insecure Content` into allow. It will disable the redirect only in this web url.
-![image](https://github.com/user-attachments/assets/e552b6ff-b2c5-408a-930a-8afef3927940)
+
+<img src="https://github.com/user-attachments/assets/e552b6ff-b2c5-408a-930a-8afef3927940" width="300" alt="image">
