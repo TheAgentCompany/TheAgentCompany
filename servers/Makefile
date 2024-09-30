@@ -1,11 +1,11 @@
 SHELL = /bin/bash
 
-NEXTCLOUD_HOME?=/home/yufansong/data
+NEXTCLOUD_HOME?=/home/yufansong/data/nextcloud
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
 GITLAB_PORT?=8929
 NEXTCLOUD_BACKUP_VOLUME_NAME?=nextcloud_aio_backupdir
-NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
+NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/nextcloud
 NEXTCLOUD_IMAGE_TAG?=20240808_083748
 NEXTCLOUD_PORT?=8090
 PLANE_DOCKER_FILE_PATH=./plane/plane-app/docker-compose.yaml
@@ -59,14 +59,25 @@ get-nextcloud-config:
 enter-nextcloud-container:
 	docker exec -it nextcloud-aio-mastercontainer /bin/bash
 
+# NOTE: when start nextcloud, please make sure NEXTCLOUD_BACKUP_VOLUME_PATH is empty
 start-nextcloud: init create-nextcloud-backup-volume
 	docker compose up nextcloud -d
 
 stop-nextcloud: init stop-nextcloud-side-container
 	docker compose stop nextcloud
 
-rm-nextcloud: init rm-nextcloud-volume
+rm-nextcloud: init rm-nextcloud-volume rm-nextcloud-side-container
 	docker compose rm nextcloud
+	docker network rm nextcloud-aio
+	docker volume rm nextcloud_aio_backupdir
+	docker volume rm nextcloud_aio_nextcloud_datadir
+	make rm-nextcloud-backup-volume
+
+refresh-nextcloud-data:
+	./nextcloud/restore.sh
+	docker exec nextcloud-aio-nextcloud chown -R 33:0 /mnt/ncdata/ 
+	docker exec nextcloud-aio-nextcloud chmod -R 750 /mnt/ncdata/ 
+	docker exec --user www-data -it nextcloud-aio-nextcloud php occ files:scan --all
 
 # GitLab
 start-gitlab: init
