@@ -63,11 +63,11 @@ def mirror(username, repo_id):
     body = {
         'personal_access_token': GITHUB_ACCESS_TOKEN,
         'repo_id': repo_id,
-        'target_namespace': username,
+        'target_namespace': 'root',
         'optional_stages': {
-            "single_endpoint_issue_events_import": True,
-            "single_endpoint_notes_import": True,
-            "attachments_import": True
+            "single_endpoint_issue_events_import": False,
+            "single_endpoint_notes_import": False,
+            "attachments_import": False
         }
     }
     r = requests.post(mirror_url, json=body, headers=ROOT_HEADER)
@@ -145,7 +145,6 @@ def import_repos(repos):
         # username might be a person, or an org
         REPO_ID = get_github_repo_id(USERNAME, REPO)
         logger.info(f'Repo id for {USERNAME}/{REPO}: {REPO_ID}')
-        users_list = create_users_from_pulls(USERNAME, REPO)
-        users_list.extend(create_users_from_issues(USERNAME, REPO))
-        users_list = list(set(users_list))
+        create_users_from_pulls(USERNAME, REPO)
+        create_users_from_issues(USERNAME, REPO)
         mirror(USERNAME, REPO_ID)
