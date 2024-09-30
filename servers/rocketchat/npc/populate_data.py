@@ -1,8 +1,30 @@
 import json
 import logging
-
 from redis_om import Migrator
 from sotopia.database import AgentProfile
+import time
+import redis
+
+def wait_for_redis(host='localhost', port=6379, password='jobbench', retries=300, delay=1):
+    client = redis.StrictRedis(host=host, port=port, password=password)
+    
+    for attempt in range(retries):
+        try:
+            # Test if Redis is responding to PING command
+            if client.ping():
+                print("Redis is up and running!")
+                return True
+        except redis.exceptions.ConnectionError:
+            print(f"Attempt {attempt + 1} failed: Redis not available yet, retrying in {delay} seconds...")
+            time.sleep(delay)
+    
+    print("Failed to connect to Redis after several retries.")
+    return False
+
+# NOTE: redis-stack are used to work with the dockerfile in server root path. It is a network shared with redis-stack
+#       If you run locally, you can use the localhost
+#       If you manually run this docker, you can remove this check if you are sure redis docker is running
+wait_for_redis(host="redis-stack")
 
 Migrator().run()
 
