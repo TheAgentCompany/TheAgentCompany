@@ -1,6 +1,7 @@
 import asyncio
 import os
 import base64
+import time
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
@@ -66,9 +67,10 @@ if __name__ == '__main__':
     rocketchat_login_actions = [
         'goto("http://ogma.lti.cs.cmu.edu:3000/")',
         'noop(5000)',
-        'fill("89", "jobbench")',
-        'fill("94", "jobbench")',
-        'click("97")'
+        'fill("52", "jobbench")',
+        'fill("57", "jobbench")',
+        'click("60")',
+        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
     ]
 
     image_id = 0
@@ -85,9 +87,14 @@ if __name__ == '__main__':
             file.write(image_data)
             image_id += 1
 
+    # TODO: call init.sh in the task image
+
     # run agent to solve the task
     instruction = "Complete the task in /instruction/task.md"
 
+    # TODO: OpenHands should:
+    # 1) optionally, save browser screenshots to a place
+    # 2) optionally, save trajectory to a place
     state: State | None = asyncio.run(
         run_controller(
             config=config,
