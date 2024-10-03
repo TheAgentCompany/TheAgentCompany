@@ -13,3 +13,4 @@ COPY task.md /instruction/
 
 # install libraries needed for evaluation
 RUN pip install requests
+RUN pip install beautifulsoup4
