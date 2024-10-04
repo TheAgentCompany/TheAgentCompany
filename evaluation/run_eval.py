@@ -1,7 +1,6 @@
 import asyncio
 import os
 import base64
-import time
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
@@ -14,9 +13,8 @@ from openhands.core.config import (
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, BrowseInteractiveAction
-from openhands.events.observation import CmdOutputObservation, BrowserOutputObservation, ErrorObservation
+from openhands.events.observation import BrowserOutputObservation
 from openhands.runtime.runtime import Runtime
-from openhands.runtime.browser.browser_env import BrowserEnv
 
 
 def get_config(
@@ -49,11 +47,19 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         'fill("52", "jobbench")',
         'fill("57", "jobbench")',
         'click("60")',
-        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
+    ]
+
+    gitlab_login_actions = [
+        'goto("http://ogma.lti.cs.cmu.edu:8929/users/sign_in")',
+        'noop(5000)',
+        'fill("72", "root")',
+        'fill("78", "JobBench")',
+        'click("92")',
     ]
 
     all_login_actions = [
-        ('rocket_chat', rocketchat_login_actions)
+        ('rocket_chat', rocketchat_login_actions),
+        ('gitlab', gitlab_login_actions),
     ]
 
     for (website_name, login_actions) in all_login_actions:
@@ -77,8 +83,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
                     image_id += 1
 
 
-def init_task_env(runtime: Runtime, openai_api_key: str):
-    action = CmdRunAction(command=f'OPENAI_API_KEY={openai_api_key} bash /utils/init.sh')
+def init_task_env(runtime: Runtime):
+    action = CmdRunAction(command=f'bash /utils/init.sh')
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -126,7 +132,9 @@ if __name__ == '__main__':
     )
     args, _ = parser.parse_known_args()
 
-    # TODO: sotopia should support different LLM providers
+    # devnote: sotopia supports different LLM providers, but in a very hacky
+    # way: we need to pass CUSTOM_API_KEY environmental variable, and set model
+    # to "custom/<model_name>@<model_endpoint>" rather than just "gpt-4-turbo"
     if args.openai_api_key is None:
         raise ValueError(f'Must provide openai_api_key argument')
 

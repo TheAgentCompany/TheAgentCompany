@@ -5,6 +5,7 @@ import subprocess
 
 
 scenarios_file_path = os.getenv('SCENARIOS_FILE_PATH') or 'scenarios.json'
+openai_api_key = os.getenv('OPENAI_API_KEY')
 
 # Load the JSON file
 with open(scenarios_file_path, 'r') as file:
@@ -16,7 +17,7 @@ names = list(data.keys())
 # Loop through the names and execute the command
 for name in names:
     print(f"Launching {name}")
-    command = f"python_default /npc/run_one_npc.py --agent_first_name={name}"
+    command = f"OPENAI_API_KEY={openai_api_key} python_default /npc/run_one_npc.py --agent_first_name={name}"
     # do not let it print logs to stdout
     subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
