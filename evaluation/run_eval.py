@@ -77,9 +77,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
                     image_id += 1
 
 
-def init_task_env(runtime: Runtime):
-    action = CmdRunAction(command="""bash ./utils/init.sh""")
-    action.timeout = 600
+def init_task_env(runtime: Runtime, openai_api_key: str):
+    action = CmdRunAction(command=f'OPENAI_API_KEY={openai_api_key} bash /utils/init.sh')
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -104,7 +103,7 @@ def run_solver(runtime: Runtime, config: AppConfig) -> State:
 
 
 def run_evaluator(runtime: Runtime):
-    action = CmdRunAction(command="""python /utils/evaluator.py""")
+    action = CmdRunAction(command="""python_default /utils/evaluator.py""")
     action.timeout = 600
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
@@ -120,7 +119,16 @@ if __name__ == '__main__':
         default='example-exam-image',
         help='Task image name',
     )
+    parser.add_argument(
+        '--openai_api_key',
+        type=str,
+        help='OpenAI API key (needed by NPC)'
+    )
     args, _ = parser.parse_known_args()
+
+    # TODO: sotopia should support different LLM providers
+    if args.openai_api_key is None:
+        raise ValueError(f'Must provide openai_api_key argument')
 
     llm_config = None
     if args.llm_config:
@@ -133,11 +141,10 @@ if __name__ == '__main__':
     config: AppConfig = get_config(args.task_image_name, llm_config)
     runtime: Runtime = create_runtime(config)
 
-    pre_login(runtime)
+    init_task_env(runtime, args.openai_api_key)
 
-    init_task_env(runtime)
+    pre_login(runtime)
 
     state = run_solver(runtime, config)
 
     run_evaluator(runtime)
-    
