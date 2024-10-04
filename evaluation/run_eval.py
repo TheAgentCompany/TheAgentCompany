@@ -42,6 +42,76 @@ def get_config(
     return config
 
 
+def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
+    rocketchat_login_actions = [
+        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
+        'noop(5000)',
+        'fill("52", "jobbench")',
+        'fill("57", "jobbench")',
+        'click("60")',
+        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
+    ]
+
+    all_login_actions = [
+        ('rocket_chat', rocketchat_login_actions)
+    ]
+
+    for (website_name, login_actions) in all_login_actions:
+        if save_screenshots:
+            directory = os.path.join(screenshots_dir, website_name)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            image_id = 0
+        for instruction in login_actions:
+            action = BrowseInteractiveAction(
+                browser_actions=instruction
+            )
+            action.timeout = 10000
+            logger.info(action, extra={'msg_type': 'ACTION'})
+            obs: BrowserOutputObservation = runtime.run_action(action)
+            logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+            if save_screenshots:
+                image_data = base64.b64decode(obs.screenshot)
+                with open(os.path.join(directory, f'{image_id}.png'), 'wb') as file:
+                    file.write(image_data)
+                    image_id += 1
+
+
+def init_task_env(runtime: Runtime):
+    action = CmdRunAction(command="""bash ./utils/init.sh""")
+    action.timeout = 600
+    logger.info(action, extra={'msg_type': 'ACTION'})
+    obs = runtime.run_action(action)
+    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+    assert obs.exit_code == 0
+
+
+def run_solver(runtime: Runtime, config: AppConfig) -> State:
+    instruction = "Complete the task in /instruction/task.md"
+
+    # TODO: OpenHands should:
+    # 1) optionally, save browser screenshots to a place
+    # 2) optionally, return trajectory or save it to a given place
+    state: State | None = asyncio.run(
+        run_controller(
+            config=config,
+            task_str=instruction,
+            runtime=runtime,
+        )
+    )
+    logger.info(state)
+    return state
+
+
+def run_evaluator(runtime: Runtime):
+    action = CmdRunAction(command="""python /utils/evaluator.py""")
+    action.timeout = 600
+    logger.info(action, extra={'msg_type': 'ACTION'})
+    obs = runtime.run_action(action)
+    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+    assert obs.exit_code == 0
+
+
 if __name__ == '__main__':
     parser = get_parser()
     parser.add_argument(
@@ -61,46 +131,13 @@ if __name__ == '__main__':
 
     logger.info(f"Task image name is {args.task_image_name}")
     config: AppConfig = get_config(args.task_image_name, llm_config)
-    runtime = create_runtime(config)
+    runtime: Runtime = create_runtime(config)
 
-    # pre-login to websites
-    rocketchat_login_actions = [
-        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
-        'noop(5000)',
-        'fill("52", "jobbench")',
-        'fill("57", "jobbench")',
-        'click("60")',
-        'goto("http://ogma.lti.cs.cmu.edu:3000/")',
-    ]
+    pre_login(runtime)
 
-    image_id = 0
-    for instruction in rocketchat_login_actions:
-        action = BrowseInteractiveAction(
-            browser_actions=instruction
-        )
-        action.timeout = 10000
-        logger.info(action, extra={'msg_type': 'ACTION'})
-        obs: BrowserOutputObservation = runtime.run_action(action)
-        logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-        image_data = base64.b64decode(obs.screenshot)
-        with open("screenshots/" + str(image_id) + ".png", 'wb') as file:
-            file.write(image_data)
-            image_id += 1
+    init_task_env(runtime)
 
-    # TODO: call init.sh in the task image
+    state = run_solver(runtime, config)
 
-    # run agent to solve the task
-    instruction = "Complete the task in /instruction/task.md"
-
-    # TODO: OpenHands should:
-    # 1) optionally, save browser screenshots to a place
-    # 2) optionally, save trajectory to a place
-    state: State | None = asyncio.run(
-        run_controller(
-            config=config,
-            task_str=instruction,
-            runtime=runtime,
-        )
-    )
-
-    # TODO: run evaluator
+    run_evaluator(runtime)
+    

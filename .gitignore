@@ -1,3 +1,6 @@
+# Evaluation results
+screenshots/
+
 *.tar.gz
 *db.dump
 __pycache__
