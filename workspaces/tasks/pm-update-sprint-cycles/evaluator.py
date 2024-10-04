@@ -17,7 +17,7 @@ PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu" 
-API_KEY = 'plane_api_d2ce61341ba94102b5de670c3c50bc81' #os.getenv('PLANE_API') 
+API_KEY = os.getenv('PLANE_API') 
 
 headers = {
     "x-api-key": API_KEY,
