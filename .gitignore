@@ -1,5 +1,6 @@
-# Evaluation results
+# Evaluation-related
 screenshots/
+config.toml
 
 *.tar.gz
 *db.dump
