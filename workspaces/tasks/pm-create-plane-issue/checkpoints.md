@@ -10,4 +10,4 @@ Found the correct project page ("Web Dashboard")
 
 ## Checkpoint 2 (1pt)
 
-Issue "Fix page loading performance" is created
+Issue "Improve page loading speed" is created

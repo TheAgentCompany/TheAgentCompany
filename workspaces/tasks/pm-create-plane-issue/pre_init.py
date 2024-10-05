@@ -3,7 +3,7 @@ import requests
 import logging
 
 ############################# init variable ##################################### 
-HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"

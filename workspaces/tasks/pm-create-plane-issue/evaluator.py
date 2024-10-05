@@ -4,7 +4,7 @@ import sys
 import logging
 
 ############################# init variable ##################################### 
-HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
@@ -36,7 +36,7 @@ def grade_checkpoint2(project_id):
     if response.status_code == 200:
         resp = response.json()
         for issue in resp["results"]:
-            if issue.get('name').lower() == "Fix page loading performance".lower():
+            if issue.get('name').lower() == "Improve page loading speed".lower():
                 return True
     return False
 
@@ -54,5 +54,9 @@ if __name__ == "__main__":
     project_id = get_project_id("wdash")
     passed1 = grade_checkpoint1(trajectory, project_id)
     passed2 = grade_checkpoint2(project_id)
-    points = sum([passed1, passed2])
+    points = 0
+    if passed2:
+        points = 2
+    elif passed1:
+        points = 1
     print(f"Final points for task: {points}")
