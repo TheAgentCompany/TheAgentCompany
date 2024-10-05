@@ -1,3 +1,7 @@
+# Evaluation-related
+screenshots/
+config.toml
+
 *.tar.gz
 *db.dump
 __pycache__

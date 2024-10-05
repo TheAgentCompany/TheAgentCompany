@@ -10,6 +10,9 @@ RUN mkdir -p /instruction
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
+# create a softlink in case "python" alias is polluted
+RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
+
 ################## NPC SETUP ######################
 # For simplicity, we set up necessary environments needed
 # by NPCs in the base image, even though some simple tasks
@@ -18,6 +21,8 @@ WORKDIR /workspace
 # Install Python libraries needed to launch NPCs
 RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
+# sotopia requires a specific hiredis version
+RUN pip install hiredis==3.0.0
 
 # create npc directory (examinee MUST not access this directory)
 RUN mkdir -p /npc

@@ -1,4 +1,6 @@
 # How to run
+Execute download.sh first
+
 Before start, remember the default download version of `plane.env` need to be changed. You should change from `NGINX_PORT=90` into `NGINX_PORT=8091`. Then it will not conflict with nextcloud port.
  
 Run `./setup.sh`, then choose `2` start. Then you will get a new cluster
@@ -19,9 +21,3 @@ How to download the plane:
 ```
 curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
 ```
-
-# TODO
-Solve the licence problem
-1. Remove `setup.sh` file from a fix version url, change it into curl command
-2. Remove `docker-compose.yaml` Replace the ${APP_RELEASE:-stable} in dockerfile, may need to figure out the how to set the `web_url`
-3. Remove `restore.sh`, let user download it via `setup.sh`
