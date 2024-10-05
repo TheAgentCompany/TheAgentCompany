@@ -37,7 +37,7 @@ it MAY contain an initialization script `/utils/init.sh`.  As a benchmark user
 (e.g. you are the one who'd like to evaluate an agent), you should run
 
 ```bash
-python /utils/init.py
+bash /utils/init.sh
 ```
 
 After you start the container and before you let the examinee start the task.
@@ -66,10 +66,6 @@ sandbox_base_container_image="example-exam-image"
 
 Please note you also need to add LLM keys to `config.toml`. Please follow OpenHands
 documentation to complete the setup.
-
-Then you can launch OpenHands platform. IMPORTANT: once you see an openhands container
-has spun up, you need to manually enter that container and run `python /utils/init.py`
-as mentioned before.
 
 Finally, you could now prompt the agent running on OpenHands with the task.
 You could prompt the agent with, say,

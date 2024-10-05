@@ -72,6 +72,7 @@ rm-nextcloud: init rm-nextcloud-volume rm-nextcloud-side-container
 	docker volume rm nextcloud_aio_backupdir
 	docker volume rm nextcloud_aio_nextcloud_datadir
 	make rm-nextcloud-backup-volume
+	docker network rm servers_nextcloud-network
 
 refresh-nextcloud-data:
 	./nextcloud/restore.sh
