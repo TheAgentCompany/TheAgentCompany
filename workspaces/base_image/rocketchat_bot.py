@@ -15,6 +15,7 @@ class RocketChatBot(object):
         self.command_character = command_character
         self.last_channel_id = "GENERAL"
         self.username = self.api.me().json()['username']
+        self.default_latestts = "2024-10-01T00:00:00.000Z"
 
     def get_status(self, auser):
         return self.api.users_get_presence(username=auser)
@@ -67,7 +68,7 @@ class RocketChatBot(object):
         if channel_id not in self.lastts:
             self.lastts[channel_id] = ''
         if not self.lastts[channel_id]:
-            self.lastts[channel_id] = "2024-10-01T00:00:00.000Z"
+            self.lastts[channel_id] = self.default_latestts
         return self.process_messages(self.api.channels_history(channel_id, oldest=self.lastts[channel_id]).json(),
                               channel_id)
 
@@ -75,7 +76,7 @@ class RocketChatBot(object):
         if channel_id not in self.lastts:
             self.lastts[channel_id] = ''
         if not self.lastts[channel_id]:
-            self.lastts[channel_id] = "2024-10-01T00:00:00.000Z"
+            self.lastts[channel_id] = self.default_latestts
         return self.process_messages(self.api.groups_history(channel_id, oldest=self.lastts[channel_id]).json(),
                               channel_id)
 
@@ -83,7 +84,7 @@ class RocketChatBot(object):
         if channel_id not in self.lastts:
             self.lastts[channel_id] = ''
         if not self.lastts[channel_id]:
-            self.lastts[channel_id] = "2024-10-01T00:00:00.000Z"
+            self.lastts[channel_id] = self.default_latestts
         return self.process_messages(self.api.im_history(channel_id, oldest=self.lastts[channel_id]).json(),
                               channel_id)
 
