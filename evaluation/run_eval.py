@@ -83,8 +83,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
                     image_id += 1
 
 
-def init_task_env(runtime: Runtime):
-    action = CmdRunAction(command=f'bash /utils/init.sh')
+def init_task_env(runtime: Runtime, openai_api_key: str):
+    action = CmdRunAction(command=f'OPENAI_API_KEY={openai_api_key} bash /utils/init.sh')
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
