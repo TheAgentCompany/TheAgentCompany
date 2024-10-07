@@ -57,9 +57,19 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         'click("92")',
     ]
 
+    plane_login_actions = [
+        'goto("http://ogma.lti.cs.cmu.edu:8091")',
+        'noop(5000)',
+        'fill("67", "job@bench.com")',
+        'click("68")',
+        'fill("87", "jobbenchJobBench")',
+        'click("94")'
+    ]
+
     all_login_actions = [
         ('rocket_chat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
+        ('plane', plane_login_actions),
     ]
 
     for (website_name, login_actions) in all_login_actions:
