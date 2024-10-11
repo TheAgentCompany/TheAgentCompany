@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-create-career-ladder
-CONTAINER_NAME=job-bench-hr-create-career-ladder
+IMAGE_NAME=job-bench-hr-populate-salary-increse-memo
+CONTAINER_NAME=job-bench-hr-populate-salary-increse-memo
 
 .PHONY: build run stop
 

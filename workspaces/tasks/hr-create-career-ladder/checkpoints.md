@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 5 points in total. 
+This task has 3 points in total. 
 
 ## Checkpoint 1 (1pt)
 
@@ -9,7 +9,7 @@ https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resource
 
 ## Checkpoint 2 (1pt)
 
-A new file named "Career Ladder.odt" is created in the hr folder.
+A new file named "Career_Ladder.odt" is created in the hr folder.
 
 ## Final checkpoint (1pt)
 

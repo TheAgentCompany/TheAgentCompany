@@ -1,0 +1,1 @@
+Create a MEMO template for staff salary increase that can be used every year, named as "Salary_Increase_MEMO", including name, email ID, salary amount, assignment start and end date.Populate the MEMO information from the salaries_increase.text for each of the employees. The populated MEMO should be saved under folder named "salary_increase_notice".
