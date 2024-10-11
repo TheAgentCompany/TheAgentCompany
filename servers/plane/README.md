@@ -26,19 +26,18 @@ Follow the instruction here: https://docs.plane.so/self-hosting/methods/docker-c
 How to download the plane:
 ```
 curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
-
 ```
 # Populated data
 
 There is some populated data in Plane for task creators to have a starting point. This data includes:
 * The company workspace name 'TheAgentCompany'
-* Added 18 Employees with their relevant roles and positions within the company. 
+* Added 17 Employees with their relevant roles and positions within the company. 
 * Each employee was assigned a username and email address based on a standard format. Password is the same as email for every employee. 
 
 ## Credentials 
-Username format: `firstnamelastname` in lowercase (e.g., `johnsmith`).
-Email format: `firstname.lastname@agentcompany.com`
-Password: `firstname.lastname@agentcompany.com`
+Username format: `firstnamelastname` in lowercase (e.g., `emmalewis`).
+Email format: `firstname.lastname@agentcompany.com` (e.g., `emma.lewis@agentcompany.com`)
+Password: `firstname.lastname@agentcompany.com`(e.g., `emma.lewis@agentcompany.com`)
 
 ## Project Structure
 The projects in Plane were set up to reflect the key modules of The Agent Company's core initiatives. Each module was created as a separate project to streamline organization and focus. The projects are as follows:
