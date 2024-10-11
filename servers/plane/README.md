@@ -26,4 +26,52 @@ Follow the instruction here: https://docs.plane.so/self-hosting/methods/docker-c
 How to download the plane:
 ```
 curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
+
 ```
+# Populated data
+
+There is some populated data in Plane for task creators to have a starting point. This data includes:
+* The company workspace name 'TheAgentCompany'
+* Added 18 Employees with their relevant roles and positions within the company. 
+* Each employee was assigned a username and email address based on a standard format. Password is the same as email for every employee. 
+
+## Credentials 
+Username format: `firstnamelastname` in lowercase (e.g., `johnsmith`).
+Email format: `firstname.lastname@agentcompany.com`
+Password: `firstname.lastname@agentcompany.com`
+
+## Project Structure
+The projects in Plane were set up to reflect the key modules of The Agent Company's core initiatives. Each module was created as a separate project to streamline organization and focus. The projects are as follows:
+
+1. **Graph Database Project** (JanusGraph)
+2. **Streaming Database Project** (RisingWave)
+3. **AI Project** (OpenHands & llama.cpp)
+4. **Web Crawler Project** (Colly)
+5. **Search Engine Project** (OpenSearch)
+6. **Low-Code Platform Project** (Node-RED)
+7. **Frontend Development Project** (E-commerce Website)
+8. **API Development Project** (API-server)
+
+## Module and Issue Setup
+Within each project:
+- **Modules** were set up to represent key issues or tasks for that specific project.
+- **Issues** were created to detail sub-issues or actionable steps necessary to complete each module's objectives.
+
+This hierarchical structure helps break down complex tasks into manageable components, making it easier to track progress and execution.
+
+## Sprint Cycles
+Three sprint cycles have been created to manage the project timelines effectively:
+1. **Sprint 1:** October 2024
+2. **Sprint 2:** November 2024
+
+Each issue was assigned to one of these sprint cycles, ensuring organized task flow and prioritization.
+
+## Task Assignment and Distribution
+### Roles and Responsibilities:
+- **Database-related tasks** have been assigned to **Li Ming** and **Zhang Wei**.
+- **AI and Machine Learning tasks** are handled by **Wang Fang** and **Mike Chen**.
+- **Web Crawling and Distributed Systems** responsibilities are managed by **Emily Zhou**.
+- **Quality Assurance** is overseen by **Liu Qiang**.
+- **Product, Frontend, and API Development** tasks are distributed among **Huang Jie**, **Jessica Chen**, and **Emma Lewis**.
+
+
