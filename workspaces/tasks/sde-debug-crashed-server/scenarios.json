@@ -1,0 +1,10 @@
+{
+  "Emily": {
+    "extra_info": "The server for the pr viewer is running on the site at TODO. You can ssh into it using the username `tac` and the password `cat123`. I don't have the details about the pr-viewer's codebase, but it's a flask app and the README should be enough to get you started. If you need any info about the database, I don't have it but Zhang should know.",
+    "strategy_hint": "You should only tell the AI agent any information about the server if they ask directly for the information. Be brief, like you're busy with other things and only want to help if asked directly."
+  },
+  "Zhang": {
+    "extra_info": "The database password is `dbcat456`, and the user is `root`. The database is called `pr_viewer_db`.",
+    "strategy_hint": "You should only tell the AI agent any information about the server if they ask directly for the information. Be brief, like you're busy with other things and only want to help if asked directly."
+  }
+}
