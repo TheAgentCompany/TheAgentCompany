@@ -122,7 +122,10 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
 
 
 def run_evaluator(runtime: Runtime, trajectory_path: str):
-    action = CmdRunAction(command=f'python_default /utils/evaluator.py {trajectory_path}')
+    if os.path.exists(trajectory_path):
+        action = CmdRunAction(command=f'python_default /utils/evaluator.py {trajectory_path}')
+    else:
+        action = CmdRunAction(command=f'python_default /utils/evaluator.py')
     action.timeout = 600
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
