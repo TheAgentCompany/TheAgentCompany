@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.12
 
 # create utils directory (examinee MUST not access this directory)
 RUN mkdir -p /utils
