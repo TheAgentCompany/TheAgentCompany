@@ -19,11 +19,13 @@ from openhands.runtime.runtime import Runtime
 
 def get_config(
     base_container_image: str,
+    trajectories_path: str,
     llm_config: LLMConfig
 ) -> AppConfig:
     config = AppConfig(
         run_as_openhands=False,
         max_budget_per_task=4,
+        trajectories_path=trajectories_path,
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -101,7 +103,7 @@ def init_task_env(runtime: Runtime, openai_api_key: str):
     assert obs.exit_code == 0
 
 
-def run_solver(runtime: Runtime, config: AppConfig) -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
     instruction = "Complete the task in /instruction/task.md"
 
     # TODO: OpenHands should:
@@ -110,6 +112,7 @@ def run_solver(runtime: Runtime, config: AppConfig) -> State:
     state: State | None = asyncio.run(
         run_controller(
             config=config,
+            sid=task_name,
             task_str=instruction,
             runtime=runtime,
         )
@@ -118,8 +121,8 @@ def run_solver(runtime: Runtime, config: AppConfig) -> State:
     return state
 
 
-def run_evaluator(runtime: Runtime):
-    action = CmdRunAction(command="""python_default /utils/evaluator.py""")
+def run_evaluator(runtime: Runtime, trajectory_path: str):
+    action = CmdRunAction(command=f'python_default /utils/evaluator.py {trajectory_path}')
     action.timeout = 600
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
@@ -140,6 +143,11 @@ if __name__ == '__main__':
         type=str,
         help='OpenAI API key (needed by NPC)'
     )
+    parser.add_argument(
+        '--trajectories_path',
+        type=str,
+        help='Folder path to save trajectories'
+    )
     args, _ = parser.parse_known_args()
 
     # devnote: sotopia supports different LLM providers, but in a very hacky
@@ -156,13 +164,14 @@ if __name__ == '__main__':
         raise ValueError(f'Could not find LLM config: --llm_config {args.llm_config}')
 
     logger.info(f"Task image name is {args.task_image_name}")
-    config: AppConfig = get_config(args.task_image_name, llm_config)
+    config: AppConfig = get_config(args.task_image_name, args.trajectories_path, llm_config)
     runtime: Runtime = create_runtime(config)
 
     init_task_env(runtime, args.openai_api_key)
 
     pre_login(runtime)
 
-    state = run_solver(runtime, config)
+    state = run_solver(runtime, args.task_image_name, config)
+    trajectory_path = os.path.join(args.trajectories_path, args.task_image_name, '.traj')
 
-    run_evaluator(runtime)
+    run_evaluator(runtime, trajectory_path)
