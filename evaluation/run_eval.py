@@ -25,6 +25,7 @@ def get_config(
     config = AppConfig(
         run_as_openhands=False,
         max_budget_per_task=4,
+        max_iterations=1,
         trajectories_path=trajectories_path,
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
@@ -34,8 +35,8 @@ def get_config(
             timeout=300,
             api_key=os.environ.get('ALLHANDS_API_KEY', None),
         ),
-        # do not mount workspace
-        workspace_base=None,
+        workspace_base=trajectories_path,
+        workspace_mount_path_in_sandbox='/workspace',
         workspace_mount_path=None,
     )
     config.set_llm_config(llm_config)
@@ -122,7 +123,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
 
 
 def run_evaluator(runtime: Runtime, trajectory_path: str):
-    if os.path.exists(trajectory_path):
+    if trajectory_path is not None:
         action = CmdRunAction(command=f'python_default /utils/evaluator.py {trajectory_path}')
     else:
         action = CmdRunAction(command=f'python_default /utils/evaluator.py')
@@ -178,6 +179,6 @@ if __name__ == '__main__':
     pre_login(runtime)
 
     state = run_solver(runtime, args.task_image_name, config)
-    trajectory_path = os.path.join(args.trajectories_path, args.task_image_name + '.traj')
+    trajectory_path = f'/workspace/{args.task_image_name}.traj'
 
     run_evaluator(runtime, trajectory_path)
