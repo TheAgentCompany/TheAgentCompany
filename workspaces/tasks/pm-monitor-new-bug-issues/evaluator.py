@@ -24,7 +24,7 @@ def grade_checkpoint1(trajectory):
     return all(part in trajectory for part in required_url_parts)
 
 def grade_checkpoint2():
-    messages = get_message("openhands")
+    messages = get_message("project-ai")
     if not messages:
         return False
     
@@ -38,7 +38,7 @@ def grade_checkpoint2():
     return False
 
 def grade_final_checkpoint():
-    messages = get_message("openhands")
+    messages = get_message("project-ai")
     if not messages:
         return False
     
