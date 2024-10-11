@@ -8,6 +8,7 @@ from odf.text import P
 
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
+import pandas as pd
 
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 NEXTCLOUD_USERNAME = 'admin'
@@ -15,12 +16,21 @@ NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
 def grade_checkpoint1(trajectory):
     urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team&openfile=true"]
-            
     return any(url in trajectory for url in urls)
 
 
-def grade_checkpoint2():
-    file_name = "Salary_Increase_MEMO.odt"
+def calculate_salary_statistics(file_path):
+    df = pd.read_csv(file_path)
+    average_salary = df['Salary'].mean()
+    highest_salary = df['Salary'].max()
+    lowest_salary = df['Salary'].min()
+    median_salary = df['Salary'].median()
+    
+    return [average_salary, highest_salary, lowest_salary, median_salary]
+
+
+def grade_checkpoint2_3():
+    file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team/"
 
     score = 0
@@ -35,8 +45,8 @@ def grade_checkpoint2():
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
 
-        keywords = ["name", "email ID", "salary amount", "assignment start and end date"]
-
+        keywords = calculate_salary_statistics("workspaces/tasks/hr-salary-analysis/salary.txt")
+        
         found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
         
         if found_keywords:
@@ -48,61 +58,6 @@ def grade_checkpoint2():
         print("Failed to retrieve file content.")
         return 0
     
-
-def grade_checkpoint3():
-    dir_name = "Documents/Human%20Resources%20Team/salary_increase_notice/"
-    score = 0
-    if not directory_exists(dir_name):
-        return 0
-    else:
-        score += 1
-
-    file_count = count_files_in_directory(dir_name)
-    if file_count == 10:
-        score += 1
-
-    return score
-    
-
-def count_files_in_directory(dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
-    headers = {
-        'OCS-APIRequest': 'true',
-        'Content-Type': 'application/xml',
-        'Depth': '1',
-    }
-
-    response = requests.request(
-        method="PROPFIND",
-        url=server_url,
-        headers=headers,
-        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
-    )
-
-    if response.status_code == 207:
-        root = ET.fromstring(response.text)
-        # Subtract 1 to exclude the directory itself
-        return len(root.findall(".//{DAV:}response")) - 1
-    else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
-        return 0
-    
-def directory_exists(dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
-    headers = {
-        'OCS-APIRequest': 'true',
-        'Depth': '0',
-    }
-
-    response = requests.request(
-        method="PROPFIND",
-        url=server_url,
-        headers=headers,
-        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
-    )
-
-    return response.status_code == 207
 
 
 def file_exists_in_directory(file_name, dir_name):
@@ -183,7 +138,6 @@ if __name__ == "__main__":
             exit(1)
 
     passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2()
-    passed3 = grade_checkpoint3()
-    points = sum([passed1, passed2, passed3])
-    print(f"Final points for task Populate Salary Increase MEMO: {points}")
+    passed2 = grade_checkpoint2_3()
+    points = sum([passed1, passed2])
+    print(f"Final points for task Salary Analysis: {points}")
