@@ -1,0 +1,6 @@
+{
+  "Zhang Wei": {
+    "extra_info": "You want to create a new agent that can only issue non-verbal communication.",
+    "strategy_hint": "You should only tell the AI agent the requirements if they ask."
+  }
+}

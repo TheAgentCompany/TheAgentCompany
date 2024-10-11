@@ -1,0 +1,1 @@
+Goto this gitlab repo http://ogma.lti.cs.cmu.edu:8929/root/sotopia and ask Zhang Wei to about their requirements for the new agent to be created in Sotopia. Then create the agent following the contribution guidelines in the docs.
