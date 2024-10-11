@@ -8,7 +8,7 @@ Check if the janusgraph gitlab repo has been in the log, and if the open issues 
 
 ## Checkpoint 2 (1pt)
 
-In the janusgraph channel, there has been a new message describing a summary of latest open issues.
+In the project-graphdb channel, there has been a new message describing a summary of latest open issues.
 
 ## Final checkpoint (2pt)
 

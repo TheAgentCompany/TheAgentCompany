@@ -13,4 +13,3 @@ COPY task.md /instruction/
 
 # install libraries needed for evaluation
 RUN pip install requests
-RUN pip install rocketchat_API==1.32.0
