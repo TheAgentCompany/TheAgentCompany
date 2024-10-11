@@ -7,6 +7,12 @@ Run `./setup.sh`, then choose `2` start. Then you will get a new cluster
 See here for mored details `https://docs.plane.so/self-hosting/methods/docker-compose`
 
 # How to backup
+```
+curl -fsSL -o setup.sh https://raw.githubusercontent.com/makeplane/plane/master/deploy/selfhost/install.sh
+
+chmod +x setup.sh
+```
+
 After you launching the cluster, run `./setup.sh` and choose `7` backup data. Then you will find data in backup directory. In the directory, there will be `pgdata.tar.gz`, `redisdata.tar.gz`, and `uploads.tar.gz`
 
 # How to restore from backup
