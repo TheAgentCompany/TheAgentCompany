@@ -3,7 +3,9 @@ import logging
 import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
-from bs4 import BeautifulSoup
+
+from requests.auth import HTTPBasicAuth
+import xml.etree.ElementTree as ET
 
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
@@ -14,44 +16,33 @@ ADMIN_PASS = 'jobbench'
 
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
+NEXTCLOUD_USERNAME = 'admin'
+NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
+
 def grade_checkpoint1(trajectory):
-    urls = [f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
-            f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
+    urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team&openfile=true"]
+            
     return any(url in trajectory for url in urls)
 
+
 def grade_checkpoint2():
-    url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
+    file_name = "Career_Ladder.odt"
+    dir_name = "Documents/Human%20Resources%20Team/"
+    return file_exists_in_directory(file_name, dir_name)
 
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        elements = soup.find_all("div", class_="js-mr-header")
-        for element in elements:
-            if element and element['data-state'] == "merged":
-                return True
-    else:
-        print(f"Failed to fetch the webpage: {response.status_code}")
-
-    return False
 
 def grade_final_checkpoint():
-    messages = get_message("janusgraph")
+    messages = get_message("hr-announcements")
     if not messages:
         return False
     
-    meeting_agenda = ['release v1.1.0', 'milestone']
-    merge_conflit = ['conflict', 'merge', 'request']
-    score = [0] * 3
+    keywords = ['career', 'ladder', 'suggestions']
+    score = 0
 
     for msg in messages:
         message_text = msg.get('msg', '').lower()
-        if all(keyword in message_text for keyword in meeting_agenda):
-            score[0] = 1
-        if all(keyword in message_text for keyword in merge_conflit):
-            score[1] = 1
-        if "4456" in message_text:
-            score[2] = 1
+        if all(keyword in message_text for keyword in keywords):
+            score
     
     return sum(score)
     
@@ -76,6 +67,38 @@ def get_message(channel):
 
     return messages
     
+def file_exists_in_directory(file_name, dir_name):
+    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
+    headers = {
+        'OCS-APIRequest': 'true',
+        'Content-Type': 'application/xml',
+        'Depth': '1',  # Depth of 1 to list the immediate contents of the directory
+    }
+
+    # Send PROPFIND request
+    response = requests.request(
+        method="PROPFIND",
+        url=server_url,
+        headers=headers,
+        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
+    )
+
+    if response.status_code == 207:
+        root = ET.fromstring(response.text)
+        for response in root.findall(".//{DAV:}response"):
+            href = response.find("{DAV:}href").text
+            if file_name in href:
+                print(f"File '{file_name}' found.")
+                return True
+
+        # If loop completes and file is not found
+        print(f"File '{file_name}' not found.")
+        return False
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+        return None
+
     
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -93,4 +116,4 @@ if __name__ == "__main__":
     passed2 = grade_checkpoint2()
     passed3 = grade_final_checkpoint()
     points = sum([passed1, passed2, passed3])
-    print(f"Final points for task Milestone Meeting: {points}")
+    print(f"Final points for task Create Career Ladder: {points}")
