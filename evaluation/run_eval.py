@@ -12,7 +12,7 @@ from openhands.core.config import (
 )
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
-from openhands.events.action import CmdRunAction, BrowseInteractiveAction
+from openhands.events.action import CmdRunAction, BrowseInteractiveAction, MessageAction
 from openhands.events.observation import BrowserOutputObservation
 from openhands.runtime.runtime import Runtime
 
@@ -113,7 +113,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
         run_controller(
             config=config,
             sid=task_name,
-            task_str=instruction,
+            initial_user_action=MessageAction(content=instruction),
             runtime=runtime,
         )
     )
@@ -175,6 +175,6 @@ if __name__ == '__main__':
     pre_login(runtime)
 
     state = run_solver(runtime, args.task_image_name, config)
-    trajectory_path = os.path.join(args.trajectories_path, args.task_image_name, '.traj')
+    trajectory_path = os.path.join(args.trajectories_path, args.task_image_name + '.traj')
 
     run_evaluator(runtime, trajectory_path)
