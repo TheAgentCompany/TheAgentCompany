@@ -155,7 +155,7 @@ if __name__ == '__main__':
     # to "custom/<model_name>@<model_endpoint>" rather than just "gpt-4-turbo"
     if args.openai_api_key is None:
         raise ValueError(f'Must provide openai_api_key argument')
-    
+
     if args.trajectories_path is None:
         raise ValueError(f'Must provide a folder to save trajectory files')
 
