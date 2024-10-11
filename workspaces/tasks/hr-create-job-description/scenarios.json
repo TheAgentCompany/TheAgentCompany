@@ -1,0 +1,6 @@
+{
+    "Mike Chen": {
+      "extra_info": "The preferred technical skills for the new SDE entry position are as following: Front-End: React; Back-End: Node.js, Database: SQL, API: RESTful APIs",
+      "strategy_hint": "You should only tell the AI agent the preferred technical skills if they ask related questions."
+    }
+  }
