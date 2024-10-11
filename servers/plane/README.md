@@ -39,6 +39,33 @@ Username format: `firstnamelastname` in lowercase (e.g., `emmalewis`).
 Email format: `firstname.lastname@agentcompany.com` (e.g., `emma.lewis@agentcompany.com`)
 Password: `firstname.lastname@agentcompany.com`(e.g., `emma.lewis@agentcompany.com`)
 
+## Employee Accounts
+
+Below are the usernames, email addresses, and initial passwords for each employee. The passwords have been set to match the user's email address to simplify the initial login process.
+
+### User Account Details
+
+| Name              | Username       | Email Address                    | Password                  |
+|-------------------|----------------|---------------------------------|--------------------------|
+| **Sarah Johnson** | `sarahjohnson` | `sarah.johnson@agentcompany.com` | `sarah.johnson@agentcompany.com` |
+| **Li Ming**       | `liming`       | `li.ming@agentcompany.com`       | `li.ming@agentcompany.com`       |
+| **Zhang Wei**     | `zhangwei`     | `zhang.wei@agentcompany.com`     | `zhang.wei@agentcompany.com`     |
+| **Wang Fang**     | `wangfang`     | `wang.fang@agentcompany.com`     | `wang.fang@agentcompany.com`     |
+| **Mike Chen**     | `mikechen`     | `mike.chen@agentcompany.com`     | `mike.chen@agentcompany.com`     |
+| **Emily Zhou**    | `emilyzhou`    | `emily.zhou@agentcompany.com`    | `emily.zhou@agentcompany.com`    |
+| **Liu Qiang**     | `liuqiang`     | `liu.qiang@agentcompany.com`     | `liu.qiang@agentcompany.com`     |
+| **Priya Sharma**  | `priyasharma`  | `priya.sharma@agentcompany.com`  | `priya.sharma@agentcompany.com`  |
+| **Mark Johnson**  | `markjohnson`  | `mark.johnson@agentcompany.com`  | `mark.johnson@agentcompany.com`  |
+| **Jessica Lee**   | `jessicalee`   | `jessica.lee@agentcompany.com`   | `jessica.lee@agentcompany.com`   |
+| **Chen Xinyi**    | `chenxinyi`    | `chen.xinyi@agentcompany.com`    | `chen.xinyi@agentcompany.com`    |
+| **David Wong**    | `davidwong`    | `david.wong@agentcompany.com`    | `david.wong@agentcompany.com`    |
+| **Huang Jie**     | `huangjie`     | `huang.jie@agentcompany.com`     | `huang.jie@agentcompany.com`     |
+| **Sophia Rodriguez** | `sophiarodriguez` | `sophia.rodriguez@agentcompany.com` | `sophia.rodriguez@agentcompany.com` |
+| **Alex Turner**   | `alexturner`   | `alex.turner@agentcompany.com`   | `alex.turner@agentcompany.com`   |
+| **Emma Lewis**    | `emmalewis`    | `emma.lewis@agentcompany.com`    | `emma.lewis@agentcompany.com`    |
+| **Jessica Chen**  | `jessicachen`  | `jessica.chen@agentcompany.com`  | `jessica.chen@agentcompany.com`  |
+
+
 ## Project Structure
 The projects in Plane were set up to reflect the key modules of The Agent Company's core initiatives. Each module was created as a separate project to streamline organization and focus. The projects are as follows:
 
