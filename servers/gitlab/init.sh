@@ -62,36 +62,22 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
              --form "file=@$file" \
              "http://0.0.0.0/api/v4/projects/import"
 
-        # Store project IDs in an array
-        project_ids+=($project_id)
-        ((project_id++))
-
-        sleep 30
-    done
-
-    echo "Waiting for all imports to complete..."
-
-    # Wait for all imports to complete
-    while true; do
-        all_complete=true
-        for id in "${project_ids[@]}"; do
-            status=$(check_import_status $id)
+        echo "Waiting for import to complete or fail..."
+        while true; do
+            status=$(check_import_status $project_id)
             if [ "$status" == "started" ] || [ "$status" == "scheduled" ]; then
-                all_complete=false
-                echo "Project $id import status: $status"
-                break
+                echo "Project $project_id import status: $status"
             elif [ "$status" != "finished" ]; then
-                echo "Error: Unexpected status for project $id: $status"
+                echo "Error: Unexpected status for project $project_id: $status"
+                break
+            else
+                echo "Project $project_id import succeeded with status: $status"
+                break
             fi
+            sleep 30
         done
 
-        if $all_complete; then
-            echo "All imports completed!"
-            break
-        fi
-
-        echo "Waiting 10 seconds for imports to complete..."
-        sleep 10
+        ((project_id++))
     done
 else
     echo "No .tar.gz file found in /assets/exports/. Nothing to import."
