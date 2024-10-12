@@ -55,7 +55,7 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
         # Extract the filename without the path and extension
         filename=$(basename "$file" .tar.gz)
 
-        echo "Importing $filename..."
+        echo "Importing $filename, project_id=$project_id"
         curl --request POST \
              --header "PRIVATE-TOKEN: root-token" \
              --form "path=$filename" \
@@ -65,6 +65,8 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
         # Store project IDs in an array
         project_ids+=($project_id)
         ((project_id++))
+
+        sleep 30
     done
 
     echo "Waiting for all imports to complete..."
@@ -74,15 +76,17 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
         all_complete=true
         for id in "${project_ids[@]}"; do
             status=$(check_import_status $id)
-            if [ "$status" != "finished" ]; then
+            if [ "$status" == "started" ] || [ "$status" == "scheduled" ]; then
                 all_complete=false
                 echo "Project $id import status: $status"
                 break
+            elif [ "$status" != "finished" ]; then
+                echo "Error: Unexpected status for project $id: $status"
             fi
         done
 
         if $all_complete; then
-            echo "All imports completed successfully!"
+            echo "All imports completed!"
             break
         fi
 
