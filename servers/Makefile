@@ -101,7 +101,7 @@ rebuild-gitlab: init
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
 	@echo "start gitlab from clean state..."
-	docker compose up --build --force-recreate gitlab -d
+	docker compose build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again
 # any changes to gitlab will disappear, and the container will start
