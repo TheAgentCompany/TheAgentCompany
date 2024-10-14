@@ -19,7 +19,7 @@ def grade_checkpoint1(trajectory):
     return "ogma.lti.cs.cmu.edu:8929/root/api-server" in trajectory
 
 def grade_checkpoint2():
-    if os.path.exists('/workspace/api-server'):
+    if os.path.exists('/workspace/api-server/server.py'):
         with open('/workspace/api-server/server.py') as f:
             code_content = f.read()
             if "Welcome to the Flask API" in code_content:
