@@ -11,4 +11,4 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-openfeet = "*"
+openhands-ai = { git = "https://github.com/All-Hands-AI/OpenHands.git", rev = "4dfc7a7ef01bcc78a974d8af12ec7f3a2bc9b097" }
