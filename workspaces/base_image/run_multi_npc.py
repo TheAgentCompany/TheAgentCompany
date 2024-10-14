@@ -17,7 +17,8 @@ names = list(data.keys())
 # Loop through the names and execute the command
 for name in names:
     print(f"Launching {name}")
-    command = f"OPENAI_API_KEY={openai_api_key} python_default /npc/run_one_npc.py --agent_name={name}"
+    command = f"OPENAI_API_KEY={openai_api_key} python_default /npc/run_one_npc.py --agent_name=\"{name}\""
+    print(command)
     # do not let it print logs to stdout
     subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
