@@ -23,6 +23,7 @@ RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
 # sotopia requires a specific hiredis version
 RUN pip install hiredis==3.0.0
+RUN pip install litellm==1.23.16
 
 # create npc directory (examinee MUST not access this directory)
 RUN mkdir -p /npc
@@ -32,8 +33,16 @@ COPY *.py /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
+
+# For rocketchat NPC sotopia
 ENV OPENAI_API_KEY <YOUR OPENAI KEY>
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
 
+# For LLM Evaluator
+ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
+ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
+ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
+COPY llm_evaluator.py /utils
+export PYTHONPATH="/utils:$PYTHONPATH"
 ################## NPC SETUP ######################
