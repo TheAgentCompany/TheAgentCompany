@@ -1,0 +1,10 @@
+{
+  "Emily Zhou": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "Your free time is Monday, Tuesday, and Friday. All other time you are busy"
+  },
+  "Liu Qiang": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "Your free time is Wednesday, Friday. All other time you are busy"
+  }
+}
