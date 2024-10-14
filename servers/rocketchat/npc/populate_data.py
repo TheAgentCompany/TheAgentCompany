@@ -33,16 +33,16 @@ Migrator().run()
 
 with open('npc_definition.json', 'r') as file:
     agent_definitions = json.load(file)
-    logging.info(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
-def get_by_first_name(first_name):
-    return NPCDefinition.find(NPCDefinition.first_name == first_name).execute()
+def get_by_name(first_name, last_name):
+    return NPCDefinition.find(NPCDefinition.first_name == first_name and NPCDefinition.last_name == last_name).execute()
 
 for definition in agent_definitions:
-    if get_by_first_name(definition["first_name"]):
+    if get_by_name(definition["first_name"],definition["last_name"]):
         # TODO: shall we support modifications?
-        logging.info(f'NPC ({definition["first_name"]}) already inserted, skip')
+        print(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
         continue
     agent_profile = NPCDefinition.parse_obj(definition)
     agent_profile.save()
-    logging.info(f'Inserted {definition["first_name"]} successfully')
+    print(f'Inserted {definition["first_name"]} {definition["last_name"]} successfully')
