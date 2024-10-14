@@ -36,13 +36,13 @@ with open('npc_definition.json', 'r') as file:
     print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
 def get_by_name(first_name, last_name):
-    return NPCDefinition.find(NPCDefinition.first_name == first_name and NPCDefinition.last_name == last_name).execute()
+    return AgentProfile.find(AgentProfile.first_name == first_name and AgentProfile.last_name == last_name).execute()
 
 for definition in agent_definitions:
     if get_by_name(definition["first_name"],definition["last_name"]):
         # TODO: shall we support modifications?
         print(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
         continue
-    agent_profile = NPCDefinition.parse_obj(definition)
+    agent_profile = AgentProfile.parse_obj(definition)
     agent_profile.save()
     print(f'Inserted {definition["first_name"]} {definition["last_name"]} successfully')
