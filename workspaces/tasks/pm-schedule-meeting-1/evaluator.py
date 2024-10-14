@@ -26,8 +26,8 @@ def get_history(username):
             id = item["_id"]
             break
     msgs = rocket.im_history(room_id=id).json()['messages']
-    for msg in msgs:
-        print(msg['msg'])
+    for msg in msgs[::-1]:
+        print(f"{username}'s chat: {msg['msg']}")
 
     if len(msgs)>0:
         return True
@@ -63,7 +63,7 @@ def checkpoint3(file_path = '/workspace/conclusion.txt'):
 
 
 def calculate_total_score():
-    # 定义每个函数True时对应的分数
+    # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
         checkpoint2: 2,
@@ -80,5 +80,5 @@ def calculate_total_score():
 
 # compute the total point
 total = calculate_total_score()
-print(f"total point is: {total}")
+print(f"\ntotal point is: {total}")
 
