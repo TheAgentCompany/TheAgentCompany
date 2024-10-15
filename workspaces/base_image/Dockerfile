@@ -1,5 +1,6 @@
 FROM python:3.12
 
+################## Basic SETUP ################################
 # create utils directory (examinee MUST not access this directory)
 RUN mkdir -p /utils
 
@@ -13,7 +14,11 @@ WORKDIR /workspace
 # create a softlink in case "python" alias is polluted
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
 
-################## NPC SETUP ######################
+# install commonly used libraries
+RUN pip install requests
+#############################################################
+
+################## NPC SETUP ################################
 # For simplicity, we set up necessary environments needed
 # by NPCs in the base image, even though some simple tasks
 # don't require NPCs
@@ -38,11 +43,29 @@ ENV SCENARIOS_FILE_PATH /npc/scenarios.json
 ENV OPENAI_API_KEY <YOUR OPENAI KEY>
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
+#############################################################
 
-# For LLM Evaluator
+################## LLM Evaluator SETUP ######################
 ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
 ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
 ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
 ENV PYTHONPATH="/utils:$PYTHONPATH"
 COPY llm_evaluator.py /utils
-################## NPC SETUP ######################
+#############################################################
+
+################## ONBUILD (child images) SETUP #############
+# persist utilities files in the exam image
+ONBUILD COPY evaluator.py /utils/
+ONBUILD COPY init.sh /utils/
+ONBUILD RUN chmod +x /utils/init.sh
+
+# those files are optional and benchmark developers should customize
+ONBUILD RUN if [ -f "pre_init.py" ]; then cp pre_init.py /utils/; fi
+ONBUILD RUN if [ -f "post_init.py" ]; then cp post_init.py /utils/; fi
+
+# optional, only if npc is used - benchmark developers should customize
+ONBUILD RUN if [ -f "scenarios.json" ]; then cp scenarios.json /npc; fi
+
+# persist instruction files needed by the examinee
+ONBUILD COPY task.md /instruction/
+#############################################################
