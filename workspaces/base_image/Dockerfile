@@ -55,16 +55,9 @@ COPY llm_evaluator.py /utils
 
 ################## ONBUILD (child images) SETUP #############
 # persist utilities files in the exam image
-ONBUILD COPY evaluator.py /utils/
+ONBUILD COPY *.py /utils/
 ONBUILD COPY init.sh /utils/
 ONBUILD RUN chmod +x /utils/init.sh
-
-# those files are optional and benchmark developers should customize
-ONBUILD RUN if [ -f "pre_init.py" ]; then cp pre_init.py /utils/; fi
-ONBUILD RUN if [ -f "post_init.py" ]; then cp post_init.py /utils/; fi
-
-# optional, only if npc is used - benchmark developers should customize
-ONBUILD RUN if [ -f "scenarios.json" ]; then cp scenarios.json /npc; fi
 
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
