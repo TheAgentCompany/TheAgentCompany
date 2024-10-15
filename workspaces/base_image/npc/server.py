@@ -67,7 +67,7 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         size: int = 1,
         env_params: dict[str, Any] = {},
         agents_params: list[dict[str, Any]] = [{}, {}],
-        agent_first_name: str = "",
+        agent_name: str = "",
     ) -> Generator[EnvAgentCombo[ObsType, ActType], None, None]:
         # This is a simplified version of the original function
         # The original function is not provided in the snippet
@@ -81,14 +81,15 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
             len(agents_params) == n_agent
         ), f"agents_params should be a list of length {n_agent}"
         env_profile = EnvironmentProfile.parse_obj(
-            get_scenarios(agent_first_name)
+            get_scenarios(agent_name)
         )
         env = ParallelSotopiaEnv(env_profile=env_profile, **env_params)
+        name = agent_name.split()
         agent_profiles = [
             # Only get the first result. If not item in list, should raise error
             # Please check the redis server, you should populate data before running
             AgentProfile.find(AgentProfile.first_name == 'X').execute()[0],
-            AgentProfile.find(AgentProfile.first_name == agent_first_name).execute()[0],
+            AgentProfile.find(AgentProfile.first_name == name[0] and AgentProfile.last_name==name[1]).execute()[0],
         ]
         for _ in range(size):
             agents = [
@@ -112,7 +113,7 @@ async def run_server(
     tag: str | None = None,
     push_to_db: bool = False,
     using_async: bool = True,
-    agent_first_name: str = "",
+    agent_name: str = "",
 ) -> list[list[tuple[str, str, Message]]]:
     """
     Doc incomplete
@@ -169,10 +170,10 @@ async def run_server(
             n_agent=len(agents_model_dict),
             env_params=env_params,
             agents_params=[
-                {"model_name": model_name} if model_name != "rocketchat"  else {"first_name": agent_first_name}
+                {"model_name": model_name} if model_name != "rocketchat"  else {"credential_name": agent_name}
                 for model_name in agents_model_dict.values()
             ],
-            agent_first_name = agent_first_name,
+            agent_name = agent_name,
         )
     episode_futures = [
         arun_one_episode(

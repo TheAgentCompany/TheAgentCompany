@@ -16,7 +16,7 @@ logging.basicConfig(
 def main():
     # Use argparse to capture command-line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--agent_first_name', type=str, help="Input NPC first name")
+    parser.add_argument('--agent_name', type=str, help="Input NPC first name")
     args = parser.parse_args()
 
     # Run the asyncio task
@@ -35,7 +35,7 @@ def main():
                 "agent1": "",
                 "agent2": "",
             },
-            agent_first_name = args.agent_first_name
+            agent_name = args.agent_name
         )
     )
 
