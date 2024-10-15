@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 4 points in total. If the last check passes, then full credits are granted. Otherwise, partial credits might be granted if only some checkpoints are completed.
+This task has 4 points in total. Only the previous checkpoint pass, we will run the next check, otherwise we will just stop the evaluation
 
 ## Checkpoint 1 (1pt)
 

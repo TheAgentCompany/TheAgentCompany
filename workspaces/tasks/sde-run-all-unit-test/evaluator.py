@@ -3,14 +3,6 @@ import logging
 import re
 import sys
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return json.load(file)
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return []
-
 # Check if OpenHands repo is cloned
 def grade_checkpoint1(trajectory):
     try:
@@ -88,6 +80,14 @@ def grade_checkpoints(trajectory):
             break  
 
     return points
+
+def load_trajectory(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return json.load(file)
+    except Exception as e:
+        logging.warning(f"Error reading trajectory file: {e}")
+        return []
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

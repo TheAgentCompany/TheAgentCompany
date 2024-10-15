@@ -10,11 +10,7 @@ RUN chmod +x /utils/init.sh
 # to their tasks' needs
 COPY pre_init.py /utils/
 COPY post_init.py /utils/
-COPY trajectory.json /utils/
-COPY trajectory_all_failed.json /utils/
-COPY trajectory_no_test.json /utils/
-COPY trajectory_partial_pass.json /utils/
-COPY trajectory_not_clone.json /utils/
+
 
 # persist instruction files needed by the examinee
 COPY task.md /instruction/
