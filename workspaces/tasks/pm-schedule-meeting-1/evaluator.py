@@ -45,6 +45,11 @@ def check_final_result(file_path):
     # Read the content of the file and call litellm
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
+
+        if len(content) == 0:
+            print("there is no content in the txt")
+            return False
+
         messages = [{"content": f"Does the phrase \"\"{content}\"\" include any specific day of the week?? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
 
     # Check result
