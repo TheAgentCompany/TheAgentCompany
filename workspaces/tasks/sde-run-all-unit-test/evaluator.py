@@ -2,11 +2,31 @@ import json
 import logging
 import re
 import sys
+import os
+import random
 
 # Check if OpenHands repo is cloned
-def grade_checkpoint1(trajectory):
+def grade_checkpoint1():
+    openhands_path = '/workspace/openhands'
     try:
-        return any('git clone' in step.get('command', '') and 'openhands' in step.get('command', '').lower() for step in trajectory)
+        # Check if the directory exists
+        if not os.path.isdir(openhands_path):
+            logging.warning("No dir found")
+            return False
+        
+        # Get all files in the directory
+        files = os.listdir(openhands_path)
+        
+        # Check if there's at least one file
+        if not files:
+            logging.warning("No file found")
+            return False
+        
+        instruction_file_name = ".openhands_instructions"
+        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
+        
+        return os.path.isfile(instruction_file_path)
+    
     except Exception as e:
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
@@ -62,22 +82,22 @@ def grade_checkpoint4(trajectory):
 def grade_checkpoints(trajectory):
     checkpoints = [
         (grade_checkpoint1, "OpenHands repo is cloned"),
-        (grade_checkpoint2, "At least one unit test is collected"),
-        (grade_checkpoint3, "At least one unit test passes"),
-        (grade_checkpoint4, "All unit tests pass")
+        (lambda t: grade_checkpoint2(t), "At least one unit test is collected"),
+        (lambda t: grade_checkpoint3(t), "At least one unit test passes"),
+        (lambda t: grade_checkpoint4(t), "All unit tests pass")
     ]
 
     points = 0
     for grade_func, description in checkpoints:
         try:
-            passed = grade_func(trajectory)
+            passed = grade_func() if grade_func == grade_checkpoint1 else grade_func(trajectory)
             points += int(passed)
             print(f"{'✓' if passed else '✗'} {description}")
             if not passed:
                 break  
         except Exception as e:
             logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break  
+            break 
 
     return points
 
