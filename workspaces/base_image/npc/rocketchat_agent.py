@@ -73,7 +73,7 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         uuid_str: str | None = None,
         session_id: str | None = None,
         agent_profile: AgentProfile | None = None,
-        first_name: str | None = None,
+        credential_name: str | None = None,
     ) -> None:
         super().__init__(
             agent_name=agent_name,
@@ -83,8 +83,9 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         # super().__init__(agent_name=agent_name, uuid_str=uuid_str)
         self.session_id = session_id or str(uuid4())
         self.sender_id = str(uuid4())
-        print(f"step 1: connect to the server: user first name: {first_name}")
-        username, password = get_credentials(first_name)
+        print(f"step 1: connect to the server: user first name: {credential_name}")
+        username, password = get_credentials(credential_name)
+        print(username, password)
         self.bot = RocketChatBot(username, password, server_url)
         self.send_init_message()
         logging.info(f"Session ID: {self.session_id}")
