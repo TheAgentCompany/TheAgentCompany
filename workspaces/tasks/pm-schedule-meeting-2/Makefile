@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-schedule-meeting-1-image
-CONTAINER_NAME=pm-schedule-meeting-1
+IMAGE_NAME=pm-schedule-meeting-2-image
+CONTAINER_NAME=pm-schedule-meeting-2
 
 .PHONY: build run stop
 
