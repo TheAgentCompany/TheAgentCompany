@@ -32,7 +32,7 @@
         "last_name": "Ming",
         "age": 35,
         "occupation": "Database Team Project Manager",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Managing database projects, resource coordination, ensuring timely delivery; Project: JanusGraph (Graph Database); Skills: Java, distributed systems",
         "slack_channels": "#project-graphdb, #engineering, #tech-talk"
@@ -42,7 +42,7 @@
         "last_name": "Wei",
         "age": 31,
         "occupation": "Senior Software Engineer (Streaming Database Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing and optimizing core streaming database functionalities; Project: RisingWave (Streaming Database); Skills: Rust, database systems",
         "slack_channels": "#project-streamdb, #engineering, #tech-talk"
@@ -62,7 +62,7 @@
         "last_name": "Chen",
         "age": 33,
         "occupation": "Senior Software Engineer (AI Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing and optimizing LLM inference engines; Project: llama.cpp (LLM inference project); Skills: C++, CUDA, performance optimization",
         "slack_channels": "#project-ai, #engineering, #tech-talk"
@@ -82,7 +82,7 @@
         "last_name": "Qiang",
         "age": 36,
         "occupation": "Quality Assurance Engineer",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing test strategies, executing tests, ensuring product quality; Project: All projects (focusing on testing and quality); Skills: N/A",
         "slack_channels": "All project channels, #engineering, #tech-talk"
@@ -102,7 +102,7 @@
         "last_name": "Johnson",
         "age": 40,
         "occupation": "Sales Director",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing sales strategies, managing sales team, expanding client relationships; Project: N/A (Sales); Skills: N/A",
         "slack_channels": "#sales-marketing, #general"
@@ -132,7 +132,7 @@
         "last_name": "Wong",
         "age": 45,
         "occupation": "Finance Director",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Financial planning, budget management, financial reporting; Project: N/A (Finance); Skills: N/A",
         "slack_channels": "#general"
@@ -142,7 +142,7 @@
         "last_name": "Jie",
         "age": 34,
         "occupation": "Product Manager (Search Engine Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Defining product requirements, planning product roadmap, communicating with clients; Project: OpenSearch (Search Engine); Skills: N/A",
         "slack_channels": "#project-search, #product, #tech-talk"
@@ -162,7 +162,7 @@
         "last_name": "Turner",
         "age": 30,
         "occupation": "Software Engineer (Low-Code Platform Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing low-code platform features; Project: Node-RED (Low-Code Platform); Skills: N/A",
         "slack_channels": "#project-lowcode, #engineering, #tech-talk"
