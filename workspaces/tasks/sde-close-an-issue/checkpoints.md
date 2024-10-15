@@ -8,7 +8,5 @@ This task has 2 points in total.
 
 ## Checkpoint 2 (1pt)
 
-Found the correct API server codebase http://ogma.lti.cs.cmu.edu:8929/root/api-server
-
 issue is closed
  
