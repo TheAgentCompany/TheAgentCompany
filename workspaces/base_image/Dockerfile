@@ -1,5 +1,6 @@
 FROM python:3.12
 
+################## Basic SETUP ################################
 # create utils directory (examinee MUST not access this directory)
 RUN mkdir -p /utils
 
@@ -13,7 +14,11 @@ WORKDIR /workspace
 # create a softlink in case "python" alias is polluted
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
 
-################## NPC SETUP ######################
+# install commonly used libraries
+RUN pip install requests
+#############################################################
+
+################## NPC SETUP ################################
 # For simplicity, we set up necessary environments needed
 # by NPCs in the base image, even though some simple tasks
 # don't require NPCs
@@ -23,17 +28,35 @@ RUN pip install rocketchat_API==1.32.0
 RUN pip install sotopia==0.1.0-rc.1
 # sotopia requires a specific hiredis version
 RUN pip install hiredis==3.0.0
+RUN pip install litellm==1.23.16
 
-# create npc directory (examinee MUST not access this directory)
+# create npc directory (TODO: examinee MUST not access this directory)
 RUN mkdir -p /npc
-
-COPY *.json  /npc
-COPY *.py /npc
+COPY ./npc  /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
+
+# For rocketchat NPC sotopia
 ENV OPENAI_API_KEY <YOUR OPENAI KEY>
 ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
 ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
+#############################################################
 
-################## NPC SETUP ######################
+################## LLM Evaluator SETUP ######################
+ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
+ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
+ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
+ENV PYTHONPATH="/utils:$PYTHONPATH"
+COPY llm_evaluator.py /utils
+#############################################################
+
+################## ONBUILD (child images) SETUP #############
+# persist utilities files in the exam image
+ONBUILD COPY *.py /utils/
+ONBUILD COPY init.sh /utils/
+ONBUILD RUN chmod +x /utils/init.sh
+
+# persist instruction files needed by the examinee
+ONBUILD COPY task.md /instruction/
+#############################################################
