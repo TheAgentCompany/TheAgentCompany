@@ -1,0 +1,1 @@
+Goto http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/issues/3797, reply with “Closing due to inactivity”, and close the issue.
