@@ -14,4 +14,4 @@ confirmed with Liu Qiang about the meeting time
 
 ## Final Checkpoint (3pt)
 
-Arrange a suitable meeting time for Emily Zhou and Liu Qiang
+Unable to schedule a meeting this week for Emily Zhou and Liu Qiang
