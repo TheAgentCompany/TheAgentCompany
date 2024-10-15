@@ -30,13 +30,9 @@ RUN pip install sotopia==0.1.0-rc.1
 RUN pip install hiredis==3.0.0
 RUN pip install litellm==1.23.16
 
-# create npc directory (examinee MUST not access this directory)
+# create npc directory (TODO: examinee MUST not access this directory)
 RUN mkdir -p /npc
-
-COPY npc*.json  /npc
-COPY rocketchat*.py /npc
-COPY *npc.py /npc
-COPY server.py /npc
+COPY ./npc  /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
