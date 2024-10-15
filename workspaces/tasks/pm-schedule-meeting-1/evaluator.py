@@ -3,6 +3,8 @@ from rocketchat_API.rocketchat import RocketChat
 
 import datetime
 
+from llm_evaluator import *
+
 # Set environment variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
@@ -34,22 +36,26 @@ def get_history(username):
     else:
         return False
 
-def check_thursday(file_path):
+def check_final_result(file_path):
     # Check if the file exists
     if not os.path.exists(file_path):
         print(f"The file {file_path} does not exist.")
         return False
 
-    # Read the content of the file
+    # Read the content of the file and call litellm
     with open(file_path, 'r', encoding='utf-8') as file:
-        content = file.read().lower()
+        content = file.read()
+        messages = [{"content": f"Does the phrase \"\"{content}\"\" include any specific day of the week?? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
 
-    # Check if "thursday" is in the file content
-    if "thursday" in content:
-        print("thursday is mentioned in the file.")
+    # Check result
+    llm_resonse = llm_evaluator(messages).json()
+    print(llm_resonse)
+
+    if 'no' in llm_resonse['choices'][0]['message']['content'].lower():
+        print("there is not a meeting in this week")
         return True
     else:
-        print("thursday is not mentioned in the file.")
+        print("there is a meeting in this week")
         return False
 
 def checkpoint1(username='emily_zhou'):
@@ -59,7 +65,7 @@ def checkpoint2(username='liu_qiang'):
     return get_history(username=username)
 
 def checkpoint3(file_path = '/workspace/conclusion.txt'):
-    return check_thursday(file_path=file_path)
+    return check_final_result(file_path=file_path)
 
 
 def calculate_total_score():

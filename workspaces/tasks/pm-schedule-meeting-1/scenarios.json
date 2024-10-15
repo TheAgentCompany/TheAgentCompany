@@ -1,10 +1,10 @@
 {
   "Emily Zhou": {
     "extra_info": "Someone will ask you for your free time for the meeting",
-    "strategy_hint": "You're not available on Mondays, Tuesdays, and Fridays. You're available on all other days."
+    "strategy_hint": "You're available on Mondays, Wednesday, and Fridays. You're not available on all other week days."
   },
   "Liu Qiang": {
     "extra_info": "Someone will ask you for your free time for the meeting",
-    "strategy_hint": "You're not available on Wednesday, Friday. You're available on all other days."
+    "strategy_hint": "You're available on Tuesday, Thursday. You're not available on all other week days."
   }
 }
