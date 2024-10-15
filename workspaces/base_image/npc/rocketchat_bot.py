@@ -55,6 +55,7 @@ class RocketChatBot(object):
         try:
             if "success" in messages:
                 if messages['success'] == False:
+                    print(messages)
                     return None
                     # raise RuntimeError(messages['error'])
             if len(messages['messages']) > 0:
@@ -115,7 +116,7 @@ class RocketChatBot(object):
                 message = self.process_im(im.get('_id'))
                 if message is not None:
                     return message
-            print("No message received, waiting...")
+            print(self.botname, ": No message received, waiting...")
             sleep(1)
 
 """

@@ -79,7 +79,7 @@ Once the examinee has finished its work (as of now, we don't enforce timing),
 run the below command in the exam container to grade the exam:
 
 ```bash
-python /utils/evaluator.py <optional_trajectory_file_path>
+python_default /utils/evaluator.py <optional_trajectory_file_path>
 ```
 
 Note that the trajectory file path must be an absolute path to the trajectory
