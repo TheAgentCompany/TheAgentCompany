@@ -33,8 +33,10 @@ RUN pip install litellm==1.23.16
 # create npc directory (examinee MUST not access this directory)
 RUN mkdir -p /npc
 
-COPY *.json  /npc
-COPY *.py /npc
+COPY npc*.json  /npc
+COPY rocketchat*.py /npc
+COPY *npc.py /npc
+COPY server.py /npc
 
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
