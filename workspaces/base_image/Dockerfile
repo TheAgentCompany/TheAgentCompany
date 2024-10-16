@@ -57,6 +57,8 @@ COPY llm_evaluator.py /utils
 # persist utilities files in the exam image
 ONBUILD COPY *.py /utils/
 
+ONBUILD COPY dependencies.yml /utils/
+
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
 #############################################################
