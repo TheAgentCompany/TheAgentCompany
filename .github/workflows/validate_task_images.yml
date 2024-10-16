@@ -1,0 +1,33 @@
+# This workflow only validates task images without pushing them to registry
+# it acts as a sanity checker without verifying correctness of tasks' contents
+name: Validate all task images
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build base image
+      run: |
+        cd workspaces/base_image
+        make build
+
+    - name: Build task images
+      run: |
+        for task_dir in workspaces/tasks/*/; do
+          echo "Building in $task_dir"
+          cd "$task_dir"
+          make build
+          cd -
+        done
