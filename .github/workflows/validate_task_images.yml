@@ -9,10 +9,83 @@ on:
     branches: [ main ]
 
 jobs:
-  validate:
+  check-task-structure:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+
+  build-task-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml
+
+        - name: Check task structure
+        run: |
+          #!/bin/bash
+          set -e
+  
+          for task_dir in workspaces/tasks/*/; do
+            echo "Checking task: $task_dir"
+            
+            # 1. Check if task.md exists
+            if [ ! -f "${task_dir}task.md" ]; then
+              echo "Error: task.md is missing in $task_dir"
+              exit 1
+            fi
+  
+            # 2. Check if evaluator.py exists
+            if [ ! -f "${task_dir}evaluator.py" ]; then
+              echo "Error: evaluator.py is missing in $task_dir"
+              exit 1
+            fi
+  
+            # 3. Check if Dockerfile exists and contains "FROM base-image"
+            if [ ! -f "${task_dir}Dockerfile" ]; then
+              echo "Error: Dockerfile is missing in $task_dir"
+              exit 1
+            fi
+            if ! grep -q "FROM base-image" "${task_dir}Dockerfile"; then
+              echo "Error: Dockerfile in $task_dir does not contain 'FROM base-image'"
+              exit 1
+            fi
+  
+            # 4. Check if Makefile exists and contains keyword "build"
+            if [ ! -f "${task_dir}Makefile" ]; then
+              echo "Error: Makefile is missing in $task_dir"
+              exit 1
+            fi
+            if ! grep -q "build" "${task_dir}Makefile"; then
+              echo "Error: Makefile in $task_dir does not contain 'build'"
+              exit 1
+            fi
+  
+            # 5. Check if checkpoints.md exists
+            if [ ! -f "${task_dir}checkpoints.md" ]; then
+              echo "Error: checkpoints.md is missing in $task_dir"
+              exit 1
+            fi
+  
+            # 6. Check dependencies.yml
+            if [ ! -f "${task_dir}dependencies.yml" ]; then
+              echo "Error: dependencies.yml is missing in $task_dir"
+              exit 1
+            fi
+  
+            python .github/validate_dependencies.py "${task_dir}dependencies.yml"
+          done
+  
+          echo "All checks passed successfully!"
 
     - name: Set up Docker Buildx
       id: buildx
