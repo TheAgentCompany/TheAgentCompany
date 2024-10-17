@@ -14,12 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-
-  build-task-image:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -86,6 +80,11 @@ jobs:
           done
   
           echo "All checks passed successfully!"
+
+  build-task-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       id: buildx
