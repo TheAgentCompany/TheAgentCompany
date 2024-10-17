@@ -13,8 +13,7 @@ contain rubrics used for grading.
 
 ## Checkpoints (Evaluator)
 
-Every task folder may have a `checkpoints.md` that documents the checkpoint rubrics.
-This is optional, but strongly recommended.
+Every task folder should have a `checkpoints.md` that documents the checkpoint rubrics.
 
 Every task folder must have an `evaluator.py` that can be run to grade the
 examinee's work. It must take exactly one CLI argument that is a path to the
@@ -25,7 +24,7 @@ but it MUST document the necessary steps conducted by the examinee.
 
 Every task folder should have a `Dockerfile` that will be used to build a container
 where the examinee shall finish its task. Think of it as a PC environment you'd like
-to provide your interviewee with. It is not required, but strongly recommended, to
+to provide your interviewee with. It is required to
 build the image on top of the [base image](../../base_image/Dockerfile).
 
 The Dockerfile should contain necessary environments you'd like to provide with
@@ -46,15 +45,24 @@ is executed when the container is launched (and remember, if there are multiple
 one takes effect). For consistency, please DO NOT put any `CMD` or `ENTRYPOINT`
 instructions into the task Dockerfile.
 
+## Dependency config (dependencies.yml)
+
+`dependencies.yml` is a mandatory file that records the service dependencies of
+a task. For efficiency purpose, benchmark users are not required to reset all service
+states between task runs - they only need to reset services that are needed by the
+task. If your task doesn't rely on any service, simply put an empty `dependencies.yml`
+file.
+
 ## Run time (init scripts, optional)
 
-The example task contains `init.sh`, which calls `pre_init.py` and `post_init.py`.
-These are optional and you only need them if you need to set up some environments,
-or run sanity checks. If you, for example, attempt to launch an HTTP server that
-is needed by the examinee, you shall put it as part of `init.sh`.
+The base image contains `init.sh`, which calls `pre_init.py` and `post_init.py`
+if they exist. You could choose to provide `pre_init.py` and/or `post_init.py`
+in your task directory if you need to set up some uncommon environments,
+or run non-standard sanity checks. If you, for example, attempt to launch an
+HTTP server that is needed by the examinee, you could put it either in `pre_init.py`
+or `post_init.py`.
 
-`pre_init.py` and `post_init.py` are optional. You could remove them or rewrite
-them as shell scripts or any other executable. A common use case for `pre_init.py`
+A common use case for `pre_init.py`
 is to check whether services involved in the task are ready and in a clean state.
 For example, it could check access to a wiki page, check existence 
 of some repository, issue, pull request in GitLab, and check existence of an user in
@@ -68,8 +76,7 @@ scenario is the initialization process might involve some task-specific data pop
 steps. Post-init step could check if the data is correctly populated to the task
 container. If not, it could choose to fail the script.
 
-Benchmark developers only need to provide the `init.sh`, but not execute them
-as part of `RUN` or `ENTRYPOINT` instructions in the Dockerfile. It is benchmark users'
+Note that `init.sh` is not executed as part of image build process. It is benchmark users'
 responsibility to run them before the examinee starts its task. The reason is some
 agent frameworks might choose to override `CMD` or `ENTRYPOINT` instruction in
 their customized images built on top of task images. For consistency and simplicitly,
@@ -90,4 +97,6 @@ order to do a specific task, the examinee might need to present their work to th
 boss NPC, who has some context of the task and would respond in a improvised, but
 generally pre-defined fashion. This context is defined in each individual task image.
 
-If your task needs to involve NPCs, please see details [here](./NPC.md)
+If your task needs to involve NPCs, take a look at the example task. In a nutshell,
+all you need to do is to add a `scenarios.json` that documents the NPCs involved, their
+knowledge and their settings. For details, see [here](./NPC.md).
