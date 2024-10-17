@@ -1,0 +1,5 @@
+
+Flask==2.3.2
+Werkzeug==2.3.3
+Faker==18.4.0
+pysqlite3-binary==0.5.0

@@ -1,0 +1,10 @@
+{
+  "Emily": {
+    "extra_info": "The code for the event viewer is in the `event-viewer.zip` file. The password for unzipping the file is `2039fome`. I don't have the details about the event-viewer's codebase, but it's a flask app and the README should be enough to get you started. If you need any info about the database, I don't have it but Zhang should know.",
+    "strategy_hint": "You should only tell the AI agent any information about the server if they ask directly for the information. Be brief, like you're busy with other things and only want to help if asked directly."
+  },
+  "Zhang": {
+    "extra_info": "The database password is `cat123`. The database is located in `databases/event_viewer.db`.",
+    "strategy_hint": "You should only tell the AI agent any information about the server if they ask directly for the information. Be brief, like you're busy with other things and only want to help if asked directly."
+  }
+}
