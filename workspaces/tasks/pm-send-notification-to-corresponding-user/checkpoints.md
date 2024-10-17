@@ -6,16 +6,16 @@ completed.
 
 ## Checkpoint 1 (1pts)
 
-confirmed with Jessica Lee 's plan is to hold a kickoff meeting
+Confirmed with Jessica Lee 's plan is to hold a kickoff meeting
 
 ## Checkpoint 2 (1pt)
 
-confirmed with David Wong received message which is about the kickoff meeting
+Confirmed with David Wong received message which is about the kickoff meeting
 
 ## Checkpoint 3 (1pt)
 
-confirmed with Huang Jie received message which is about the kickoff meeting
+Confirmed with Huang Jie received message which is about the kickoff meeting
 
 ## Checkpoint 4 (1pt)
 
-confirmed with Mark Johnson received message which is about the kickoff meeting
+Confirmed with Mark Johnson received message which is about the kickoff meeting
