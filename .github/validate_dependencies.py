@@ -6,6 +6,9 @@ def validate_dependencies(file_path):
     with open(file_path, 'r') as f:
         try:
             data = yaml.safe_load(f)
+            if data is None:
+                # empty yaml file
+                return True
             if not isinstance(data, list):
                 print(f'Error: {file_path} is not a valid array')
                 return False
