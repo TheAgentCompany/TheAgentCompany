@@ -4,7 +4,6 @@ import sys
 
 #Check if the repository has been deleted.
 def check_repository_deleted():
-    """Check if the repository has been deleted."""
     url = "http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/root/raft"
     
     try:
