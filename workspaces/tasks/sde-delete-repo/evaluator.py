@@ -1,20 +1,28 @@
 import logging
 import requests
-import sys
+import urllib.parse
 
-#Check if the repository has been deleted.
+# GitLab configuration
+base_url = "http://ogma.lti.cs.cmu.edu:8929/api/v4"
+project_path = "root/raft"
+access_token = "root-token"
+headers = {"PRIVATE-TOKEN": access_token}
+
+# Check if the repository returns a 404 status via the API.
 def check_repository_deleted():
-    url = "http://ogma.lti.cs.cmu.edu:8929/api/v4/projects/root/raft"
+    encoded_path = urllib.parse.quote(project_path, safe='')
+    url = f"{base_url}/projects/{encoded_path}"
     
     try:
-        response = requests.get(url)
-        
+        response = requests.get(url, headers=headers)
+ 
         if response.status_code == 404:
+            logging.info(f"Repository '{project_path}' not found (404), as expected.")
             return True
         else:
-            logging.warning(f"Repository still exists or encountered an unexpected status code: {response.status_code}")
+            logging.warning(f"Unexpected status code: {response.status_code}")
             return False
-    except Exception as e:
+    except requests.RequestException as e:
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
@@ -29,7 +37,7 @@ def grade_checkpoint(check_func, description):
 
 if __name__ == "__main__":
     checkpoints = [
-        (check_repository_deleted, "Repository 'root/raft' has been deleted"),
+        (check_repository_deleted, f"Repository '{project_path}' returns 404"),
     ]
 
     total_points = 0
@@ -37,4 +45,4 @@ if __name__ == "__main__":
         points = grade_checkpoint(check_func, description)
         total_points += points
 
-    print(f"\nFinal score for repository deletion task: {total_points}/1")
+    print(f"\nFinal score for repository deletion check: {total_points}/{len(checkpoints)}")
