@@ -10,5 +10,6 @@ include = ["poetry.lock"]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
-openhands-ai-test = "*"
+python = "^3.12"
+pyyaml = "*"
+openhands-ai = { git = "https://github.com/All-Hands-AI/OpenHands.git", rev = "4dfc7a7ef01bcc78a974d8af12ec7f3a2bc9b097" }

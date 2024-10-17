@@ -16,8 +16,8 @@ Below are the addresses, usernames, and passwords for each service:
 * service url: https://ogma.lti.cs.cmu.edu/login
 * username: admin
 * password: 
-    * If you use the backup in server: `e42a78e0ca1ca798d98827946cb271cb9e428d357069d547`
-    * else try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`
+    * current password `cf6a70e7fbef0dc2f6e8c48369b30ab8357b3c10063f5fbe`
+    * if out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`
 
 ## Plane
 * http://ogma.lti.cs.cmu.edu:8091
