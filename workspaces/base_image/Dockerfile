@@ -3,6 +3,8 @@ FROM python:3.12
 ################## Basic SETUP ################################
 # create utils directory (examinee MUST not access this directory)
 RUN mkdir -p /utils
+COPY init.sh /utils/
+RUN chmod +x /utils/init.sh
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -54,8 +56,8 @@ COPY llm_evaluator.py /utils
 ################## ONBUILD (child images) SETUP #############
 # persist utilities files in the exam image
 ONBUILD COPY *.py /utils/
-ONBUILD COPY init.sh /utils/
-ONBUILD RUN chmod +x /utils/init.sh
+
+ONBUILD COPY dependencies.yml /utils/
 
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
