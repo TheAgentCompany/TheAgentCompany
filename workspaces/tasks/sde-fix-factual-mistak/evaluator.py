@@ -95,7 +95,5 @@ if __name__ == "__main__":
     for check_func, description in checkpoints:
         point = grade_checkpoint(check_func, description)
         points += point
-        if point == 0:
-            break
 
     print(f"\nFinal points for OpenHands task: {points}/3")
