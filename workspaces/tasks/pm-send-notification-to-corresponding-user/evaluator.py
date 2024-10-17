@@ -46,7 +46,7 @@ def check_with_llm(msgs, pattern):
             "role": "user"}
     ]
     llm_resonse = llm_evaluator(messages).json()
-    print(llm_resonse)
+   # print(llm_resonse)
 
     if pattern in llm_resonse['choices'][0]['message']['content'].lower():
         return True
