@@ -45,7 +45,7 @@ is executed when the container is launched (and remember, if there are multiple
 one takes effect). For consistency, please DO NOT put any `CMD` or `ENTRYPOINT`
 instructions into the task Dockerfile.
 
-## Dependeny config (dependencies.yml)
+## Dependency config (dependencies.yml)
 
 `dependencies.yml` is a mandatory file that records the service dependencies of
 a task. For efficiency purpose, benchmark users are not required to reset all service
