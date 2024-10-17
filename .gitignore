@@ -1,3 +1,8 @@
+# Evaluation-related
+evaluation/screenshots/
+evaluation/config.toml
+evaluation/trajectories/
+
 *.tar.gz
 *db.dump
 __pycache__

@@ -13,7 +13,7 @@ If you already have the access to this repository and can create branch on main 
 
 #### 1. Fork the Official Repository
 
-Fork [JobBnech repository](https://https://github.com/neulab/TheAgentCompany) into your own account.
+Fork [The Agent Company repository](https://https://github.com/neulab/TheAgentCompany) into your own account.
 Clone your own forked repository into your local environment.
 
 ```shell
