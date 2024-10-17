@@ -8,24 +8,20 @@ The agent has communicated with Emily on RocketChat.
 
 ## Checkpoint 2 (1pts)
 
-The agent has logged into the server using ssh.
+The agent has read `event-viewer/README.md`.
 
 ## Checkpoint 3 (1pts)
 
-The agent has read `pr-viewer/README.md`.
+The agent has run `event-viewer/app.py`.
 
 ## Checkpoint 4 (1pts)
 
-The agent has read `pr-viewer/logs/gunicorn.log`.
+The agent has communicated with Zhang on RocketChat.
 
 ## Checkpoint 5 (1pts)
 
-The agent has communicated with Zhang on RocketChat.
+`events-viewer/app.py` includes the word `cat123`.
 
 ## Checkpoint 6 (1pts)
 
-The configuration file `pr-viewer/config.toml` matches the regex `db_password.*dbcat456`.
-
-## Checkpoint 7 (1pts)
-
-The server returns the words "pr-viewer" when the URL `http://localhost:5000/` is accessed.
+The server returns the words " when the URL `http://localhost:5000/events` is accessed.

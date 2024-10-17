@@ -23,3 +23,7 @@ RUN pip install requests
 # this is optional and benchmark developers should customize according
 # to their tasks' needs
 COPY scenarios.json /npc
+
+# Copy files into the workspace
+COPY events-viewer.zip /workspace/
+COPY events.db /workspace/
