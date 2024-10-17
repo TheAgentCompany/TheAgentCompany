@@ -1,0 +1,1 @@
+Clone OpenHands repository from http://ogma.lti.cs.cmu.edu:8929/root/openhands/ to /workspace folder and run all unit tests
