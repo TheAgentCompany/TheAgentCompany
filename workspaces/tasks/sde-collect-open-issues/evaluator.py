@@ -1,5 +1,4 @@
 import csv
-import json
 import logging
 import sys
 import os
@@ -8,27 +7,8 @@ import os
 def grade_checkpoint1(trajectory):
     target_url = "http://ogma.lti.cs.cmu.edu:8929/root/sotopia/-/issues"
     
-    def search_in_string(text):
-        return target_url in text
-    
-    def search_in_list(items):
-        return any(search_in_any(item) for item in items)
-    
-    def search_in_dict(data):
-        return any(search_in_any(value) for value in data.values())
-    
-    def search_in_any(obj):
-        if isinstance(obj, str):
-            return search_in_string(obj)
-        elif isinstance(obj, list):
-            return search_in_list(obj)
-        elif isinstance(obj, dict):
-            return search_in_dict(obj)
-        else:
-            return search_in_string(str(obj))
-    
     try:
-        return search_in_any(trajectory)
+        return target_url in (str(trajectory))
     except Exception as e:
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
@@ -91,12 +71,7 @@ def load_trajectory(file_path):
     try:
         with open(file_path, 'r') as file:
             content = file.read()
-            try:
-                # Try to parse as JSON
-                return json.loads(content)
-            except json.JSONDecodeError:
-                # If not JSON, return as plain text
-                return content
+            return content
     except Exception as e:
         logging.warning(f"Error reading trajectory file: {e}")
         return ""
