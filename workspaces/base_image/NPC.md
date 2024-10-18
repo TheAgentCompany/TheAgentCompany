@@ -6,13 +6,49 @@
 * Run `make build` in base image folder
 
 ## Build your own image
-* Create a `scenarios.josn` file under your task folder
+* Create a `scenarios.josn` file under your task folder. Each item represents a NPC. The key is full name which should matched name [here](./npc/npc_credential.json). For more information about NPC roles, check [here](../../servers/rocketchat/npc/npc_definition.json). For example, the `extra_info` should be the information that every can know, the `strategy_hint` should be the information only this NPC should know :
+```
+{
+  "Emily Zhou": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "You're available on Mondays, Wednesday, and Fridays. You're not available on all other week days."
+  },
+  "Liu Qiang": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "You're available on Tuesday, Thursday. You're not available on all other week days."
+  }
+}
+```
+
 * `make build` in your folder
 * `make run` in your folder, then you will run the task image and step into the container.
-* Maunally execute `/utils/init.sh` then NPC will be launched
+* Maunally execute `/utils/init.sh` then NPC will be launched, you will see the CMD output like below:
+
+```
+root@299afff5d411:/utils# ls
+dependencies.yml  evaluator.py  init.sh  llm_evaluator.py
+root@299afff5d411:/utils# sh init.sh 
++ ping -c 1
++ grep PING
++ awk -F[()] {print $2}
+ping: usage error: Destination address required
++ SERVICE_IP=
++ echo  theagentcompany.com
++ [ -f /utils/pre_init.py ]
++ [ -f /npc/scenarios.json ]
++ python_default /npc/run_multi_npc.py
+Launching Emily Zhou
+OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Emily Zhou"
+Launching Liu Qiang
+OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
++ [ -f /utils/populate_data.py ]
++ [ -f /utils/post_init.py ]
+```
 
 ## How to debug our NPC
-* 
+* If your NPC not work as your expected, attach into your task container, when execute `init.sh`, the log will contain the command to launch a single NPC like below, the `agent_name` will decide which NPC get launched: 
+`OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"`
+* It will show the log output of your NPC. `No message received, waiting...` means NPC are waiting for message. If received, it will print the message and the response.
 
 
 ## NOTE
