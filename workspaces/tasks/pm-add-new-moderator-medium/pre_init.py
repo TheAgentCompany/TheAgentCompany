@@ -122,5 +122,9 @@ if __name__ == "__main__":
     username2 = 'sarah_johnson'
     username3 = 'priya_sharma'
     print(add_user_to_channel(channel_name, username1))
+    print(add_user_to_channel(channel_name, username2))
+    print(add_user_to_channel(channel_name, username3))
     print(add_user_role_moderator(channel_name, username1))
+    print(add_user_role_moderator(channel_name, username2))
+    print(add_user_role_moderator(channel_name, username3))
 
