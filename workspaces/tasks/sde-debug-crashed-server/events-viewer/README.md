@@ -1,12 +1,12 @@
 # Event Viewer Application
 
-The Event Viewer is a Flask-based web application that manages events, users, and participants. It provides a RESTful API for creating, reading, updating, and deleting (CRUD) events, users, and participants.
+The Event Viewer is a Flask-based web application that manages events and users. It provides a RESTful API for creating, reading, updating, and deleting (CRUD) events and users.
 
 ## Features
 
-- CRUD operations for events, users, and participants
-- SQLite database with password protection
-- Fake data generation for testing and development
+- CRUD operations for events and users
+- DuckDB database with encrypted Parquet files
+- Encryption for sensitive data
 - Unit tests to ensure functionality
 
 ## Requirements
@@ -14,7 +14,9 @@ The Event Viewer is a Flask-based web application that manages events, users, an
 - Python 3.7+
 - Flask
 - Werkzeug
-- Faker
+- DuckDB
+- PyArrow
+- Cryptography
 
 ## Installation
 
@@ -28,7 +30,6 @@ The Event Viewer is a Flask-based web application that manages events, users, an
 2. Install the required packages:
 
    ```bash
-   apt install sqlcipher
    pip install -r requirements.txt
    ```
 
@@ -60,14 +61,6 @@ The Event Viewer is a Flask-based web application that manages events, users, an
 - PUT /users/{id} - Update a specific user
 - DELETE /users/{id} - Delete a specific user
 
-### Participants
-
-- GET /participants - List all participants
-- POST /participants - Create a new participant
-- GET /participants/{id} - Get a specific participant
-- PUT /participants/{id} - Update a specific participant
-- DELETE /participants/{id} - Delete a specific participant
-
 ## Testing
 
 Run the unit tests:
@@ -78,7 +71,7 @@ python test_app.py
 
 ## Security
 
-The application uses a SQLite database with password protection. The database password is set in `app.py`. Make sure to change the default password in a production environment.
+The application uses DuckDB with encrypted Parquet files. Sensitive data, such as event descriptions and user emails, are encrypted before being stored in the database. The encryption key is stored in a separate file and should be properly secured in a production environment.
 
 ## Contributing
 
@@ -87,3 +80,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
