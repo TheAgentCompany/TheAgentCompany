@@ -1,5 +1,5 @@
-IMAGE_NAME=admin-watch-video-image
-CONTAINER_NAME=admin-watch-video
+IMAGE_NAME=admin-read-survey-and-summarise-image
+CONTAINER_NAME=admin-read-survey-and-summarise
 
 .PHONY: build run stop attach
 
