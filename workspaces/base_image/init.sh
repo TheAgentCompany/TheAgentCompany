@@ -3,7 +3,8 @@ set -ex
 
 ########## PRE INIT PHASE ############
 
-# Use synthetic service hostname in tasks and point it to your real service host
+# Use synthetic service hostname, theagentcompany.com in tasks and point it
+# to your real service host
 SERVER_HOSTNAME=${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu}
 SERVICE_IP=$(ping -c 1 $SERVER_HOSTNAME | grep PING | awk -F'[()]' '{print $2}')
 echo "$SERVICE_IP theagentcompany.com" >> /etc/hosts

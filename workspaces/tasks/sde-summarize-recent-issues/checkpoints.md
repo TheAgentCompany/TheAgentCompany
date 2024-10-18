@@ -4,7 +4,7 @@ This task has 4 points in total. If the final checkpoint passes, then full credi
 
 ## Checkpoint 1 (1pt)
 
-Check if the janusgraph gitlab repo has been in the log, and if the open issues are viewed in descending time order. (http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/issues/?sort=created_date&state=opened)
+Check if the janusgraph gitlab repo has been in the log, and if the open issues are viewed in descending time order. (http://theagentcompany.com:8929/root/janusgraph/-/issues/?sort=created_date&state=opened)
 
 ## Checkpoint 2 (1pt)
 

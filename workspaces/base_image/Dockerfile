@@ -43,8 +43,8 @@ ENV SCENARIOS_FILE_PATH /npc/scenarios.json
 
 # For rocketchat NPC sotopia
 ENV OPENAI_API_KEY <YOUR OPENAI KEY>
-ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
-ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
+ENV REDIS_OM_URL redis://default:jobbench@theagentcompany.com/:6379
+ENV BOT_URL http://theagentcompany.com:3000
 #############################################################
 
 ################## LLM Evaluator SETUP ######################
