@@ -65,4 +65,4 @@ def calculate_total_score():
 
 # compute the total point
 total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+print(f"\ntotal points: {total}")
