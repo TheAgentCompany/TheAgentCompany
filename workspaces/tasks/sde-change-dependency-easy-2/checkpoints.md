@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pt)
 
-Get the correct codebase http://ogma.lti.cs.cmu.edu:8929/root/janusgraph
+Get the correct codebase http://ogma.lti.cs.cmu.edu:8929/root/openhands
 
 ## Checkpoint 2 (1pt)
 
