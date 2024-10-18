@@ -1,0 +1,1 @@
+Collect all open issues on http://theagentcompany.com:8929/root/sotopia, follow the format of “ID,Title”, and save it as “/workspace/issues.csv” file.

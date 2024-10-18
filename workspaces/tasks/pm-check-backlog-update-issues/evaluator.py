@@ -4,7 +4,7 @@ from rocketchat_API.rocketchat import RocketChat
 
 ############################# Init Variables #####################################
 # Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu' 
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com' 
 
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
@@ -13,7 +13,7 @@ ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
 # Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'theagentcompany.com'
 PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 
 

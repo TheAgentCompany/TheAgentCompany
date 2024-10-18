@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 ############################# Init Variables #####################################
 # Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu' 
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com' 
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
@@ -13,7 +13,7 @@ ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
 # Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'theagentcompany.com'
 PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu" 

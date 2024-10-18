@@ -1,0 +1,14 @@
+{
+  "Mike Chen": {
+    "extra_info": "Someone will ask you about the quality assurance engineer Liu Qiang's recent job performance.",
+    "strategy_hint": "You think Liu Qiang is doing a great job. You should express positive opinions for Liu Qiang."
+  },
+  "Li Ming": {
+    "extra_info": "Someone will ask you about the quality assurance engineer Liu Qiang's recent job performance.",
+    "strategy_hint": "You think Liu Qiang is slacking off and not performing well. You should express negative opinions for Liu Qiang."
+  },
+  "Zhang Wei": {
+    "extra_info": "Someone will ask you about the quality assurance engineer Liu Qiang's recent job performance.",
+    "strategy_hint": "You think Liu Qiang is doing a great job. You should express positive opinions for Liu Qiang."
+  }
+}

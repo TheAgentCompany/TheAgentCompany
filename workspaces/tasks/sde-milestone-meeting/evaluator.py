@@ -5,7 +5,7 @@ import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 from bs4 import BeautifulSoup
 
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+HOSTNAME = os.getenv('HOSTNAME') or 'theagentcompany.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
@@ -15,12 +15,12 @@ ADMIN_PASS = 'jobbench'
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def grade_checkpoint1(trajectory):
-    urls = [f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
-            f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
+    urls = [f"http://theagentcompany.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
+            f"http://theagentcompany.com:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
     return any(url in trajectory for url in urls)
 
 def grade_checkpoint2():
-    url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
+    url = f"http://theagentcompany.com:8929/root/janusgraph/-/merge_requests/4657"
 
     response = requests.get(url)
 

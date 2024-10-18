@@ -34,9 +34,7 @@ def grade_checkpoint1():
 # Check if at least one unit test is collected
 def grade_checkpoint2(trajectory):
     try:
-        pytest_output = next((step['output'] for step in trajectory if 'pytest' in step.get('command', '')), '')
-        # Check the collected items is greater than 0
-        match = re.search(r'collected (\d+) item(s)?', pytest_output)
+        match = re.search(r'collected (\d+) item(s)?', trajectory)
         if match: 
             return int(match.group(1)) > 0
         else:
@@ -48,8 +46,7 @@ def grade_checkpoint2(trajectory):
 # Check if at least one unit test passes
 def grade_checkpoint3(trajectory):
     try:
-        pytest_output = next((step['output'] for step in trajectory if 'pytest' in step.get('command', '')), '')
-        passed_match = re.search(r'(\d+) passed', pytest_output)
+        passed_match = re.search(r'(\d+) passed', trajectory)
         if passed_match:
             return int(passed_match.group(1)) > 0
         else:
@@ -61,15 +58,14 @@ def grade_checkpoint3(trajectory):
 # Check if all unit tests pass
 def grade_checkpoint4(trajectory):
     try:
-        pytest_output = next((step['output'] for step in trajectory if 'pytest' in step.get('command', '')), '')
-        if 'failed' in pytest_output.lower():
+        if 'failed' in trajectory.lower():
             return False
         
-        collected_match = re.search(r'collected (\d+) item(s)?', pytest_output)
+        collected_match = re.search(r'collected (\d+) item(s)?', trajectory)
         if not collected_match or int(collected_match.group(1)) == 0:
             return False
         
-        passed_match = re.search(r'(\d+) passed', pytest_output)
+        passed_match = re.search(r'(\d+) passed', trajectory)
         if passed_match and collected_match:
             passed_tests = int(passed_match.group(1))
             total_tests = int(collected_match.group(1))
@@ -104,10 +100,11 @@ def grade_checkpoints(trajectory):
 def load_trajectory(file_path):
     try:
         with open(file_path, 'r') as file:
-            return json.load(file)
+            content = file.read()
+            return content
     except Exception as e:
         logging.warning(f"Error reading trajectory file: {e}")
-        return []
+        return ""
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
