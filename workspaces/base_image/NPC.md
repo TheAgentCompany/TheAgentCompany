@@ -1,12 +1,21 @@
-# How to launch your NPC
-## Build the base image
-* Make sure you use the latest main branch
-* Go [base image folder](../base_image/)
-* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your openai api key. Currently only support openai model, defualt model is `gpt-4-turbo`
-* Run `make build` in base image folder
+# How to Launch Your NPC
 
-## Build your own image
-* Create a `scenarios.josn` file under your task folder. Each item represents a NPC. The key is full name which should matched name [here](./npc/npc_credential.json). For more information about NPC roles, check [here](../../servers/rocketchat/npc/npc_definition.json). For example, the `extra_info` should be the information that every can know, the `strategy_hint` should be the information only this NPC should know :
+## Build the Base Image
+
+* Make sure you are using the latest main branch.
+* Navigate to the [base image folder](../base_image/).
+* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your OpenAI API key. Currently, only OpenAI models are supported, with the default model being `gpt-4-turbo`.
+* Run `make build` in the base image folder.
+
+## Build Your Task Image
+
+* Create a `scenarios.json` file in your task folder. Each item in this file represents an NPC.
+* The key should be the full name of the NPC, which must match the name in [this file](./npc/npc_credential.json).
+* For more information about NPC roles, check [this file](../../servers/rocketchat/npc/npc_definition.json).
+* In the `scenarios.json` file:
+  - The `extra_info` field should contain information that everyone (Agent and NPC) can know.
+  - The `strategy_hint` field should contain information that only this specific NPC should know.
+
 ```
 {
   "Emily Zhou": {
@@ -20,9 +29,11 @@
 }
 ```
 
-* `make build` in your folder
-* `make run` in your folder, then you will run the task image and step into the container.
-* Maunally execute `/utils/init.sh` then NPC will be launched, you will see the CMD output like below:
+# Launch NPC
+
+* Run `make build` in your folder to build the task image.
+* Execute `make run` in your folder. This will run the task image and bring you into the container.
+* Manually execute `/utils/init.sh` inside the container. This will launch the NPC, and you will see output similar to the following:
 
 ```
 root@299afff5d411:/utils# ls
@@ -45,16 +56,27 @@ OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_
 + [ -f /utils/post_init.py ]
 ```
 
-## How to debug our NPC
-* If your NPC not work as your expected, attach into your task container, when execute `init.sh`, the log will contain the command to launch a single NPC like below, the `agent_name` will decide which NPC get launched: 
-`OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"`
-* It will show the log output of your NPC. `No message received, waiting...` means NPC are waiting for message. If received, it will print the message and the response.
+## How to Debug Your NPC
+* If your NPC is not working as expected, follow these steps:
+  1. Attach to your task container.
+  2. When executing `init.sh`, look for the command to launch a single NPC in the log output. It will look similar to this:
+     ```
+     OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
+     ```
+     The `agent_name` parameter determines which NPC gets launched.
 
+* This command will display the log output of your NPC:
+  - The message "No message received, waiting..." indicates that the NPC is waiting for a message.
+  - When a message is received, the log will print both the incoming message and the NPC's response.
 
-## NOTE
-* Remember to delete your openai api key in dockerfile before commit code.
+## Notes
 
-# Depracted (You don't need to check the following doc, unless you know what you want)
+* Important: Remember to remove your OpenAI API key from the Dockerfile before committing your code.
+* Use `make stop` to halt and remove your previously running task image.
+
+# Deprecated 
+(You don't need to check the following documentation unless you know what you're looking for)
+
 # Solution 1: How to run dockerfile
 1. Set the correct configuration
     1. Set the `OPENAI_API_KEY`. You should use your own key.
