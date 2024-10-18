@@ -1,7 +1,0 @@
-
-Flask==2.3.2
-Werkzeug==2.3.3
-Faker==18.4.0
-duckdb==1.1.2
-pyarrow==17.0.0
-cryptography==42.0.5
