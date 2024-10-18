@@ -1,7 +1,8 @@
 # Checkpoints
 
 This task has 3 points in total. 
-## Checkpoint 1 (2pts)
+
+## Checkpoint 1 (1pt)
 
 http://ogma.lti.cs.cmu.edu:8929/root/sotopia/-/issues is in the trajectory
 
