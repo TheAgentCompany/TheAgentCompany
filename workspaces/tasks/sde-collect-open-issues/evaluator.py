@@ -6,12 +6,29 @@ import os
 
 # Check http://ogma.lti.cs.cmu.edu:8929/root/sotopia/-/issues is in the trajectory
 def grade_checkpoint1(trajectory):
+    target_url = "http://ogma.lti.cs.cmu.edu:8929/root/sotopia/-/issues"
+    
+    def search_in_string(text):
+        return target_url in text
+    
+    def search_in_list(items):
+        return any(search_in_any(item) for item in items)
+    
+    def search_in_dict(data):
+        return any(search_in_any(value) for value in data.values())
+    
+    def search_in_any(obj):
+        if isinstance(obj, str):
+            return search_in_string(obj)
+        elif isinstance(obj, list):
+            return search_in_list(obj)
+        elif isinstance(obj, dict):
+            return search_in_dict(obj)
+        else:
+            return search_in_string(str(obj))
+    
     try:
-        for step in trajectory:
-            if "http://ogma.lti.cs.cmu.edu:8929/root/sotopia/-/issues" in step.get('command', ''):
-                return True
-        logging.warning("No trajectory or issue url found in the trajectory")
-        return False
+        return search_in_any(trajectory)
     except Exception as e:
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
@@ -73,10 +90,16 @@ def grade_checkpoints(trajectory):
 def load_trajectory(file_path):
     try:
         with open(file_path, 'r') as file:
-            return json.load(file)
+            content = file.read()
+            try:
+                # Try to parse as JSON
+                return json.loads(content)
+            except json.JSONDecodeError:
+                # If not JSON, return as plain text
+                return content
     except Exception as e:
         logging.warning(f"Error reading trajectory file: {e}")
-        return []
+        return ""
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
