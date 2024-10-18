@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-change-license-easy
-CONTAINER_NAME=job-bench-change-license-easy
+IMAGE_NAME=job-bench-sde-change-dependency-easy-1
+CONTAINER_NAME=job-bench-change-dependency-easy-1
 
 .PHONY: build run stop
 
