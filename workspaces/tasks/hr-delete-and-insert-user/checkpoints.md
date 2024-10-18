@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pts)
 
-confirmed Dan Liu have been removed
+confirmed Li Ming have been removed
 
 ## Checkpoint 2 (1pt)
 
