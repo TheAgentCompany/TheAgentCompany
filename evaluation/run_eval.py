@@ -97,8 +97,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
                     image_id += 1
 
 
-def init_task_env(runtime: Runtime, openai_api_key: str):
-    action = CmdRunAction(command=f'SERVER_HOSTNAME={ogma.lti.cs.cmu.edu} OPENAI_API_KEY={openai_api_key} bash /utils/init.sh')
+def init_task_env(runtime: Runtime, openai_api_key: str, hostname: str):
+    action = CmdRunAction(command=f'SERVER_HOSTNAME={hostname} OPENAI_API_KEY={openai_api_key} bash /utils/init.sh')
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -149,6 +149,12 @@ if __name__ == '__main__':
         default='./trajectories',
         help='Folder path to save trajectories'
     )
+    parser.add_argument(
+        '--server_hostname',
+        type=str,
+        default='ogma.lti.cs.cmu.edu',
+        help='Server hostname, e.g. ogma.lti.cs.cmu.edu'
+    )
     args, _ = parser.parse_known_args()
 
     # devnote: sotopia supports different LLM providers, but in a very hacky
@@ -168,7 +174,7 @@ if __name__ == '__main__':
     config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.trajectories_path), llm_config)
     runtime: Runtime = create_runtime(config)
 
-    init_task_env(runtime, args.openai_api_key)
+    init_task_env(runtime, args.openai_api_key, args.server_hostname)
 
     pre_login(runtime)
 
