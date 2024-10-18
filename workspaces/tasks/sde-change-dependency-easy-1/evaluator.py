@@ -49,7 +49,7 @@ def check_pyproject_update():
         with open("/workspace/openhands/pyproject.toml") as f:
             code_content = f.read()
             if (
-                'uvicorn = "^0.31.1"'
+                'uvicorn = "0.31.1"'
                 in code_content 
             ):
                 return True
