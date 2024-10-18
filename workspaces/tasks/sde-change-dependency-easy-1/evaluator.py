@@ -35,9 +35,8 @@ def check_poetry_update():
         with open("/workspace/openhands/poetry.lock") as f:
             code_content = f.read()
             if (
-                'version = "0.31.1"'
-                and '"uvicorn-0.31.1-py3-none-any.whl"'
-                and '"uvicorn-0.31.1.tar.gz"' 
+                'uvicorn-0.31.1-py3-none-any.whl'
+                and 'uvicorn-0.31.1.tar.gz' 
                 in code_content
             ):
                 return True
@@ -68,10 +67,11 @@ if __name__ == "__main__":
     )
     print(check_code_clone())
     print(check_poetry_update())
-    print(check_pyproject_update)
+    print(check_pyproject_update())
     score =         check_url(
             [
-                f"ACTION: goto('{GITLAB_URL}/root/janusgraph')",
-                 f"{GITLAB_URL}/root/janusgraph/-/blob/main/LICENSE?ref_type=heads"           
+        f"{GITLAB_URL}/root/openhands",
+        f"{GITLAB_URL}/root/openhands/-/blob/main/pyproject.toml?ref_type=heads",
+        f"{GITLAB_URL}/root/openhands/-/blob/main/poetry.lock?ref_type=heads"             
             ]
         ) + check_code_clone() + check_poetry_update() + check_pyproject_update()
