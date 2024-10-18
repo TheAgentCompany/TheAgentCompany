@@ -57,4 +57,9 @@ if __name__ == "__main__":
     )
     print(check_code_clone())
     print(check_license_update())
-    score = check_code_clone() + check_license_update()
+    score =         check_url(
+            [
+                f"ACTION: goto('{GITLAB_URL}/root/janusgraph')",
+                 f"{GITLAB_URL}/root/janusgraph/-/blob/main/LICENSE?ref_type=heads"           
+            ]
+        ) + check_code_clone() + check_license_update()
