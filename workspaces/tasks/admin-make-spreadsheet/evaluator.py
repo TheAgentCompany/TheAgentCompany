@@ -1,5 +1,5 @@
 import csv
-from collections import Counter
+from collections import defaultdict
 
 def grade_drinks_survey():
     score = 0
@@ -8,14 +8,20 @@ def grade_drinks_survey():
     try:
         with open('/workspace/drinks_survey.csv', 'r') as file:
             reader = csv.DictReader(file)
-            drinks = [row['drink'].strip().lower() for row in reader]
+            drinks_count = defaultdict(int)
+            for row in reader:
+                drink = row['drink'].strip().lower()
+                quantity = int(row['quantity'])
+                drinks_count[drink] += quantity
     except FileNotFoundError:
         return 0, ["Error: File '/workspace/drinks_survey.csv' not found."]
     except csv.Error:
         return 0, ["Error: Unable to parse the CSV file. Make sure it's properly formatted."]
+    except ValueError:
+        return 0, ["Error: Invalid quantity value in the CSV. All quantities should be integers."]
 
     # Checkpoint 1
-    unique_drinks = set(drinks)
+    unique_drinks = set(drinks_count.keys())
     if len(unique_drinks) == 9:
         score += 2
         feedback.append("Checkpoint 1: Correct! There are 9 unique drinks. (2 points)")
@@ -26,7 +32,7 @@ def grade_drinks_survey():
         feedback.append(f"Checkpoint 1: Incorrect. You found {len(unique_drinks)} unique drinks. Check for 'diet coke' and other variations. (0 points)")
 
     # Checkpoint 2
-    apple_juice_count = drinks.count('apple juice')
+    apple_juice_count = drinks_count['apple juice']
     if apple_juice_count == 4:
         score += 1
         feedback.append("Checkpoint 2: Correct! There are 4 Apple Juice entries. (1 point)")
@@ -43,7 +49,7 @@ def grade_drinks_survey():
         feedback.append(f"Checkpoint 3: Incorrect. Missing drinks: {', '.join(missing)}. (0 points)")
 
     # Checkpoint 4
-    vita_coco_count = drinks.count('vita coco')
+    vita_coco_count = drinks_count['vita coco']
     if vita_coco_count == 2:
         score += 1
         feedback.append("Checkpoint 4: Correct! The demand for Vita Coco is 2. (1 point)")
@@ -53,6 +59,6 @@ def grade_drinks_survey():
     return score, feedback
 
 if __name__ == "__main__":
-    score, feedback = grade_drinks_survey
+    score, feedback = grade_drinks_survey()
     print(f"Evaluation completed. Final score: {score}/5")
     print(feedback)
