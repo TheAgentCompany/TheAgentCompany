@@ -1,3 +1,24 @@
+# How to launch your NPC
+## Build the base image
+* Make sure you use the latest main branch
+* Go [base image folder](../base_image/)
+* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your openai api key. Currently only support openai model, defualt model is `gpt-4-turbo`
+* Run `make build` in base image folder
+
+## Build your own image
+* Create a `scenarios.josn` file under your task folder
+* `make build` in your folder
+* `make run` in your folder, then you will run the task image and step into the container.
+* Maunally execute `/utils/init.sh` then NPC will be launched
+
+## How to debug our NPC
+* 
+
+
+## NOTE
+* Remember to delete your openai api key in dockerfile before commit code.
+
+# Depracted (You don't need to check the following doc, unless you know what you want)
 # Solution 1: How to run dockerfile
 1. Set the correct configuration
     1. Set the `OPENAI_API_KEY`. You should use your own key.
