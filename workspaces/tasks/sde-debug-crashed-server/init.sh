@@ -2,10 +2,10 @@
 set -ex
 
 ########## PRE INIT PHASE ############
-python /utils/pre_init.py
+python_default /utils/pre_init.py
 ######################################
 
 
 ########## POST INIT PHASE ###########
-python /utils/post_init.py
+python_default /utils/post_init.py
 ######################################
