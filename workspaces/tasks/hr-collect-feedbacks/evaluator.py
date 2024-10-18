@@ -15,21 +15,6 @@ ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
-# Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-
-PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
-
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
-
-API_KEY = os.getenv('PLANE_API') 
-
-
-headers = {
-    "x-api-key": API_KEY,
-    "Content-Type": "application/json"
-}
 
 # Initialize RocketChat client
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
@@ -52,7 +37,7 @@ def get_history(username: str):
         return False, msg
 
 
-def check_final_result(username: str):
+def check_final_feedback(username: str):
 
     _, msg = get_history(username)
 
@@ -81,7 +66,7 @@ def evaluate_task():
         if res:
             points += 1
 
-    if check_final_result(performance_evaluatee):
+    if check_final_feedback(performance_evaluatee):
         points += 2
 
     # Final result
