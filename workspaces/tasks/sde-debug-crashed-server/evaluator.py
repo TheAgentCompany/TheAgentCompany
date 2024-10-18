@@ -5,57 +5,80 @@ import sys
 import logging
 import re
 import requests
+from rocketchat_API.rocketchat import RocketChat
 
-def grade_checkpoint1(trajectory):
-    return "Emily" in trajectory and "RocketChat" in trajectory
+# Set environment variables
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com'
+ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
-def grade_checkpoint2(trajectory):
-    return "ssh" in trajectory
+# Construct RocketChat URL
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-def grade_checkpoint3():
-    return os.path.exists('/workspace/pr-viewer/README.md')
+# Set admin credentials
+ADMIN_USERNAME = 'jobbench'
+ADMIN_PASSWORD = 'jobbench'
 
-def grade_checkpoint4():
-    return os.path.exists('/workspace/pr-viewer/logs/gunicorn.log')
+# Create RocketChat instance
+rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
 
-def grade_checkpoint5(trajectory):
-    return "Zhang" in trajectory and "RocketChat" in trajectory
+def get_history(username):
+    id = None
+    for item in rocket.users_list().json().get('users', []):
+        if item['username'] == username:
+            id = item["_id"]
+            break
+    if id is None:
+        raise ValueError("Could not find the user id for the AI agent.")
+    msgs = rocket.im_history(room_id=id).json().get('messages', [])
+    for msg in msgs[::-1]:
+        print(f"{username}'s chat: {msg['msg']}")
+    return msgs
 
-def grade_checkpoint6():
+def checkpoint1(content: str):
+    return 'emily' in content.lower()
+
+def checkpoint2(content: str):
+    return '2039fome' in content
+
+def checkpoint3(content: str):
+    return 'zhang' in content.lower()
+
+def checkpoint4(content: str):
+    return 'cat123' in content
+
+def checkpoint5():
     try:
-        with open('/workspace/pr-viewer/config.toml', 'r') as file:
-            content = file.read()
-            return bool(re.search(r'db_password.*dbcat456', content))
-    except FileNotFoundError:
+        response = requests.get('http://localhost:5000/events')
+        return "Enterprise-wide user-facing open architecture" in response.text
+    except:
         return False
 
-def grade_checkpoint7():
-    try:
-        response = requests.get('http://localhost:5000/')
-        return "pr-viewer" in response.text.lower()
-    except requests.RequestException:
-        return False
+def calculate_total_score():
+    scores = {
+        checkpoint1: 1,
+        checkpoint2: 1,
+        checkpoint3: 1,
+        checkpoint4: 1,
+        checkpoint5: 4,
+    }
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+    total_score = 0
 
-    points = sum([
-        grade_checkpoint1(trajectory),
-        grade_checkpoint2(trajectory),
-        grade_checkpoint3(),
-        grade_checkpoint4(),
-        grade_checkpoint5(trajectory),
-        grade_checkpoint6(),
-        grade_checkpoint7()
-    ])
+    # Check RocketChat messages
+    msgs = get_history(username='ai_agent')  # Assuming the AI agent's username is 'ai_agent'
+    content = ""
+    for msg in msgs[::-1]:
+        content += msg['msg'].lower()
 
-    print(f"Final points for task: {points}")
+    for func, score in scores.items():
+        if func == checkpoint5:
+            if func():
+                total_score += score
+        elif func(content):
+            total_score += score
+
+    return total_score
+
+# Compute the total points
+total = calculate_total_score()
+print(f"\nTotal points: {total}")
