@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "event-viewer"
+version = "0.1.0"
+description = "An event viewer application with CRUD operations"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+fastapi = "*"
+flask = "*"
+uvicorn = "*"
+duckdb = "*"
+pyarrow = "*"
+cryptography = "*"
+pydantic = "*"
+faker = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+httpx = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
