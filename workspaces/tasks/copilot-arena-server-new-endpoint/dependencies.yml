@@ -1,0 +1,4 @@
+# This file defines all dependencies this task relies on.
+# Available options are: rocketchat, gitlab, plane, and nextcloud
+# (all in lower cases).
+- gitlab
