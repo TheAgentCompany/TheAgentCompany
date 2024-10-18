@@ -1,7 +1,7 @@
 import requests
 import logging
 
-base_url = "http://ogma.lti.cs.cmu.edu:8929/api/v4"
+base_url = "http://theagentcompany.com:8929/api/v4"
 project_id = "root%2Fopenhands" 
 issue_iid = "3797"
 target_comment = "Closing due to inactivity"
