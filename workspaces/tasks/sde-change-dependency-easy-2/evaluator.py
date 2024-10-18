@@ -67,7 +67,7 @@ if __name__ == "__main__":
     print(check_code_clone())
     print(check_poetry_update())
     print(check_pyproject_update())
-    score =         check_url(
+    score = check_url(
             [
                 f"ACTION: goto('{GITLAB_URL}/root/openhands')",
                  f"{GITLAB_URL}/root/openhands/-/blob/main/LICENSE?ref_type=heads",
