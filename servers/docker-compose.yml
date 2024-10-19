@@ -4,10 +4,10 @@ services:
       context: ./gitlab
     container_name: gitlab
     restart: always
-    hostname: '$HOSTNAME'
+    hostname: the-agent-company.com
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://$HOSTNAME:$GITLAB_PORT'
+        external_url 'http://the-agent-company.com:$GITLAB_PORT'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
     ports:
       - '$GITLAB_PORT:8929'
