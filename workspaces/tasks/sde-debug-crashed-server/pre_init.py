@@ -2,6 +2,7 @@ import os
 import subprocess
 import requests
 import logging
+from workspaces.tasks.sde_debug_crashed_server import evaluator
 
 
 ############################# init variable ##################################### 
@@ -30,15 +31,14 @@ def execute_command(command):
 ################### Please delete the test you don't need #######################
 
 # test access file document
-def test_file():
-    response = requests.get(f"{NEXCTCLOUD_URL}/apps/files/files/626?dir=/Documents/Financials")
-    logger.debug(response.content)
-    if "July-September 2024 Financials.ods" not in str(response.content):
-        logger.Error("cannot get correct file")
+def test_evaluators_fail():
+    if evaluator.calculate_total_score() != 0:
+        logger.error("evaluators returned success")
+        raise ValueError("evaluators returned success")
     return
 
 
 
 if __name__ == "__main__":
-    test_file()
+    test_evaluators_fail()
     

@@ -23,13 +23,17 @@ rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
 
 def get_history(username):
     id = None
-    for item in rocket.users_list().json().get('users', []):
+    users_list = rocket.users_list().json().get('users', [])
+    print(f"{users_list=}")
+    for item in users_list:
         if item['username'] == username:
             id = item["_id"]
             break
     if id is None:
         raise ValueError("Could not find the user id for the AI agent.")
-    msgs = rocket.im_history(room_id=id).json().get('messages', [])
+    im_history = rocket.im_history(room_id=id).json()
+    print(f"{id=} {im_history=}")
+    msgs = im_history.get('messages', [])
     for msg in msgs[::-1]:
         print(f"{username}'s chat: {msg['msg']}")
     return msgs
@@ -65,7 +69,7 @@ def calculate_total_score():
     total_score = 0
 
     # Check RocketChat messages
-    msgs = get_history(username='ai_agent')  # Assuming the AI agent's username is 'ai_agent'
+    msgs = get_history(username='jobbench')  # Assuming the AI agent's username is 'jobbench'
     content = ""
     for msg in msgs[::-1]:
         content += msg['msg'].lower()
