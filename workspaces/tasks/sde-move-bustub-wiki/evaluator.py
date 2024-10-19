@@ -36,6 +36,7 @@ def check_key_contents():
         response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
     except Exception as e:
         print("Unable to access the new wiki page due to exception ", e)
+        return False
     
     return all(item in response for item in key_words) and \
             all(item in response for item in key_image_links) and  \
