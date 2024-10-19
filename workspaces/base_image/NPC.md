@@ -42,7 +42,6 @@ root@299afff5d411:/utils# sh init.sh
 + ping -c 1
 + grep PING
 + awk -F[()] {print $2}
-ping: usage error: Destination address required
 + SERVICE_IP=
 + echo  theagentcompany.com
 + [ -f /utils/pre_init.py ]
