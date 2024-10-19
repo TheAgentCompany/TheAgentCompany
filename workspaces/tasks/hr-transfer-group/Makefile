@@ -1,4 +1,4 @@
-IMAGE_NAME=hr-transfer-group
+IMAGE_NAME=hr-transfer-group-image
 CONTAINER_NAME=hr-transfer-group
 
 .PHONY: build run stop
