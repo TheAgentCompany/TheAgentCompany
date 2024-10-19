@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y iputils-ping
 RUN mkdir -p /utils
 COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
+COPY common.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction

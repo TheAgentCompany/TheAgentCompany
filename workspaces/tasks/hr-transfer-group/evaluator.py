@@ -1,24 +1,8 @@
-import os
-from rocketchat_API.rocketchat import RocketChat
-
 from llm_evaluator import *
+from common import create_rocketchat_client
 
-############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-
-
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
-
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
-
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 ############################# Helper Functions #####################################
 
 def get_channel_room_id(channel_name):

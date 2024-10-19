@@ -16,8 +16,10 @@ ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASSWORD = 'jobbench'
 
+from common import create_rocketchat_client
+
 # Create RocketChat instance
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
+rocket = create_rocketchat_client()
 
 
 def get_history(username):

@@ -1,18 +1,9 @@
-import os
-import requests
 import logging
-from rocketchat_API.rocketchat import RocketChat
 
-############################# Initialization Variables #####################################
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-CHANNEL_NAME = "sprint-planning"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
+from common import create_rocketchat_client
 
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Logging Setup #####################################  
 logging.basicConfig(level=logging.INFO,    

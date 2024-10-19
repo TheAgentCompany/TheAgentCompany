@@ -12,7 +12,10 @@ ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     urls = [f"http://the-agent-company.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
