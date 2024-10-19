@@ -2,7 +2,7 @@ import shutil
 import subprocess
 import logging
 
-# jdk is installed
+# OpenJDK is installed
 def grade_checkpoint1():
     try:
         output = run_command(["java", "--version"])
@@ -11,7 +11,7 @@ def grade_checkpoint1():
         logging.error(f"Fail to grade checkpoint 1: {e}")
         return False
 
-# jdk 17 is installed
+# OpenJDK 17 is installed
 def grade_checkpoint2():
     try:
         output = run_command(["java", "--version"])
@@ -45,8 +45,8 @@ def grade_checkpoint(check_func, description):
 
 if __name__ == "__main__":
     checkpoints = [
-        (grade_checkpoint1, "JDK is installed (java --version returns 'openjdk xxx')"),
-        (grade_checkpoint2, "JDK 17 is installed (openjdk 17.xx keyword is in it)"),
+        (grade_checkpoint1, "OpenJDK is installed (java --version returns 'openjdk xxx')"),
+        (grade_checkpoint2, "OpenJDK 17 is installed (openjdk 17.xx keyword is in it)"),
     ]
 
     points = 0
@@ -56,4 +56,4 @@ if __name__ == "__main__":
         if point == 0:
             break
 
-    print(f"\nFinal points for JDK installation task: {points}/2")
+    print(f"\nFinal points for OpenJDK installation task: {points}/2")
