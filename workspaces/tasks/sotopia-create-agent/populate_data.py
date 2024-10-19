@@ -80,8 +80,7 @@ def add_user_to_channel(channel_name, username):
         return False
 
 if __name__ == "__main__":
-    create_channel("Janusgraph")
     create_user()
-    channel_name = "Janusgraph"
-    username = 'Colby.Devin'
+    channel_name = "project-ai"
+    username = 'wang_fang'
     print(add_user_to_channel(channel_name, username))

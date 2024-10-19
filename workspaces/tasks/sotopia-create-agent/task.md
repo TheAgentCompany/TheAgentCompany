@@ -1,1 +1,1 @@
-Goto this gitlab repo http://ogma.lti.cs.cmu.edu:8929/root/sotopia and create a new agent (called `NonVerbalAgent`) that can only issue non-verbal communication.
+Goto this gitlab repo http://ogma.lti.cs.cmu.edu:8929/root/sotopia and create a new agent (called `NonVerbalAgent`) that can only issue non-verbal communication. You can check the `LLMAgent` in `sotopia/agents/llm_agent.py` for the inspiration.
