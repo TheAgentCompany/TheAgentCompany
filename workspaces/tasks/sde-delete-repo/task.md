@@ -1,1 +1,1 @@
-Delete repository http://theagentcompany.com:8929/root/raft
+Delete repository http://the-agent-company.com:8929/root/raft

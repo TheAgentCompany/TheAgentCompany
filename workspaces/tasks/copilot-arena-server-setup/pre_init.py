@@ -6,7 +6,7 @@ import logging
 
 ############################# init variable #####################################
 
-SERVER_HOSTNAME = os.getenv("SERVER_HOSTNAME") or "theagentcompany.com"
+SERVER_HOSTNAME = os.getenv("SERVER_HOSTNAME") or "the-agent-company.com"
 GITLAB_PORT = os.getenv("GITLAB_PORT") or "8929"
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"

@@ -103,3 +103,42 @@ jobs:
           make build
           cd -
         done
+
+  test-evaluator-basic:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build base image
+      run: |
+        cd workspaces/base_image
+        make build
+
+    - name: Run evaluator in each task container
+      run: |
+        for task_dir in workspaces/tasks/*/; do
+          echo "Testing in $task_dir"
+          cd "$task_dir"
+
+          docker build -t task-image .
+
+          # Run the container and execute the evaluator
+          # The evaluator would almost always say 0 marks granted, but that's
+          # fine, we only run it to make sure it at least compiles
+          docker run --rm task-image python_default /utils/evaluator.py
+
+          # Capture the exit code
+          EXIT_CODE=$?
+
+          # If the evaluator failed, exit the workflow
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "Evaluator failed in $task_dir"
+            exit $EXIT_CODE
+          fi
+
+          cd -
+        done

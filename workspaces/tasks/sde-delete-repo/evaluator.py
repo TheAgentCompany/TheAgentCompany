@@ -3,7 +3,7 @@ import requests
 import urllib.parse
 
 # GitLab configuration
-base_url = "http://theagentcompany.com:8929/api/v4"
+base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/raft"
 access_token = "root-token"
 headers = {"PRIVATE-TOKEN": access_token}

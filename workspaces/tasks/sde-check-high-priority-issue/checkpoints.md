@@ -4,7 +4,7 @@ This task has 4 points in total. If the final checkpoint passes, then full credi
 
 ## Checkpoint 1 (1pt)
 
-Check if the janusgraph gitlab repo has been in the log, and if the open issues are viewed in descending priority order. (http://theagentcompany.com:8929/root/janusgraph/-/issues/?sort=priority_desc&state=opened&first_page_size=20)
+Check if the janusgraph gitlab repo has been in the log, and if the open issues are viewed in descending priority order. (http://the-agent-company.com:8929/root/janusgraph/-/issues/?sort=priority_desc&state=opened&first_page_size=20)
 
 ## Checkpoint 2 (1pt)
 
