@@ -132,7 +132,7 @@ rm-rocketchat-volume:
 	docker volume rm servers_mongodb_data
 
 restore-rocketchat:
-	docker exec -i servers-mongodb-1 sh -c 'mongorestore --archive' < ./rocketchat/db.dump
+	docker exec -i servers-mongodb-1 sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
 
 backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump

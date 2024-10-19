@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-assign-issues-image
-CONTAINER_NAME=job-bench-pm-assign-issues-message
+IMAGE_NAME=pm-assign-issues-image
+CONTAINER_NAME=pm-assign-issues
 
 .PHONY: build run stop
 
