@@ -71,14 +71,14 @@ jobs:
           image_name=$(grep '^IMAGE_NAME=' Makefile | cut -d'=' -f2)
           expected_image_name="${folder_name}-image"
           if [ "$image_name" != "$expected_image_name" ]; then
-            echo "Error: IMAGE_NAME in ${task_dir}Makefile should be $expected_image_name"
+            echo "Error: IMAGE_NAME in ${task_dir}/Makefile should be $expected_image_name"
             exit 1
           fi
           
           container_name=$(grep '^CONTAINER_NAME=' Makefile | cut -d'=' -f2)
           expected_container_name="${folder_name}"
           if [ "$container_name" != "$expected_container_name" ]; then
-            echo "Error: CONTAINER_NAME in ${task_dir}Makefile should be $expected_container_name"
+            echo "Error: CONTAINER_NAME in ${task_dir}/Makefile should be $expected_container_name"
             exit 1
           fi
   
