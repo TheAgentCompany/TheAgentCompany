@@ -32,7 +32,10 @@ def check_key_contents():
     key_image_links = ["https://15445.courses.cs.cmu.edu/fall2024/project0/img/cardinality.png", "https://15445.courses.cs.cmu.edu/fall2024/project0/img/hll-example.png"]
     key_links = ["https://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf", "https://engineering.fb.com/2018/12/13/data-infrastructure/hyperloglog/", "https://www.youtube.com/watch?v=lJYufx0bfpw", "https://www.youtube.com/watch?v=2PlrMCiUN_s"]
     
-    response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
+    try:
+        response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
+    except Exception as e:
+        print("Unable to access the new wiki page due to exception ", e)
     
     return all(item in response for item in key_words) and \
             all(item in response for item in key_image_links) and  \
