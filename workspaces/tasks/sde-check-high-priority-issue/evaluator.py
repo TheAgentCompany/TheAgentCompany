@@ -4,7 +4,7 @@ import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
@@ -14,7 +14,7 @@ ADMIN_PASS = 'jobbench'
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def grade_checkpoint1(trajectory):
-    return f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/issues/?sort=priority_desc&state=opened&first_page_size=20" in trajectory
+    return f"http://the-agent-company.com:8929/root/janusgraph/-/issues/?sort=priority_desc&state=opened&first_page_size=20" in trajectory
 
 def grade_checkpoint2():
     messages = get_message("janusgraph")

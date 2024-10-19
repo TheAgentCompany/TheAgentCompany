@@ -2,6 +2,12 @@
 set -ex
 
 ########## PRE INIT PHASE ############
+
+# Use synthetic service hostname, the-agent-company.com in tasks and point it
+# to your real service host
+SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu} | grep PING | awk -F'[()]' '{print $2}')
+echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
+
 if [ -f "/utils/pre_init.py" ]; then
     python_default /utils/pre_init.py
 fi
