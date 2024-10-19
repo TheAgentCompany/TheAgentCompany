@@ -103,3 +103,26 @@ jobs:
           make build
           cd -
         done
+
+    - name: Run evaluator in each task container
+      run: |
+        for task_dir in workspaces/tasks/*/; do
+          echo "Testing in $task_dir"
+          cd "$task_dir"
+          
+          # Extract IMAGE_NAME and CONTAINER_NAME from Makefile
+          IMAGE_NAME=$(grep "^IMAGE_NAME" Makefile | cut -d '=' -f2 | tr -d ' ')
+          CONTAINER_NAME=$(grep "^CONTAINER_NAME" Makefile | cut -d '=' -f2 | tr -d ' ')
+          
+          # Run the container and execute the evaluator
+          # The evaluator would almost always say 0 marks granted, but that's
+          # fine, we only run it to make sure it at least compiles
+          docker run --name $CONTAINER_NAME -d $IMAGE_NAME
+          docker exec $CONTAINER_NAME python_default /utils/evaluator.py
+          
+          # Clean up
+          docker stop $CONTAINER_NAME
+          docker rm $CONTAINER_NAME
+          
+          cd -
+        done
