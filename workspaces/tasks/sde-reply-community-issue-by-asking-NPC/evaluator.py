@@ -68,7 +68,7 @@ def check_with_llm(msgs, target, expect_result):
         return False
 
 
-def checkpoint1(url='http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/issues/4158'):
+def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
     if len(sys.argv) < 2:
         trajectory = ""
     else:
