@@ -4,7 +4,7 @@ set -e
 cd workspaces/tasks
 for task_dir in *; do
   # Check if folder name is lowercase
-  if [[ "$task_dir" != "${task_dir,,}" ]]; then
+  if [ "$task_dir" != "$(echo $task_dir | tr '[:upper:]' '[:lower:]')" ]; then
     echo "Error: Folder name '$task_dir' is not in lowercase"
     exit 1
   fi
