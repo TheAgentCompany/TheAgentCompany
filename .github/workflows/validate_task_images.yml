@@ -94,7 +94,7 @@ jobs:
             exit 1
           fi
   
-          python ../../.github/validate_dependencies.py "dependencies.yml"
+          python ../../../.github/validate_dependencies.py "dependencies.yml"
 
           cd -
         done
