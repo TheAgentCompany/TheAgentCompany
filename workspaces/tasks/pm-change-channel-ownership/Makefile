@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-add-new-moderator
-CONTAINER_NAME=job-bench-pm-add-new-moderator
+IMAGE_NAME=pm-change-channel-ownership-image
+CONTAINER_NAME=pm-change-channel-ownership
 
 .PHONY: build run stop
 
