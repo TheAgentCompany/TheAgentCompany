@@ -2,7 +2,53 @@
 
 Target audience of this doc: benchmark developers that would like to incorporate NPCs in their tasks.
 
-## How to start NPC
+## Existing NPCs and Channels
+You to use existing NPCs and channels when creating the tasks.
+
+Here are the existing channels
+
+| Name               | Users | Created At       |
+|--------------------|-------|------------------|
+| engineering        | 2     | October 11, 2024 |
+| general            |       | October 19, 2024 |
+| help-desk          | 14    | October 11, 2024 |
+| hr-announcements   | 3     | October 11, 2024 |
+| kudos              | 19    | October 11, 2024 |
+| product            | 4     | October 11, 2024 |
+| project-ai         | 6     | October 11, 2024 |
+| project-graphdb    | 6     | October 11, 2024 |
+| project-lowcode    | 5     | October 11, 2024 |
+| project-search     | 5     | October 11, 2024 |
+| project-streamdb   | 5     | October 11, 2024 |
+| project-webcrawler | 6     | October 11, 2024 |
+| random             | 8     | October 11, 2024 |
+| sales-marketing    | 3     | October 11, 2024 |
+| tech-talk          | 12    | October 11, 2024 |
+
+Here are the existing NPCs and their channels:
+
+| Name               | User Name         | Occupation                                  | Info                                                                                                                                                  | Channels                                            |
+|--------------------|-------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Sarah Johnson      | Sarah_Johnson     | CTO                                         | Responsibilities: Technical strategy planning, R&D team leadership, new technology assessment; Project: Oversees all technical projects; Skills: N/A | All technical channels, #general, #tech-talk       |
+| Li Ming            | Li_Ming           | Database Team Project Manager               | Responsibilities: Managing database projects, resource coordination, ensuring timely delivery; Project: JanusGraph (Graph Database); Skills: Java, distributed systems | #project-graphdb, #engineering, #tech-talk         |
+| Zhang Wei          | Zhang_Wei         | Senior Software Engineer (Streaming DB Team)| Responsibilities: Developing and optimizing core streaming database functionalities; Project: RisingWave (Streaming Database); Skills: Rust, database systems | #project-streamdb, #engineering, #tech-talk        |
+| Wang Fang          | Wang_Fang         | AI Researcher (AI Team)                     | Responsibilities: Designing and implementing machine learning models, optimizing model performance; Project: OpenHands (LLM project); Skills: Python, machine learning, LLM | #project-ai, #engineering, #tech-talk              |
+| Mike Chen          | Mike_Chen         | Senior Software Engineer (AI Team)          | Responsibilities: Developing and optimizing LLM inference engines; Project: llama.cpp (LLM inference project); Skills: C++, CUDA, performance optimization | #project-ai, #engineering, #tech-talk              |
+| Emily Zhou         | Emily_Zhou        | Software Engineer (Web Crawler Team)        | Responsibilities: Designing and implementing web crawler functionalities; Project: Colly (Web Crawler Framework); Skills: Go, distributed systems | #project-webcrawler, #engineering, #tech-talk      |
+| Liu Qiang          | Liu_Qiang         | Quality Assurance Engineer                  | Responsibilities: Developing test strategies, executing tests, ensuring product quality; Project: All projects (focusing on testing and quality); Skills: N/A | All project channels, #engineering, #tech-talk     |
+| Priya Sharma       | Priya_Sharma      | Documentation Engineer                      | Responsibilities: Writing technical documentation, maintaining wiki, improving documentation processes; Project: Documentation (Wiki); Skills: N/A | All project channels, #engineering, #tech-talk     |
+| Mark Johnson       | Mark_Johnson      | Sales Director                              | Responsibilities: Developing sales strategies, managing sales team, expanding client relationships; Project: N/A (Sales); Skills: N/A | #sales-marketing, #general                         |
+| Jessica Lee        | Jessica_Lee       | Marketing Manager                           | Responsibilities: Developing marketing strategies, managing brand image, organizing marketing events; Project: N/A (Marketing); Skills: N/A | #sales-marketing, #general                         |
+| Chen Xinyi         | Chen_Xinyi        | Human Resources Manager                     | Responsibilities: Recruitment, employee training, compensation management; Project: N/A (HR); Skills: N/A | #hr-announcements, #general                         |
+| David Wong         | David_Wong        | Finance Director                            | Responsibilities: Financial planning, budget management, financial reporting; Project: N/A (Finance); Skills: N/A | #general                                            |
+| Huang Jie          | Huang_Jie         | Product Manager (Search Engine Team)        | Responsibilities: Defining product requirements, planning product roadmap, communicating with clients; Project: OpenSearch (Search Engine); Skills: N/A | #project-search, #product, #tech-talk              |
+| Sophia Rodriguez   | Sophia_Rodriguez  | UX Designer                                 | Responsibilities: Designing user interfaces, improving user experience, conducting user research; Project: All projects (focusing on user experience); Skills: N/A | All project channels, #product, #tech-talk         |
+| Alex Turner        | Alex_Turner       | Software Engineer (Low-Code Platform Team)  | Responsibilities: Developing low-code platform features; Project: Node-RED (Low-Code Platform); Skills: N/A | #project-lowcode, #engineering, #tech-talk         |
+| Emma Lewis         | Emma_Lewis        | Software Engineer (API Team)                | Responsibilities: Developing API functionalities using Python; Project: API-server; Skills: N/A | #engineering, #tech-talk                            |
+| Jessica Chen       | Jessica_Chen      | Frontend Software Engineer                  | Responsibilities: Developing user interfaces, implementing responsive designs, optimizing web performance; Project: E-commerce Website Redesign; Skills: N/A | #project-ecommerce, #frontend, #tech-talk          |
+
+## How to create new NPCs
+If necessary, you can create new NPCs.
 
 ### Step 1: Create NPC accounts in RocketChat
 
