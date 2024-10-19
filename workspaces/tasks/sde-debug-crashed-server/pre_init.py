@@ -7,7 +7,7 @@ from workspaces.tasks.sde_debug_crashed_server import evaluator
 
 ############################# init variable ##################################### 
 
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 NEXCTCLOUD_PORT = os.getenv('NEXCTCLOUD_PORT') or '80'
 NEXCTCLOUD_URL = f"http://{SERVER_HOSTNAME}:{NEXCTCLOUD_PORT}"
 
