@@ -4,7 +4,7 @@ import sys
 import logging
 
 ############################# init variable ##################################### 
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com'
+HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"

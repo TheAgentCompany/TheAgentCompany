@@ -4,7 +4,7 @@ This task has 3 points in total.
 
 ## Checkpoint 1 (1pt)
 
-http://theagentcompany.com:8929/root/sotopia/-/issues is in the trajectory
+http://the-agent-company.com:8929/root/sotopia/-/issues is in the trajectory
 
 ## Checkpoint 2 (1pt)
 

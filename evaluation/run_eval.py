@@ -46,7 +46,7 @@ def get_config(
 
 def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
     rocketchat_login_actions = [
-        'goto("http://theagentcompany.com:3000/")',
+        'goto("http://the-agent-company.com:3000/")',
         'noop(5000)',
         'fill("52", "jobbench")',
         'fill("57", "jobbench")',
@@ -54,7 +54,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     ]
 
     gitlab_login_actions = [
-        'goto("http://theagentcompany.com:8929/users/sign_in")',
+        'goto("http://the-agent-company.com:8929/users/sign_in")',
         'noop(5000)',
         'fill("72", "root")',
         'fill("78", "JobBench")',
@@ -62,7 +62,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     ]
 
     plane_login_actions = [
-        'goto("http://theagentcompany.com:8091")',
+        'goto("http://the-agent-company.com:8091")',
         'noop(5000)',
         'fill("67", "job@bench.com")',
         'click("68")',

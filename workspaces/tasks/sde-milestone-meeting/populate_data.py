@@ -6,7 +6,7 @@ import logging
 from rocketchat_API.rocketchat import RocketChat
 
 ############################# init variable ##################################### 
-HOSTNAME = os.getenv('HOSTNAME') or 'theagentcompany.com'
+HOSTNAME = os.getenv('HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
