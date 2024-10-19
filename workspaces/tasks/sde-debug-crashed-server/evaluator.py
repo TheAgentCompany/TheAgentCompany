@@ -24,31 +24,31 @@ rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
 def get_history(username):
     id = None
     users_list = rocket.users_list().json().get('users', [])
-    print(f"{users_list=}")
     for item in users_list:
         if item['username'] == username:
             id = item["_id"]
             break
     if id is None:
-        raise ValueError("Could not find the user id for the AI agent.")
+        raise ValueError(f"Could not find the user id for {username}.")
     im_history = rocket.im_history(room_id=id).json()
-    print(f"{id=} {im_history=}")
     msgs = im_history.get('messages', [])
+    content = ""
     for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-    return msgs
+        content += f"{username}'s chat: {msg['msg']}\n"
+    return content
 
-def checkpoint1(content: str):
-    return 'emily' in content.lower()
+def checkpoint1(content: list[str]):
+    return len(content) > 0
 
-def checkpoint2(content: str):
+def checkpoint2(content: list[str]):
     return '2039fome' in content
 
-def checkpoint3(content: str):
-    return 'zhang' in content.lower()
+def checkpoint3(content: list[str]):
+    return len(content) > 0
 
-def checkpoint4(content: str):
+def checkpoint4(content: list[str]):
     return 'cat123' in content
+    
 
 def checkpoint5():
     try:
@@ -69,17 +69,22 @@ def calculate_total_score():
     total_score = 0
 
     # Check RocketChat messages
-    msgs = get_history(username='jobbench')  # Assuming the AI agent's username is 'jobbench'
-    content = ""
-    for msg in msgs[::-1]:
-        content += msg['msg'].lower()
-
+    emily_msgs = get_history(username='emily_zhou')
+    print(emily_msgs)
+    zhang_msgs = get_history(username='zhang_wei')
+    print(zhang_msgs)
     for func, score in scores.items():
         if func == checkpoint5:
             if func():
                 total_score += score
-        elif func(content):
-            total_score += score
+        elif func == checkpoint1 or func == checkpoint2:
+            if func(emily_msgs):
+                total_score += score
+        elif func == checkpoint3 or func == checkpoint4:
+            if func(zhang_msgs):
+                total_score += score
+        else:
+            raise ValueError(f"Unknown checkpoint: {func}")
 
     return total_score
 
