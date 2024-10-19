@@ -17,7 +17,7 @@ ADMIN_PASSWORD = 'jobbench'
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
 
 # Configuration for gitlab
-base_url = "http://ogma.lti.cs.cmu.edu:8929/api/v4"
+base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
 access_token = "root-token"
