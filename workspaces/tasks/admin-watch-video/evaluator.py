@@ -14,9 +14,7 @@ def evaluate_task():
             
             number = int(numbers[0])
             
-            if number == 8:
-                return 1
-            elif number == 4:
+            if number == 4:
                 return 2
             else:
                 return 0
