@@ -54,13 +54,29 @@ jobs:
             exit 1
           fi
   
-          # 4. Check if Makefile exists and contains keyword "build"
+          # 4. Check Makefile structure
           if [ ! -f "${task_dir}Makefile" ]; then
             echo "Error: Makefile is missing in $task_dir"
             exit 1
           fi
           if ! grep -q "build" "${task_dir}Makefile"; then
             echo "Error: Makefile in $task_dir does not contain 'build'"
+            exit 1
+          fi
+
+          folder_name=$(basename "$task_dir")
+
+          image_name=$(grep '^IMAGE_NAME=' Makefile | cut -d'=' -f2)
+          expected_image_name="${folder_name}-image"
+          if [ "$image_name" != "$expected_image_name" ]; then
+            echo "Error: IMAGE_NAME in $task_dir/Makefile should be $expected_image_name"
+            exit 1
+          fi
+          
+          container_name=$(grep '^CONTAINER_NAME=' Makefile | cut -d'=' -f2)
+          expected_container_name="${folder_name}"
+          if [ "$container_name" != "$expected_container_name" ]; then
+            echo "Error: CONTAINER_NAME in $task_dir/Makefile should be $expected_container_name"
             exit 1
           fi
   
@@ -123,25 +139,6 @@ jobs:
         for task_dir in workspaces/tasks/*/; do
           echo "Testing in $task_dir"
           cd "$task_dir"
-
-          # Extract folder name
-          folder_name=$(basename "$task_dir")
-
-          # Check IMAGE_NAME in Makefile
-          image_name=$(grep '^IMAGE_NAME=' Makefile | cut -d'=' -f2)
-          expected_image_name="${folder_name}-image"
-          if [ "$image_name" != "$expected_image_name" ]; then
-            echo "Error: IMAGE_NAME in $task_dir/Makefile should be $expected_image_name"
-            exit 1
-          fi
-          
-          # Check CONTAINER_NAME in Makefile
-          container_name=$(grep '^CONTAINER_NAME=' Makefile | cut -d'=' -f2)
-          expected_container_name="${folder_name}"
-          if [ "$container_name" != "$expected_container_name" ]; then
-            echo "Error: CONTAINER_NAME in $task_dir/Makefile should be $expected_container_name"
-            exit 1
-          fi
 
           docker build -t task-image .
 
