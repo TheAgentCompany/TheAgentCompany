@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pts)
 
-successful access the issue http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/issues/4158
+successful access the issue http://the-agent-company.com:8929/root/openhands/-/issues/4158
 
 ## Checkpoint 2 (1pt)
 
