@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-install-jdk-image
-CONTAINER_NAME=sde-install-jdk
+IMAGE_NAME=sde-install-openjdk-image
+CONTAINER_NAME=sde-install-openjdk
 
 .PHONY: build run stop
 
