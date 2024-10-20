@@ -50,7 +50,7 @@ def create_user():
 
 def check_channel_exists(channel_name):
     channels = rocket.channels_list().json()
-    channel_names = channels.get("channels")
+    channel_names = channels.get("channels", [])
     return any(current_channel['name'] == channel_name for current_channel in channel_names)
 
 
