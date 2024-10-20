@@ -42,7 +42,7 @@ def checkpoint2():
 def calculate_total_score():
     # Define the scores corresponding to when each function is True
     scores = {
-        # checkpoint1: 1,
+        checkpoint1: 1,
         checkpoint2: 2
     }
 
