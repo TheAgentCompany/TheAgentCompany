@@ -35,6 +35,10 @@ def grade_checkpoint1():
 def grade_checkpoint2():
     try:
         p = subprocess.Popen(["/workspace/risingwave"], stdout=DEVNULL)
+    except Exception:
+        return None, False
+
+    try:
         time.sleep(12)
         pipe = subprocess.run(['psql', '-h', 'localhost', '-p', '4566', '-d' ,'dev', '-U','root', '-c', "SELECT * FROM average_exam_scores"], stdout=subprocess.PIPE)
         print("---------QUERY OUTPUT---------")
@@ -59,6 +63,7 @@ if __name__ == "__main__":
     if res:
         points += 1
 
-    process.wait()
+    if process is not None:
+        process.wait()
 
     print(f"\nFinal points for running Rising Wave locally: {points}/2")
