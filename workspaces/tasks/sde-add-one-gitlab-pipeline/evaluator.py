@@ -21,7 +21,7 @@ def get_gitlab_pipeline():
         return {}
 
 
-def checkpoint1(url='http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/ci/editor?branch_name=main'):
+def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/editor?branch_name=main'):
     if len(sys.argv) < 2:
         trajectory = ""
     else:
