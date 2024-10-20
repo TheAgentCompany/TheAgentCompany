@@ -4,6 +4,7 @@ import re
 import sys
 import os
 
+# Check the repo has been cloned
 def grade_checkpoint1():
     openhands_path = '/workspace/openhands'
     try:
@@ -26,6 +27,7 @@ def grade_checkpoint1():
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
 
+# Check it has test_agent_skill.py
 def grade_checkpoint2():
     test_file_path = '/workspace/openhands/tests/unit/test_agent_skill.py'
     try:
@@ -34,6 +36,7 @@ def grade_checkpoint2():
         logging.warning(f"Error in grade_checkpoint3: {e}")
         return False
 
+# Check the file has unit test for open_file function
 def grade_checkpoint3():
     test_file_path = '/workspace/openhands/tests/unit/test_agent_skill.py'
     try:
@@ -44,6 +47,7 @@ def grade_checkpoint3():
         logging.warning(f"Error in grade_checkpoint3: {e}")
         return False
 
+# Check all the test passed
 def grade_checkpoint4(trajectory):
     try:
         if 'test_open_file' not in trajectory:
@@ -54,7 +58,7 @@ def grade_checkpoint4(trajectory):
             logging.warning("Some tests failed")
             return False
         
-        # Check if tests were collected and run
+        # Check if tests were selected and run
         selected_match = re.search(r'(\d+) selected', trajectory)
         if not selected_match or int(selected_match.group(1)) == 0:
             logging.warning("No tests were selected for open_file")
