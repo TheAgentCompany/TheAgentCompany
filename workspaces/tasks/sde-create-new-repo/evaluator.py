@@ -1,7 +1,7 @@
 import os
 from rocketchat_API.rocketchat import RocketChat
 import requests
-from llm_evaluator import *
+from common import llm_evaluator
 
 import logging
 import urllib

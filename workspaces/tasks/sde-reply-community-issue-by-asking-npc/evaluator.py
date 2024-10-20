@@ -5,7 +5,7 @@ from rocketchat_API.rocketchat import RocketChat
 import urllib.parse
 import logging
 
-from llm_evaluator import *
+from common import llm_evaluator
 
 # Configuration for rocketchat
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'

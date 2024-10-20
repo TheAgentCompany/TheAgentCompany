@@ -4,7 +4,7 @@ import requests
 import urllib.parse
 import logging
 
-from llm_evaluator import *
+from common import llm_evaluator
 
 # Configuration for gitlab
 base_url = "http://the-agent-company.com:8929/api/v4"

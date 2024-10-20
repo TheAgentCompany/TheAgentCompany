@@ -3,7 +3,7 @@ from rocketchat_API.rocketchat import RocketChat
 
 import datetime
 
-from llm_evaluator import *
+from common import llm_evaluator
 
 # Set environment variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'

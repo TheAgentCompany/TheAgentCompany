@@ -1,4 +1,4 @@
-from llm_evaluator import *
+from common import llm_evaluator
 from common import create_rocketchat_client
 
 # Create RocketChat instance
