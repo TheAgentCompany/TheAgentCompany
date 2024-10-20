@@ -47,9 +47,10 @@ def create_rocketchat_client(username='jobbench', password='jobbench'):
     
     try:
         return RocketChat(username, password, server_url=ROCKETCHAT_URL)
-    except Exception as e:
-        logging.warning("Fail to connect to rocketchat", e)
+    except:
+        logging.warning("Fail to connect to rocketchat")
         if TEST_MODE:
+            logging.info("TEST_MODE, use mock rocketchat client")
             return MockRocketChatClient()
         else:
             raise

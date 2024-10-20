@@ -10,12 +10,12 @@ def check_user_added(channel_name, username):
 
 def check_user_removed(username):
     response_user = rocket.users_info(username=username).json()
-    is_exist = response_user['success']
+    is_exist = response_user.get('success', False)
     return not is_exist
 
 def check_user_exist(username):
     response_user = rocket.users_info(username=username).json()
-    is_exist = response_user['success']
+    is_exist = response_user.get('success', False)
     return is_exist
 
 def checkpoint1(username='li_ming'):
