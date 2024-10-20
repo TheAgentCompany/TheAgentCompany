@@ -5,7 +5,7 @@ rocket = create_rocketchat_client()
 
 def check_user_added(channel_name, username):
     members = rocket.channels_members(channel=channel_name).json()
-    users_list = members.get("members")
+    users_list = members.get("members", [])
     return any(user['username'] == username for user in users_list)
 
 def check_user_removed(username):
