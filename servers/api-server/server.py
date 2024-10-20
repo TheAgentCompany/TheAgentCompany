@@ -6,7 +6,19 @@ import threading
 
 app = Flask(__name__)
 
-EXECUTION_DIR = '/home/yufansong/JobBench/servers'
+def get_git_root():
+    try:
+        git_root = subprocess.check_output(
+            ['git', 'rev-parse', '--show-toplevel'],
+            cwd=os.getcwd(),
+            stderr=subprocess.STDOUT,
+            universal_newlines=True
+        ).strip()
+        return git_root
+    except subprocess.CalledProcessError:
+        return None
+
+EXECUTION_DIR = get_git_root() + '/servers'
 
 def execute_command(command):
     try:
