@@ -33,7 +33,7 @@ def grade_checkpoint2():
     try:
         return os.path.isfile(test_file_path)
     except Exception as e:
-        logging.warning(f"Error in grade_checkpoint3: {e}")
+        logging.warning(f"Error in grade_checkpoint2: {e}")
         return False
 
 # Check the file has unit test for open_file function
