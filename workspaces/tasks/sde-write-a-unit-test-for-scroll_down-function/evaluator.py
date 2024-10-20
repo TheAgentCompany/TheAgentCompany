@@ -3,8 +3,9 @@ import ast
 import sys
 import logging
 import subprocess
-import astor
+import time
 
+import astor
 from llm_evaluator import *
 
 def check_with_llm(msgs, expect_result):
@@ -86,7 +87,7 @@ def is_function_exists(file_path, function_name):
         return False
 
     except Exception as e:
-        print(f"Error parsing file {file_path}: {e}")
+        logging.warning(f"Error parsing file {file_path}: {e}")
         return False
 
 def get_function_content(file_path, function_name):
@@ -103,7 +104,7 @@ def get_function_content(file_path, function_name):
 
         return None
     except Exception as e:
-        print(f"Error parsing file {file_path}: {e}")
+        logging.warning(f"Error parsing file {file_path}: {e}")
         return False
 
 def is_repo_exit(dir_path):
@@ -117,10 +118,36 @@ def is_repo_exit(dir_path):
 
     return is_file_exist(instruction_file_path)
 
-def is_test_run(file_path, function_name):
+def is_test_run(dir_path, file_path, function_name):
     """
     Run a specific test function using pytest and check if it was successful.
     """
+    # configure enviroment
+    try:
+        os.chdir(dir_path)
+
+        subprocess.run(["poetry", "--version"], check=True, capture_output=True)
+    except Exception as e:
+        logging.warning(f"is_test_run configure step 1. {e}")
+        subprocess.run([sys.executable, "-m", "pip", "install", "poetry"], check=True)
+        time.sleep(5)
+
+    logging.info(f"Installing dependencies...")
+    try:
+        result = subprocess.run(["poetry", "install"], capture_output=True, text=True)
+    except Exception as e:
+        logging.warning(f"is_test_run configure step 2. {e}")
+        return False
+
+    if result.returncode != 0:
+        logging.warning(f"Error installing dependencies. {e}")
+        logging.warning(f"{result.stderr}")
+        return False
+    else:
+        logging.info(f"Dependencies installed successfully.")
+
+    time.sleep(5)
+    # run test
     try:
         command = [sys.executable, "-m", "pytest", f"{file_path}::{function_name}", "-v"]
 
@@ -129,27 +156,27 @@ def is_test_run(file_path, function_name):
         if result.returncode == 0 and f"{function_name} PASSED" in result.stdout:
             return True
         else:
-            logging.log("Stdout:", result.stdout)
-            logging.log("Stderr:", result.stderr)
+            logging.warning(f"{result.stdout}")
+            logging.warning(f"is_test_run: {result.stderr}")
             return False
 
     except Exception as e:
-        print(f"An error occurred while running the test: {e}")
+        logging.warning(f"An error occurred while running the test: {e}")
         return False
 
-def checkpoint1(path='/workspaces/OpenHands'):
+def checkpoint1(path='/workspace/openhands/'):
     return is_repo_exit(dir_path=path)
 
-def checkpoint2(path='/workspaces/OpenHands/tests/unit/test_agent_skill.py'):
+def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)
 
-def checkpoint3(path='/workspaces/OpenHands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
+def checkpoint3(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
     return is_function_exists(file_path=path, function_name=function_name)
 
-def checkpoint4(path='/workspaces/OpenHands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
-    return is_test_run(file_path=path, function_name=function_name)
+def checkpoint4(dir_path='/workspace/openhands/', path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
+    return is_test_run(dir_path=dir_path, file_path=path, function_name=function_name)
 
-def checkpoint5(path='/workspaces/OpenHands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
+def checkpoint5(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
     content = get_function_content(file_path=path, function_name=function_name)
 
     if not content:
