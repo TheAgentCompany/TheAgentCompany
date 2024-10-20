@@ -3,6 +3,7 @@ import subprocess
 import os
 import json
 import threading
+import requests
 
 app = Flask(__name__)
 
@@ -20,8 +21,21 @@ def get_git_root():
 
 EXECUTION_DIR = get_git_root() + '/servers'
 
+def check_url(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            print("Web service is up!")
+            return 200, "Web service is up!"
+        else:
+            return response.status_code
+    except requests.ConnectionError:
+        print("Web service is not available yet. Retrying...")
+        return 500, "Web service is not available yet"
+
 def execute_command(command):
     try:
+        print(EXECUTION_DIR, command)
         os.chdir(EXECUTION_DIR)
         result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
         return result.stdout.strip()
@@ -65,6 +79,26 @@ def reset_gitlab():
 def reset_nextcloud():
     async_execute_command('make reset-nextcloud')
     return jsonify({"message": "Reset Nextcloud command initiated"}), 202
+
+@app.route('/api/healthcheck/gitlab', methods=['GET'])
+def healthcheck_gitlab():
+    code, msg = check_url("http://localhost:8929")
+    return jsonify({"message":msg}), code
+
+@app.route('/api/healthcheck/nextcloud', methods=['GET'])
+def healthcheck_nextcloud():
+    code, msg = check_url("http://localhost:8090")
+    return jsonify({"message":msg}), code
+
+@app.route('/api/healthcheck/rocketchat', methods=['GET'])
+def healthcheck_rocketchat():
+    code, msg = check_url("http://localhost:3000")
+    return jsonify({"message":msg}), code
+
+@app.route('/api/healthcheck/plane', methods=['GET'])
+def healthcheck_plane():
+    code, msg = check_url("http://localhost:8091")
+    return jsonify({"message":msg}), code
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
