@@ -40,7 +40,8 @@ def check_if_user_in_channel(channel_name: str, username: str):
 
 def check_job_description(username: str):
 
-    job_description = rocket.users_info(username=username).json()['user']['bio']
+    user_info = rocket.users_info(username=username).json().get('user', {})
+    job_description = user_info.get('bio', '')
     print(f"{username}''s Job Description: {job_description}")
 
     messages = [{"content": f"Does the phrase \"\"{job_description}\"\" indicate the person does not work in database team and now works in the AI team? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
