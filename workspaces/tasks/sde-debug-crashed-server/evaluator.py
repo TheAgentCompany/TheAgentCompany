@@ -8,7 +8,7 @@ import requests
 from rocketchat_API.rocketchat import RocketChat
 
 # Set environment variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com'
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 # Construct RocketChat URL
