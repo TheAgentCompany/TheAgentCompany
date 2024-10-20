@@ -19,12 +19,16 @@ def get_history(username: str):
     if len(msgs)>0:
         return True, msg
     else:
-        return False, msg
+        return False, None
 
 
 def check_final_feedback(username: str):
 
-    _, msg = get_history(username)
+    success, msg = get_history(username)
+
+    if not success:
+        print(f"Failed to get history or no history")
+        return False
 
     messages = [{"content": f"Does the phrase \"\"{msg}\"\" indicate the person receiving the feedback had an average job performance? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     # Check result
