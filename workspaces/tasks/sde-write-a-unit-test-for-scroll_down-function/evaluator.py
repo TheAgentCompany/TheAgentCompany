@@ -8,6 +8,32 @@ import time
 import astor
 from llm_evaluator import *
 
+def config_env(dir_path):
+    """configure enviroment"""
+    try:
+        os.chdir(dir_path)
+
+        subprocess.run(["poetry", "--version"], check=True, capture_output=True)
+    except Exception as e:
+        logging.warning(f"is_test_run configure step 1. {e}")
+        subprocess.run([sys.executable, "-m", "pip", "install", "poetry"], check=True)
+        time.sleep(5)
+
+    logging.info(f"Installing dependencies...")
+    try:
+        result = subprocess.run(["poetry", "install"], capture_output=True, text=True)
+    except Exception as e:
+        logging.warning(f"is_test_run configure step 2. {e}")
+        return False
+
+    if result.returncode != 0:
+        logging.warning(f"Error installing dependencies. {e}")
+        logging.warning(f"{result.stderr}")
+        return False
+    else:
+        logging.info(f"Dependencies installed successfully.")
+
+
 def check_with_llm(msgs, expect_result):
     content = msgs
 
@@ -122,31 +148,6 @@ def is_test_run(dir_path, file_path, function_name):
     """
     Run a specific test function using pytest and check if it was successful.
     """
-    # configure enviroment
-    try:
-        os.chdir(dir_path)
-
-        subprocess.run(["poetry", "--version"], check=True, capture_output=True)
-    except Exception as e:
-        logging.warning(f"is_test_run configure step 1. {e}")
-        subprocess.run([sys.executable, "-m", "pip", "install", "poetry"], check=True)
-        time.sleep(5)
-
-    logging.info(f"Installing dependencies...")
-    try:
-        result = subprocess.run(["poetry", "install"], capture_output=True, text=True)
-    except Exception as e:
-        logging.warning(f"is_test_run configure step 2. {e}")
-        return False
-
-    if result.returncode != 0:
-        logging.warning(f"Error installing dependencies. {e}")
-        logging.warning(f"{result.stderr}")
-        return False
-    else:
-        logging.info(f"Dependencies installed successfully.")
-
-    time.sleep(5)
     # run test
     try:
         command = [sys.executable, "-m", "pytest", f"{file_path}::{function_name}", "-v"]
