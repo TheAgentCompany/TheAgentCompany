@@ -3,7 +3,7 @@ from rocketchat_API.rocketchat import RocketChat
 
 import datetime
 
-from common import llm_evaluator
+from common import llm_evaluate
 
 # Set environment variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -55,7 +55,7 @@ def check_final_result(file_path):
         messages = [{"content": f"Does the phrase \"\"{content}\"\" include any specific day of the week?? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
 
     # Check result
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     print(llm_resonse)
 
     if 'no' in llm_resonse['choices'][0]['message']['content'].lower():

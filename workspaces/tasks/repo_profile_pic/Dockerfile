@@ -6,4 +6,5 @@ RUN set -e && \
     [ -s /utils/reference.jpg ] || (echo "Failed to download image" && exit 1)
 
 # numpy library is needed for this task's evaluation
-RUN pip install numpy
+RUN pip install numpy==2.1.2
+RUN pip install pillow==11.0.0

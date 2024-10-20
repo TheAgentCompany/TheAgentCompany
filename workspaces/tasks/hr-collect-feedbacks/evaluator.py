@@ -1,5 +1,5 @@
 from common import create_rocketchat_client
-from common import llm_evaluator
+from common import llm_evaluate
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
@@ -32,7 +32,7 @@ def check_final_feedback(username: str):
 
     messages = [{"content": f"Does the phrase \"\"{msg}\"\" indicate the person receiving the feedback had an average job performance? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     # Check result
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     print(llm_resonse)
 
     if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():

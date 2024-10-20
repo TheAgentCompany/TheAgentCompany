@@ -26,7 +26,7 @@ def create_channel(channel_name):
         return None
 
 def post_message(user_credentials, channel_id, message):
-    user_rocket = RocketChat(user_credentials['username'], user_credentials['password'], server_url=ROCKETCHAT_URL)
+    user_rocket = create_rocketchat_client(user_credentials['username'], user_credentials['password'])
     response = user_rocket.chat_post_message(message, room_id=channel_id).json()
     if response.get('success'):
         logger.info(f"Message posted to channel by {user_credentials['username']}.")

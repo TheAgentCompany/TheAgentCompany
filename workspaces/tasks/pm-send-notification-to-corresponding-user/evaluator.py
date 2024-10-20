@@ -3,7 +3,7 @@ from rocketchat_API.rocketchat import RocketChat
 
 import datetime
 
-from common import llm_evaluator
+from common import llm_evaluate
 
 # Set environment variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -47,7 +47,7 @@ def check_with_llm(msgs, pattern):
             "content": f"Does the text \"{content}\" include the plan to hold a kickoff meeting for the main Q4 project? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
    # print(llm_resonse)
 
     if pattern in llm_resonse['choices'][0]['message']['content'].lower():

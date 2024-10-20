@@ -5,7 +5,7 @@ from rocketchat_API.rocketchat import RocketChat
 import urllib.parse
 import logging
 
-from common import llm_evaluator
+from common import llm_evaluate
 
 # Configuration for rocketchat
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
@@ -63,7 +63,7 @@ def check_with_llm(msgs, target, expect_result):
             "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
 
     if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
         return True

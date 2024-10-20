@@ -14,14 +14,16 @@ LITELLM_MODEL = os.environ.get("LITELLM_MODEL")
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
-def llm_evaluator(messages):
-    response = litellm.completion(
+def llm_evaluate(messages):
+    if TEST_MODE:
+        return {'choices': [{'message': {"content": "Hello, how are you?","role": "user"}}]}
+
+    return litellm.completion(
         api_key=LITELLM_API_KEY,
         base_url=LITELLM_BASE_URL,
         model=LITELLM_MODEL,
         messages=messages
-    )
-    return response
+    ).json()
 
 
 class MockRocketChatClient:
@@ -36,19 +38,15 @@ class MockRocketChatClient:
         return method
 
 
-def create_rocketchat_client():
+def create_rocketchat_client(username='jobbench', password='jobbench'):
     SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
     ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
     
     # Construct RocketChat URL
     ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
     
-    # Set admin credentials
-    ADMIN_USERNAME = 'jobbench'
-    ADMIN_PASSWORD = 'jobbench'
-
     try:
-        return RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
+        return RocketChat(username, password, server_url=ROCKETCHAT_URL)
     except Exception as e:
         logging.warning("Fail to connect to rocketchat", e)
         if TEST_MODE:

@@ -8,9 +8,7 @@ rocket = create_rocketchat_client()
 
 # Rocket.Chat variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com' 
-
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
 # Plane variables

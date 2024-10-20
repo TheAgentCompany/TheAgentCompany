@@ -43,7 +43,7 @@ root@299afff5d411:/utils# sh init.sh
 + grep PING
 + awk -F[()] {print $2}
 + SERVICE_IP=
-+ echo  theagentcompany.com
++ echo  the-agent-company.com
 + [ -f /utils/pre_init.py ]
 + [ -f /npc/scenarios.json ]
 + python_default /npc/run_multi_npc.py
