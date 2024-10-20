@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-move-bustub-wiki
-CONTAINER_NAME=job-bench-sde-move-bustub-wiki
+IMAGE_NAME=sde-move-bustub-wiki-image
+CONTAINER_NAME=sde-move-bustub-wiki
 
 .PHONY: build run stop
 

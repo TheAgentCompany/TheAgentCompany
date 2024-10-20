@@ -4,7 +4,7 @@
 
 * Make sure you are using the latest main branch.
 * Navigate to the [base image folder](../base_image/).
-* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your OpenAI API key. Currently, only OpenAI models are supported, with the default model being `gpt-4-turbo`.
+* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your OpenAI API key in the `Dockerfile`. Currently, only OpenAI models are supported, with the default model being `gpt-4-turbo`.
 * Run `make build` in the base image folder.
 
 ## Build Your Task Image
@@ -13,8 +13,8 @@
 * The key should be the full name of the NPC, which must match the name in [this file](./npc/npc_credential.json).
 * For more information about NPC roles, check [this file](../../servers/rocketchat/npc/npc_definition.json).
 * In the `scenarios.json` file:
-  - The `extra_info` field should contain information that everyone (Agent and NPC) can know.
-  - The `strategy_hint` field should contain information that only this specific NPC should know.
+  - The `extra_info` field is information that the NPC may share with others.
+  - The `strategy_hint` field is private information that the NPC will use to act in a certain way.
 
 ```
 {

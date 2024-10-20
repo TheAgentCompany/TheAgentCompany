@@ -1,5 +1,5 @@
-IMAGE_NAME=example-exam-image
-CONTAINER_NAME=example-exam
+IMAGE_NAME=example-image
+CONTAINER_NAME=example
 
 .PHONY: build run stop
 

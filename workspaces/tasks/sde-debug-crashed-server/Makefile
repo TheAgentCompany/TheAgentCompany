@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-check-backlog-update-issues-image
-CONTAINER_NAME=pm-check-backlog-update-issues
+IMAGE_NAME=sde-debug-crashed-server-image
+CONTAINER_NAME=sde-debug-crashed-server
 
 .PHONY: build run stop
 

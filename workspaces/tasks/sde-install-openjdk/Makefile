@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-check-backlog-update-issues-image
-CONTAINER_NAME=pm-check-backlog-update-issues
+IMAGE_NAME=sde-install-openjdk-image
+CONTAINER_NAME=sde-install-openjdk
 
 .PHONY: build run stop
 

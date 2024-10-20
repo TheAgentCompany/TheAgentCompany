@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-check-backlog-update-issues-image
-CONTAINER_NAME=pm-check-backlog-update-issues
+IMAGE_NAME=sde-reply-community-issue-by-asking-npc-image
+CONTAINER_NAME=sde-reply-community-issue-by-asking-npc
 
 .PHONY: build run stop
 
@@ -12,3 +12,6 @@ run:
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
+
+attach:
+	docker exec -it $(CONTAINER_NAME) /bin/bash
