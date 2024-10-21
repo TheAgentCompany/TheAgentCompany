@@ -61,6 +61,10 @@ def check_job_description_content():
     
     with open("/workspace/requirement.txt", "r") as f:
         requirement_content = f.read()
+    
+    if "[Insert Information]" in final_content:
+        print("some placeholder still present in the final job description.")
+        return False
 
     messages = [{"content": f"Is the content in the markdown file \"\"{final_content}\"\" a successful combination of the markdown template \"\"{template_content}\"\" and the requirement file \"\"{requirement_content}\"\"? Pay special consideration to all of the numerical details. Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     # Check result
