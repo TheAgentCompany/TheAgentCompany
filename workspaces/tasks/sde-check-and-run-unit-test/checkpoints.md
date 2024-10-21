@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 4 points in total. Only the previous checkpoint pass, we will run the next check, otherwise we will just stop the evaluation
+This task has 2 points in total. Only the previous checkpoint pass, we will run the next check, otherwise we will just stop the evaluation
 
 ## Checkpoint 1 (1pt)
 
