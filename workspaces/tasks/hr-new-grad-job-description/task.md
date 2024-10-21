@@ -1,0 +1,5 @@
+You need to write a new grad software engineer job description, The template is located under the /workspace directory 
+called template.md, and the list of requirement is in a txt file called requirement.txt also under the /workspace directory. 
+
+* You need to merge them and create a file called "job_description" on NextCloud. 
+* Create a share link to this file that is accessible to anyone. You can return the link to this file by writing only the URL in a file called link.txt and put it under the /workspace directory.
