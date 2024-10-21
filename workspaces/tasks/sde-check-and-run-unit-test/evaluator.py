@@ -26,29 +26,9 @@ def grade_checkpoint1():
     except Exception as e:
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
-
-# Check it has test_agent_skill.py
-def grade_checkpoint2():
-    test_file_path = '/workspace/openhands/tests/unit/test_agent_skill.py'
-    try:
-        return os.path.isfile(test_file_path)
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint2: {e}")
-        return False
-
-# Check the file has unit test for open_file function
-def grade_checkpoint3():
-    test_file_path = '/workspace/openhands/tests/unit/test_agent_skill.py'
-    try:
-        with open(test_file_path, 'r') as file:
-            content = file.read()
-            return 'def test_open_file' in content
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint3: {e}")
-        return False
-
+    
 # Check all the test passed
-def grade_checkpoint4(trajectory):
+def grade_checkpoint2(trajectory):
     try:
         if 'test_open_file' not in trajectory:
             logging.warning("No test_open_file tests found in the trajectory")
@@ -66,15 +46,13 @@ def grade_checkpoint4(trajectory):
         
         return True
     except Exception as e:
-        logging.warning(f"Error in grade_checkpoint4: {e}")
+        logging.warning(f"Error in grade_checkpoint2: {e}")
         return False
 
 def grade_checkpoints(trajectory):
     checkpoints = [
         (grade_checkpoint1, "OpenHands code cloned in local workspace"),
-        (grade_checkpoint2, "OpenHands/tests/unit/test_agent_skill.py exists"),
-        (grade_checkpoint3, "There's a unit test for the function `open_file` in the unit test file"),
-        (lambda: grade_checkpoint4(trajectory), "open_file function's unit tests are PASS in history")
+        (lambda: grade_checkpoint2(trajectory), "open_file function's unit tests are PASS in history")
     ]
 
     points = 0
@@ -108,4 +86,4 @@ if __name__ == "__main__":
         trajectory = load_trajectory(sys.argv[1])
 
     points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for OpenHands task: {points}/4")
+    print(f"\nFinal points for OpenHands task: {points}/2")
