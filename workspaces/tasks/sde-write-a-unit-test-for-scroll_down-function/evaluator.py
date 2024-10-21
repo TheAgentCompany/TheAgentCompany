@@ -181,8 +181,8 @@ def checkpoint4(dir_path='/workspace/openhands/', path='/workspace/openhands/tes
     return is_test_run(dir_path=dir_path, file_path=path, function_name=function_name)
 
 def checkpoint5():
-    test_content = get_function_content(file_path='/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/tests/unit/test_agent_skill.py', function_name='test_scroll_down')
-    func_content = get_function_content(file_path='/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/openhands/runtime/plugins/agent_skills/file_ops/file_ops.py', function_name='scroll_down')
+    test_content = get_function_content(file_path='/workspaces/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down')
+    func_content = get_function_content(file_path='/workspaces/openhands/openhands/runtime/plugins/agent_skills/file_ops/file_ops.py', function_name='scroll_down')
 
     if not test_content:
         return False
