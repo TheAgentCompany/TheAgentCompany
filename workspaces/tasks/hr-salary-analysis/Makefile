@@ -1,4 +1,4 @@
-IMAGE_NAME=hr-salary-analysis
+IMAGE_NAME=hr-salary-analysis-image
 CONTAINER_NAME=hr-salary-analysis
 
 .PHONY: build run stop
