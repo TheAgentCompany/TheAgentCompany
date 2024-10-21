@@ -1,1 +1,1 @@
-Use the provided salary.txt spreadsheet to identify trends such as average salary by department, highest and lowest salaries, and median salaries across roles. Save the report as "Salary_Analysis_Report".
+Use the provided salary.txt spreadsheet on Nextcloud's "HR Dept" folder to identify trends such as average salary by department, highest and lowest salaries, and median salaries across roles. Save the report as "Salary_Analysis_Report" in the same folder.
