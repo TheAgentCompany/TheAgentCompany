@@ -32,7 +32,7 @@ def get_gitlab_issue_notes():
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
-        return {}
+        return []
 
 def get_history(username):
     id = ""
@@ -97,11 +97,15 @@ def checkpoint4(username='mike_chen'):
     msgs = get_history(username=username)
 
     issue_notes = get_gitlab_issue_notes()
+    target = None
     if issue_notes:
         for issue_note in issue_notes:
             if issue_note.get('id') not in [127283, 127284, 127285]:
                 target = issue_note.get('body')
     else:
+        return False
+
+    if target is None:
         return False
 
     return check_with_llm(
