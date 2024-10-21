@@ -1,3 +1,81 @@
+# How to Launch Your NPC
+
+## Build the Base Image
+
+* Make sure you are using the latest main branch.
+* Navigate to the [base image folder](../base_image/).
+* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your OpenAI API key in the `Dockerfile`. Currently, only OpenAI models are supported, with the default model being `gpt-4-turbo`.
+* Run `make build` in the base image folder.
+
+## Build Your Task Image
+
+* Create a `scenarios.json` file in your task folder. Each item in this file represents an NPC.
+* The key should be the full name of the NPC, which must match the name in [this file](./npc/npc_credential.json).
+* For more information about NPC roles, check [this file](../../servers/rocketchat/npc/npc_definition.json).
+* In the `scenarios.json` file:
+  - The `extra_info` field is information that the NPC may share with others.
+  - The `strategy_hint` field is private information that the NPC will use to act in a certain way.
+
+```
+{
+  "Emily Zhou": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "You're available on Mondays, Wednesday, and Fridays. You're not available on all other week days."
+  },
+  "Liu Qiang": {
+    "extra_info": "Someone will ask you for your free time for the meeting",
+    "strategy_hint": "You're available on Tuesday, Thursday. You're not available on all other week days."
+  }
+}
+```
+
+# Launch NPC
+
+* Run `make build` in your folder to build the task image.
+* Execute `make run` in your folder. This will run the task image and bring you into the container.
+* Manually execute `/utils/init.sh` inside the container. This will launch the NPC, and you will see output similar to the following:
+
+```
+root@299afff5d411:/utils# ls
+dependencies.yml  evaluator.py  init.sh  llm_evaluator.py
+root@299afff5d411:/utils# sh init.sh 
++ ping -c 1
++ grep PING
++ awk -F[()] {print $2}
++ SERVICE_IP=
++ echo  the-agent-company.com
++ [ -f /utils/pre_init.py ]
++ [ -f /npc/scenarios.json ]
++ python_default /npc/run_multi_npc.py
+Launching Emily Zhou
+OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Emily Zhou"
+Launching Liu Qiang
+OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
++ [ -f /utils/populate_data.py ]
++ [ -f /utils/post_init.py ]
+```
+
+## How to Debug Your NPC
+* If your NPC is not working as expected, follow these steps:
+  1. Attach to your task container.
+  2. When executing `init.sh`, look for the command to launch a single NPC in the log output. It will look similar to this:
+     ```
+     OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
+     ```
+     The `agent_name` parameter determines which NPC gets launched.
+
+* This command will display the log output of your NPC:
+  - The message "No message received, waiting..." indicates that the NPC is waiting for a message.
+  - When a message is received, the log will print both the incoming message and the NPC's response.
+
+## Notes
+
+* Important: Remember to remove your OpenAI API key from the Dockerfile before committing your code.
+* Use `make stop` to halt and remove your previously running task image.
+
+# Deprecated 
+(You don't need to check the following documentation unless you know what you're looking for)
+
 # Solution 1: How to run dockerfile
 1. Set the correct configuration
     1. Set the `OPENAI_API_KEY`. You should use your own key.
@@ -13,10 +91,10 @@ FROM base-image
 # Step1: Set ENV: OPENAI API KEY, REDIS_OM_URL, BOT_URL
 ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 # Redis Username: default, Password: jobbench
-# Redis service URL: ogma.lti.cs.cmu.edu/:6379
-ENV REDIS_OM_URL redis://default:jobbench@ogma.lti.cs.cmu.edu/:6379
+# Redis service URL: the-agent-company.com/:6379
+ENV REDIS_OM_URL redis://default:jobbench@the-agent-company.com/:6379
 # RocketChat service URL
-ENV BOT_URL http://ogma.lti.cs.cmu.edu:3000
+ENV BOT_URL http://the-agent-company.com:3000
 
 # Step2: Change the scenarios.json to use your own definition
 COPY scenarios.json /npc

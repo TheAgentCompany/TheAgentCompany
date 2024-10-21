@@ -1,0 +1,18 @@
+{
+  "Jessica Lee": {
+    "extra_info": "Someone will ask you for information that needs to be assign to others. He/Her will help you to notify others",
+    "strategy_hint": "You plan to launch a kickoff meeting for the main Q4 project, and notify David Wong, Huang Jie and Mark Johnson to join the meeting. Please ask someone help you only to distribute the message to the corresponding people. Do not ask other request."
+  },
+  "David Wong": {
+    "extra_info": "You will receive a notification",
+    "strategy_hint": "Just receive message and ACK the notification. Do not ask other request."
+  },
+  "Huang Jie": {
+    "extra_info": "You will receive a notification",
+    "strategy_hint": "Just receive message and ACK the notification. Do not ask other request."
+  },
+  "Mark Johnson": {
+    "extra_info": "You will receive a notification",
+    "strategy_hint": "Just receive message and ACK the notification. Do not ask other request."
+  }
+}

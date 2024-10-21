@@ -2,7 +2,7 @@ import os
 from rocketchat_API.rocketchat import RocketChat
 
 ############################# Init Variables #####################################
-HOSTNAME =  'ogma.lti.cs.cmu.edu'
+HOSTNAME =  'the-agent-company.com'
 ROCKETCHAT_PORT =  '3000'
 CHANNEL_NAME = "sprint-planning"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"

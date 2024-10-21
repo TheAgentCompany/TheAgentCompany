@@ -1,0 +1,6 @@
+{
+  "Zhang Wei": {
+    "extra_info": "Someone will ask you about the new storage project that you proposed. Storage systems are among the most fascinating and the most important parts of computer systems. They often dominate the performance of a system, and failures of other components are frequently addressed by restarting from the data stored on them. Indeed, storage systems hold the crown jewels of most organizations: their information (from source code to Microsoft's software to the sales databases of every e-commerce site to the logs and indices driving the Big Data and ML revolution). There continues to be great demand for bright people and better solutions in this critical field of computer systems. ",
+    "strategy_hint": "Provide some concrete tasks for the new storage project."
+  }
+}
