@@ -39,7 +39,7 @@ def grade_checkpoint2():
         return None, False
 
     try:
-        time.sleep(12)
+        time.sleep(8)
         pipe = subprocess.run(['psql', '-h', 'localhost', '-p', '4566', '-d' ,'dev', '-U','root', '-c', "SELECT * FROM average_exam_scores"], stdout=subprocess.PIPE)
         print("---------QUERY OUTPUT---------")
         output = pipe.stdout.decode('utf-8')
