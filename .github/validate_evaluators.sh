@@ -23,3 +23,5 @@ for task_dir in workspaces/tasks/*/; do
 
   cd -
 done
+
+echo "Sanity check passed for all evaluators"
