@@ -6,7 +6,7 @@ python_default /utils/pre_init.py
 ######################################
 
 ########## RUN INITIALIZATION ########
-
+python_default /npc/run_multi_npc.py
 ######################################
 
 ########## POST INIT PHASE ###########
