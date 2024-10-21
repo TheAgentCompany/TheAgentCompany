@@ -69,4 +69,4 @@ jobs:
 
     - name: Run evaluator in each task container
       run: |
-        TAC_TEST_MODE=True bash .github/validate_evaluators.sh
+        bash .github/validate_evaluators.sh
