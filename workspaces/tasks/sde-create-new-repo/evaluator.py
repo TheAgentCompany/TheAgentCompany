@@ -87,7 +87,11 @@ def check_readme_content():
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
     url = f"{base_url}/projects/{encoded_path}/repository/files/{readme_encoded_path}/raw?ref=main"
 
-    readme = requests.get(url, headers=headers).text
+    try:
+        readme = requests.get(url, headers=headers).text
+    except requests.RequestException as e:
+        logging.error(f"Error occurred while checking readme file: {e}")
+        return False
 
     messages = [{"content": f"Does the readme \"\"{readme}\"\" provide some details about a new storage system project? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     

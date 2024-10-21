@@ -27,7 +27,8 @@ def get_history(username):
             id = item["_id"]
             break
     if id is None:
-        raise ValueError(f"Could not find the user id for {username}.")
+        logging.error(f"Could not find the user id for {username}.")
+        return ''
     im_history = rocket.im_history(room_id=id).json()
     msgs = im_history.get('messages', [])
     content = ""
