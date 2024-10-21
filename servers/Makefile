@@ -74,6 +74,9 @@ rm-nextcloud: init rm-nextcloud-volume rm-nextcloud-side-container
 	make rm-nextcloud-backup-volume
 	docker network rm servers_nextcloud-network
 
+backup-nextcloud:
+	./nextcloud/backup.sh
+
 reset-nextcloud:
 	./nextcloud/restore.sh
 	docker exec nextcloud-aio-nextcloud chown -R 33:0 /mnt/ncdata/ 
