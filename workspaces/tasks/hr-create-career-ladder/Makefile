@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-create-career-ladder
-CONTAINER_NAME=job-bench-hr-create-career-ladder
+IMAGE_NAME=hr-create-career-ladder-image
+CONTAINER_NAME=hr-create-career-ladder-image
 
 .PHONY: build run stop
 

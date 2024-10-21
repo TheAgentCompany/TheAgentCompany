@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-create-employee-manual
-CONTAINER_NAME=job-bench-hr-create-employee-manual
+IMAGE_NAME=hr-create-employee-manual-image
+CONTAINER_NAME=hr-create-employee-manual-image
 
 .PHONY: build run stop
 

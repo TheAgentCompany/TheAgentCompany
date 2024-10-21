@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-salary-analysis
-CONTAINER_NAME=job-bench-hr-salary-analysis
+IMAGE_NAME=hr-salary-analysis-image
+CONTAINER_NAME=hr-salary-analysis-image
 
 .PHONY: build run stop
 

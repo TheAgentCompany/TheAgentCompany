@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-create-job-description
-CONTAINER_NAME=job-bench-hr-create-job-description
+IMAGE_NAME=hr-create-job-description-image
+CONTAINER_NAME=hr-create-job-description-image
 
 .PHONY: build run stop
 

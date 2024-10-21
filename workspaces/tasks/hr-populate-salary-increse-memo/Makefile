@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-populate-salary-increse-memo
-CONTAINER_NAME=job-bench-hr-populate-salary-increse-memo
+IMAGE_NAME=hr-populate-salary-increse-memo-image
+CONTAINER_NAME=hr-populate-salary-increse-memo-image
 
 .PHONY: build run stop
 
