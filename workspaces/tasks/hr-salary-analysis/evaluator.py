@@ -31,7 +31,7 @@ def calculate_salary_statistics(file_path):
 
 def grade_checkpoint2_3():
     file_name = "Salary_Analysis_Report.odt"
-    dir_name = "Documents/Human%20Resources%20Team/"
+    dir_name = "Documents/Human%20Resources%20Team"
 
     score = 0
 
@@ -45,7 +45,8 @@ def grade_checkpoint2_3():
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
 
-        keywords = calculate_salary_statistics("workspaces/tasks/hr-salary-analysis/salary.txt")
+        keywords = calculate_salary_statistics("./salary.txt")
+        print(f"Keywords: {keywords}")
         
         found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
         
@@ -93,9 +94,10 @@ def file_exists_in_directory(file_name, dir_name):
         return None
 
 
-def get_binary_file_content(dir_name, file_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}/{file_name}"
-    file_url = f"{server_url}{file_name}"
+def get_binary_file_content(file_name, dir_name):
+    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
+    file_url = f"{server_url}/{file_name}"
+    print(f"File URL: {file_url}")
 
     response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
 
@@ -120,7 +122,7 @@ def extract_text_from_odt(binary_content):
 
 def check_keywords_in_content(content, keywords):
     content = content.lower()
-    found_keywords = [keyword for keyword in keywords if keyword in content]
+    found_keywords = [str(keyword) for keyword in keywords if str(keyword) in content]
     score = len(found_keywords) / len(keywords)
     return found_keywords, score
 
