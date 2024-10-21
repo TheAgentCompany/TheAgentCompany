@@ -34,15 +34,18 @@ def config_env(dir_path):
         logging.info(f"Dependencies installed successfully.")
 
 
-def check_with_llm(msgs, expect_result):
-    content = msgs
+def check_with_llm(test_code, func_code, expect_result):
+    test_content = test_code
+    func_content = func_code
 
-    if len(content) == 0:
+    if len(test_content) == 0:
+        return False
+    if len(func_content) == 0:
         return False
 
     messages = [
         {
-            "content": f"Does the function named 'test_scroll_down' in the text '{content}' thoroughly and meaningfully test the 'scroll_down' functionality? The test should include specific assertions that validate the expected behavior of 'scroll_down', and must not contain trivial or non-functional code such as 'return True' or 'assert 1 == 1'. Does it properly verify the output, state changes, or side effects that should occur when 'scroll_down' is executed? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
+            "content": f"Does the function named 'test_scroll_down' in the text '{test_content}' thoroughly and meaningfully test the 'scroll_down' functionality? The test should include specific assertions that validate the expected behavior of the function '{func_content}', and must not contain trivial or non-functional code such as 'return True' or 'assert 1 == 1'. Does it properly verify the output, state changes, or side effects that should occur when 'scroll_down' is executed? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
     llm_resonse = llm_evaluator(messages).json()
@@ -177,14 +180,18 @@ def checkpoint3(path='/workspace/openhands/tests/unit/test_agent_skill.py', func
 def checkpoint4(dir_path='/workspace/openhands/', path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
     return is_test_run(dir_path=dir_path, file_path=path, function_name=function_name)
 
-def checkpoint5(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
-    content = get_function_content(file_path=path, function_name=function_name)
+def checkpoint5():
+    test_content = get_function_content(file_path='/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/tests/unit/test_agent_skill.py', function_name='test_scroll_down')
+    func_content = get_function_content(file_path='/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/openhands/runtime/plugins/agent_skills/file_ops/file_ops.py', function_name='scroll_down')
 
-    if not content:
+    if not test_content:
+        return False
+    if not func_content:
         return False
 
     return check_with_llm(
-        msgs=content,
+        test_code=test_content,
+        func_code=func_content,
         expect_result='yes'
     )
 
