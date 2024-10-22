@@ -4,7 +4,7 @@ This task has 10 points in total. Only pass the first checkpoint can test the se
 
 ## Checkpoint 1 (5pts)
 
-go test -run 3A passes
+go test -run 2A passes
 
 ## Checkpoint 2 (5pts)
 

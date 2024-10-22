@@ -3,8 +3,6 @@ import shutil
 import subprocess
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-
 def run_command(command):
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=False)
@@ -44,13 +42,13 @@ def run_test(test_command):
         logging.error("Tests failed or unexpected output.")
         return False
 
-# Check pass all 3A tests
+# Check pass all 2A tests
 def grade_checkpoint1():
     if not copy_test_file():
         logging.error("Failed to copy test file in checkpoint1")
         return False
 
-    return run_test(["go", "test", "-run", "3A"])
+    return run_test(["go", "test", "-run", "2A"])
 
 # Check pass all tests
 def grade_checkpoint2():
@@ -62,7 +60,7 @@ def grade_checkpoint2():
 
 def grade_checkpoints():
     checkpoints = [
-        (grade_checkpoint1, "Checkpoint 1: go test -run 3A passes", 5),
+        (grade_checkpoint1, "Checkpoint 1: go test -run 2A passes", 5),
         (grade_checkpoint2, "Checkpoint 2: Full test passes", 5)
     ]
 
