@@ -33,7 +33,7 @@ Below are the addresses, usernames, and passwords for each service:
 
 ## SSL Error
 
-### Solution 1 (change your local DNS):
+### Solution 1 (Recommend):
 The hosts trick actually work arounds the https problem.
 
 Add `128.2.205.27 the-agent-company.com` to your `/etc/hosts` file and then you can start using http://the-agent-company.com:8929/ in your browser.
