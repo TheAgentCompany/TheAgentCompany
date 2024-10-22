@@ -9,6 +9,8 @@ from odf.text import P
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 
+from llm_evaluator import *
+
 HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
@@ -43,11 +45,13 @@ def grade_checkpoint2_3():
             print(f"Keywords found in the document: {', '.join(found_keywords)}")
             score += keyword_score
 
-        readability = ["table of contents", "\u2022", "- ", "heading", "section"]
-        found_readability, readability_score = check_keywords_in_content(text_content, readability)
+        messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
-        if found_readability:
-            score += readability_score
+        # Check result
+        llm_resonse = llm_evaluator(messages).json()
+
+        if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
+            score += 1            
 
         return score
     else:
