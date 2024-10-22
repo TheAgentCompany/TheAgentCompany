@@ -6,7 +6,7 @@ import subprocess
 import time
 import re
 import astor
-from llm_evaluator import *
+from common import llm_evaluate
 
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
