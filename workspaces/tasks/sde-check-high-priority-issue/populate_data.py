@@ -13,8 +13,10 @@ ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# util function #####################################  
 # Set up logging
