@@ -4,9 +4,13 @@ import sys
 import logging
 import subprocess
 import time
-
+import re
 import astor
 from llm_evaluator import *
+
+REPO_DIR = '/workspace/openhands/'
+UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
+COV_FILE = REPO_DIR + 'tests/unit/test_agent_skill_coverage.xml'
 
 def config_env(dir_path):
     """configure enviroment"""
@@ -32,7 +36,6 @@ def config_env(dir_path):
         return False
     else:
         logging.info(f"Dependencies installed successfully.")
-
 
 def check_with_llm(test_code, func_code, expect_result):
     test_content = test_code
@@ -168,6 +171,49 @@ def is_test_run(dir_path, file_path, function_name):
         logging.warning(f"An error occurred while running the test: {e}")
         return False
 
+def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
+    """
+    Run pytest and collect test statistics.
+    """
+    try:
+        if function_name:
+            command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}::{function_name}"
+        else:
+            command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}"
+
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+        # Parse test statistics
+        output = result.stdout
+        stats = {
+            'passed': 0,
+            'failed': 0,
+            'skipped': 0,
+            'total': 0
+        }
+
+        # Use regex to match results
+        patterns = {
+            'passed': r'(\d+) passed',
+            'failed': r'(\d+) failed',
+            'skipped': r'(\d+) skipped'
+        }
+
+        # Extract numbers for each test result type
+        for key, pattern in patterns.items():
+            match = re.search(pattern, output)
+            if match:
+                stats[key] = int(match.group(1))
+
+        # Calculate total tests
+        stats['total'] = stats['passed'] + stats['failed'] + stats['skipped']
+
+    except Exception as e:
+        logging.warning(f"Error in run_pytest_with_stats: {e}")
+        return False
+
+    return stats
+
 def checkpoint1(path='/workspace/openhands/'):
     return is_repo_exit(dir_path=path)
 
@@ -177,8 +223,12 @@ def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
 def checkpoint3(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
     return is_function_exists(file_path=path, function_name=function_name)
 
-def checkpoint4(dir_path='/workspace/openhands/', path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
-    return is_test_run(dir_path=dir_path, file_path=path, function_name=function_name)
+def checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
+    status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
+    if not status:
+        return False
+
+    return True if status['passed']==1 else False
 
 def checkpoint5():
     test_content = get_function_content(file_path='/workspaces/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down')
