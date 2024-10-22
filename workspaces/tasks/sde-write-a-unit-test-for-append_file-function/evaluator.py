@@ -9,8 +9,8 @@ import astor
 import re
 
 REPO_DIR = '/workspace/openhands/'
-UT_FILE = '/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/tests/unit/test_agent_skill.py' #'/workspace/openhands/tests/unit/test_agent_skill.py'
-COV_FILE = '/workspace/openhands/tests/unit/test_agent_skill_coverage.xml'
+UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
+COV_FILE = REPO_DIR + 'tests/unit/test_agent_skill_coverage.xml'
 
 def config_env(dir_path):
     """configure enviroment"""
@@ -154,33 +154,38 @@ def run_pytest_with_stats(cov_file_path, ut_file_path):
     """
     Run pytest and collect test statistics.
     """
-    command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    try:
+        command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}"
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
-    # Parse test statistics
-    output = result.stdout
-    stats = {
-        'passed': 0,
-        'failed': 0,
-        'skipped': 0,
-        'total': 0
-    }
+        # Parse test statistics
+        output = result.stdout
+        stats = {
+            'passed': 0,
+            'failed': 0,
+            'skipped': 0,
+            'total': 0
+        }
 
-    # Use regex to match results
-    patterns = {
-        'passed': r'(\d+) passed',
-        'failed': r'(\d+) failed',
-        'skipped': r'(\d+) skipped'
-    }
+        # Use regex to match results
+        patterns = {
+            'passed': r'(\d+) passed',
+            'failed': r'(\d+) failed',
+            'skipped': r'(\d+) skipped'
+        }
 
-    # Extract numbers for each test result type
-    for key, pattern in patterns.items():
-        match = re.search(pattern, output)
-        if match:
-            stats[key] = int(match.group(1))
+        # Extract numbers for each test result type
+        for key, pattern in patterns.items():
+            match = re.search(pattern, output)
+            if match:
+                stats[key] = int(match.group(1))
 
-    # Calculate total tests
-    stats['total'] = stats['passed'] + stats['failed'] + stats['skipped']
+        # Calculate total tests
+        stats['total'] = stats['passed'] + stats['failed'] + stats['skipped']
+
+    except Exception as e:
+        logging.warning(f"Error in run_pytest_with_stats: {e}")
+        return False
 
     return stats
 
@@ -202,7 +207,7 @@ def get_line_cov_rate(cov_file_path=COV_FILE):
         logging.warning(f"Error in get_line_cov_rate: {e}")
         return False
 
-def remove_func(file_path=UT_FILE):
+def remove_func(file_path=UT_FILE, function_name="def test_append_file("):
     """
     Remove test_append_file function from the specified test file.
     """
@@ -217,7 +222,7 @@ def remove_func(file_path=UT_FILE):
 
         for i, line in enumerate(lines):
             # Look for function definition
-            if line.strip().startswith('def test_append_file('):
+            if line.strip().startswith(function_name):
                 start_idx = i
                 # Find the end of function (first non-indented line after start)
                 for j in range(i + 1, len(lines)):
@@ -243,7 +248,7 @@ def remove_func(file_path=UT_FILE):
         return False
 
     except Exception as e:
-        print(f"Error: File not found at {file_path}")
+        print(f"Error: File not found at {file_path}, {e}")
         return False
 
 def checkpoint1(path=REPO_DIR):
@@ -260,48 +265,22 @@ def checkpoint4(path=UT_FILE, function_name='test_append_file'):
 
 def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     before_stats = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path)
+    if not before_stats:
+        return False
 
     before_cov_rate = get_line_cov_rate(cov_file_path)
     if not before_cov_rate:
         return False
 
-    test_function = '''
-    def test_append_file(tmp_path):
-        temp_file_path = tmp_path / 'a.txt'
-        content = 'Line 1\\nLine 2'
-        temp_file_path.write_text(content)
-
-        open_file(str(temp_file_path))
-
-        with io.StringIO() as buf:
-            with contextlib.redirect_stdout(buf):
-                append_file(str(temp_file_path), content='APPENDED TEXT')
-            result = buf.getvalue()
-            expected = (
-                f'[File: {temp_file_path} (3 lines total after edit)]\\n'
-                '(this is the beginning of the file)\\n'
-                '1|Line 1\\n'
-                '2|Line 2\\n'
-                '3|APPENDED TEXT\\n'
-                '(this is the end of the file)\\n'
-                + MSG_FILE_UPDATED.format(line_number=2)
-                + '\\n'
-            )
-            assert result.split('\\n') == expected.split('\\n')
-
-        with open(temp_file_path, 'r') as file:
-            lines = file.readlines()
-        assert len(lines) == 3
-        assert lines[0].rstrip() == 'Line 1'
-        assert lines[1].rstrip() == 'Line 2'
-        assert lines[2].rstrip() == 'APPENDED TEXT'
-    '''
-    with open(ut_file_path, 'a') as file:
-        file.write(test_function)
+    remove_func(file_path=UT_FILE, function_name="def test_append_file(")
 
     after_stats = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path)
+    if not after_stats:
+        return False
 
-    before_stats['passed'] = before_stats['passed']+1
+    before_stats['passed'] = before_stats['passed']-1
+    before_stats['total'] = before_stats['total']-1
+
     if after_stats != before_stats:
         return False
 
@@ -309,7 +288,7 @@ def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     if not after_cov_rate:
         return False
 
-    return True if after_cov_rate>before_cov_rate else False
+    return True if after_cov_rate<before_cov_rate else False
 
 def calculate_total_score():
     # Define the scores corresponding to when each function is True
@@ -331,7 +310,5 @@ def calculate_total_score():
 
 
 # compute the total point
-# total = calculate_total_score()
-# print(f"\ntotal point is: {total}")
-
-remove_func()
+total = calculate_total_score()
+print(f"\ntotal point is: {total}")
