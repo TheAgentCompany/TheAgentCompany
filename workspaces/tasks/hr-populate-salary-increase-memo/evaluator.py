@@ -9,7 +9,6 @@ from odf.text import P
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
@@ -25,41 +24,51 @@ def grade_checkpoint2():
 
     score = 0
 
-    if file_exists_in_directory(file_name, dir_name):
-        score += 1
-    else:
+    try: 
+        if file_exists_in_directory(file_name, dir_name):
+            score += 1
+        else:
+            return 0
+    except Exception as e:
+        print(f"Error: {e}")
         return 0
 
-    binary_content = get_binary_file_content(file_name, dir_name)
+    try: 
+        binary_content = get_binary_file_content(file_name, dir_name)
 
-    if binary_content:
-        text_content = extract_text_from_odt(binary_content)
+        if binary_content:
+            text_content = extract_text_from_odt(binary_content)
 
-        keywords = ["name", "email", "salary amount", "assignment start and end date"]
+            keywords = ["name", "email", "salary amount", "assignment start and end date"]
 
-        found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
-        print(keyword_score)
-        
-        if found_keywords:
-            print(f"Keywords found in the document: {', '.join(found_keywords)}")
-            score += keyword_score
+            found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
+            print(keyword_score)
+            
+            if found_keywords:
+                print(f"Keywords found in the document: {', '.join(found_keywords)}")
+                score += keyword_score
 
-        return score
-    else:
-        print("Failed to retrieve file content.")
+            return score
+        return 0
+    except Exception as e:
+        print(f"Error: {e}")
         return 0
     
 
 def grade_checkpoint3():
     dir_name = "Documents/Human%20Resources%20Team/salary_increase_notice"
     score = 0
-    if not directory_exists(dir_name):
-        print(f"Directory '{dir_name}' not found.")
+    try: 
+        if not directory_exists(dir_name):
+            print(f"Directory '{dir_name}' not found.")
+            return 0
+        else:
+            print(f"Directory '{dir_name}' found.")
+            score += 1
+    except Exception as e:
+        print(f"Error: {e}") 
         return 0
-    else:
-        print(f"Directory '{dir_name}' found.")
-        score += 1
-
+    
     file_count = count_files_in_directory(dir_name)
     if file_count == 10:
         print(f"Directory '{dir_name}' contains 10 files.")
