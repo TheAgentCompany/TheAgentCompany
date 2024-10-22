@@ -40,7 +40,9 @@ def grade_checkpoint2():
                 if issue.get('name') in required_issues:
                     found_issues.add(issue.get('name'))
             return len(found_issues) == len(required_issues)
-        return False
+        else:
+            logging.warning(f"Invalid response: {response.json()}")
+            return False
     except Exception as e:
         logging.warning(f"Error getting issues: {e}")
         return False
