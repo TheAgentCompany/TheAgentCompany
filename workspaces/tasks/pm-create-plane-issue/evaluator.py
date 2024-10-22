@@ -17,7 +17,11 @@ headers = {
 def get_project_id(project_identifier):
     """Get the project_id for a specific project by its human identifier."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    response = requests.request("GET", url, headers=headers)
+    try:
+        response = requests.request("GET", url, headers=headers)
+    except requests.RequestException as e:
+        logging.warning(f"Error getting project id: {e}")
+        return None
     if response.status_code == 200:
         resp = response.json()
         for project in resp["results"]:
@@ -31,11 +35,15 @@ def grade_checkpoint1(trajectory, project_id):
 
 def grade_checkpoint2(project_id):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.request("GET", url, headers=headers)
+    try:
+        response = requests.request("GET", url, headers=headers)
+    except requests.RequestException as e:
+        logging.warning(f"Error getting issues: {e}")
+        return False
 
     if response.status_code == 200:
         resp = response.json()
-        for issue in resp["results"]:
+        for issue in resp.get("results", []):
             if issue.get('name').lower() == "Improve page loading speed".lower():
                 return True
     return False

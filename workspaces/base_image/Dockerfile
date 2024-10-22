@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y iputils-ping
 RUN mkdir -p /utils
 COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
+COPY common.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -52,7 +53,6 @@ ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
 ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
 ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
 ENV PYTHONPATH="/utils:$PYTHONPATH"
-COPY llm_evaluator.py /utils
 #############################################################
 
 ################## ONBUILD (child images) SETUP #############

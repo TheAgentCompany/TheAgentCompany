@@ -1,23 +1,8 @@
-import os
-from rocketchat_API.rocketchat import RocketChat
-
-from llm_evaluator import *
-
-############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-
-
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
+from common import create_rocketchat_client
+from common import llm_evaluate
 
 # Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
@@ -47,7 +32,7 @@ def check_final_feedback(username: str):
 
     messages = [{"content": f"Does the phrase \"\"{msg}\"\" indicate the person receiving the feedback had an average job performance? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     # Check result
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     print(llm_resonse)
 
     if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():

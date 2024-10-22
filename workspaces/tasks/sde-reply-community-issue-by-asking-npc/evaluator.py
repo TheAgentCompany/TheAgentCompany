@@ -5,7 +5,7 @@ from rocketchat_API.rocketchat import RocketChat
 import urllib.parse
 import logging
 
-from llm_evaluator import *
+from common import llm_evaluate
 
 # Configuration for rocketchat
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
@@ -14,7 +14,10 @@ ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASSWORD = 'jobbench'
 
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 # Configuration for gitlab
 base_url = "http://the-agent-company.com:8929/api/v4"
@@ -32,7 +35,7 @@ def get_gitlab_issue_notes():
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
-        return {}
+        return []
 
 def get_history(username):
     id = ""
@@ -60,7 +63,7 @@ def check_with_llm(msgs, target, expect_result):
             "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
 
     if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
         return True
@@ -97,11 +100,15 @@ def checkpoint4(username='mike_chen'):
     msgs = get_history(username=username)
 
     issue_notes = get_gitlab_issue_notes()
+    target = None
     if issue_notes:
         for issue_note in issue_notes:
             if issue_note.get('id') not in [127283, 127284, 127285]:
                 target = issue_note.get('body')
     else:
+        return False
+
+    if target is None:
         return False
 
     return check_with_llm(
