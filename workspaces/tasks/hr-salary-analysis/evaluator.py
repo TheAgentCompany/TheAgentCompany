@@ -31,34 +31,40 @@ def calculate_salary_statistics(file_path):
 def grade_checkpoint2():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
-
-    score = 0
-
-    if file_exists_in_directory(file_name, dir_name):
-        return 1
-    else:
+    try: 
+        if file_exists_in_directory(file_name, dir_name):
+            return 1
+        else:
+            return 0
+    except Exception as e:
+        print(f"Error: {e}")
         return 0
     
 def grade_checkpoint3():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
 
-    binary_content = get_binary_file_content(file_name, dir_name)
+    try:
+        binary_content = get_binary_file_content(file_name, dir_name)
 
-    if binary_content:
-        text_content = extract_text_from_odt(binary_content)
+        if binary_content:
+            text_content = extract_text_from_odt(binary_content)
 
-        keywords = calculate_salary_statistics("./salary.txt")
-        print(f"Keywords: {keywords}")
+            keywords = calculate_salary_statistics("./salary.txt")
+            print(f"Keywords: {keywords}")
+            
+            found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
+            
+            if found_keywords:
+                print(f"Keywords found in the document: {', '.join(found_keywords)}")
+            
+            return keyword_score
+        else:
+            return 0
         
-        found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
-        
-        if found_keywords:
-            print(f"Keywords found in the document: {', '.join(found_keywords)}")
-        
-        return keyword_score
-    else:
+    except Exception as e:
         print("Failed to retrieve file content.")
+        print(f"Error: {e}")
         return 0
     
 
