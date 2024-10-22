@@ -150,5 +150,7 @@ if __name__ == "__main__":
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
     passed3 = grade_checkpoint3()
+    if passed2 or passed3:
+        passed1 = 1
     points = sum([passed1, passed2, passed3])
     print(f"Final points for task Salary Analysis: {points}")
