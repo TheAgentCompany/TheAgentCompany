@@ -1,4 +1,3 @@
-
 Name,Salary,Email
 John Doe,Software Developer,85000,johndoe@theagentcompany.com
 Jane Smith,Project Manager,90000,janesmith@theagentcompany.com
@@ -10,4 +9,3 @@ David Wilson,Web Developer,80000,davidwilson@theagentcompany.com
 Sarah Miller,Product Owner,95000,sarahmiller@theagentcompany.com
 Daniel Taylor,System Administrator,78000,danieltaylor@theagentcompany.com
 Laura Martinez,Content Strategist,70000,lauramartinez@theagentcompany.com
-

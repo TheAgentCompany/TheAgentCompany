@@ -1,1 +1,2 @@
+Navigate to Nextcloud at https://ogma.lti.cs.cmu.edu/apps/dashboard.
 Use the provided salary.txt spreadsheet on Nextcloud's "Human Resources Team" folder to identify trends such as average salary by department, highest and lowest salaries, and median salaries across roles. Save the report as "Salary_Analysis_Report" in the same folder.
