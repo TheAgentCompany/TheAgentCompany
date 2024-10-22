@@ -2,7 +2,11 @@ import os
 import requests
 import json
 import logging
-from rocketchat_API.rocketchat import RocketChat
+
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Initialization Variables #####################################
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -11,9 +15,6 @@ CHANNEL_NAME = "sprint-planning"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
-
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 ############################# Logging Setup #####################################  
 logging.basicConfig(level=logging.INFO,    
@@ -89,7 +90,7 @@ def create_channel(channel_name):
         return None
 
 def post_message(user_credentials, channel_id, message):
-    user_rocket = RocketChat(user_credentials['username'], user_credentials['password'], server_url=ROCKETCHAT_URL)
+    user_rocket = create_rocketchat_client(user_credentials['username'], user_credentials['password'])
     response = user_rocket.chat_post_message(message, room_id=channel_id).json()
     if response.get('success'):
         logger.info(f"Message posted to channel by {user_credentials['username']}.")

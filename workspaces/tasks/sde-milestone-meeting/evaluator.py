@@ -12,7 +12,10 @@ ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
 ADMIN_USERNAME = 'jobbench'
 ADMIN_PASS = 'jobbench'
 
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     urls = [f"http://the-agent-company.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
@@ -22,7 +25,11 @@ def grade_checkpoint1(trajectory):
 def grade_checkpoint2():
     url = f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests/4657"
 
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.RequestException as e:
+        logging.error(f"Error fetching PR: {e}")
+        return False
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -31,7 +38,7 @@ def grade_checkpoint2():
             if element and element['data-state'] == "merged":
                 return True
     else:
-        print(f"Failed to fetch the webpage: {response.status_code}")
+        logging.error(f"Failed to fetch the webpage: {response.status_code}")
 
     return False
 
