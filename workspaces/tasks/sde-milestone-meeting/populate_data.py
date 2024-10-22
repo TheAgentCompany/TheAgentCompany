@@ -10,8 +10,6 @@ HOSTNAME = os.getenv('HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
 from common import create_rocketchat_client
 
