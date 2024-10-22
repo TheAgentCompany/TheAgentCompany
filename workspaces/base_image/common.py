@@ -54,3 +54,19 @@ def create_rocketchat_client(username='jobbench', password='jobbench'):
             return MockRocketChatClient()
         else:
             raise
+
+
+def get_chat_history(rocket, username: str):
+    id = ""
+    for item in rocket.users_list().json()['users']:
+        if item['nameInsensitive'] == username.lower():
+            id = item["_id"]
+            break
+    msgs = rocket.im_history(room_id=id).json()['messages']
+    for msg in msgs[::-1]:
+        print(f"{username}'s chat: {msg['msg']}")
+
+    if len(msgs)>0:
+        return True, msg
+    else:
+        return False, None
