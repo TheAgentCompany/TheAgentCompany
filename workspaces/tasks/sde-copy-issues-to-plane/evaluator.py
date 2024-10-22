@@ -3,7 +3,6 @@ import sys
 import logging
 import requests
 
-logging.basicConfig(level=logging.INFO)
 
 ############################# init variable #####################################
 HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
