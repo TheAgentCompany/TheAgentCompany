@@ -9,7 +9,7 @@ import astor
 import re
 
 REPO_DIR = '/workspace/openhands/'
-UT_FILE = '/workspace/openhands/tests/unit/test_agent_skill.py'
+UT_FILE = '/Users/bytedance/code_ex/TheAgentCompany/workspaces/OpenHands/tests/unit/test_agent_skill.py' #'/workspace/openhands/tests/unit/test_agent_skill.py'
 COV_FILE = '/workspace/openhands/tests/unit/test_agent_skill_coverage.xml'
 
 def config_env(dir_path):
@@ -184,7 +184,6 @@ def run_pytest_with_stats(cov_file_path, ut_file_path):
 
     return stats
 
-
 def get_line_cov_rate(cov_file_path=COV_FILE):
     """
     Extract coverage information for file_ops.py from coverage XML report.
@@ -203,6 +202,49 @@ def get_line_cov_rate(cov_file_path=COV_FILE):
         logging.warning(f"Error in get_line_cov_rate: {e}")
         return False
 
+def remove_func(file_path=UT_FILE):
+    """
+    Remove test_append_file function from the specified test file.
+    """
+    try:
+        # Read all lines from file
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        # Find function boundaries
+        start_idx = None
+        end_idx = None
+
+        for i, line in enumerate(lines):
+            # Look for function definition
+            if line.strip().startswith('def test_append_file('):
+                start_idx = i
+                # Find the end of function (first non-indented line after start)
+                for j in range(i + 1, len(lines)):
+                    if lines[j].strip() and not lines[j].startswith(' '):
+                        end_idx = j
+                        break
+                if end_idx is None:  # If function extends to end of file
+                    end_idx = len(lines)
+                break
+
+        if start_idx is not None:
+            # Remove the function
+            del lines[start_idx:end_idx]
+
+            # Write back to file
+            with open(file_path, 'w') as file:
+                file.writelines(lines)
+
+            print(f"Successfully removed test_append_file function")
+            return True
+
+        print("Function test_append_file not found in file")
+        return False
+
+    except Exception as e:
+        print(f"Error: File not found at {file_path}")
+        return False
 
 def checkpoint1(path=REPO_DIR):
     return is_repo_exit(dir_path=path)
@@ -289,5 +331,7 @@ def calculate_total_score():
 
 
 # compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+# total = calculate_total_score()
+# print(f"\ntotal point is: {total}")
+
+remove_func()
