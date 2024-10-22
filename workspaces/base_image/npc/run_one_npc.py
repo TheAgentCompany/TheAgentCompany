@@ -2,7 +2,7 @@ import asyncio
 from server import run_server
 import argparse
 import logging
-
+import os
 FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 logging.basicConfig(
     level=15,
@@ -12,6 +12,10 @@ logging.basicConfig(
         logging.StreamHandler(),
     ],
 ) 
+
+os.environ['CUSTOM_API_KEY'] = os.getenv('LITELLM_API_KEY')
+BASE_URL = os.getenv('LITELLM_BASE_URL')
+MODEL_NAME = os.getenv('LITELLM_MODEL')
 
 def main():
     # Use argparse to capture command-line arguments
@@ -28,7 +32,7 @@ def main():
             model_dict={
                 "env": "gpt-4-turbo",
                 "agent1": "rocketchat",
-                "agent2": "gpt-4-turbo",
+                "agent2": f"custom/{MODEL_NAME}@{BASE_URL}",
             },
             # Agent Roles are uesless here.
             agents_roles={
