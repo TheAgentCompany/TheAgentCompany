@@ -10,6 +10,7 @@ PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
 PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
+# TODO: can we make the API key fixed
 API_KEY = os.getenv('PLANE_API')
 headers = {
     "x-api-key": API_KEY,
