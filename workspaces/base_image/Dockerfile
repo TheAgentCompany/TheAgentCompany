@@ -30,7 +30,7 @@ RUN pip install requests
 
 # Install Python libraries needed to launch NPCs
 RUN pip install rocketchat_API==1.32.0
-RUN pip install sotopia==0.1.0-rc.1
+RUN pip install sotopia==0.1.2
 # sotopia requires a specific hiredis version
 RUN pip install hiredis==3.0.0
 RUN pip install litellm==1.23.16
