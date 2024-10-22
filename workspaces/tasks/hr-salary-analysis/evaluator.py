@@ -14,7 +14,7 @@ NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
 def grade_checkpoint1(trajectory):
-    urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team&openfile=true"]
+    urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
     return any(url in trajectory for url in urls)
 
 
