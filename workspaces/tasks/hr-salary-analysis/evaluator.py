@@ -10,7 +10,6 @@ from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 import pandas as pd
 
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
@@ -29,16 +28,20 @@ def calculate_salary_statistics(file_path):
     return [average_salary, highest_salary, lowest_salary, median_salary]
 
 
-def grade_checkpoint2_3():
+def grade_checkpoint2():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
 
     score = 0
 
     if file_exists_in_directory(file_name, dir_name):
-        score += 1
+        return 1
     else:
         return 0
+    
+def grade_checkpoint3():
+    file_name = "Salary_Analysis_Report.odt"
+    dir_name = "Documents/Human%20Resources%20Team"
 
     binary_content = get_binary_file_content(file_name, dir_name)
 
@@ -52,9 +55,8 @@ def grade_checkpoint2_3():
         
         if found_keywords:
             print(f"Keywords found in the document: {', '.join(found_keywords)}")
-            score += keyword_score
-
-        return score
+        
+        return keyword_score
     else:
         print("Failed to retrieve file content.")
         return 0
@@ -140,6 +142,7 @@ if __name__ == "__main__":
             exit(1)
 
     passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2_3()
-    points = sum([passed1, passed2])
+    passed2 = grade_checkpoint2()
+    passed3 = grade_checkpoint3()
+    points = sum([passed1, passed2, passed3])
     print(f"Final points for task Salary Analysis: {points}")
