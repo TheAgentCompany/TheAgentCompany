@@ -129,33 +129,16 @@ def is_repo_exit(dir_path):
 
     return is_file_exist(instruction_file_path)
 
-def is_test_run(file_path, function_name):
-    """
-    Run a specific test function using pytest and check if it was successful.
-    """
-    # run test
-    try:
-        command = [sys.executable, "-m", "pytest", f"{file_path}::{function_name}", "-v"]
-
-        result = subprocess.run(command, capture_output=True, text=True)
-
-        if result.returncode == 0 and f"{function_name} PASSED" in result.stdout:
-            return True
-        else:
-            logging.warning(f"{result.stdout}")
-            logging.warning(f"is_test_run: {result.stderr}")
-            return False
-
-    except Exception as e:
-        logging.warning(f"An error occurred while running the test: {e}")
-        return False
-
-def run_pytest_with_stats(cov_file_path, ut_file_path):
+def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
     """
     Run pytest and collect test statistics.
     """
     try:
-        command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}"
+        if function_name:
+            command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}::{function_name}"
+        else:
+            command = f"poetry run pytest --forked --cov=openhands --cov-report=xml:{cov_file_path} -svv {ut_file_path}"
+
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
         # Parse test statistics
@@ -260,8 +243,12 @@ def checkpoint2(path=UT_FILE):
 def checkpoint3(path=UT_FILE, function_name='test_append_file'):
     return is_function_exists(file_path=path, function_name=function_name)
 
-def checkpoint4(path=UT_FILE, function_name='test_append_file'):
-    return is_test_run(file_path=path, function_name=function_name)
+def checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
+    status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
+    if not status:
+        return False
+
+    return True if status['passed']==1 else False
 
 def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     before_stats = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path)
