@@ -1,4 +1,4 @@
-from llm_evaluator import *
+from common import llm_evaluate
 import subprocess
 import re
 
