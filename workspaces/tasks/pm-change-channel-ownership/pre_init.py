@@ -1,19 +1,12 @@
 import os
-import subprocess
-import requests
 import logging
-from rocketchat_API.rocketchat import RocketChat
+from common import create_rocketchat_client
 
 ############################# init variable ##################################### 
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "general"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# util function #####################################  
 # Set up logging
@@ -42,7 +35,7 @@ def find_channel(channel_name):
 
 def check_channel_exists(channel_name):
     channels = rocket.channels_list().json()
-    channel_names = channels.get("channels")
+    channel_names = channels.get("channels", [])
     return any(current_channel['name'] == channel_name for current_channel in channel_names)
 
 def send_message(channel_name, message):
@@ -82,7 +75,7 @@ def add_user_to_channel(channel_name, username):
 
 def check_user_role(username, role):
     roles = rocket.roles_get_users_in_role(role).json()
-    users_list = roles.get("users")
+    users_list = roles.get("users", [])
     return any(user['username'] == username for user in users_list)
 
 

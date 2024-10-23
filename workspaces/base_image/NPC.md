@@ -4,7 +4,19 @@
 
 * Make sure you are using the latest main branch.
 * Navigate to the [base image folder](../base_image/).
-* Replace `ENV OPENAI_API_KEY <YOUR OPENAI KEY>` with your OpenAI API key in the `Dockerfile`. Currently, only OpenAI models are supported, with the default model being `gpt-4-turbo`.
+* Set the following environment variables:
+```
+ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
+ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
+ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
+```
+A good example is:
+```
+ENV LITELLM_API_KEY <YOUR OPENAI API KEY>
+ENV LITELLM_BASE_URL https://api.openai.com/v1
+ENV LITELLM_MODEL gpt-4o
+```
+
 * Run `make build` in the base image folder.
 
 ## Build Your Task Image
@@ -43,7 +55,7 @@ root@299afff5d411:/utils# sh init.sh
 + grep PING
 + awk -F[()] {print $2}
 + SERVICE_IP=
-+ echo  theagentcompany.com
++ echo  the-agent-company.com
 + [ -f /utils/pre_init.py ]
 + [ -f /npc/scenarios.json ]
 + python_default /npc/run_multi_npc.py

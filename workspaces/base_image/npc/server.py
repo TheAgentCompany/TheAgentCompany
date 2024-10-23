@@ -148,33 +148,31 @@ async def run_server(
         "agent2": model_dict["agent2"],
     }
 
-    def get_agent_class(
-        model_name: str,
-        agent_role: str,
-    ) -> Type[BaseAgent[Observation, AgentAction]]:
-        if model_name == "rocketchat":
-            return RocketChatAgent
-        else:
-            return HumanUserAgent
-
     if env_agent_combo_list:
         assert (
             type(sampler) is BaseSampler
         ), "No sampler should be used when `env_agent_combo_list` is not empty"
         env_agent_combo_iter = iter(env_agent_combo_list)
     else:
+        agent_classes = []
+        agents_params = []
+        
+        for model_name, agent_role in zip(agents_model_dict.values(), agents_roles.values()):
+            if model_name == "rocketchat":
+                agent_classes.append(RocketChatAgent)
+                agents_params.append({"credential_name": agent_name})
+            else:
+                agent_classes.append(HumanUserAgent)
+                agents_params.append({"model_name": model_name})
+        
         env_agent_combo_iter = sampler.sample(
-            agent_classes=[
-                get_agent_class(model_name, agents_role) for model_name, agents_role in zip(agents_model_dict.values(), agents_roles.values())
-            ],
+            agent_classes=agent_classes,
             n_agent=len(agents_model_dict),
             env_params=env_params,
-            agents_params=[
-                {"model_name": model_name} if model_name != "rocketchat"  else {"credential_name": agent_name}
-                for model_name in agents_model_dict.values()
-            ],
-            agent_name = agent_name,
+            agents_params=agents_params,
+            agent_name=agent_name,
         )
+
     episode_futures = [
         arun_one_episode(
             env=env_agent_combo[0],

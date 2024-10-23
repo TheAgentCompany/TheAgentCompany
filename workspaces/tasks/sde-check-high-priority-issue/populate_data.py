@@ -10,11 +10,11 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# util function #####################################  
 # Set up logging
@@ -50,7 +50,7 @@ def create_user():
 
 def check_channel_exists(channel_name):
     channels = rocket.channels_list().json()
-    channel_names = channels.get("channels")
+    channel_names = channels.get("channels", [])
     return any(current_channel['name'] == channel_name for current_channel in channel_names)
 
 

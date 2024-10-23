@@ -1,5 +1,4 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
 
 import sys
 import logging
@@ -12,15 +11,15 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
 GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
@@ -43,7 +42,7 @@ def check_project_distributed():
     members = get_database_members()
 
     for member in members:
-        msgs = rocket.im_history(room_id=member['_id']).json()['messages']
+        msgs = rocket.im_history(room_id=member['_id']).json().get('messages', [])
         msg_log = ""
         for msg in msgs[::-1]:
             print(f"{member['username']}'s chat: {msg['msg']}")

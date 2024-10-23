@@ -1,16 +1,12 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
+from common import create_rocketchat_client
 
-# Rocket.Chat server URL and admin credentials
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def check_url_1(browser_logs):
     return f"{ROCKETCHAT_URL}/home" in browser_logs
@@ -27,7 +23,7 @@ def get_channel_room_id(channel_name):
 
 def check_channel_exists(channel_name):
     channels = rocket.channels_list().json()
-    channel_names = channels.get("channels")
+    channel_names = channels.get("channels", [])
     return any(current_channel['name'] == channel_name for current_channel in channel_names)
 
 def check_user_added(channel_name, username):
@@ -36,12 +32,12 @@ def check_user_added(channel_name, username):
         print(f"Failed to find room ID for channel #{channel_name}.")
         return False
     members = rocket.channels_members(channel=channel_name).json()
-    users_list = members.get("members")
+    users_list = members.get("members", [])
     return any(user['username'] == username for user in users_list)
 
 def check_user_role(username, role):
     roles = rocket.roles_get_users_in_role(role).json()
-    users_list = roles.get("users")
+    users_list = roles.get("users", [])
     return any(user['username'] == username for user in users_list)
 
 if __name__ == "__main__":

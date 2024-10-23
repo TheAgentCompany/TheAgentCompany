@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y iputils-ping
 RUN mkdir -p /utils
 COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
+COPY common.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -29,7 +30,7 @@ RUN pip install requests
 
 # Install Python libraries needed to launch NPCs
 RUN pip install rocketchat_API==1.32.0
-RUN pip install sotopia==0.1.0-rc.1
+RUN pip install sotopia==0.1.2
 # sotopia requires a specific hiredis version
 RUN pip install hiredis==3.0.0
 RUN pip install litellm==1.23.16
@@ -41,18 +42,16 @@ COPY ./npc  /npc
 ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
 
-# For rocketchat NPC sotopia
-ENV OPENAI_API_KEY <YOUR OPENAI KEY>
+################## rocketchat NPC sotopia SETUP ######################
 ENV REDIS_OM_URL redis://default:jobbench@the-agent-company.com/:6379
 ENV BOT_URL http://the-agent-company.com:3000
 #############################################################
 
-################## LLM Evaluator SETUP ######################
+################## LLM Evaluator/rocketchat NPC SETUP ###############
 ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
 ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
 ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
 ENV PYTHONPATH="/utils:$PYTHONPATH"
-COPY llm_evaluator.py /utils
 #############################################################
 
 ################## ONBUILD (child images) SETUP #############
