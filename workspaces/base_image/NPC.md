@@ -14,7 +14,7 @@ A good example is:
 ```
 ENV LITELLM_API_KEY <YOUR OPENAI API KEY>
 ENV LITELLM_BASE_URL https://api.openai.com/v1
-ENV LITELLM_MODEL gpt-4-turbo
+ENV LITELLM_MODEL gpt-4o
 ```
 
 * Run `make build` in the base image folder.
