@@ -20,7 +20,12 @@ def check_trajectory(trajectory):
     return f"{GITLAB_URL}/bustub/-/issues/759" in trajectory
 
 def test_wiki():
-    response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project") 
+    try:
+        response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project") 
+    except requests.RequestException as e:
+        logging.error(f"Error fetching wiki: {e}")
+        return False
+
     if response.status_code != 200:
         print("wiki page not successfully created")
         return False
@@ -34,8 +39,8 @@ def check_key_contents():
     
     try:
         response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
-    except Exception as e:
-        print("Unable to access the new wiki page due to exception ", e)
+    except requests.RequestException as e:
+        logging.error(f"Error fetching wiki: {e}")
         return False
     
     return all(item in response for item in key_words) and \

@@ -30,8 +30,10 @@ headers = {
     "Content-Type": "application/json"
 }
 
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
