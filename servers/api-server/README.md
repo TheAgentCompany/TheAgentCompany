@@ -1,6 +1,6 @@
 # API SERVER
 
-Remeber to do `/etc/host` change in [here](../README.md). Or you need to replace all `the-agent-company.com` with `ogma.lti.cs.cmu.edu` in the following commands.
+Remember to do `/etc/host` change as mentioned [here](../README.md). Alternatively, you need to replace all `the-agent-company.com` with `ogma.lti.cs.cmu.edu` in the following commands.
 
 ```bash
 # Get nextcloud login password
