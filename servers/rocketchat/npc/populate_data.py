@@ -8,7 +8,7 @@ import redis
 class NPCDefinition(AgentProfile):
     slack_channels: str = Field(index=False, default_factory=lambda: "")
 
-def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retries=3000, delay=1):
+def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retries=300, delay=1):
     client = redis.StrictRedis(host=host, port=port, password=password)
     
     for attempt in range(retries):
