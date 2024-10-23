@@ -283,9 +283,9 @@ def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
 def calculate_total_score():
     # Define the scores corresponding to when each function is True
     scores = {
-        # checkpoint1: 1,
-        # checkpoint2: 1,
-        # checkpoint3: 1,
+        checkpoint1: 1,
+        checkpoint2: 1,
+        checkpoint3: 1,
         checkpoint4: 2,
         checkpoint5: 1
     }
