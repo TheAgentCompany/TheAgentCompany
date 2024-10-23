@@ -12,10 +12,6 @@ ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 # Construct RocketChat URL
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-# Set admin credentials
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASSWORD = 'jobbench'
-
 from common import create_rocketchat_client
 
 # Create RocketChat instance
