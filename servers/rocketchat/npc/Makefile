@@ -1,10 +1,10 @@
-IMAGE_NAME=job-bench-rocketchat-npc-populate-data
-CONTAINER_NAME=job-bench-rocketchat-npc-populate-data
+IMAGE_NAME=rocketchat-npc-populate-data
+CONTAINER_NAME=rocketchat-npc-populate-data
 
 .PHONY: build run
 
 build:
-	docker build -t $(IMAGE_NAME) .
+	docker build -t $(IMAGE_NAME) . --no-cache
 
 run:
 	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
