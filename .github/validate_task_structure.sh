@@ -72,7 +72,9 @@ for task_dir in *; do
     exit 1
   fi
 
-  poetry run python ../../../.github/validate_dependencies.py "dependencies.yml"
+  # self-hosted runner doesn't have poetry environment
+  # poetry run python ../../../.github/validate_dependencies.py "dependencies.yml"
+  python ../../../.github/validate_dependencies.py "dependencies.yml"
 
   cd -
 done
