@@ -1,3 +1,4 @@
+import os
 # In test mode, we use mock servers and mock LLM responses
 TEST_MODE = os.environ.get('TAC_TEST_MODE', False)
 
