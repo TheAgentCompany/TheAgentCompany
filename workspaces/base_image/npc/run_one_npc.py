@@ -30,7 +30,7 @@ def main():
             # The agent2 is the sotopia NPC
             # This should match the profile and goals order
             model_dict={
-                "env": "gpt-4o",
+                "env": "gpt-4",
                 "agent1": "rocketchat",
                 "agent2": f"custom/{MODEL_NAME}@{BASE_URL}",
             },
