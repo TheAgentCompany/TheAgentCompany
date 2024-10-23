@@ -13,8 +13,6 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
 base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/new-storage-project"
