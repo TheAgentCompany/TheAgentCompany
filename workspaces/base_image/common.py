@@ -2,7 +2,7 @@ import os
 import logging
 import litellm
 from rocketchat_API.rocketchat import RocketChat
-from const import *
+from config import *
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]

@@ -4,7 +4,7 @@ import json
 import logging
 
 from common import create_rocketchat_client
-from const import *
+from config import *
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()

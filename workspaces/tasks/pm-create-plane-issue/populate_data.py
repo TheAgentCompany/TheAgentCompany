@@ -1,7 +1,7 @@
 import os
 import requests
 import logging
-from const import *
+from config import *
 ############################# init variable ##################################### 
 HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'

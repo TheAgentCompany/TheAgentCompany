@@ -2,7 +2,7 @@ import os
 import requests
 from rocketchat_API.rocketchat import RocketChat
 from datetime import datetime, timezone
-from const import *
+from config import *
 ############################# Init Variables #####################################
 # Rocket.Chat variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com' 

@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 import requests
-from const import *
+from config import *
 
 ############################# init variable #####################################
 HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'

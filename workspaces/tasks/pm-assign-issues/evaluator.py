@@ -1,7 +1,7 @@
 import os
 import requests
 from common import create_rocketchat_client
-from const import *
+from config import *
 
 ############################# Init Variables #####################################
 # Create RocketChat instance
