@@ -147,7 +147,7 @@ def populate_channel():
     # Define user credentials
     users = [
         {'name': 'John Doe', 'password': 'John.Doe', 'email': 'John.Doe@cmu.edu.com', 'username': 'John.Doe'},
-        {'name': 'Rocket Cat', 'password': 'jobbench', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
+        {'name': 'Rocket Cat', 'password': 'theagentcompany', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
     ]
 
     user_credentials_list = []

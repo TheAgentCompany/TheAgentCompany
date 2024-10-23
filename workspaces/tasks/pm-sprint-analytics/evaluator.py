@@ -89,7 +89,7 @@ def check_summary_posted(channel_name, required_keywords):
     print(f"Checking last {len(messages)} messages in #{channel_name}")
     
     for message in messages:
-        if message['u']['username'] == 'jobbench':  # Adjust this to the expected username
+        if message['u']['username'] == 'theagentcompany':  # Adjust this to the expected username
             msg_content = message['msg'].lower()
             if all(keyword.lower() in msg_content for keyword in required_keywords):
                 print(f"Summary found in #{channel_name}")

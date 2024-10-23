@@ -27,8 +27,8 @@ Below are the addresses, usernames, and passwords for each service:
 
 ## RocketChat
 * http://ogma.lti.cs.cmu.edu:3000/
-* email: jobbench
-* password: jobbench
+* email: theagentcompany
+* password: theagentcompany
 
 # Troubleshooting
 

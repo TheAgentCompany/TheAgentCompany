@@ -46,5 +46,5 @@ if __name__ == "__main__":
     print(check_channel_exists("general"))
     test_url_2 = f"{ROCKETCHAT_URL}/channel/general"
     print(check_url_2(f"ACTION: goto('{test_url_2}')"))
-    print(check_user_role("jobbench", "owner"))
+    print(check_user_role("theagentcompany", "owner"))
 

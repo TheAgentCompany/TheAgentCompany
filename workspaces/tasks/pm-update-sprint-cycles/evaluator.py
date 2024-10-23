@@ -170,7 +170,7 @@ def check_notifications_sent(channel_name):
     
     messages = rocket.channels_history(room_id=room_id, count=20).json().get('messages', [])
     for message in messages:
-        if message['u']['username'] == 'jobbench':  # Adjust this to the expected username
+        if message['u']['username'] == 'theagentcompany':  # Adjust this to the expected username
             if 'has been moved to the next sprint' in message['msg']:
                 return True
     return False
