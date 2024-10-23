@@ -1,4 +1,4 @@
-# API SEVER
+# API SERVER
 
 Remeber to do `/etc/host` change in [here](../README.md). Or you need to replace all `the-agent-company.com` with `ogma.lti.cs.cmu.edu` in the following commands.
 
