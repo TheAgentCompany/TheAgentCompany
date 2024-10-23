@@ -12,7 +12,7 @@ def evaluate_task():
     performance_evaluatee = "Liu Qiang"
 
     for npc in npcs:
-        if get_chat_history(npc):
+        if get_chat_history(rocket, npc):
             points += 1
 
     if evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance"):

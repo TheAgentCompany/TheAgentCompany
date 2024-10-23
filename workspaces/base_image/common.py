@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 
 import litellm
 
@@ -62,7 +63,7 @@ def get_chat_history(rocket_client, username: str):
     1) param username,
     2) and the account used to create rocket client instance
 
-    Returns the messages as a list. If no history, returns an empty list.
+    Returns the messages as a dict. If no history, returns an empty dict.
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
@@ -72,10 +73,11 @@ def get_chat_history(rocket_client, username: str):
 
     if id is None:
         logging.error(f'Cannot fetch chat history for {username}')
-        return []
+        return {}
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    return [] if msgs is None else msgs
+    logging.info(f'Rocketchat history: \n{msgs}')
+    return {} if msgs is None else msgs
 
 
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
@@ -85,7 +87,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     Args:
         rocket_client: RocketChat client instance
         username: The username whose chat history to evaluate
-        predicate: The condition to evaluate against (e.g., "had average job performance")
+        predicate: The condition to evaluate against (e.g., "Liu Qiang had average job performance")
 
     Returns:
         bool: True if the chat history matches the predicate, False otherwise
@@ -93,7 +95,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     Example:
         >>> result = evaluate_chat_history_with_llm(
         ...     rocket_client,
-        ...     "john_doe",
+        ...     "Liu Qiang",
         ...     "the person receiving the feedback had an average job performance"
         ... )
     """
@@ -107,7 +109,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the chat history """{"\n".join(messages)}""" indicate {predicate}? '
+            "content": f'Does the chat history """{json.dumps(messages)}""" indicate {predicate}? '
                       'Please answer "yes" if it does, or "no" if it does not.'
         }]
 
