@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-task-structure:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
@@ -31,7 +31,7 @@ jobs:
         bash .github/validate_task_structure.sh
 
   build-task-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
@@ -54,7 +54,7 @@ jobs:
         done
 
   test-evaluator-basic:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
