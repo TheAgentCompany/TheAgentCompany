@@ -1,4 +1,4 @@
-docker-compose.yml
+docker-compose.yaml
 plane.env
 restore.sh
 setup.sh
