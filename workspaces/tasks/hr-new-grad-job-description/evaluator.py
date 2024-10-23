@@ -20,25 +20,29 @@ def check_url_file_exist():
         return False
 
 def verify_nextcloud_content_exists(link):
-    command = ["curl", "--output", "/workspace/download_link", link.rstrip("\n")]
-    try:
-        subprocess.run(command)
-    except Exception as e:
-        print(f"Unable to download from link: {link}")
-        return False
 
-    pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
+    if "download" not in link:
+        command = ["curl", "--output", "/workspace/download_link", link.rstrip("\n")]
+        try:
+            subprocess.run(command)
+        except Exception as e:
+            print(f"Unable to download from link: {link}")
+            return False
 
-    download_link: str | None = None
-    with open("/workspace/download_link", "r") as f:
-        content = f.read()
-        matches = re.findall(pattern, content, re.MULTILINE)
-        if matches:
-            download_link = matches[0]
-    
-    if download_link is None:
-        print(f"Did not find proper download link")
-        return False
+        pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
+
+        download_link: str | None = None
+        with open("/workspace/download_link", "r") as f:
+            content = f.read()
+            matches = re.findall(pattern, content, re.MULTILINE)
+            if matches:
+                download_link = matches[0]
+        
+        if download_link is None:
+            print(f"Did not find proper download link")
+            return False
+    else:
+        download_link = link.rstrip("\n")
 
     try:
         print(download_link)
