@@ -141,20 +141,20 @@ backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
 
 
-# Redis
-start-redis: init
+# RocketChat Redis
+start-rocketchat-redis: init
 	docker compose up redis-stack -d
 	docker compose up redis-stack-npc-data-population -d
 
-stop-redis:
+stop-rocketchat-redis:
 	docker compose stop redis-stack
 	docker compose stop redis-stack-npc-data-population
 
-rm-redis:
+rm-rocketchat-redis:
 	docker rm servers-redis-stack-1
 	docker rm redis-stack-npc-data-population
 
-attach-redis:
+attach-rocketchat-redis:
 	docker exec -it servers-redis-stack-1 /bin/bash
 
 # Plane
