@@ -39,29 +39,6 @@ jobs:
       run: |
         bash .github/validate_task_structure.sh
 
-  build-task-image:
-    runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build base image
-      run: |
-        cd workspaces/base_image
-        make build
-
-    - name: Build task images
-      run: |
-        for task_dir in workspaces/tasks/*/; do
-          echo "Building in $task_dir"
-          cd "$task_dir"
-          make build
-          cd -
-        done
-
   test-evaluator-basic:
     runs-on: self-hosted
     steps:
