@@ -8,53 +8,42 @@ on:
   push:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-task-structure:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install poetry via pipx
-      run: pipx install poetry
+    # The below steps don't work on self-hosted runners, so we need to temporarily
+    # disable them and avoid using poetry in CI. Once this repository becomes public,
+    # we can enable the below steps again, and use poetry run in validate_task_structure.sh
+    # - name: Install pipx
+    #   run: |
+    #     sudo apt update
+    #     sudo apt install -y pipx
+
+    # - name: Install poetry via pipx
+    #   run: pipx install poetry
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-        cache: 'poetry'
+        # cache: 'poetry'
 
-    - name: Install Python dependencies using Poetry
-      run: poetry install
+    # - name: Install Python dependencies using Poetry
+    #   run: poetry install
 
     - name: Check task structure
       run: |
         bash .github/validate_task_structure.sh
 
-  build-task-image:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build base image
-      run: |
-        cd workspaces/base_image
-        make build
-
-    - name: Build task images
-      run: |
-        for task_dir in workspaces/tasks/*/; do
-          echo "Building in $task_dir"
-          cd "$task_dir"
-          make build
-          cd -
-        done
-
   test-evaluator-basic:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
