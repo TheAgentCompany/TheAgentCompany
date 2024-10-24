@@ -1,5 +1,5 @@
 IMAGE_NAME=pm-monitor-new-bug-issues-image
-CONTAINER_NAME=pm-monitor-new-bug-issues-image
+CONTAINER_NAME=pm-monitor-new-bug-issues
 
 .PHONY: build run stop
 
