@@ -2,6 +2,9 @@ import os
 import logging
 import json
 import litellm
+import urllib
+
+import requests
 from rocketchat_API.rocketchat import RocketChat
 from config import *
 
@@ -125,3 +128,21 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
+
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+    url = f"{BASE_URL}:{GITLAB_PORT}/api/v4"
+
+    if project_identifier:
+        if '/' in project_identifier:
+            project_identifier = urllib.parse.quote(project_identifier, safe='')
+        url = f"{url}/projects/{project_identifier}"
+    
+    if additional_path:
+        url = f"{url}/{additional_path}"
+    
+    try:
+        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        return response
+    except Exception as e:
+        logging.error(f"GitLab API request failed: {e}")
+        return None

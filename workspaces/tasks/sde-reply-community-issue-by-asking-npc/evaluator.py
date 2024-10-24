@@ -1,11 +1,8 @@
 import os
 import sys
-import requests
 from rocketchat_API.rocketchat import RocketChat
-import urllib.parse
 import logging
-
-from common import llm_evaluate
+from common import *
 
 # Configuration for rocketchat
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
@@ -18,18 +15,13 @@ from common import create_rocketchat_client
 rocket = create_rocketchat_client()
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 
 def get_gitlab_issue_notes():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/issues/{issue_id}/notes"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"issues/{issue_id}/notes")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
