@@ -8,14 +8,14 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
+ADMIN_USERNAME = 'theagentcompany'
+ADMIN_PASS = 'theagentcompany'
 
 rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 def grade_checkpoint1(trajectory):
     required_url_parts = [
-        "http://ogma.lti.cs.cmu.edu:8929/root/OpenHands/-/issues/",
+        "http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/issues/",
         "label_name[]=bug",
         "sort=created_date",
         "state=opened",
@@ -42,7 +42,7 @@ def grade_final_checkpoint():
     if not messages:
         return False
     
-    issue_numbers = ['#4166', '#4164', '#4157', '#4158', '#4153', '#4131', '#4127']
+    issue_numbers = ['4166', '4164', '4157', '4158', '4153', '4131', '4127', '4802', '4042', '4017']
     required_info = ['issue', 'title', 'assigned', 'http']
     
     for msg in messages:
