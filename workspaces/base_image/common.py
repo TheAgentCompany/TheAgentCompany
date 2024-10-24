@@ -1,8 +1,9 @@
 import os
 import logging
-import json
 import litellm
+
 from rocketchat_API.rocketchat import RocketChat
+
 from config import *
 
 # messages: a list of message.
@@ -55,7 +56,7 @@ def get_chat_history(rocket_client, username: str):
     1) param username,
     2) and the account used to create rocket client instance
 
-    Returns the messages as a dict. If no history, returns an empty dict.
+    Returns the messages as a list. If no history, returns an empty list.
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
@@ -69,7 +70,7 @@ def get_chat_history(rocket_client, username: str):
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
     logging.info(f'Rocketchat history: \n{msgs}')
-    return {} if msgs is None else msgs
+    return [] if msgs is None else msgs
 
 
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
@@ -101,7 +102,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the chat history """{json.dumps(messages)}""" indicate {predicate}? '
+            "content": f'Does the chat history """{messages}""" indicate {predicate}? '
                       'Please answer "yes" if it does, or "no" if it does not.'
         }]
 
