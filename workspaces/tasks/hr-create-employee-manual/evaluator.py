@@ -63,7 +63,7 @@ def grade_checkpoint3():
         messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         # Check result
-        llm_resonse = llm_evaluator(messages).json()
+        llm_resonse = llm_evaluate(messages).json()
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
             score += 1            
