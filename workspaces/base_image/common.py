@@ -72,7 +72,7 @@ def get_chat_history(rocket_client, username: str):
     return {} if msgs is None else msgs
 
 
-def evaluate_with_llm(content: str, predicate: str):
+def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
     Evaluates if a predicate can be inferred from the content, judged by LLM
     """
@@ -80,7 +80,7 @@ def evaluate_with_llm(content: str, predicate: str):
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the content """{content}""" indicate {predicate}? '
+            "content": f'Does the content """{content}""" indicate {predicate}? {additional_prompt}'
                       'Please answer "yes" if it does, or "no" if it does not.'
         }]
 

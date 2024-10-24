@@ -1,18 +1,9 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
+import logging 
 
-import datetime
-
-from common import llm_evaluate
-
-# Set environment variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-# Construct RocketChat URL
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from common import evaluate_with_llm
 from common import create_rocketchat_client
+from common import get_chat_history
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -41,25 +32,17 @@ def check_final_result(file_path):
         return False
 
     # Read the content of the file and call litellm
+    content = ''
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
-        if len(content) == 0:
-            print("there is no content in the txt")
-            return False
-
-        messages = [{"content": f"Does the phrase \"\"{content}\"\" include any specific day of the week?? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
-
-    # Check result
-    llm_resonse = llm_evaluate(messages)
-    print(llm_resonse)
-
-    if 'no' in llm_resonse['choices'][0]['message']['content'].lower():
-        print("there is not a meeting in this week")
-        return True
-    else:
-        print("there is a meeting in this week")
+    if len(content) == 0:
+        logging.warning("there is no content in the txt")
         return False
+
+    predicate = 'a meeting is scheduled'
+    return evaluate_with_llm(content, predicate)
+
 
 def checkpoint1(username='emily_zhou'):
     return get_history(username=username)
