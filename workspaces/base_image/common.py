@@ -1,12 +1,15 @@
 import os
 import logging
-import json
+
 import litellm
 import urllib
 
 import requests
 from rocketchat_API.rocketchat import RocketChat
+
 from config import *
+
+logging.basicConfig(level=logging.INFO)
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
@@ -58,7 +61,7 @@ def get_chat_history(rocket_client, username: str):
     1) param username,
     2) and the account used to create rocket client instance
 
-    Returns the messages as a dict. If no history, returns an empty dict.
+    Returns the messages as a list. If no history, returns an empty list.
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
@@ -68,11 +71,13 @@ def get_chat_history(rocket_client, username: str):
 
     if id is None:
         logging.error(f'Cannot fetch chat history for {username}')
-        return {}
+        return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    logging.info(f'Rocketchat history: \n{msgs}')
-    return {} if msgs is None else msgs
+    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    history = reversed_history[::-1]
+    logging.info(f'Chat history with {username} is: {history}')
+    return history
 
 
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
@@ -104,20 +109,25 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the chat history """{json.dumps(messages)}""" indicate {predicate}? '
+            "content": f'Does the chat history """{messages}""" indicate {predicate}? '
                       'Please answer "yes" if it does, or "no" if it does not.'
         }]
 
+        logging.debug(f'LLM request is: {llm_messages}')
+
         # Call LLM for evaluation
         llm_response = llm_evaluate(llm_messages)
-        logging.info("LLM evaluation completed", extra={"response": llm_response})
+        logging.info(f"LLM evaluation completed, response is: {llm_response}")
 
         # Extract and process response
         content = llm_response["choices"][0]["message"]["content"].lower().strip()
 
         # Evaluate result
         result = "yes" in content
-        logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        if result:
+            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        else:
+            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
 
         return result
 

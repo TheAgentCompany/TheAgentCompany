@@ -113,7 +113,7 @@ reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm gitlab
+	docker compose rm -f gitlab
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
@@ -141,21 +141,18 @@ backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
 
 
-# Redis
-start-redis: init
-	docker compose up redis-stack -d
-	docker compose up redis-stack-npc-data-population -d
+# Sotopia Redis
+start-sotopia-redis: init
+	docker compose up -d redis-stack redis-stack-npc-data-population
 
-stop-redis:
-	docker compose stop redis-stack
-	docker compose stop redis-stack-npc-data-population
+stop-sotopia-redis:
+	docker compose stop redis-stack redis-stack-npc-data-population
 
-rm-redis:
-	docker rm servers-redis-stack-1
-	docker rm redis-stack-npc-data-population
+rm-sotopia-redis:
+	docker compose rm -f redis-stack redis-stack-npc-data-population
 
-attach-redis:
-	docker exec -it servers-redis-stack-1 /bin/bash
+attach-sotopia-redis:
+	docker exec -it redis-stack /bin/bash
 
 # Plane
 download-plane:
