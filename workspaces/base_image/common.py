@@ -7,7 +7,7 @@ from config import *
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
-def llm_evaluate(messages):
+def llm_complete(messages):
     if TEST_MODE:
         return {'choices': [{'message': {"content": "Hello, how are you?","role": "user"}}]}
 
@@ -72,6 +72,43 @@ def get_chat_history(rocket_client, username: str):
     return {} if msgs is None else msgs
 
 
+def evaluate_with_llm(content: str, predicate: str):
+    """
+    Evaluates if a predicate can be inferred from the content, judged by LLM
+    """
+    try:
+        # Construct LLM query
+        llm_messages = [{
+            "role": "user",
+            "content": f'Does the content """{content}""" indicate {predicate}? '
+                      'Please answer "yes" if it does, or "no" if it does not.'
+        }]
+
+        # Call LLM for evaluation
+        llm_response = llm_complete(llm_messages)
+        logging.info("LLM evaluation completed", extra={"response": llm_response})
+
+        # Extract and process response
+        content = llm_response["choices"][0]["message"]["content"].lower().strip()
+
+        # Evaluate result
+        result = "yes" in content
+        if result:
+            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        else:
+            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
+
+        return result
+
+    except KeyError as e:
+        logging.error("Invalid LLM response structure", exc_info=True)
+        return False
+
+    except Exception as e:
+        logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
+        return False
+
+
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
     """
     Evaluates chat history from RocketChat server against a given predicate using LLM.
@@ -97,29 +134,8 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
-
-        # Construct LLM query
-        llm_messages = [{
-            "role": "user",
-            "content": f'Does the chat history """{json.dumps(messages)}""" indicate {predicate}? '
-                      'Please answer "yes" if it does, or "no" if it does not.'
-        }]
-
-        # Call LLM for evaluation
-        llm_response = llm_evaluate(llm_messages)
-        logging.info("LLM evaluation completed", extra={"response": llm_response})
-
-        # Extract and process response
-        content = llm_response["choices"][0]["message"]["content"].lower().strip()
-
-        # Evaluate result
-        result = "yes" in content
-        if result:
-            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
-        else:
-            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
-
-        return result
+        
+        return evaluate_with_llm(json.dumps(messages), predicate)
 
     except KeyError as e:
         logging.error("Invalid LLM response structure", exc_info=True)
