@@ -17,6 +17,11 @@ os.environ['CUSTOM_API_KEY'] = os.getenv('LITELLM_API_KEY')
 BASE_URL = os.getenv('LITELLM_BASE_URL')
 MODEL_NAME = os.getenv('LITELLM_MODEL')
 
+# HACK: sotopia is not compatible with LITELLM, so we have to remove
+# "openai/" prefix, if any, from the model name.
+if MODEL_NAME.startswith("openai/"):
+    MODEL_NAME = MODEL_NAME[7:]  # Skip first 7 characters ("openai/")
+
 def main():
     # Use argparse to capture command-line arguments
     parser = argparse.ArgumentParser()
