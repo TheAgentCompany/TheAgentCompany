@@ -1,5 +1,5 @@
-IMAGE_NAME=hr-create-employee-manual-image
-CONTAINER_NAME=hr-create-employee-manual
+IMAGE_NAME=hr-create-career-ladder-image
+CONTAINER_NAME=hr-create-career-ladder
 
 .PHONY: build run stop
 

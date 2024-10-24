@@ -10,47 +10,20 @@ from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 
 from common import llm_evaluate
+from common import create_rocketchat_client
 
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
+
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
-
 def grade_checkpoint2():
-    file_name = "Employee_Manual.odt"
-    dir_name = "Documents/Human%20Resources%20Team"
-
-    score = 0
-
-    if file_exists_in_directory(file_name, dir_name):
-        score += 1
-    else:
-        return 0
-
-    binary_content = get_binary_file_content(file_name, dir_name)
-
-    if binary_content:
-        text_content = extract_text_from_odt(binary_content)
-
-        keywords = ["company values", "code of conduct", "operational procedures", "employee benefits", "company policies"]
-
-        found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
-        
-        if found_keywords:
-            print(f"Keywords found in the document: {', '.join(found_keywords)}")
-            score += keyword_score        
-
-        return score
-    else:
-        print("Failed to retrieve file content.")
-        return 0
-    
-def grade_checkpoint3():
-    file_name = "Employee_Manual.odt"
+    file_name = "Career_Ladder.odt"
     dir_name = "Documents/Human%20Resources%20Team"
 
     score = 0
@@ -60,9 +33,8 @@ def grade_checkpoint3():
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
 
-        messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
+        messages = [{"content": f"You are asked to grade the following content: \"\"{text_content}\"\" \n Is this a valid career ladder Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
-        # Check result
         llm_resonse = llm_evaluate(messages).json()
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
@@ -73,7 +45,44 @@ def grade_checkpoint3():
         print("Failed to retrieve file content.")
         return 0
     
+def grade_final_checkpoint():
+    messages = get_message("hr-announcements")
+    if not messages:
+        return False
+    
+    score = 0
 
+    for msg in messages:
+        message_text = msg.get('msg', '').lower()
+        messages = [{"content": f"You are asked to grade the following message: \"\"{message_text}\"\" \n Is the message about the new career ladder design and asking for suggestions? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
+
+        llm_resonse = llm_evaluate(messages).json()
+        if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
+            score += 1
+            break
+    
+    return score
+    
+def get_message(channel):
+    response = rocket.channels_info(channel=channel).json()
+    if not response.get('success'):
+        print(f"Failed to retrieve {channel} channel info.")
+        return None
+
+    room_id = response['channel']['_id']
+
+    response = rocket.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        print("Failed to retrieve message history.")
+        return None
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        print("No messages found.")
+        return None
+
+    return messages
 
 def file_exists_in_directory(file_name, dir_name):
     server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
@@ -141,13 +150,6 @@ def extract_text_from_odt(binary_content):
 
     return text_content
 
-def check_keywords_in_content(content, keywords):
-    content = content.lower()
-    print(content)
-    found_keywords = [keyword for keyword in keywords if keyword in content]
-    score = len(found_keywords) / len(keywords)
-    return found_keywords, score
-
     
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -163,7 +165,7 @@ if __name__ == "__main__":
 
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
-    passed3 = grade_checkpoint3()
+    passed3 = grade_final_checkpoint()
     if passed2 or passed3:
         passed1 = 1
     points = sum([passed1, passed2, passed3])

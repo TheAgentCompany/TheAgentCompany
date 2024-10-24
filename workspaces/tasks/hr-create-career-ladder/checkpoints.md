@@ -9,7 +9,7 @@ https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resource
 
 ## Checkpoint 2 (1pt)
 
-A new file named "Career_Ladder.odt" is created in the hr folder.
+A valid career ladder named "Career_Ladder.odt" is created in the hr folder.
 
 ## Final checkpoint (1pt)
 
