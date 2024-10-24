@@ -35,9 +35,14 @@ def grade_checkpoint2():
 
         messages = [{"content": f"You are asked to grade the following content: \"\"{text_content}\"\" \n Is this a valid career ladder Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
-        llm_resonse = llm_evaluate(messages).json()
+        try: 
+            llm_resonse = llm_evaluate(messages)
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
+            print("Valid career ladder found.")
             score += 1            
 
         return score
@@ -56,8 +61,13 @@ def grade_final_checkpoint():
         message_text = msg.get('msg', '').lower()
         messages = [{"content": f"You are asked to grade the following message: \"\"{message_text}\"\" \n Is the message about the new career ladder design and asking for suggestions? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
-        llm_resonse = llm_evaluate(messages).json()
+        try:
+            llm_resonse = llm_evaluate(messages)
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
+            print("Correct message found.")
             score += 1
             break
     
@@ -169,4 +179,5 @@ if __name__ == "__main__":
     if passed2 or passed3:
         passed1 = 1
     points = sum([passed1, passed2, passed3])
+    print("Scores: ", passed1, passed2, passed3)
     print(f"Final points for task Create Employee Manual: {points}")
