@@ -1,7 +1,7 @@
 # Server: nextcloud
 ## Starting up server
 ```
-export NEXTCLOUD_HOME=/home/fangzhex/ogma3/jobbench_nextcloud
+export NEXTCLOUD_HOME=/home/yufansong/data
 docker compose up -d
 docker ps
 # Some useful command

@@ -14,12 +14,10 @@ ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 # Construct RocketChat URL
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-# Set admin credentials
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASSWORD = 'jobbench'
+from common import create_rocketchat_client
 
 # Create RocketChat instance
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
+rocket = create_rocketchat_client()
 
 def get_history(username):
     id = None
@@ -29,7 +27,8 @@ def get_history(username):
             id = item["_id"]
             break
     if id is None:
-        raise ValueError(f"Could not find the user id for {username}.")
+        logging.error(f"Could not find the user id for {username}.")
+        return ''
     im_history = rocket.im_history(room_id=id).json()
     msgs = im_history.get('messages', [])
     content = ""
