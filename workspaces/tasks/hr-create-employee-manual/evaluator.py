@@ -4,7 +4,7 @@ import os
 import sys
 from io import BytesIO
 from odf.opendocument import load
-from odf.text import P
+from odf.text import P,H
 
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
@@ -20,7 +20,7 @@ def grade_checkpoint1(trajectory):
     return any(url in trajectory for url in urls)
 
 
-def grade_checkpoint2_3():
+def grade_checkpoint2():
     file_name = "Employee_Manual.odt"
     dir_name = "Documents/Human%20Resources%20Team"
 
@@ -42,10 +42,26 @@ def grade_checkpoint2_3():
         
         if found_keywords:
             print(f"Keywords found in the document: {', '.join(found_keywords)}")
-            score += keyword_score
+            score += keyword_score        
+
+        return score
+    else:
+        print("Failed to retrieve file content.")
+        return 0
+    
+def grade_checkpoint3():
+    file_name = "Employee_Manual.odt"
+    dir_name = "Documents/Human%20Resources%20Team"
+
+    score = 0
+
+    binary_content = get_binary_file_content(file_name, dir_name)
+
+    if binary_content:
+        text_content = extract_text_from_odt(binary_content)
 
         messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
-        
+
         # Check result
         llm_resonse = llm_evaluator(messages).json()
 
@@ -111,14 +127,20 @@ def extract_text_from_odt(binary_content):
     document = load(odt_file)
 
     text_content = ""
-    for paragraph in document.getElementsByType(P):
-        if paragraph.firstChild is not None:
-            text_content += str(paragraph.firstChild) + "\n"
+
+    for elem in document.text.childNodes:
+        if elem.tagName == 'text:p':  # If the element is a paragraph
+            if elem.firstChild is not None:
+                text_content += elem.firstChild.data + "\n"
+        elif elem.tagName == 'text:h':  # If the element is a header
+            if elem.firstChild is not None:
+                text_content += elem.firstChild.data + "\n"
 
     return text_content
 
 def check_keywords_in_content(content, keywords):
     content = content.lower()
+    print(content)
     found_keywords = [keyword for keyword in keywords if keyword in content]
     score = len(found_keywords) / len(keywords)
     return found_keywords, score
@@ -137,6 +159,9 @@ if __name__ == "__main__":
             exit(1)
 
     passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2_3()
-    points = sum([passed1, passed2])
+    passed2 = grade_checkpoint2()
+    passed3 = grade_checkpoint3()
+    if passed2 or passed3:
+        passed1 = 1
+    points = sum([passed1, passed2, passed3])
     print(f"Final points for task Create Employee Manual: {points}")
