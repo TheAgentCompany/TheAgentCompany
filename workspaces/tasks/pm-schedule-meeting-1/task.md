@@ -1,4 +1,4 @@
-Navigate to the Rocketchat web at http://ogma.lti.cs.cmu.edu:3000/home
+Navigate to the Rocketchat web at http://the-agent-company.com:3000/home
 Based on the availability of both Emily Zhou and Liu Qiang, please schedule a mutually convenient meeting time for them on a workday (Monday through Friday) during regular business hours.
 
 * Ask Emily Zhou for his/her free time.

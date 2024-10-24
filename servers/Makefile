@@ -14,7 +14,7 @@ PLANE_DOCKER_ENV_PATH=./plane/plane-app/plane.env
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
-		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume restore-rocketchat backup-rocketchat
+		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume reset-rocketchat backup-rocketchat
 
 init:
 	$(eval export NEXTCLOUD_HOME)
@@ -74,7 +74,10 @@ rm-nextcloud: init rm-nextcloud-volume rm-nextcloud-side-container
 	make rm-nextcloud-backup-volume
 	docker network rm servers_nextcloud-network
 
-refresh-nextcloud-data:
+backup-nextcloud:
+	./nextcloud/backup.sh
+
+reset-nextcloud:
 	./nextcloud/restore.sh
 	docker exec nextcloud-aio-nextcloud chown -R 33:0 /mnt/ncdata/ 
 	docker exec nextcloud-aio-nextcloud chmod -R 750 /mnt/ncdata/ 
@@ -131,27 +134,27 @@ rm-rocketchat:
 rm-rocketchat-volume:
 	docker volume rm servers_mongodb_data
 
-restore-rocketchat:
-	docker exec -i servers-mongodb-1 sh -c 'mongorestore --archive' < ./rocketchat/db.dump
+reset-rocketchat:
+	docker exec -i servers-mongodb-1 sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
 
 backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
 
 
-# Redis
-start-redis: init
+# Sotopia Redis
+start-sotopia-redis: init
 	docker compose up redis-stack -d
 	docker compose up redis-stack-npc-data-population -d
 
-stop-redis:
+stop-sotopia-redis:
 	docker compose stop redis-stack
 	docker compose stop redis-stack-npc-data-population
 
-rm-redis:
+rm-sotopia-redis:
 	docker rm servers-redis-stack-1
 	docker rm redis-stack-npc-data-population
 
-attach-redis:
+attach-sotopia-redis:
 	docker exec -it servers-redis-stack-1 /bin/bash
 
 # Plane
@@ -165,14 +168,17 @@ start-plane:
 stop-plane:
 	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
 
+backup-plane:
+	./plane/setup.sh backup
+
 rm-plane-volume:
+	docker volume rm plane-app_redisdata
+	docker volume rm plane-app_uploads
 	docker volume rm plane-app_logs_api
 	docker volume rm plane-app_logs_beat-worker
 	docker volume rm plane-app_logs_migrator
 	docker volume rm plane-app_logs_worker
 	docker volume rm plane-app_pgdata
-	docker volume rm plane-app_redisdata
-	docker volume rm plane-app_uploads
 
 reset-plane:
 	make stop-plane

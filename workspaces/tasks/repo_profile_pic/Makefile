@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-repo-profile-pic-image
-CONTAINER_NAME=job-bench-repo-profile-pic
+IMAGE_NAME=repo_profile_pic-image
+CONTAINER_NAME=repo_profile_pic
 
 .PHONY: build run stop
 

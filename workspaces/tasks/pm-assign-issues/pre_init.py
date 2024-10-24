@@ -1,16 +1,10 @@
-import os
-from rocketchat_API.rocketchat import RocketChat
+from common import create_rocketchat_client
 
 ############################# Init Variables #####################################
-HOSTNAME =  'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT =  '3000'
 CHANNEL_NAME = "sprint-planning"
-ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-# Initialize the RocketChat client with admin username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 

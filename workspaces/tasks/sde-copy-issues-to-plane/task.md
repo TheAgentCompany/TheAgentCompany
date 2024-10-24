@@ -1,0 +1,1 @@
+Collect all open issues labeled with “priority” on http://the-agent-company.com:8929/root/sotopia, and create them on http://the-agent-company.com:8091/tac/projects/2bc631a1-8515-4bca-858e-129337c83c8d/issues/ with the same title.
