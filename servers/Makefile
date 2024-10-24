@@ -150,7 +150,7 @@ stop-sotopia-redis:
 	docker compose stop redis-stack
 	docker compose stop redis-stack-npc-data-population
 
-rm-rocketchat-redis:
+rm-sotopia-redis:
 	docker rm servers-redis-stack-1
 	docker rm redis-stack-npc-data-population
 
