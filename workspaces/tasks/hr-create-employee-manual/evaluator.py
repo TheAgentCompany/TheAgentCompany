@@ -4,7 +4,7 @@ import os
 import sys
 from io import BytesIO
 from odf.opendocument import load
-from odf.text import P,H
+from odf.element import Node
 
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
@@ -122,15 +122,22 @@ def get_binary_file_content(file_name, dir_name):
         return None
 
 def extract_text_from_odt(binary_content):
-    # Load the binary content into a BytesIO stream
     odt_file = BytesIO(binary_content)
     document = load(odt_file)
 
     text_content = ""
 
+    def get_text_from_node(node):
+        text = ""
+        for child in node.childNodes:
+            if isinstance(child, Node):
+                if hasattr(child, 'data'):
+                    text += child.data + "\n"
+                text += get_text_from_node(child)  
+        return text
+
     for elem in document.text.childNodes:
-        if elem.firstChild is not None:
-            text_content += elem.firstChild.data + "\n"
+        text_content += get_text_from_node(elem) + "\n"
 
     return text_content
 
