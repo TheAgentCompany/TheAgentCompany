@@ -1,15 +1,16 @@
 # Checkpoints
 
-This task has 4 points in total. 
+This task has 3 points in total. 
 
 ## Checkpoint 1 (1pt)
 
-Use "TAC_overview.md" to gather the information needed for each section.
+The personnell file is used as a reference to create the career ladder:
+https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team
 
-## Checkpoint 2 (2pt)
+## Checkpoint 2 (1pt)
 
-A new file named "Employee_Manual.odt" is created in the hr folder, including the following sections: company values, code of conduct, operational procedures, employee benefits, and company policies.
+A new file named "Career_Ladder.odt" is created in the hr folder.
 
-## Checkpoint 3 (1pt)
+## Final checkpoint (1pt)
 
-The manual is formatted for readability, with headings, subheadings, bullet points and table of contents where necessary. 
+A new message is sent in hr channel referencing the created document.
