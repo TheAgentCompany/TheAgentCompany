@@ -60,7 +60,7 @@ def check_repo_exist():
     try:
         response = make_gitlab_request(project_path)
  
-        if response.status_code == 200:
+        if response is not None and response.status_code == 200:
             logging.info(f"New repository '{project_path}' created successfully.")
             return True
         else:
