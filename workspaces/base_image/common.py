@@ -1,9 +1,12 @@
 import os
 import logging
-import json
+
 import litellm
 from rocketchat_API.rocketchat import RocketChat
+
 from config import *
+
+logging.basicConfig(level=logging.INFO)
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
@@ -55,7 +58,7 @@ def get_chat_history(rocket_client, username: str):
     1) param username,
     2) and the account used to create rocket client instance
 
-    Returns the messages as a dict. If no history, returns an empty dict.
+    Returns the messages as a list. If no history, returns an empty list.
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
@@ -68,8 +71,10 @@ def get_chat_history(rocket_client, username: str):
         return {}
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    logging.info(f'Rocketchat history: \n{msgs}')
-    return {} if msgs is None else msgs
+    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    history = reversed_history[::-1]
+    logging.info(f'Chat history with {username} is: {history}')
+    return history
 
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
@@ -135,7 +140,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
             logging.warning(f"No chat history found for user: {username}")
             return False
         
-        return evaluate_with_llm(json.dumps(messages), predicate)
+        return evaluate_with_llm(str(messages), predicate)
 
     except KeyError as e:
         logging.error("Invalid LLM response structure", exc_info=True)

@@ -1,5 +1,4 @@
 import logging
-import json
 
 from common import create_rocketchat_client
 from common import evaluate_chat_history_with_llm
@@ -14,7 +13,7 @@ def run_checkpoint_1():
         logging.warning(f"No chat history found for Chen Xinyi")
         return False
 
-    messages_cleaned = json.dumps(messages).lower()
+    messages_cleaned = str(messages).lower()
     return 'green card' in messages_cleaned or 'citizen' in messages_cleaned
 
 

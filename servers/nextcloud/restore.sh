@@ -3,7 +3,8 @@
 # set parameters
 CONTAINER_NAME="nextcloud-aio-nextcloud"
 ROOT_PATH=$(git rev-parse --show-toplevel)
-BACKUP_FILE=$ROOT_PATH/servers/nextcloud/nextcloud_backup_20240930_000504.tar.gz  # replace it with your backup file
+# use latest backup
+BACKUP_FILE=$(ls -t $ROOT_PATH/servers/nextcloud/nextcloud_backup_*.tar.gz | head -n1)
 
 # check whether file exist
 if [ ! -f "$BACKUP_FILE" ]; then
