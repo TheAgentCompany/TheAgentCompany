@@ -129,12 +129,8 @@ def extract_text_from_odt(binary_content):
     text_content = ""
 
     for elem in document.text.childNodes:
-        if elem.tagName == 'text:p':  # If the element is a paragraph
-            if elem.firstChild is not None:
-                text_content += elem.firstChild.data + "\n"
-        elif elem.tagName == 'text:h':  # If the element is a header
-            if elem.firstChild is not None:
-                text_content += elem.firstChild.data + "\n"
+        if elem.firstChild is not None:
+            text_content += elem.firstChild.data + "\n"
 
     return text_content
 
