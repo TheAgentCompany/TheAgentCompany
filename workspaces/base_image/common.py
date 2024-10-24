@@ -1,7 +1,7 @@
 import os
 import logging
-import litellm
 
+import litellm
 from rocketchat_API.rocketchat import RocketChat
 
 from config import *
