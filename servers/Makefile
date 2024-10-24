@@ -141,7 +141,7 @@ backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
 
 
-# RocketChat Redis
+# Sotopia Redis
 start-sotopia-redis: init
 	docker compose up redis-stack -d
 	docker compose up redis-stack-npc-data-population -d
