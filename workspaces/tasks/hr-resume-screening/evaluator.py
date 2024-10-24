@@ -1,3 +1,6 @@
+import logging
+import json
+
 from common import create_rocketchat_client
 from common import evaluate_chat_history_with_llm
 from common import get_chat_history
@@ -6,10 +9,13 @@ from common import get_chat_history
 rocket = create_rocketchat_client()
 
 def run_checkpoint_1():
-    msgs = get_chat_history(rocket, 'Chen Xinyi')
-    if msgs is not None and ('green card' in msgs.lower() or 'citizen' in msgs.lower()):
-        return True
-    return False
+    messages = get_chat_history(rocket, 'Chen Xinyi')
+    if not messages:
+        logging.warning(f"No chat history found for Chen Xinyi")
+        return False
+
+    messages_cleaned = json.dumps(messages).lower()
+    return 'green card' in messages_cleaned or 'citizen' in messages_cleaned
 
 
 def run_checkpoint_2():
