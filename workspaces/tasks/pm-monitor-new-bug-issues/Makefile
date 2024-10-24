@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-monitor-new-bug-issues
-CONTAINER_NAME=job-bench-pm-monitor-new-bug-issues
+IMAGE_NAME=job-bench-pm-monitor-new-bug-issues-image
+CONTAINER_NAME=job-bench-pm-monitor-new-bug-issues-image
 
 .PHONY: build run stop
 
