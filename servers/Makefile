@@ -142,7 +142,7 @@ backup-rocketchat:
 
 
 # RocketChat Redis
-start-rocketchat-redis: init
+start-sotopia-redis: init
 	docker compose up redis-stack -d
 	docker compose up redis-stack-npc-data-population -d
 
