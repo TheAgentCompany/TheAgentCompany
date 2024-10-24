@@ -1,7 +1,7 @@
 import os
 import requests
 from common import create_rocketchat_client
-
+from config import *
 ############################# Init Variables #####################################
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -19,11 +19,8 @@ PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
 
-API_KEY = os.getenv('PLANE_API') 
-
-
 headers = {
-    "x-api-key": API_KEY,
+    "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
 

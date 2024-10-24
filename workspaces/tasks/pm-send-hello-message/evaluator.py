@@ -7,8 +7,6 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
 from common import create_rocketchat_client
 
@@ -46,4 +44,4 @@ def check_message_sent(channel_name, message, username):
 if __name__ == "__main__":
     test_url = f"{ROCKETCHAT_URL}/channel/general"
     print(check_url(f"ACTION: goto('{test_url}')"))
-    print(check_message_sent("general", "Hi", "jobbench"))
+    print(check_message_sent("general", "Hi", "theagentcompany"))

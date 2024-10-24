@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 import requests
-
+from config import *
 
 ############################# init variable #####################################
 HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -10,10 +10,9 @@ PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
 PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
-# TODO: can we make the API key fixed
-API_KEY = os.getenv('PLANE_API')
+
 headers = {
-    "x-api-key": API_KEY,
+    "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
 
