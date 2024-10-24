@@ -9,7 +9,7 @@ from odf.element import Node
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 
-from llm_evaluator import *
+from common import llm_evaluate
 
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
