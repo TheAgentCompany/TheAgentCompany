@@ -13,9 +13,10 @@ from common import llm_evaluate
 
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
+NEXTCLOUD_URL = os.environ.get('NEXTCLOUD_URL', 'https://ogma.lti.cs.cmu.edu')
 
 def grade_checkpoint1(trajectory):
-    urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
+    urls = [f"{NEXTCLOUD_URL}/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
@@ -63,7 +64,7 @@ def grade_checkpoint3():
         messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         # Check result
-        llm_resonse = llm_evaluate(messages).json()
+        llm_resonse = llm_evaluate(messages)
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
             score += 1            
@@ -76,7 +77,7 @@ def grade_checkpoint3():
 
 
 def file_exists_in_directory(file_name, dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
     headers = {
         'OCS-APIRequest': 'true',
         'Content-Type': 'application/xml',
@@ -109,7 +110,7 @@ def file_exists_in_directory(file_name, dir_name):
 
 
 def get_binary_file_content(file_name, dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
     file_url = f"{server_url}/{file_name}"
 
     response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
