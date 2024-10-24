@@ -154,7 +154,7 @@ rm-rocketchat-redis:
 	docker rm servers-redis-stack-1
 	docker rm redis-stack-npc-data-population
 
-attach-rocketchat-redis:
+attach-sotopia-redis:
 	docker exec -it servers-redis-stack-1 /bin/bash
 
 # Plane
