@@ -114,7 +114,10 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
 
         # Evaluate result
         result = "yes" in content
-        logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        if result:
+            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        else:
+            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
 
         return result
 
