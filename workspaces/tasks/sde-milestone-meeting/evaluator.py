@@ -5,24 +5,29 @@ import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 from bs4 import BeautifulSoup
 
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+HOSTNAME = os.getenv('HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 channel_name = "general"
 ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
-    urls = [f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
-            f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
+    urls = [f"http://the-agent-company.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
+            f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
     return any(url in trajectory for url in urls)
 
 def grade_checkpoint2():
-    url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
+    url = f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests/4657"
 
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.RequestException as e:
+        logging.error(f"Error fetching PR: {e}")
+        return False
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -31,7 +36,7 @@ def grade_checkpoint2():
             if element and element['data-state'] == "merged":
                 return True
     else:
-        print(f"Failed to fetch the webpage: {response.status_code}")
+        logging.error(f"Failed to fetch the webpage: {response.status_code}")
 
     return False
 

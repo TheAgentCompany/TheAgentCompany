@@ -4,10 +4,10 @@ services:
       context: ./gitlab
     container_name: gitlab
     restart: always
-    hostname: '$HOSTNAME'
+    hostname: the-agent-company.com
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://$HOSTNAME:$GITLAB_PORT'
+        external_url 'http://the-agent-company.com:$GITLAB_PORT'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
     ports:
       - '$GITLAB_PORT:8929'
@@ -72,10 +72,10 @@ services:
       traefik.http.routers.rocketchat.entrypoints: https
       traefik.http.routers.rocketchat.tls.certresolver: le
     environment:
-      ADMIN_USERNAME: jobbench
-      ADMIN_PASS: jobbench
-      ADMIN_EMAIL: jobbench@example.com
-      ADMIN_NAME: jobbench
+      ADMIN_USERNAME: theagentcompany
+      ADMIN_PASS: theagentcompany
+      ADMIN_EMAIL: theagentcompany@example.com
+      ADMIN_NAME: theagentcompany
       Show_Setup_Wizard: completed
       OVERWRITE_SETTING_Show_Setup_Wizard: completed
       MONGO_URL: "${MONGO_URL:-\
@@ -116,7 +116,7 @@ services:
     ports:
       - "6379:6379"
     environment:
-      - REDIS_ARGS=--requirepass jobbench --user jobbench on >jobbench ~* &* +@all
+      - REDIS_ARGS=--requirepass theagentcompany --user theagentcompany on >theagentcompany ~* &* +@all
     networks:
       - rocketchat-redis-net
 
