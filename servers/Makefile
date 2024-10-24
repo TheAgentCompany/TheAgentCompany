@@ -146,7 +146,7 @@ start-sotopia-redis: init
 	docker compose up redis-stack -d
 	docker compose up redis-stack-npc-data-population -d
 
-stop-rocketchat-redis:
+stop-sotopia-redis:
 	docker compose stop redis-stack
 	docker compose stop redis-stack-npc-data-population
 
