@@ -113,7 +113,7 @@ reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm gitlab
+	docker compose rm -f gitlab
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
