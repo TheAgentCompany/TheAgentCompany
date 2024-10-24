@@ -4,6 +4,7 @@ import json
 import logging
 
 from common import create_rocketchat_client
+from config import *
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -29,10 +30,9 @@ PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
-API_KEY = os.getenv('PLANE_API') 
 
 headers = {
-    "x-api-key": API_KEY,
+    "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
 
@@ -147,7 +147,7 @@ def populate_channel():
     # Define user credentials
     users = [
         {'name': 'John Doe', 'password': 'John.Doe', 'email': 'John.Doe@cmu.edu.com', 'username': 'John.Doe'},
-        {'name': 'Rocket Cat', 'password': 'jobbench', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
+        {'name': 'Rocket Cat', 'password': 'theagentcompany', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
     ]
 
     user_credentials_list = []

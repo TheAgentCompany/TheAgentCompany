@@ -8,4 +8,4 @@ Navigated to the general channel (http://the-agent-company.com:3000/channel/gene
 
 ## Final checkpoint (1pt)
 
-Assigned 'jobbench' as owner
+Assigned 'theagentcompany' as owner

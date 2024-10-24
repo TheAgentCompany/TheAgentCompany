@@ -2,7 +2,7 @@ import os
 import requests
 from rocketchat_API.rocketchat import RocketChat
 from datetime import datetime, timezone
-
+from config import *
 ############################# Init Variables #####################################
 # Rocket.Chat variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com' 
@@ -15,10 +15,8 @@ PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu" 
-API_KEY = os.getenv('PLANE_API') 
-
 headers = {
-    "x-api-key": API_KEY,
+    "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
 
@@ -172,7 +170,7 @@ def check_notifications_sent(channel_name):
     
     messages = rocket.channels_history(room_id=room_id, count=20).json().get('messages', [])
     for message in messages:
-        if message['u']['username'] == 'jobbench':  # Adjust this to the expected username
+        if message['u']['username'] == 'theagentcompany':  # Adjust this to the expected username
             if 'has been moved to the next sprint' in message['msg']:
                 return True
     return False

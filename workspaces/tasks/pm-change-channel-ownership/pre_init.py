@@ -95,6 +95,6 @@ def add_user_role_owner(channel_name, username):
 
 if __name__ == "__main__":
     channel_name = "general"
-    username = 'jobbench'
+    username = 'theagentcompany'
     print(add_user_role_owner(channel_name, username))
 

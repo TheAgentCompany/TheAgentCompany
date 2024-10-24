@@ -102,9 +102,9 @@ The following is a dockerfile example, you can use it build a npc example and ru
 FROM base-image
 # Step1: Set ENV: OPENAI API KEY, REDIS_OM_URL, BOT_URL
 ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
-# Redis Username: default, Password: jobbench
+# Redis Username: default, Password: theagentcompany
 # Redis service URL: the-agent-company.com/:6379
-ENV REDIS_OM_URL redis://default:jobbench@the-agent-company.com/:6379
+ENV REDIS_OM_URL redis://default:theagentcompany@the-agent-company.com/:6379
 # RocketChat service URL
 ENV BOT_URL http://the-agent-company.com:3000
 
@@ -135,7 +135,7 @@ conda env config vars set OPENAI_API_KEY=your_key
 ```
 
 ## Redis
-You can directly launch the server docker compose file. We already config the redis server there. Port is 8092, username is `jobbench` and password is `jobbench`
+You can directly launch the server docker compose file. We already config the redis server there. Port is 8092, username is `theagentcompany` and password is `theagentcompany`
 
 If you don't want to use it, you can config it follow this doc for linux.
 
@@ -145,7 +145,7 @@ Here are four lines of code to create a redis-stack server:
 curl -fsSL https://packages.redis.io/redis-stack/redis-stack-server-7.2.0-v10.focal.x86_64.tar.gz -o redis-stack-server.tar.gz
 tar -xvf redis-stack-server.tar.gz
 pip install redis
-echo -e "port 8092\nrequirepass jobbench\nuser jobbench on >jobbench ~* +@all" > redis-stack-server.conf
+echo -e "port 8092\nrequirepass theagentcompany\nuser theagentcompany on >theagentcompany ~* +@all" > redis-stack-server.conf
 ./redis-stack-server-7.2.0-v10/bin/redis-stack-server redis-stack-server.conf --daemonize yes
 ```
 
@@ -153,7 +153,7 @@ The `REDIS_OM_URL` need to be set before loading and saving agents:
 ```bash
 conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
 # For example
-conda env config vars set REDIS_OM_URL="redis://jobbench:jobbench@localhost:8092"
+conda env config vars set REDIS_OM_URL="redis://theagentcompany:theagentcompany@localhost:8092"
 ```
 
 ## Usage

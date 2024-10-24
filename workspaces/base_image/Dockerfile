@@ -8,6 +8,7 @@ RUN mkdir -p /utils
 COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
 COPY common.py /utils
+COPY config.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -43,7 +44,7 @@ ENV CREDENTIAL_FILE_PATH /npc/npc_credential.json
 ENV SCENARIOS_FILE_PATH /npc/scenarios.json
 
 ################## rocketchat NPC sotopia SETUP ######################
-ENV REDIS_OM_URL redis://default:jobbench@the-agent-company.com/:6379
+ENV REDIS_OM_URL redis://default:theagentcompany@the-agent-company.com/:6379
 ENV BOT_URL http://the-agent-company.com:3000
 #############################################################
 

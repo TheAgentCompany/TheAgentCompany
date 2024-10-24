@@ -64,5 +64,5 @@ if __name__ == "__main__":
     test_url_2 = f"{ROCKETCHAT_URL}/channel/webagents"
     print(check_url_2(f"ACTION: goto('{test_url_2}')"))
     print(check_user_added("webagents", "kritanjali.jain"))
-    print(check_message_sent("webagents", "Welcome to the webagents channel!", "jobbench"))
+    print(check_message_sent("webagents", "Welcome to the webagents channel!", "theagentcompany"))
 
