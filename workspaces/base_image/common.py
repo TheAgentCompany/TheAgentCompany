@@ -31,7 +31,7 @@ class MockRocketChatClient:
         return method
 
 
-def create_rocketchat_client(username='jobbench', password='jobbench'):
+def create_rocketchat_client(username='theagentcompany', password='theagentcompany'):
     SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
     ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
     

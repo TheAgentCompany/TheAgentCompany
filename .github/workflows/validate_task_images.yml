@@ -14,36 +14,28 @@ concurrency:
 
 jobs:
   check-task-structure:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
-    # The below steps don't work on self-hosted runners, so we need to temporarily
-    # disable them and avoid using poetry in CI. Once this repository becomes public,
-    # we can enable the below steps again, and use poetry run in validate_task_structure.sh
-    # - name: Install pipx
-    #   run: |
-    #     sudo apt update
-    #     sudo apt install -y pipx
-
-    # - name: Install poetry via pipx
-    #   run: pipx install poetry
+    - name: Install poetry via pipx
+      run: pipx install poetry
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-        # cache: 'poetry'
+        cache: 'poetry'
 
-    # - name: Install Python dependencies using Poetry
-    #   run: poetry install
+    - name: Install Python dependencies using Poetry
+      run: poetry install
 
     - name: Check task structure
       run: |
         bash .github/validate_task_structure.sh
 
   test-evaluator-basic:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 

@@ -44,4 +44,4 @@ def check_message_sent(channel_name, message, username):
 if __name__ == "__main__":
     test_url = f"{ROCKETCHAT_URL}/channel/general"
     print(check_url(f"ACTION: goto('{test_url}')"))
-    print(check_message_sent("general", "Hi", "jobbench"))
+    print(check_message_sent("general", "Hi", "theagentcompany"))

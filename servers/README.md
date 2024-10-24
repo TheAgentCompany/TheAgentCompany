@@ -21,14 +21,14 @@ Below are the addresses, usernames, and passwords for each service:
 
 ## Plane
 * http://ogma.lti.cs.cmu.edu:8091
-* email:`job@bench.com`
-* password:`jobbenchJobBench`
+* email:`agent@company.com`
+* password:`theagentcompany`
 * API_KEY:`plane_api_569b8e604e0c46d0b65ef56bb9e76f03`
 
 ## RocketChat
 * http://ogma.lti.cs.cmu.edu:3000/
-* email: jobbench
-* password: jobbench
+* email: theagentcompany
+* password: theagentcompany
 
 # Troubleshooting
 

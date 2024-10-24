@@ -72,12 +72,7 @@ for task_dir in *; do
     exit 1
   fi
 
-  # self-hosted runner doesn't have poetry environment
-  # poetry run python ../../../.github/validate_dependencies.py "dependencies.yml"
-  ##### TEMPORARY WORKAROUND FOR SELF-HOSTED RUNNER #####
-  pip install pyyaml
-  python ../../../.github/validate_dependencies.py "dependencies.yml"
-  ##### TEMPORARY WORKAROUND FOR SELF-HOSTED RUNNER #####
+  poetry run python ../../../.github/validate_dependencies.py "dependencies.yml"
 
   cd -
 done
