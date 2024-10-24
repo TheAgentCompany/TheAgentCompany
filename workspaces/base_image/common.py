@@ -68,7 +68,7 @@ def get_chat_history(rocket_client, username: str):
 
     if id is None:
         logging.error(f'Cannot fetch chat history for {username}')
-        return {}
+        return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
     reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
