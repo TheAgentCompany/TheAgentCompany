@@ -1,7 +1,7 @@
 import logging
 
 from common import create_rocketchat_client
-from common import llm_evaluate
+from common import evaluate_chat_history_with_llm
 from common import get_chat_history
 
 # Initialize RocketChat client
@@ -28,14 +28,18 @@ def check_final_result(username: str):
 
 
 def run_checkpoint_1():
-    _, msgs = get_chat_history('Chen Xinyi')
+    msgs = get_chat_history(rocket, 'Chen Xinyi')
     if msgs is not None and ('green card' in msgs.lower() or 'citizen' in msgs.lower()):
         return True
     return False
 
 
 def run_checkpoint_2():
-    return check_final_result('Li Ming')
+    return evaluate_chat_history_with_llm(
+        rocket,
+        'Li Ming',
+        'Jane Lee cannot be hired because she fails to meet visa/green card/citizenship requirement'
+        )
 
 
 if __name__ == "__main__":
