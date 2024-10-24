@@ -1,0 +1,20 @@
+Key Responsibilities:
+1. Work with a team to develop and extend The Agent Company's product
+2. Design and build innovative technologies in a large distributed computing environment and help lead fundamental changes in the industry.
+3. Create solutions to run predictions on distributed systems with exposure to innovative technologies at incredible scale and speed.
+4. Own full software development lifecycle: design, development, testing, and operating in production
+5. Build solutions with a high level of reliability, scalability, and security
+
+Minimum Qualification:
+1. Graduated less than 12 months ago or about to complete a Bachelor’s or Master’s Degree in Computer Science, Computer Engineering, or related fields at time of application
+2. Programming experience in one or more programming languages (e.g., Python, C, C++, Java)
+3. Knowledge of Computer Science fundamentals such as object-oriented design, algorithm design, data structures, problem solving and complexity analysis
+4. Experience working with data structures or algorithms during coursework/projects, research, internships, or practical experience in school or work (e.g., open-source coding).
+
+Preferred Qualification:
+1. Previous technical internship(s) if applicable
+2. Experience with distributed, multi-tiered systems, algorithms, and relational databases.
+3. Adept at handling ambiguous or undefined problems as well as ability to think abstractly.
+
+Salary Range:
+120000 - 150000 USD

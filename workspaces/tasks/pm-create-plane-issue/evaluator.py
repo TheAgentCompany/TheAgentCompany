@@ -2,22 +2,26 @@ import os
 import requests
 import sys
 import logging
-
+from config import *
 ############################# init variable ##################################### 
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
+HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-API_KEY = os.getenv('PLANE_API')
 headers = {
-        "x-api-key": API_KEY,
-        "Content-Type": "application/json"
+    "x-api-key": PLANE_API_KEY,
+    "Content-Type": "application/json"
 }
+
 
 def get_project_id(project_identifier):
     """Get the project_id for a specific project by its human identifier."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    response = requests.request("GET", url, headers=headers)
+    try:
+        response = requests.request("GET", url, headers=headers)
+    except requests.RequestException as e:
+        logging.warning(f"Error getting project id: {e}")
+        return None
     if response.status_code == 200:
         resp = response.json()
         for project in resp["results"]:
@@ -31,11 +35,15 @@ def grade_checkpoint1(trajectory, project_id):
 
 def grade_checkpoint2(project_id):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    response = requests.request("GET", url, headers=headers)
+    try:
+        response = requests.request("GET", url, headers=headers)
+    except requests.RequestException as e:
+        logging.warning(f"Error getting issues: {e}")
+        return False
 
     if response.status_code == 200:
         resp = response.json()
-        for issue in resp["results"]:
+        for issue in resp.get("results", []):
             if issue.get('name').lower() == "Improve page loading speed".lower():
                 return True
     return False
