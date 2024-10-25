@@ -68,7 +68,7 @@ def get_chat_history(rocket_client, username: str):
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
-        if item.get('nameInsensitive', '').lower() == username.lower() or item.get('username', '') == username.lower():
+        if item.get('nameInsensitive', '').lower() == username.lower() or item.get('username', '').lower() == username.lower():
             id = item["_id"]
             break
 
