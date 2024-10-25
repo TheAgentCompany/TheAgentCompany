@@ -1,59 +1,9 @@
-import os
-from rocketchat_API.rocketchat import RocketChat
-
-from llm_evaluator import *
-
-############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-
-
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
+from common import create_rocketchat_client
+from common import get_chat_history
+from common import evaluate_chat_history_with_llm
 
 # Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
-
-############################# Helper Functions #####################################
-
-def get_history(username: str):
-    id = ""
-    for item in rocket.users_list().json()['users']:
-        if item['nameInsensitive'] == username.lower():
-            id = item["_id"]
-            break
-    msgs = rocket.im_history(room_id=id).json()['messages']
-    for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-
-    if len(msgs)>0:
-        return True, msg
-    else:
-        return False, msg
-
-
-def check_final_feedback(username: str):
-
-    _, msg = get_history(username)
-
-    messages = [{"content": f"Does the phrase \"\"{msg}\"\" indicate the person receiving the feedback had an average job performance? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
-    # Check result
-    llm_resonse = llm_evaluator(messages).json()
-    print(llm_resonse)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        print(f"{username} received feedback that indicates an average job performance")
-        return True
-    else:
-        print(f"{username} did not receive feedback that indicates an average job performance")
-        return False
-
-############################# Evaluator #####################################
+rocket = create_rocketchat_client()
 
 def evaluate_task():
     points = 0
@@ -62,11 +12,10 @@ def evaluate_task():
     performance_evaluatee = "Liu Qiang"
 
     for npc in npcs:
-        res, _ = get_history(npc)
-        if res:
+        if get_chat_history(rocket, npc):
             points += 1
 
-    if check_final_feedback(performance_evaluatee):
+    if evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance"):
         points += 2
 
     # Final result

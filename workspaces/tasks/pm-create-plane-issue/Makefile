@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-create-plane-issue-image
-CONTAINER_NAME=job-bench-pm-create-plane-issue
+IMAGE_NAME=pm-create-plane-issue-image
+CONTAINER_NAME=pm-create-plane-issue
 
 .PHONY: build run stop
 

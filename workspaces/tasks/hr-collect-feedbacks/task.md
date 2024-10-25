@@ -1,4 +1,4 @@
-Navigate to the Rocketchat web at http://ogma.lti.cs.cmu.edu:3000/home
+Navigate to the Rocketchat web at http://the-agent-company.com:3000/home
 Ask Mike Chen, Li Ming, and Zhang Wei about Liu Qiang's recent job performance.
 
 * Ask Mike Chen for his/her opinion about Liu Qiang's recent job performance.

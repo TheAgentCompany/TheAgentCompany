@@ -6,11 +6,11 @@ completed.
 
 ## Checkpoint 1 (2pts)
 
-Found the correct wiki page http://ogma.lti.cs.cmu.edu:8929/root/doc/-/wikis
+Found the correct wiki page http://the-agent-company.com:8929/root/doc/-/wikis
 
 ## Checkpoint 2 (1pt)
 
-Found the correct API server codebase http://ogma.lti.cs.cmu.edu:8929/root/api-server
+Found the correct API server codebase http://the-agent-company.com:8929/root/api-server
 
 ## Checkpoint 3 (1pt)
 

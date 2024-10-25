@@ -1,5 +1,5 @@
-IMAGE_NAME=copilot-arena-server-bench-image
-CONTAINER_NAME=copilot-arena-server-bench
+IMAGE_NAME=copilot-arena-server-setup-image
+CONTAINER_NAME=copilot-arena-server-setup
 
 .PHONY: build run stop
 

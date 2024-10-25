@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-milestone-meeting
-CONTAINER_NAME=job-bench-sde-milestone-meeting
+IMAGE_NAME=sde-milestone-meeting-image
+CONTAINER_NAME=sde-milestone-meeting
 
 .PHONY: build run stop
 
