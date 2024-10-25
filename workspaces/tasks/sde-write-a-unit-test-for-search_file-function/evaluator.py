@@ -91,7 +91,7 @@ def get_function_content(file_path, function_name):
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
 
-def is_repo_exit():
+def is_repo_exist():
     """
      Check if a repo exists at the given path.
     """
@@ -203,7 +203,7 @@ def remove_func(file_path=UT_FILE, function_name=f"def {UT_FUNC_NAME}("):
         return False
 
 def checkpoint1():
-    return is_repo_exit()
+    return is_repo_exist()
 
 def checkpoint2(path=UT_FILE):
     return is_file_exist(file_path=path)

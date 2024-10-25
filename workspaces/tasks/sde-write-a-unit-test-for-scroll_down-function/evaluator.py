@@ -182,7 +182,7 @@ def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
     return stats
 
 def checkpoint1():
-    return is_repo_exit()
+    return is_repo_exist()
 
 def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)

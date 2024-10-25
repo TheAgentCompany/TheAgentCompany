@@ -202,7 +202,7 @@ def remove_func(file_path=UT_FILE, function_name="def test_append_file("):
         return False
 
 def checkpoint1():
-    return is_repo_exit()
+    return is_repo_exist()
 
 def checkpoint2(path=UT_FILE):
     return is_file_exist(file_path=path)
