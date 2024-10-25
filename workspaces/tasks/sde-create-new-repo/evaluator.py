@@ -1,19 +1,14 @@
-import os
 import requests
-from common import *
-
 import logging
 import urllib
 
+from common import create_rocketchat_client
+from common import make_gitlab_request
+from common import evaluate_with_llm
+from common import evaluate_chat_history_with_llm
+
 
 ############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
 project_path = "root/new-storage-project"
 
 readme_path = "README.md"
@@ -35,27 +30,6 @@ def get_history(username):
     return msgs
 
 
-def check_with_llm(msgs, pattern):
-    content = ""
-    for msg in msgs[::-1]:
-        content += msg['msg']
-
-    if len(content)==0:
-        return False
-
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" include some tasks to start a new data storage related project? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
-    logging.info(llm_resonse)
-
-    if pattern in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
-
 def check_repo_exist():
     try:
         response = make_gitlab_request(project_path)
@@ -70,6 +44,7 @@ def check_repo_exist():
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
+
 def check_readme_content():
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
     try:
@@ -77,24 +52,21 @@ def check_readme_content():
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking readme file: {e}")
         return False
-
-    messages = [{"content": f"Does the readme \"\"{readme}\"\" provide some details about a new storage system project? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     
-    # # Check result
-    llm_resonse = llm_evaluate(messages)
-    print(llm_resonse)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        print(f"README does include information about a new storage project")
-        return True
-    else:
-        print(f"README does not include information about a new storage project")
+    if not readme:
+        logging.warning("Readme file doesn't exist or is empty")
         return False
+
+    predicate = "some details about a new storage system project"
+    return evaluate_with_llm(readme, predicate)
 
 
 def check_conversation_with_leader():
-    msgs = get_history(username="zhang_wei")
-    return check_with_llm(msgs, pattern='yes')
+    return evaluate_chat_history_with_llm(
+        rocket,
+        "zhang_wei",
+        "there are some tasks to start a new data storage related project"
+        )
 
 ############################# Evaluator #####################################
 

@@ -1,4 +1,4 @@
-from common import llm_evaluate
+from common import evaluate_with_llm
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -28,17 +28,8 @@ def check_job_description(username: str):
     job_description = user_info.get('bio', '')
     print(f"{username}''s Job Description: {job_description}")
 
-    messages = [{"content": f"Does the phrase \"\"{job_description}\"\" indicate the person does not work in database team and now works in the AI team? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
-    # Check result
-    llm_resonse = llm_evaluate(messages)
-    print(llm_resonse)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        print(f"{username}'s job description is updated correctly")
-        return True
-    else:
-        print(f"{username}'s job description is not updated correctly")
-        return False
+    predicate = 'the person does not work in database team and now works in the AI team'
+    return evaluate_with_llm(job_description, predicate)
 
 ############################# Evaluator #####################################
 
