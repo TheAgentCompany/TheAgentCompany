@@ -159,14 +159,13 @@ download-plane:
 	sh ./plane/download.sh
 
 start-plane:
-	sh ./plane/download.sh
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH)  up -d --quiet-pull
+	cd plane && make start-plane
 
 stop-plane:
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
+	cd plane && make start-plane
 
 backup-plane:
-	./plane/setup.sh backup
+	cd plane && make backup-plane
 
 rm-plane-volume:
 	docker volume rm plane-app_redisdata

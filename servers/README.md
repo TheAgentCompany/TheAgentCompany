@@ -23,7 +23,7 @@ Below are the addresses, usernames, and passwords for each service:
 * http://ogma.lti.cs.cmu.edu:8091
 * email:`agent@company.com`
 * password:`theagentcompany`
-* API_KEY:`plane_api_569b8e604e0c46d0b65ef56bb9e76f03`
+* API_KEY:`plane_api_759889ebd3744c96b3d9edcb0b013712`
 
 ## RocketChat
 * http://ogma.lti.cs.cmu.edu:3000/
