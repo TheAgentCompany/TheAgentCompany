@@ -1,4 +1,4 @@
 FROM base-image
-RUN git clone http://the-agent-company.com:8929/root/sotopia.git
+RUN pip install bs4
 RUN apt update
 RUN apt install vim
