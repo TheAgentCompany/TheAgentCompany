@@ -1,6 +1,5 @@
 import re
 import logging
-import math
 
 def evaluate_task():
     # reference answer's detailed computation is documented in README.md
@@ -18,9 +17,9 @@ def evaluate_task():
             
             number = int(numbers[0])
             
-            if math.abs(number - REFERENCE_ANSWER) / float(REFERENCE_ANSWER) <= 0.02:
+            if abs(number - REFERENCE_ANSWER) / float(REFERENCE_ANSWER) <= 0.02:
                 return 4
-            elif math.abs(number - REFERENCE_ANSWER) / float(REFERENCE_ANSWER) <= 0.1:
+            elif abs(number - REFERENCE_ANSWER) / float(REFERENCE_ANSWER) <= 0.1:
                 return 2
             else:
                 return 0
@@ -31,4 +30,4 @@ def evaluate_task():
 
 if __name__ == "__main__":
     points = evaluate_task()
-    print(f"Evaluation completed. Final score: {points}/2")
+    print(f"Evaluation completed. Final score: {points}/4")
