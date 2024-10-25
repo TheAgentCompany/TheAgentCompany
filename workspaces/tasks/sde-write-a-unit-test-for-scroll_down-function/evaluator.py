@@ -6,7 +6,8 @@ import subprocess
 import time
 import re
 import astor
-from common import llm_evaluate
+
+from common import llm_complete
 
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
@@ -37,7 +38,7 @@ def config_env(dir_path):
     else:
         logging.info(f"Dependencies installed successfully.")
 
-def check_with_llm(test_code, func_code, expect_result):
+def check_with_llm(test_code, func_code):
     test_content = test_code
     func_content = func_code
 
@@ -51,9 +52,9 @@ def check_with_llm(test_code, func_code, expect_result):
             "content": f"Does the function named 'test_scroll_down' in the text '{test_content}' thoroughly and meaningfully test the 'scroll_down' functionality? The test should include specific assertions that validate the expected behavior of the function '{func_content}', and must not contain trivial or non-functional code such as 'return True' or 'assert 1 == 1'. Does it properly verify the output, state changes, or side effects that should occur when 'scroll_down' is executed? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_complete(messages)
 
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
+    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
         return True
     else:
         return False
@@ -242,7 +243,6 @@ def checkpoint5():
     return check_with_llm(
         test_code=test_content,
         func_code=func_content,
-        expect_result='yes'
     )
 
 def calculate_total_score():

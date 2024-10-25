@@ -3,7 +3,6 @@ import logging
 
 from common import evaluate_with_llm
 from common import create_rocketchat_client
-from common import get_chat_history
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()

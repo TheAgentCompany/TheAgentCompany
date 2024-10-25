@@ -65,7 +65,7 @@ def get_chat_history(rocket_client, username: str):
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
-        if item['nameInsensitive'] == username.lower():
+        if item.get('nameInsensitive', '').lower() == username.lower() or item.get('username', '') == username.lower():
             id = item["_id"]
             break
 
@@ -88,8 +88,8 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '')
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the content """{content}""" indicate {predicate}? {additional_prompt}'
-                      'Please answer "yes" if it does, or "no" if it does not.'
+            "content": f'Does the content """{content}""" indicate {predicate}?'
+                      f'Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
         }]
 
         # Call LLM for evaluation
