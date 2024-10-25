@@ -1,24 +1,14 @@
-import os
 import requests
 import sys
 import logging
 from config import *
-############################# init variable ##################################### 
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
 
 
 def get_project_id(project_identifier):
     """Get the project_id for a specific project by its human identifier."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=PLANE_HEADERS)
     except requests.RequestException as e:
         logging.warning(f"Error getting project id: {e}")
         return None
@@ -36,7 +26,7 @@ def grade_checkpoint1(trajectory, project_id):
 def grade_checkpoint2(project_id):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=PLANE_HEADERS)
     except requests.RequestException as e:
         logging.warning(f"Error getting issues: {e}")
         return False

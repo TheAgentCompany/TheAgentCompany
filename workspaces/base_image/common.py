@@ -153,7 +153,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         return False
 
 def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
-    url = f"{BASE_URL}:{GITLAB_PORT}/api/v4"
+    url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
         if '/' in project_identifier:
@@ -223,3 +223,28 @@ def download_nextcloud_content(link: str, output_file_path: str):
 
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
+
+def check_repo_clone_in_workspace():
+    openhands_path = '/workspace/openhands'
+    try:
+        # Check if the directory exists
+        if not os.path.isdir(openhands_path):
+            logging.warning("No dir found")
+            return False
+        
+        # Get all files in the directory
+        files = os.listdir(openhands_path)
+        
+        # Check if there's at least one file
+        if not files:
+            logging.warning("No file found")
+            return False
+        
+        instruction_file_name = ".openhands_instructions"
+        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
+        
+        return os.path.isfile(instruction_file_path)
+    
+    except Exception as e:
+        logging.warning(f"Error in grade_checkpoint1: {e}")
+        return False

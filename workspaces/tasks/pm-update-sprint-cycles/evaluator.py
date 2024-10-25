@@ -3,27 +3,12 @@ import requests
 from rocketchat_API.rocketchat import RocketChat
 from datetime import datetime, timezone
 from config import *
-############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com' 
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
-# Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu" 
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
-
 from common import create_rocketchat_client
 
+############################# Init Variables #####################################
 # Create RocketChat instance
 rocket = create_rocketchat_client()
+
 
 ############################# Helper Functions #####################################
 
@@ -39,7 +24,7 @@ def get_project_id(project_name):
     """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         projects = response.json().get('results', [])
         for project in projects:
@@ -55,7 +40,7 @@ def get_active_and_upcoming_cycles(project_id):
     """Get the active and upcoming cycles for a project using timestamps."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         cycles = response.json().get('results', [])
         now = datetime.now(timezone.utc)
@@ -83,7 +68,7 @@ def get_cycle_issues(project_id, cycle_id):
     """Get issues for a specific cycle."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         return response.json().get('results', [])
     except requests.RequestException as e:
@@ -106,14 +91,14 @@ def check_issue_state(issue, expected_groups):
     # First, get the issue details to retrieve the state ID
     issue_url = f"{PLANE_BASEURL}/api/v1/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/"
     try:
-        issue_response = requests.get(issue_url, headers=headers)
+        issue_response = requests.get(issue_url, headers=PLANE_HEADERS)
         issue_response.raise_for_status()
         issue_details = issue_response.json()
         state_id = issue_details['state']
         
         # Now, get the state details
         state_url = f"{PLANE_BASEURL}/api/v1/workspaces/{workspace_slug}/projects/{project_id}/states/{state_id}/"
-        state_response = requests.get(state_url, headers=headers)
+        state_response = requests.get(state_url, headers=PLANE_HEADERS)
         state_response.raise_for_status()
         state_details = state_response.json()
         state_group = state_details.get('group')
