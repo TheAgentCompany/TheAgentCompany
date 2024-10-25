@@ -1,59 +1,6 @@
-from common import llm_evaluate
-import subprocess
-import re
+from common import llm_evaluate, get_nextcloud_url_in_file, download_nextcloud_content
 
 ############################# Helper Functions #####################################
-
-def check_url_file_exist():
-    filename = "/workspace/link.txt"
-    try:
-        with open(filename, 'r') as file:
-            content = file.read()
-            if f"https://ogma.lti.cs.cmu.edu" in content:
-                return content
-            return False
-    except FileNotFoundError:
-        print(f"Error: The file '{filename}' was not found.")
-        return False
-    except IOError as e:
-        print(f"Error: An I/O error occurred. Details: {e}")
-        return False
-
-def verify_nextcloud_content_exists(link):
-
-    if "download" not in link:
-        command = ["curl", "--output", "/workspace/download_link", link.rstrip("\n")]
-        try:
-            subprocess.run(command)
-        except Exception as e:
-            print(f"Unable to download from link: {link}")
-            return False
-
-        pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
-
-        download_link: str | None = None
-        with open("/workspace/download_link", "r") as f:
-            content = f.read()
-            matches = re.findall(pattern, content, re.MULTILINE)
-            if matches:
-                download_link = matches[0]
-        
-        if download_link is None:
-            print(f"Did not find proper download link")
-            return False
-    else:
-        download_link = link.rstrip("\n")
-
-    try:
-        print(download_link)
-        subprocess.run([f"curl {download_link} --output /workspace/job_description.md"], shell=True)
-    except Exception as e:
-        print(f"Download from link: {download_link} not successful")
-        return False
-
-    print(f"Successfully downloaded from link {download_link}")
-    return True
-
 
 def check_job_description_content():
 
@@ -87,10 +34,10 @@ def check_job_description_content():
 def evaluate_task():
     points = 0
 
-    link = check_url_file_exist()
+    link = get_nextcloud_url_in_file("/workspace/link.txt")
     if link:
         points += 1
-        if verify_nextcloud_content_exists(link):
+        if download_nextcloud_content(link, "/workspace/job_description.md"):
             points += 1
 
         if check_job_description_content():
