@@ -14,5 +14,9 @@ For a full year lease:
 First month: 10,350 RMB × 0.7 (30% discount) = 7,245 RMB
 Remaining 11 months: 10,350 RMB × 11 = 113,850 RMB
 
-Total annual cost: 7,245 + 113,850 = 121,095 RMB
-Since we're interested in a full year lease, we won't need to pay the additional 2,000 RMB service fee that applies to short-term rentals.
+Annual rental cost: 7,245 + 113,850 = 121,095 RMB
+
+Since we are only interested in one year lease, which doesn't count as long-term
+rental, we need to pay 2000 RMB service fee per month.
+
+Total annual cost: 121,095 + 2000 * 12 = 145,095 RMB

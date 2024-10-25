@@ -4,7 +4,7 @@ import math
 
 def evaluate_task():
     # reference answer's detailed computation is documented in README.md
-    REFERENCE_ANSWER = 121095
+    REFERENCE_ANSWER = 145095
     try:
         with open('/workspace/ans.txt', 'r') as file:
             content = file.read().strip()
