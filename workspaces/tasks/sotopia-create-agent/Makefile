@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-check-high-priority-issue
-CONTAINER_NAME=job-bench-sde-check-high-priority-issue
+IMAGE_NAME=sotopia-create-agent
+CONTAINER_NAME=sotopia-create-agent
 
 .PHONY: build run stop
 

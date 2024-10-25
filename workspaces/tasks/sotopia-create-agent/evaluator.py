@@ -52,47 +52,6 @@ def grade_checkpoint2():
 
     return False
 
-def grade_final_checkpoint():
-    repo_url = "http://ogma.lti.cs.cmu.edu:8929/root/sotopia.git"
-    repo_dir = "/tmp/sotopia"  # Directory where the repo will be cloned
-
-    try:
-        # Check if the repository is already cloned
-        if not os.path.isdir(repo_dir):
-            # Clone the repository
-            clone_result = subprocess.run(
-                ["git", "clone", repo_url, repo_dir],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
-            if clone_result.returncode != 0:
-                print("Failed to clone the repository:")
-                print(clone_result.stderr)
-                return False
-
-        # Run pytest in the repository
-        result = subprocess.run(
-            ["pytest"],
-            cwd=repo_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
-
-        # Check if pytest was successful
-        if result.returncode == 0:
-            return True
-        else:
-            print("Pytest failed. Output:")
-            print(result.stdout)
-            print(result.stderr)
-            return False
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return False
-    
 def get_message(channel):
     response = rocket.channels_info(channel=channel).json()
     if not response.get('success'):
@@ -129,6 +88,5 @@ if __name__ == "__main__":
 
     passed1 = grade_checkpoint1(trajectory)
     passed2 = grade_checkpoint2()
-    passed3 = grade_final_checkpoint()
-    points = (int(passed3) + 2) if passed3 >= 1 else int(passed1) + int(passed2)
-    print(f"Final points for task Check High Priority Issue: {points}")
+    points = int(passed1) + int(passed2)
+    print(f"Final points for task Sotopia Create Agent: {points}")
