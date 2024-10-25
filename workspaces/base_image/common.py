@@ -179,10 +179,10 @@ def get_nextcloud_url_in_file(filename: str):
                 return content
             return False
     except FileNotFoundError:
-        print(f"Error: The file '{filename}' was not found.")
+        logging.error(f"Error: The file '{filename}' was not found.")
         return False
     except IOError as e:
-        print(f"Error: An I/O error occurred. Details: {e}")
+        logging.error(f"Error: An I/O error occurred. Details: {e}")
         return False
 
 
@@ -192,11 +192,11 @@ def download_nextcloud_content(link: str, output_file_path: str):
     output_file_path: path to file where the downloaded content is stored
     """
     if "download" not in link:
-        command = ["curl", "--output", "/workspace/.tmp_download_link", link.rstrip("\n")]
+        command = ["curl", "--output", "/tmp/.tmp_download_link", link.rstrip("\n")]
         try:
             subprocess.run(command)
         except Exception as e:
-            print(f"Unable to download from link: {link}")
+            logging.warning(f"Unable to download from link: {link} due to {e}")
             return False
 
         pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
@@ -209,17 +209,17 @@ def download_nextcloud_content(link: str, output_file_path: str):
                 download_link = matches[0]
         
         if download_link is None:
-            print(f"Did not find proper download link")
+            logging.warning(f"Did not find proper download link")
             return False
     else:
         download_link = link.rstrip("\n")
 
     try:
-        print(download_link)
+        logging.info(download_link)
         subprocess.run([f"curl {download_link} --output {output_file_path}"], shell=True)
     except Exception as e:
-        print(f"Download from link: {download_link} not successful")
+        logging.warning(f"Download from link: {download_link} not successful")
         return False
 
-    print(f"Successfully downloaded from link {download_link}")
+    logging.info(f"Successfully downloaded from link {download_link}")
     return True
