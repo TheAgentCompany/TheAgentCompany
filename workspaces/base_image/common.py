@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
-def llm_evaluate(messages):
+def llm_complete(messages):
     if TEST_MODE:
         return {'choices': [{'message': {"content": "Hello, how are you?","role": "user"}}]}
 
@@ -68,7 +68,7 @@ def get_chat_history(rocket_client, username: str):
     """
     id = None
     for item in rocket_client.users_list().json()['users']:
-        if item['nameInsensitive'] == username.lower():
+        if item.get('nameInsensitive', '').lower() == username.lower() or item.get('username', '') == username.lower():
             id = item["_id"]
             break
 
@@ -81,6 +81,43 @@ def get_chat_history(rocket_client, username: str):
     history = reversed_history[::-1]
     logging.info(f'Chat history with {username} is: {history}')
     return history
+
+
+def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
+    """
+    Evaluates if a predicate can be inferred from the content, judged by LLM
+    """
+    try:
+        # Construct LLM query
+        llm_messages = [{
+            "role": "user",
+            "content": f'Does the content """{content}""" indicate {predicate}?'
+                      f'Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
+        }]
+
+        # Call LLM for evaluation
+        llm_response = llm_complete(llm_messages)
+        logging.info("LLM evaluation completed", extra={"response": llm_response})
+
+        # Extract and process response
+        content = llm_response["choices"][0]["message"]["content"].lower().strip()
+
+        # Evaluate result
+        result = "yes" in content
+        if result:
+            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
+        else:
+            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
+
+        return result
+
+    except KeyError as e:
+        logging.error("Invalid LLM response structure", exc_info=True)
+        return False
+
+    except Exception as e:
+        logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
+        return False
 
 
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
@@ -108,35 +145,8 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
-
-        # Construct LLM query
-        llm_messages = [{
-            "role": "user",
-            "content": f'Does the chat history """{messages}""" indicate {predicate}? '
-                      'Please answer "yes" if it does, or "no" if it does not.'
-        }]
-
-        logging.debug(f'LLM request is: {llm_messages}')
-
-        # Call LLM for evaluation
-        llm_response = llm_evaluate(llm_messages)
-        logging.info(f"LLM evaluation completed, response is: {llm_response}")
-
-        # Extract and process response
-        content = llm_response["choices"][0]["message"]["content"].lower().strip()
-
-        # Evaluate result
-        result = "yes" in content
-        if result:
-            logging.info(f'Predicate "{predicate}" evaluated to "{result}"')
-        else:
-            logging.warning(f'Predicate "{predicate}" evaluated to "{result}"')
-
-        return result
-
-    except KeyError as e:
-        logging.error("Invalid LLM response structure", exc_info=True)
-        return False
+        
+        return evaluate_with_llm(str(messages), predicate)
 
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
@@ -169,10 +179,10 @@ def get_nextcloud_url_in_file(filename: str):
                 return content
             return False
     except FileNotFoundError:
-        print(f"Error: The file '{filename}' was not found.")
+        logging.error(f"Error: The file '{filename}' was not found.")
         return False
     except IOError as e:
-        print(f"Error: An I/O error occurred. Details: {e}")
+        logging.error(f"Error: An I/O error occurred. Details: {e}")
         return False
 
 
@@ -182,11 +192,11 @@ def download_nextcloud_content(link: str, output_file_path: str):
     output_file_path: path to file where the downloaded content is stored
     """
     if "download" not in link:
-        command = ["curl", "--output", "/workspace/.tmp_download_link", link.rstrip("\n")]
+        command = ["curl", "--output", "/tmp/.tmp_download_link", link.rstrip("\n")]
         try:
             subprocess.run(command)
         except Exception as e:
-            print(f"Unable to download from link: {link}")
+            logging.warning(f"Unable to download from link: {link} due to {e}")
             return False
 
         pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
@@ -199,17 +209,17 @@ def download_nextcloud_content(link: str, output_file_path: str):
                 download_link = matches[0]
         
         if download_link is None:
-            print(f"Did not find proper download link")
+            logging.warning(f"Did not find proper download link")
             return False
     else:
         download_link = link.rstrip("\n")
 
     try:
-        print(download_link)
+        logging.info(download_link)
         subprocess.run([f"curl {download_link} --output {output_file_path}"], shell=True)
     except Exception as e:
-        print(f"Download from link: {download_link} not successful")
+        logging.warning(f"Download from link: {download_link} not successful")
         return False
 
-    print(f"Successfully downloaded from link {download_link}")
+    logging.info(f"Successfully downloaded from link {download_link}")
     return True

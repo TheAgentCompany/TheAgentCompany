@@ -1,14 +1,9 @@
 import os
 import sys
-from rocketchat_API.rocketchat import RocketChat
 import logging
-from common import *
 
-# Configuration for rocketchat
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from common import evaluate_with_llm
+from common import make_gitlab_request
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -41,24 +36,15 @@ def get_history(username):
     return msgs
 
 
-def check_with_llm(msgs, target, expect_result):
+def check_with_llm(msgs, predicate):
     content = ""
     for msg in msgs[::-1]:
         content += msg['msg']
 
     if len(content) == 0:
         return False
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
 
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
+    return evaluate_with_llm(content, predicate)
 
 
 def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
@@ -101,11 +87,7 @@ def checkpoint4(username='mike_chen'):
     if target is None:
         return False
 
-    return check_with_llm(
-        msgs=msgs,
-        target=target,
-        expect_result='yes'
-    )
+    return check_with_llm(msgs, predicate=target)
 
 def calculate_total_score():
     # Define the scores corresponding to when each function is True

@@ -1,29 +1,19 @@
 import sys
 import logging
-from common import *
+
+from common import evaluate_with_llm
+from common import make_gitlab_request
 
 # Configuration for gitlab
 project_path = "root/openhands"
 issue_id = 4158
 
 
-def check_with_llm(msgs, target, expect_result):
-    content = msgs
-
-    if len(content) == 0:
+def check_with_llm(content, predicate):
+    if not content:
         return False
 
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
-
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
+    return evaluate_with_llm(content, predicate)
 
 def get_gitlab_issue_notes():
     try:
@@ -69,8 +59,7 @@ def checkpoint3():
 
     return check_with_llm(
         msgs='Alright, let\'s go ahead and increase the timeout limit bya few seconds on issue #4158 and monitory the result. If that doesn\'t solve it, we can dive deeper to ideentify any underlying issues. I\'ll start working on the update now.',
-        target=target,
-        expect_result='yes'
+        predicate=target,
     )
 
 
