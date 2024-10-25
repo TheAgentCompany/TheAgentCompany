@@ -3,7 +3,7 @@ from rocketchat_API.rocketchat import RocketChat
 
 import datetime
 
-from llm_evaluator import *
+from common import llm_evaluate
 
 # Set environment variables
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -12,12 +12,10 @@ ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 # Construct RocketChat URL
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-# Set admin credentials
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASSWORD = 'jobbench'
+from common import create_rocketchat_client
 
 # Create RocketChat instance
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASSWORD, server_url=ROCKETCHAT_URL)
+rocket = create_rocketchat_client()
 
 
 def get_history(username):
@@ -48,7 +46,7 @@ def check_final_result(file_path):
         messages = [{"content": f"Does the phrase \"\"{content}\"\" include Friday? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
 
     # Check result
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     print(llm_resonse)
 
     if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():

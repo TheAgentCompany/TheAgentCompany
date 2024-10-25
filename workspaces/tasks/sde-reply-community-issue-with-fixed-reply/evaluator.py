@@ -1,17 +1,10 @@
-import os
 import sys
-import requests
-import urllib.parse
 import logging
-
-from llm_evaluator import *
+from common import *
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 
 def check_with_llm(msgs, target, expect_result):
@@ -25,7 +18,7 @@ def check_with_llm(msgs, target, expect_result):
             "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
 
     if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
         return True
@@ -33,10 +26,8 @@ def check_with_llm(msgs, target, expect_result):
         return False
 
 def get_gitlab_issue_notes():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/issues/{issue_id}/notes"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"issues/{issue_id}/notes")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")

@@ -72,10 +72,10 @@ services:
       traefik.http.routers.rocketchat.entrypoints: https
       traefik.http.routers.rocketchat.tls.certresolver: le
     environment:
-      ADMIN_USERNAME: jobbench
-      ADMIN_PASS: jobbench
-      ADMIN_EMAIL: jobbench@example.com
-      ADMIN_NAME: jobbench
+      ADMIN_USERNAME: theagentcompany
+      ADMIN_PASS: theagentcompany
+      ADMIN_EMAIL: theagentcompany@example.com
+      ADMIN_NAME: theagentcompany
       Show_Setup_Wizard: completed
       OVERWRITE_SETTING_Show_Setup_Wizard: completed
       MONGO_URL: "${MONGO_URL:-\
@@ -113,15 +113,17 @@ services:
 
   redis-stack:
     image: redis/redis-stack-server:7.4.0-v0
+    container_name: redis-stack
     ports:
       - "6379:6379"
     environment:
-      - REDIS_ARGS=--requirepass jobbench --user jobbench on >jobbench ~* &* +@all
+      - REDIS_ARGS=--requirepass theagentcompany --user theagentcompany on >theagentcompany ~* &* +@all
     networks:
       - rocketchat-redis-net
 
   redis-stack-npc-data-population:
     build: ./rocketchat/npc
+    container_name: redis-stack-npc-data-population
     depends_on:
       - redis-stack
     networks:

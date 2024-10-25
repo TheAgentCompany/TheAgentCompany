@@ -1,17 +1,13 @@
-import requests
 import os
-from rocketchat_API.rocketchat import RocketChat
 
-# Rocket.Chat server URL and admin credentials
+from common import create_rocketchat_client
+
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def check_url_1(browser_logs):
     return f"{ROCKETCHAT_URL}/home" in browser_logs

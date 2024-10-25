@@ -48,8 +48,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     rocketchat_login_actions = [
         'goto("http://the-agent-company.com:3000/")',
         'noop(5000)',
-        'fill("52", "jobbench")',
-        'fill("57", "jobbench")',
+        'fill("52", "theagentcompany")',
+        'fill("57", "theagentcompany")',
         'click("60")',
     ]
 

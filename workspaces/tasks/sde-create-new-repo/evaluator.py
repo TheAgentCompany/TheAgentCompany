@@ -1,7 +1,6 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
 import requests
-from llm_evaluator import *
+from common import *
 
 import logging
 import urllib
@@ -14,18 +13,13 @@ SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/new-storage-project"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 readme_path = "README.md"
 
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
@@ -54,7 +48,7 @@ def check_with_llm(msgs, pattern):
             "content": f"Does the text \"{content}\" include some tasks to start a new data storage related project? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     logging.info(llm_resonse)
 
     if pattern in llm_resonse['choices'][0]['message']['content'].lower():
@@ -63,14 +57,10 @@ def check_with_llm(msgs, pattern):
         return False
 
 def check_repo_exist():
-
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}"
-
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path)
  
-        if response.status_code == 200:
+        if response is not None and response.status_code == 200:
             logging.info(f"New repository '{project_path}' created successfully.")
             return True
         else:
@@ -81,17 +71,17 @@ def check_repo_exist():
         return False
 
 def check_readme_content():
-
-    encoded_path = urllib.parse.quote(project_path, safe='')
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/repository/files/{readme_encoded_path}/raw?ref=main"
-
-    readme = requests.get(url, headers=headers).text
+    try:
+        readme = make_gitlab_request(project_path, f"repository/files/{readme_encoded_path}/raw?ref=main")
+    except requests.RequestException as e:
+        logging.error(f"Error occurred while checking readme file: {e}")
+        return False
 
     messages = [{"content": f"Does the readme \"\"{readme}\"\" provide some details about a new storage system project? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
     
     # # Check result
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_evaluate(messages)
     print(llm_resonse)
 
     if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():

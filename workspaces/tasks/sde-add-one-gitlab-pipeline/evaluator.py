@@ -1,20 +1,15 @@
 import sys
 import requests
-import urllib.parse
 import logging
+from common import *
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 
 def get_gitlab_pipeline():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/pipelines"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, "pipelines")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")

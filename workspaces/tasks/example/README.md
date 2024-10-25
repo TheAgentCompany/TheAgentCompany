@@ -100,3 +100,8 @@ generally pre-defined fashion. This context is defined in each individual task i
 If your task needs to involve NPCs, take a look at the example task. In a nutshell,
 all you need to do is to add a `scenarios.json` that documents the NPCs involved, their
 knowledge and their settings. For details, see [here](./NPC.md).
+
+
+## Gitlab (optional)
+Some tasks require the examinee to push the code to the gitlab. So they need to 
+figure out by themselves without providing the credential to them
