@@ -14,7 +14,6 @@ import requests
 import logging
 import os
 import sys
-from llm_evaluator import *
 
 def grade_checkpoint1(trajectory):
     return "8929/root/api-server" in trajectory
