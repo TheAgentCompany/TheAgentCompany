@@ -1,6 +1,6 @@
 import os
 import requests
-from common import llm_evaluate
+from common import *
 
 import logging
 import urllib
@@ -14,14 +14,9 @@ ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/new-storage-project"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 readme_path = "README.md"
-
-from common import create_rocketchat_client
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -62,14 +57,10 @@ def check_with_llm(msgs, pattern):
         return False
 
 def check_repo_exist():
-
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}"
-
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path)
  
-        if response.status_code == 200:
+        if response is not None and response.status_code == 200:
             logging.info(f"New repository '{project_path}' created successfully.")
             return True
         else:
@@ -80,13 +71,9 @@ def check_repo_exist():
         return False
 
 def check_readme_content():
-
-    encoded_path = urllib.parse.quote(project_path, safe='')
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/repository/files/{readme_encoded_path}/raw?ref=main"
-
     try:
-        readme = requests.get(url, headers=headers).text
+        readme = make_gitlab_request(project_path, f"repository/files/{readme_encoded_path}/raw?ref=main")
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking readme file: {e}")
         return False
