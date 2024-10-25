@@ -91,12 +91,6 @@ def get_function_content(file_path, function_name):
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
 
-def is_repo_exist():
-    """
-     Check if a repo exists at the given path.
-    """
-    return check_repo_clone_in_workspace()
-
 def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
     """
     Run pytest and collect test statistics.
@@ -203,7 +197,7 @@ def remove_func(file_path=UT_FILE, function_name=f"def {UT_FUNC_NAME}("):
         return False
 
 def checkpoint1():
-    return is_repo_exist()
+    return check_repo_exists('openhands')
 
 def checkpoint2(path=UT_FILE):
     return is_file_exist(file_path=path)

@@ -6,7 +6,7 @@ from common import *
 
 # Check the repo has been cloned
 def grade_checkpoint1():
-    return check_repo_clone_in_workspace()
+    return check_repo_exists('openhands')
     
 # Check all the test passed
 def grade_checkpoint2(trajectory):

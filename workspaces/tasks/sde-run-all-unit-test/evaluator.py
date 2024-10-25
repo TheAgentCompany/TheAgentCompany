@@ -5,7 +5,7 @@ from common import *
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    return check_repo_clone_in_workspace()
+    return check_repo_exists('openhands')
 
 # Check if at least one unit test is collected
 def grade_checkpoint2(trajectory):

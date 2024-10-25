@@ -6,7 +6,7 @@ from common import *
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    return check_repo_clone_in_workspace()
+    return check_repo_exists('openhands')
 
 # Check L20 is fixed to be Thursday instead of Saturday
 def grade_checkpoint2():

@@ -9,7 +9,7 @@ PLANE_PROJECT_ID = "73cb74f7-a7ac-4292-a915-e2f59a09a703"
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    return check_repo_clone_in_workspace()
+    return check_repo_exists('openhands')
 
 # Check if run unit test coverage command exists in trajectory
 def grade_checkpoint2(trajectory):

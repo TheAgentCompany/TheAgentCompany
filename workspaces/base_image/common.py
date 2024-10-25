@@ -224,27 +224,19 @@ def download_nextcloud_content(link: str, output_file_path: str):
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
 
-def check_repo_clone_in_workspace():
-    openhands_path = '/workspace/openhands'
+
+PROJECT_FILES = {
+    'openhands': '.openhands_instructions',
+}
+
+def check_repo_exists(project_name: str):
     try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
+        if project_name not in PROJECT_FILES:
+            logging.warning(f"Unknown project: {project_name}")
             return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-        
-        return os.path.isfile(instruction_file_path)
-    
+            
+        file_path = os.path.join('/workspace', project_name, PROJECT_FILES[project_name])
+        return os.path.isfile(file_path)
     except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
+        logging.warning(f"Error checking file: {e}")
         return False

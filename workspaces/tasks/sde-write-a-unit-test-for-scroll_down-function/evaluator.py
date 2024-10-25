@@ -110,13 +110,6 @@ def get_function_content(file_path, function_name):
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
 
-def is_repo_exist():
-    """
-     Check if a repo exists at the given path.
-    """
-    return check_repo_clone_in_workspace()
-
-
 def is_test_run(dir_path, file_path, function_name):
     """
     Run a specific test function using pytest and check if it was successful.
@@ -182,7 +175,7 @@ def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
     return stats
 
 def checkpoint1():
-    return is_repo_exist()
+    return check_repo_exists('openhands')
 
 def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)
