@@ -42,7 +42,7 @@ def grade_checkpoint1():
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
 
-# Check if coverage command exists in trajectory
+# Check if run unit test coverage command exists in trajectory
 def grade_checkpoint2(trajectory):
     required_commands = ["poetry run pytest", "--cov=openhands"]
     return all(cmd in trajectory for cmd in required_commands)
