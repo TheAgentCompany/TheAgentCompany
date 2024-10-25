@@ -202,7 +202,7 @@ def download_nextcloud_content(link: str, output_file_path: str):
         pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
 
         download_link: str | None = None
-        with open("/workspace/.tmp_download_link", "r") as f:
+        with open("/tmp/.tmp_download_link", "r") as f:
             content = f.read()
             matches = re.findall(pattern, content, re.MULTILINE)
             if matches:

@@ -1,4 +1,4 @@
-from common import llm_evaluate, create_rocketchat_client, get_chat_history, get_nextcloud_url_in_file, download_nextcloud_content
+from common import evaluate_with_llm, create_rocketchat_client, get_chat_history, get_nextcloud_url_in_file, download_nextcloud_content
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -24,16 +24,9 @@ def check_job_description_content():
         logger.error("some placeholder still present in the final job description.")
         return False
 
-    messages = [{"content": f"Is the content in the markdown file \"\"{final_content}\"\" a successful combination of the markdown template \"\"{template_content}\"\" and the requirement file \"\"{requirement_content}\"\"? Pay special consideration to all of the numerical details. Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
-    # Check result
-    llm_resonse = llm_evaluate(messages)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        logger.info(f"New Grad software engineer job description is expected")
-        return True
-    else:
-        logger.error(f"New Grad software engineer job description's content is not expected")
-        return False
+    predicate = f'a successful combination of the markdown template \"\"{template_content}\"\" and the requirement file \"\"{requirement_content}'
+    additional_prompt = 'Pay special consideration to all of the numerical details. '
+    return evaluate_with_llm(final_content, predicate, additional_prompt)
 
 ############################# Evaluator #####################################
 
