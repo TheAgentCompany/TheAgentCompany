@@ -10,6 +10,11 @@ PLANE_API_KEY = os.environ.get("PLANE_API_KEY") or "plane_api_569b8e604e0c46d0b6
 
 BASE_URL = "http://the-agent-company.com"
 
+SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
+ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
+
+ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
+
 # Gitlab Config
 GITLAB_PORT = 8929
 GITLAB_ACCESS_TOKEN = "root-token"
