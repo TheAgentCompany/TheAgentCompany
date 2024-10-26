@@ -49,9 +49,12 @@ ENV BOT_URL http://the-agent-company.com:3000
 #############################################################
 
 ################## LLM Evaluator/rocketchat NPC SETUP ###############
-ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
-ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
-ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
+# If the task needs to use LLM-based evaluator OR involves NPCs, then
+# LITELLM_API_KEY must be set, along with optional LITELLM_BASE_URL
+# and LITELLM_MODEL variables
+# ENV LITELLM_API_KEY
+# ENV LITELLM_BASE_URL
+# ENV LITELLM_MODEL
 ENV PYTHONPATH="/utils:$PYTHONPATH"
 #############################################################
 
