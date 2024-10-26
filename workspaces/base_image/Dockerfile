@@ -9,6 +9,7 @@ COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
 COPY common.py /utils
 COPY config.py /utils
+COPY eval.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
