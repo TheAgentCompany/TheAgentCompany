@@ -1,28 +1,14 @@
-"""Summary of evaluator for example task
-
-You don't have to write a summary for the evaluator, although documentation is
-strongly encouraged.
-
-A good evaluator should:
-1. be robust - it shouldn't abort because of its own bug or lack of fail over mechanism
-2. be deterministic and idempotent
-3. grant partial credits if possible
-4. encourage but not require trajectory for grading
-"""
 import logging
 import os
 import sys
-from common import *
+from common import make_gitlab_request, llm_complete
+from config import BASE_URL, GITLAB_PORT, GITLAB_USER
 import urllib
 import json
 from prompts import wiki_evaluation_prompt
 
-SERVER_HOSTNAME = 'the-agent-company.com'
-GITLAB_PORT = '8929'
-GITLAB_USER = "root"
-GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
-PROJECT_NAME = "sotopia"
-PROJECT_PATH = f"{GITLAB_USER}/{PROJECT_NAME}"
+GITLAB_URL = f"{BASE_URL}:{GITLAB_PORT}"
+PROJECT_PATH = f"{GITLAB_USER}/sotopia"
 
 CHECKPOINT_1_SCORE = 1
 CHECKPOINT_2_SCORE = 1
@@ -53,13 +39,11 @@ def get_readme():
         return None
 
 def grade_checkpoint1(trajectory):
-    url = f"{GITLAB_URL}/{PROJECT_NAME}"
+    url = f"{GITLAB_URL}/{PROJECT_PATH}"
     return url in trajectory
 
 def grade_checkpoint2(wiki_page):
-    if wiki_page is None:
-        return False
-    return True
+    return wiki_page is not None
 
 def grade_checkpoint3(wiki_page):
     wiki = f"{json.dumps(wiki_page)}"
@@ -73,7 +57,7 @@ def grade_checkpoint3(wiki_page):
         }
     ]
 
-    llm_response = llm_evaluate(messages)
+    llm_response = llm_complete(messages)
     content = llm_response["choices"][0]["message"]["content"].lower().strip()
     return "yes" in content
 
