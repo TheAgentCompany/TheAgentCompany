@@ -13,6 +13,7 @@ def grade_checkpoint2():
         response = requests.get("http://localhost:5000/list_models")
         return response.status_code == 200
     except Exception:
+        logging.warning("Local server is not launched correctly")
         return False
 
 
@@ -27,6 +28,7 @@ def grade_final_checkpoint():
         response = requests.post("http://localhost:5000/create_pair", json=json_input)
         return response.status_code == 400  # This should now fail
     except Exception:
+        logging.warning("Local server is not launched correctly")
         return False
 
 
