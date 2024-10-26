@@ -1,42 +1,23 @@
-import os
 import sys
-import requests
-import urllib.parse
 import logging
 
-from common import llm_evaluate
+from common import evaluate_with_llm
+from common import make_gitlab_request
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 
-def check_with_llm(msgs, target, expect_result):
-    content = msgs
-
-    if len(content) == 0:
+def check_with_llm(content, predicate):
+    if not content:
         return False
 
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
-
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
+    return evaluate_with_llm(content, predicate)
 
 def get_gitlab_issue_notes():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/issues/{issue_id}/notes"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"issues/{issue_id}/notes")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
@@ -78,8 +59,7 @@ def checkpoint3():
 
     return check_with_llm(
         msgs='Alright, let\'s go ahead and increase the timeout limit bya few seconds on issue #4158 and monitory the result. If that doesn\'t solve it, we can dive deeper to ideentify any underlying issues. I\'ll start working on the update now.',
-        target=target,
-        expect_result='yes'
+        predicate=target,
     )
 
 

@@ -1,35 +1,22 @@
 import os
 import sys
-import requests
-from rocketchat_API.rocketchat import RocketChat
-import urllib.parse
 import logging
 
-from common import llm_evaluate
-
-# Configuration for rocketchat
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from common import evaluate_with_llm
+from common import make_gitlab_request
 from common import create_rocketchat_client
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 
 def get_gitlab_issue_notes():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/issues/{issue_id}/notes"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"issues/{issue_id}/notes")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
@@ -49,24 +36,15 @@ def get_history(username):
     return msgs
 
 
-def check_with_llm(msgs, target, expect_result):
+def check_with_llm(msgs, predicate):
     content = ""
     for msg in msgs[::-1]:
         content += msg['msg']
 
     if len(content) == 0:
         return False
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
 
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
+    return evaluate_with_llm(content, predicate)
 
 
 def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
@@ -109,11 +87,7 @@ def checkpoint4(username='mike_chen'):
     if target is None:
         return False
 
-    return check_with_llm(
-        msgs=msgs,
-        target=target,
-        expect_result='yes'
-    )
+    return check_with_llm(msgs, predicate=target)
 
 def calculate_total_score():
     # Define the scores corresponding to when each function is True

@@ -1,17 +1,6 @@
-import os
 import requests
 import logging
 from config import *
-############################# init variable ##################################### 
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
-
 
 ############################# util function #####################################  
 # Set up logging
@@ -35,7 +24,7 @@ def create_project(project_name, project_identifer):
         "identifier": project_identifer,
     }
 
-    response = requests.request("POST", url, json=payload, headers=headers)
+    response = requests.request("POST", url, json=payload, headers=PLANE_HEADERS)
     if response.status_code == 201:
         resp = response.json()
         logger.info(f"Project {project_name} create.")
