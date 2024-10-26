@@ -68,4 +68,4 @@ def grade_checkpoints(trajectory=None) -> Result:
     return result
 
 if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints()))
+    print(json.dumps(grade_checkpoints().to_dict()))
