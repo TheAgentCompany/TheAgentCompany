@@ -2,7 +2,7 @@ import re
 import logging
 import json
 
-def grade_checkpoints(trajectory):
+def grade_checkpoints(trajectory=None):
     result = {'final_score': 0}
     try:
         with open('/workspace/ans.txt', 'r') as file:

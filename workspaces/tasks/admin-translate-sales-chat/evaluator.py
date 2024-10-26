@@ -2,7 +2,8 @@ import re
 import json
 import logging
 
-def grade_checkpoints(trajectory):
+
+def grade_checkpoints(trajectory=None):
     # reference answer's detailed computation is documented in README.md
     REFERENCE_ANSWER = 145095
 
