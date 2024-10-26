@@ -1,4 +1,4 @@
-IMAGE_NAME=sotopia-create-agent
+IMAGE_NAME=sotopia-create-agent-image
 CONTAINER_NAME=sotopia-create-agent
 
 .PHONY: build run stop
