@@ -46,6 +46,9 @@ def main():
         if not isinstance(results, dict):
             raise TypeError(f"grade_checkpoints must return a dict, got {type(results)}")
 
+        if not results.get('final_score'):
+            raise KeyError(f'grade_checkpoints output must contain a `final_score` field')
+
         # Save results to JSON file
         with open(args.output_path, 'w') as f:
             json.dump(results, f, indent=4)
