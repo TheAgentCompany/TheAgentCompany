@@ -8,8 +8,8 @@ Check trajectory whether we have access the bustub page
 
 ## Checkpoint 2 (1pt)
 
-Check whether the new created page exist
+Check whether the new created page url exist in /workspace/sharelink.txt file
 
 ## Checkpoint 3 (1pt)
 
-Check the keyword to make sure key information not get lost / Or use LLM evaluator (or you can use python package to parse it)
+Use LLM evaluator to make sure the page is the same as the original one

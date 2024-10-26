@@ -16,7 +16,7 @@ def checkpoint2():
 def checkpoint3():
     try:
         url_content = get_nextcloud_url_in_file('/workspace/sharelink.txt')
-        if url_content is False:
+        if not url_content:
             logging.warning("Could not get valid Nextcloud URL")
             return False
         
@@ -79,4 +79,4 @@ if __name__ == "__main__":
         trajectory = load_trajectory(sys.argv[1])
 
     points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for OpenHands task: {points}/3")
+    print(f"\nFinal points for moving page to nextcloud task: {points}/3")
