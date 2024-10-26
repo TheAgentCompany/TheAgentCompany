@@ -1,18 +1,29 @@
 import os
 import logging
-
-import litellm
 import urllib
-
 import subprocess
 import re
-
 import requests
+
+import litellm
 from rocketchat_API.rocketchat import RocketChat
 
 from config import *
 
 logging.basicConfig(level=logging.INFO)
+
+
+class MockRocketChatClient:
+
+    class JsonResponse:
+        def json(self):
+            return {'users': [], 'messages': []}
+
+    def __getattr__(self, name):
+        def method(*args, **kwargs):
+            return self.JsonResponse()
+        return method
+    
 
 # messages: a list of message.
 # example [{ "content": "Hello, how are you?","role": "user"}]
@@ -26,18 +37,6 @@ def llm_complete(messages):
         model=LITELLM_MODEL,
         messages=messages
     ).json()
-
-
-class MockRocketChatClient:
-
-    class JsonResponse:
-        def json(self):
-            return {'users': [], 'messages': []}
-
-    def __getattr__(self, name):
-        def method(*args, **kwargs):
-            return self.JsonResponse()
-        return method
 
 
 def create_rocketchat_client(username='theagentcompany', password='theagentcompany'):

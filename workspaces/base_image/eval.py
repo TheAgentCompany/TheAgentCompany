@@ -8,6 +8,7 @@ import sys
 import logging
 
 from evaluator import grade_checkpoints
+from scoring import Result, Checkpoint
 
 
 def load_trajectory(file_path):
@@ -18,7 +19,7 @@ def load_trajectory(file_path):
     except Exception as e:
         logging.warning(f"Error reading trajectory file: {e}")
         return ""
-    
+
 
 def main():
     # Set up logging
@@ -42,17 +43,13 @@ def main():
         
         result = grade_checkpoints(trajectory)
 
-        # Verify result is a dict
-        if not isinstance(result, dict):
-            raise TypeError(f"grade_checkpoints must return a dict, got {type(result)}")
-
-        if result.get('final_score') is None:
-            raise KeyError(f'grade_checkpoints output must contain a `final_score` field, but get: {result}')
+        if not isinstance(result, Result):
+            raise TypeError(f"grade_checkpoints must return Result type, got {type(result)}")
 
         # Save result to JSON file
         logging.info(f'result is: {result}')
         with open(args.output_path, 'w') as f:
-            json.dump(result, f, indent=4)
+            json.dump(result.to_dict(), f, indent=4)
             
     except Exception:
         logging.error("Failed to grade the task", exc_info=True)
