@@ -27,7 +27,7 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Grade checkpoints from trajectory and save results')
     parser.add_argument('--trajectory_path', required=False, default=None, help='Path to the trajectory file')
-    parser.add_argument('--output_path', required=True, default='./output.json', help='Path to save the output JSON')
+    parser.add_argument('--output_path', required=False, default='./output.json', help='Path to save the output JSON')
 
     # Parse arguments
     args = parser.parse_args()
@@ -46,8 +46,8 @@ def main():
         if not isinstance(results, dict):
             raise TypeError(f"grade_checkpoints must return a dict, got {type(results)}")
 
-        if not results.get('final_score'):
-            raise KeyError(f'grade_checkpoints output must contain a `final_score` field')
+        if results.get('final_score') is None:
+            raise KeyError(f'grade_checkpoints output must contain a `final_score` field, but get: {results}')
 
         # Save results to JSON file
         with open(args.output_path, 'w') as f:

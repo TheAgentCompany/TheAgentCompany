@@ -3,7 +3,7 @@ import json
 import logging
 from collections import defaultdict
 
-def grade_checkpoints():
+def grade_checkpoints(trajectory):
     result = {'final_score': 0}
     score = 0
     
