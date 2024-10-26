@@ -2,12 +2,11 @@ import logging
 import os
 import sys
 from common import make_gitlab_request, llm_complete
-from config import BASE_URL, GITLAB_PORT, GITLAB_USER
+from config import GITLAB_BASEURL, GITLAB_USER
 import urllib
 import json
 from prompts import wiki_evaluation_prompt
 
-GITLAB_URL = f"{BASE_URL}:{GITLAB_PORT}"
 PROJECT_PATH = f"{GITLAB_USER}/sotopia"
 
 CHECKPOINT_1_SCORE = 1
@@ -39,7 +38,7 @@ def get_readme():
         return None
 
 def grade_checkpoint1(trajectory):
-    url = f"{GITLAB_URL}/{PROJECT_PATH}"
+    url = f"{GITLAB_BASEURL}/{PROJECT_PATH}"
     return url in trajectory
 
 def grade_checkpoint2(wiki_page):

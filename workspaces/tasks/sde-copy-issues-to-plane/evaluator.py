@@ -1,20 +1,10 @@
-import os
 import sys
 import logging
 import requests
 from config import *
 
-############################# init variable #####################################
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
 
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
+PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
 
 # Check if the title are in the trajectory
 def grade_checkpoint1(trajectory):
@@ -26,7 +16,7 @@ def grade_checkpoint2():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=PLANE_HEADERS)
 
         if response.status_code == 200:
             resp = response.json()

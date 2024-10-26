@@ -7,22 +7,6 @@ from config import *
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
-# Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'the-agent-company.com'
-
-PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
-
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
-
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
 
 ############################# Helper Functions #####################################
 
@@ -53,7 +37,7 @@ def get_project_id(project_name):
     """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         data = response.json()
         projects = data.get('results', [])
@@ -80,7 +64,7 @@ def check_issue_created(project_id, issue_name):
     """Check if an issue with a specific name exists in a project using the Plane API."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         data = response.json()
         issues = data.get("results", [])
@@ -97,7 +81,7 @@ def check_issue_assigned(project_id, issue_text, assignee):
     """Check if the issue is assigned to the correct participant."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         issues = response.json().get("results", [])
         for issue in issues:
