@@ -7,7 +7,7 @@ import time
 import re
 import astor
 
-from common import llm_complete
+from common import *
 
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
@@ -57,36 +57,6 @@ def check_with_llm(test_code, func_code):
     if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
         return True
     else:
-        return False
-
-def is_dir(fir_path):
-    """
-    Check if the given path is a directory and contains at least one file.
-    """
-    if not fir_path:
-        logging.warning("is_dir: Empty path provided")
-        return False
-    try:
-        abs_path = os.path.abspath(fir_path)
-
-        if not os.path.exists(abs_path):
-            logging.warning(f"is_dir: Path does not exist: {abs_path}")
-            return False
-
-        if not os.path.isdir(abs_path):
-            logging.warning(f"is_dir: Path is not a directory: {abs_path}")
-            return False
-
-        files = os.listdir(abs_path)
-
-        if not files:
-            logging.warning(f"is_dir: No files found in directory: {abs_path}")
-            return False
-
-        return True
-
-    except Exception as e:
-        logging.warning(f"Error in is_dir: {e}")
         return False
 
 def is_file_exist(file_path):
@@ -139,17 +109,6 @@ def get_function_content(file_path, function_name):
     except Exception as e:
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
-
-def is_repo_exit(dir_path):
-    """
-     Check if a repo exists at the given path.
-    """
-    is_dir(dir_path)
-
-    instruction_file_name = ".openhands_instructions"
-    instruction_file_path = os.path.join(dir_path, instruction_file_name)
-
-    return is_file_exist(instruction_file_path)
 
 def is_test_run(dir_path, file_path, function_name):
     """
@@ -215,8 +174,8 @@ def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
 
     return stats
 
-def checkpoint1(path='/workspace/openhands/'):
-    return is_repo_exit(dir_path=path)
+def checkpoint1():
+    return check_repo_exists('openhands')
 
 def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)

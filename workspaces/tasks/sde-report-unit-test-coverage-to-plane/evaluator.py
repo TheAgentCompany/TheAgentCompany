@@ -3,44 +3,13 @@ import sys
 import logging
 import requests
 from config import *
+from common import *
 
-# Plane Config
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
 PLANE_PROJECT_ID = "73cb74f7-a7ac-4292-a915-e2f59a09a703"
-
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
-            return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-        
-        return os.path.isfile(instruction_file_path)
-    
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
+    return check_repo_exists('openhands')
 
 # Check if run unit test coverage command exists in trajectory
 def grade_checkpoint2(trajectory):
@@ -52,7 +21,7 @@ def grade_checkpoint3():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         if response.status_code == 200:
             issues = response.json().get("results", [])
             for issue in issues:
@@ -70,7 +39,7 @@ def grade_checkpoint4():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         if response.status_code == 200:
             issues = response.json().get("results", [])
             for issue in issues:
