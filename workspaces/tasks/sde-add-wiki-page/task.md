@@ -1,0 +1,1 @@
+Go to Sotopia's gitlab repository at http://the-agent-company.com:8929/root/sotopia. Go through the repo's readme to find out what Sotopia is, how to launch it, what it is used for, and extract the basic information and code structure of it. With the information you have gathered, create a new wiki page under gitlab sotopia repository to introduce Sotopia.
