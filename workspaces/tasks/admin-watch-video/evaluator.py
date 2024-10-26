@@ -1,6 +1,9 @@
 import re
+import logging
+import json
 
-def evaluate_task():
+def grade_checkpoints(trajectory):
+    result = {'final_score': 0}
     try:
         with open('/workspace/ans.txt', 'r') as file:
             content = file.read().strip()
@@ -10,18 +13,19 @@ def evaluate_task():
             
             # Check if there's exactly one number
             if len(numbers) != 1:
-                return 0
+                return result
             
             number = int(numbers[0])
             
             if number == 4:
-                return 2
+                result['final_score'] = 2
             else:
-                return 0
-    
+                result['final_score'] = 0
     except FileNotFoundError:
-        return 0
+        logging.error('/workspace/ans.txt is not found')
+
+    return result
+
 
 if __name__ == "__main__":
-    points = evaluate_task()
-    print(f"Evaluation completed. Final score: {points}/2")
+    print(json.dumps(grade_checkpoints()))
