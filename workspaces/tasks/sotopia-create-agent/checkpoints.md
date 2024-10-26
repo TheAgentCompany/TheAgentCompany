@@ -9,11 +9,10 @@ Create a new branch called `feature/nonVerbalAgent` in the local sotopia repo fo
 ## Checkpoint 2 (1pt)
 
 Write python code to create a new agent called `NonVerbalAgent` that can only issue non-verbal communication in the `sotopia/agents/llm_agent.py` file.
+(Ensure that the new agent class `NonVerbalAgent` inherits from `LLMAgent` and includes the keyword "NonVerbalAgent". We will only perform a basic sanity test to verify this.)
 
 ## Checkpoint 3 (3pt)
 First login the gitlab with the following username and password:
-username: root@local
-password: JobBench
 
 Commit the change to the gitlab
 
