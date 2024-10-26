@@ -40,18 +40,19 @@ def main():
         else:
             trajectory = load_trajectory(args.trajectory_path)
         
-        results = grade_checkpoints(trajectory)
+        result = grade_checkpoints(trajectory)
 
-        # Verify results is a dict
-        if not isinstance(results, dict):
-            raise TypeError(f"grade_checkpoints must return a dict, got {type(results)}")
+        # Verify result is a dict
+        if not isinstance(result, dict):
+            raise TypeError(f"grade_checkpoints must return a dict, got {type(result)}")
 
-        if results.get('final_score') is None:
-            raise KeyError(f'grade_checkpoints output must contain a `final_score` field, but get: {results}')
+        if result.get('final_score') is None:
+            raise KeyError(f'grade_checkpoints output must contain a `final_score` field, but get: {result}')
 
-        # Save results to JSON file
+        # Save result to JSON file
+        logging.info(f'result is: {result}')
         with open(args.output_path, 'w') as f:
-            json.dump(results, f, indent=4)
+            json.dump(result, f, indent=4)
             
     except Exception:
         logging.error("Failed to grade the task", exc_info=True)

@@ -1,4 +1,5 @@
-import os
+import json
+
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -29,7 +30,8 @@ def checkpoint3(content: str):
         return False
     return 'apple' in content and 'sprite' in content
 
-def calculate_total_score():
+def grade_checkpoints(trajectory):
+    result = dict()
     scores = {
         checkpoint1: 1,
         checkpoint2: 1,
@@ -46,9 +48,13 @@ def calculate_total_score():
     for func, score in scores.items():
         if func(content):
             total_score += score
+            result[func.__name__] = score
+        else:
+            result[func.__name__] = 0
 
-    return total_score
+    result['final_score'] = total_score
+    return result
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal points: {total}")
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints()))
