@@ -9,24 +9,21 @@ from scoring import Result, Checkpoint
 def grade_checkpoints(trajectory=None) -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-    
+    drinks_count = defaultdict(int)
+
     try:
         with open('/workspace/drinks_survey.csv', 'r') as file:
             reader = csv.DictReader(file)
-            drinks_count = defaultdict(int)
             for row in reader:
                 drink = row['drink'].strip().lower()
                 quantity = int(row['quantity'])
                 drinks_count[drink] += quantity
     except FileNotFoundError:
         logging.error("File '/workspace/drinks_survey.csv' not found")
-        return result
     except csv.Error:
         logging.error("Unable to parse the CSV file. Make sure it's properly formatted.")
-        return result
     except ValueError:
         logging.error("Invalid quantity value in the CSV. All quantities should be integers.")
-        return result
 
     # Checkpoint 1
     unique_drinks = set(drinks_count.keys())
