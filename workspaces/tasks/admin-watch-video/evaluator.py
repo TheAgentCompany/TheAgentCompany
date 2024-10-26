@@ -1,9 +1,15 @@
 import re
 import logging
 import json
+from typing import List
+
+from scoring import Result, Checkpoint
 
 def grade_checkpoints(trajectory=None):
-    result = {'final_score': 0}
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    total_score = 2
     try:
         with open('/workspace/ans.txt', 'r') as file:
             content = file.read().strip()
@@ -13,16 +19,16 @@ def grade_checkpoints(trajectory=None):
             
             # Check if there's exactly one number
             if len(numbers) != 1:
-                return result
-            
-            number = int(numbers[0])
-            
-            if number == 4:
-                result['final_score'] = 2
+                checkpoints.append(Checkpoint(total_score, 0))
             else:
-                result['final_score'] = 0
+                number = int(numbers[0])
+                if number == 4:
+                    checkpoints.append(Checkpoint(total_score, 2))
+                else:
+                    checkpoints.append(Checkpoint(total_score, 0))
     except FileNotFoundError:
-        logging.error('/workspace/ans.txt is not found')
+        logging.warning('/workspace/ans.txt is not found')
+        checkpoints.append(Checkpoint(total_score, 0))
 
     return result
 

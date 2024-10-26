@@ -45,11 +45,15 @@ def main():
 
         if not isinstance(result, Result):
             raise TypeError(f"grade_checkpoints must return Result type, got {type(result)}")
+        
+        if not result.checkpoints:
+            raise ValueError(f"Result must have at least one checkpoint, got {result}")
 
         # Save result to JSON file
-        logging.info(f'result is: {result}')
+        result_json = result.to_dict()
+        logging.info(f'result is: {result_json}')
         with open(args.output_path, 'w') as f:
-            json.dump(result.to_dict(), f, indent=4)
+            json.dump(result_json, f, indent=4)
             
     except Exception:
         logging.error("Failed to grade the task", exc_info=True)
