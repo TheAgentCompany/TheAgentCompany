@@ -3,9 +3,9 @@ import logging
 import sys
 import os
 
-# Check http://theagentcompany.com:8929/root/sotopia/-/issues is in the trajectory
+# Check http://the-agent-company.com:8929/root/sotopia/-/issues is in the trajectory
 def grade_checkpoint1(trajectory):
-    target_url = "http://theagentcompany.com:8929/root/sotopia/-/issues"
+    target_url = "http://the-agent-company.com:8929/root/sotopia/-/issues"
     
     try:
         return target_url in (str(trajectory))
@@ -48,7 +48,7 @@ def grade_checkpoint3():
 
 def grade_checkpoints(trajectory):
     checkpoints = [
-        (lambda t: grade_checkpoint1(t), "http://theagentcompany.com:8929/root/sotopia/-/issues/ is in the trajectory"),
+        (lambda t: grade_checkpoint1(t), "http://the-agent-company.com:8929/root/sotopia/-/issues/ is in the trajectory"),
         (grade_checkpoint2, "/workspace/issues.csv has 12 lines and is a valid csv file"),
         (grade_checkpoint3, "/workspace/issues.csv contains line \"215,[FEAT]: Custom model docs\"")
     ]

@@ -1,22 +1,16 @@
 import logging
 import requests
-import urllib.parse
+from common import *
 
-# GitLab configuration
-base_url = "http://theagentcompany.com:8929/api/v4"
 project_path = "root/raft"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 # Check if the repository returns a 404 status via the API.
 def check_repository_deleted():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}"
     
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path)
  
-        if response.status_code == 404:
+        if response is not None and response.status_code == 404:
             logging.info(f"Repository '{project_path}' not found (404), as expected.")
             return True
         else:

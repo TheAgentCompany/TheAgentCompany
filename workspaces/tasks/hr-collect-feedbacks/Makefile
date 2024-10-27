@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-hr-collect-feedbacks
-CONTAINER_NAME=job-bench-hr-collect-feedbacks
+IMAGE_NAME=hr-collect-feedbacks-image
+CONTAINER_NAME=hr-collect-feedbacks
 
 .PHONY: build run stop
 

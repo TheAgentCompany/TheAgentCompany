@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-send-hello-message-image
-CONTAINER_NAME=job-bench-pm-send-hello-message
+IMAGE_NAME=pm-send-hello-message-image
+CONTAINER_NAME=pm-send-hello-message
 
 .PHONY: build run stop
 

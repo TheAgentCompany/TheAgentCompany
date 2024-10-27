@@ -1,33 +1,23 @@
 import logging
-import requests
 import sys
 import urllib.parse
+from common import *
 
-# GitLab configuration
-base_url = "http://ogma.lti.cs.cmu.edu:8929/api/v4"
 project_path = "root/opensearch"
 stale_branch = "feature/ssl"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
 def check_repository_exists():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}"
-    
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path)
         return response.status_code == 200
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
 def check_branch_deleted():
-    encoded_path = urllib.parse.quote(project_path, safe='')
     encoded_branch = urllib.parse.quote(stale_branch, safe='')
-    url = f"{base_url}/projects/{encoded_path}/repository/branches/{encoded_branch}"
-    
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"repository/branches/{encoded_branch}")
         return response.status_code == 404
     except Exception as e:
         logging.error(f"Error occurred while checking the branch: {e}")

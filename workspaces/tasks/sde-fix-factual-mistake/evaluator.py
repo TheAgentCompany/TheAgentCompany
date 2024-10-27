@@ -1,37 +1,12 @@
-import json
 import logging
-import re
-import sys
 import os
 import yaml
+from common import *
 
-yaml_path = '/workspace/openhands/agenthub/micro/math_agent/agent.yaml'
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
-            return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-        
-        return os.path.isfile(instruction_file_path)
-    
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
+    return check_repo_exists('openhands')
 
 # Check L20 is fixed to be Thursday instead of Saturday
 def grade_checkpoint2():

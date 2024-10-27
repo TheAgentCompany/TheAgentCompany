@@ -5,14 +5,14 @@ This task has 5 points in total. Will check it step by step. Partial credits mig
 
 Confirmed checked Liu Qiang's job performance with Mike Chen
 
-## Checkpoint 1 (1pt)
+## Checkpoint 2 (1pt)
 
 Confirmed checked Liu Qiang's job performance with Li Ming
 
-## Checkpoint 1 (1pt)
+## Checkpoint 3 (1pt)
 
 Confirmed checked Liu Qiang's job performance with Zhang Wei
 
-## Checkpoint 2 (2pt)
+## Checkpoint 4 (2pt)
 
 Confirmed provided correct feedback to Liu Qiang about his job performance

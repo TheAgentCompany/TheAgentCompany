@@ -1,24 +1,14 @@
-import os
-from rocketchat_API.rocketchat import RocketChat
+import json
+import logging
+from typing import List
 
-from llm_evaluator import *
+from scoring import Result, Checkpoint
 
-############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'theagentcompany.com'
+from common import evaluate_with_llm
+from common import create_rocketchat_client
 
-
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
-
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
-
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 ############################# Helper Functions #####################################
 
 def get_channel_room_id(channel_name):
@@ -40,46 +30,44 @@ def check_if_user_in_channel(channel_name: str, username: str):
 
 def check_job_description(username: str):
 
-    job_description = rocket.users_info(username=username).json()['user']['bio']
+    user_info = rocket.users_info(username=username).json().get('user', {})
+    job_description = user_info.get('bio', '')
     print(f"{username}''s Job Description: {job_description}")
 
-    messages = [{"content": f"Does the phrase \"\"{job_description}\"\" indicate the person does not work in database team and now works in the AI team? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
-    # Check result
-    llm_resonse = llm_evaluator(messages).json()
-    print(llm_resonse)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        print(f"{username}'s job description is updated correctly")
-        return True
-    else:
-        print(f"{username}'s job description is not updated correctly")
-        return False
+    predicate = 'the person does not work in database team and now works in the AI team'
+    return evaluate_with_llm(job_description, predicate)
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
     employee = "Li Ming"
     user_name = "li_ming"
 
     res =  check_if_user_in_channel("project-graphdb", employee)
     if res is not None and not res:
-        print("succesfully removed from #project-graphdb channel")
-        points += 1
+        logging.info("succesfully removed from #project-graphdb channel")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
     
     res = check_if_user_in_channel("project-ai", employee)
     if res:
-        print("succesfully added to #project-ai channel")
-        points += 1
+        logging.info("succesfully added to #project-ai channel")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
 
     if check_job_description(user_name):
-        print("Job description succesfully updated")
-        points += 1
+        logging.info("Job description succesfully updated")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/3")
-    return points
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))

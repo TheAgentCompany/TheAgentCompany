@@ -17,22 +17,35 @@ Below are the addresses, usernames, and passwords for each service:
 * username: admin
 * password: 
     * current password `cf6a70e7fbef0dc2f6e8c48369b30ab8357b3c10063f5fbe`
-    * if out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`
-
+    * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`. This only works if you have admin access to the server where nextcloud is hosted.
+    * If you cannot find it, try the following command to get a correct one
+    `curl http://ogma.lti.cs.cmu.edu:2999/api/nextcloud-config`
 ## Plane
 * http://ogma.lti.cs.cmu.edu:8091
-* email: job@bench.com
-* password: jobbenchJobBench
+* email:`agent@company.com`
+* password:`theagentcompany`
+* API_KEY:`plane_api_759889ebd3744c96b3d9edcb0b013712`
+* If the API_KEY not work, ping @Yufan Song. And feel free to follow [here](https://developers.plane.so/api-reference/introduction) to create your temporary key to develop. We will always reset the server, so your temporary key may be deleted sometime after reset.
 
 ## RocketChat
 * http://ogma.lti.cs.cmu.edu:3000/
-* email: jobbench
-* password: jobbench
+* email: theagentcompany
+* password: theagentcompany
 
 # Troubleshooting
 
 ## SSL Error
-### Solution 1 (temporarily):
+
+### Solution 1 (Recommend):
+The hosts trick actually work arounds the https problem.
+
+Add `128.2.205.27 the-agent-company.com` to your `/etc/hosts` file and then you can start using http://the-agent-company.com:8929/ in your browser.
+
+Note: for NextCloud you still have to use https://ogma.lti.cs.cmu.edu as of now.
+
+This is a useful for Linux/Mac, Windows user should find the similar way to change your DNS.
+
+### Solution 2:
 
 Note that only NextCloud is hosted on SSL-enabled address, starting with `https`.
 Other services are only accessible via `http` protocol. Sometimes your browser
@@ -48,10 +61,10 @@ Then, go to chrome://settings/clearBrowserData, tick *only* the box Cached image
 
 Now you should be able to use `http` protocol to visit the services.
 
-### Solution 2 (for all url):
+### Solution 3:
 Open chrome://settings/security and disable "Always use secure connections". It will disable the redirect in ALL web url.
 
-### Solution 3 (for a single url, recommend):
+### Solution 4:
 * When use open the web using chrome, it will show `Not Secure` beside the url. 
 * Click it, select the "site settings". 
 

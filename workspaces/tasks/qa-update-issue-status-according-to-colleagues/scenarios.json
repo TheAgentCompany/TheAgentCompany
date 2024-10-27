@@ -1,0 +1,10 @@
+{
+  "Mike Chen": {
+    "extra_info": "Someone will ask you the progress of issue 'Model: security problem' http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab",
+    "strategy_hint": "If someone asks about plane' issue 'Model: security problem' http:/the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab, you can response with: Done. Do not reply other content."
+  },
+    "Wang Fang": {
+    "extra_info": "Someone will ask you the progress of issue 'Model: recall rate is 0' http:/the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0",
+    "strategy_hint": "If someone asks about plane' issue 'Model: recall rate is 0' http:/the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0, you can response with: In Progress. Do not reply other content."
+  }
+}

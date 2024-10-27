@@ -1,18 +1,15 @@
 import requests
 import logging
+from common import *
 
-base_url = "http://theagentcompany.com:8929/api/v4"
-project_id = "root%2Fopenhands" 
+project_path = "root/openhands" 
 issue_iid = "3797"
 target_comment = "Closing due to inactivity"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
+
 
 def grade_checkpoint1():
-    comments_url = f"{base_url}/projects/{project_id}/issues/{issue_iid}/notes"
-    
     try:
-        comments_response = requests.get(comments_url, headers=headers)
+        comments_response = make_gitlab_request(project_path, f"issues/{issue_iid}/notes")
         comments_response.raise_for_status()
         comments_data = comments_response.json()
         has_target_comment = any(target_comment in comment['body'] for comment in comments_data)
@@ -23,10 +20,8 @@ def grade_checkpoint1():
         return False
 
 def grade_checkpoint2():
-    issue_url = f"{base_url}/projects/{project_id}/issues/{issue_iid}"
-
     try: 
-        issue_response = requests.get(issue_url, headers=headers)
+        issue_response = make_gitlab_request(project_path, f"issues/{issue_iid}")
         issue_response.raise_for_status()
         issue_data = issue_response.json()
         return issue_data['state'] == 'closed'

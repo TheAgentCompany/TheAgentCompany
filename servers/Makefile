@@ -14,7 +14,7 @@ PLANE_DOCKER_ENV_PATH=./plane/plane-app/plane.env
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
-		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume restore-rocketchat backup-rocketchat
+		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume reset-rocketchat backup-rocketchat
 
 init:
 	$(eval export NEXTCLOUD_HOME)
@@ -74,7 +74,10 @@ rm-nextcloud: init rm-nextcloud-volume rm-nextcloud-side-container
 	make rm-nextcloud-backup-volume
 	docker network rm servers_nextcloud-network
 
-refresh-nextcloud-data:
+backup-nextcloud:
+	./nextcloud/backup.sh
+
+reset-nextcloud:
 	./nextcloud/restore.sh
 	docker exec nextcloud-aio-nextcloud chown -R 33:0 /mnt/ncdata/ 
 	docker exec nextcloud-aio-nextcloud chmod -R 750 /mnt/ncdata/ 
@@ -110,7 +113,7 @@ reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm gitlab
+	docker compose rm -f gitlab
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
@@ -131,48 +134,47 @@ rm-rocketchat:
 rm-rocketchat-volume:
 	docker volume rm servers_mongodb_data
 
-restore-rocketchat:
-	docker exec -i servers-mongodb-1 sh -c 'mongorestore --archive' < ./rocketchat/db.dump
+reset-rocketchat:
+	docker exec -i servers-mongodb-1 sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
 
 backup-rocketchat:
 	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
 
 
-# Redis
-start-redis: init
-	docker compose up redis-stack -d
-	docker compose up redis-stack-npc-data-population -d
+# Sotopia Redis
+start-sotopia-redis: init
+	docker compose up -d redis-stack redis-stack-npc-data-population
 
-stop-redis:
-	docker compose stop redis-stack
-	docker compose stop redis-stack-npc-data-population
+stop-sotopia-redis:
+	docker compose stop redis-stack redis-stack-npc-data-population
 
-rm-redis:
-	docker rm servers-redis-stack-1
-	docker rm redis-stack-npc-data-population
+rm-sotopia-redis:
+	docker compose rm -f redis-stack redis-stack-npc-data-population
 
-attach-redis:
-	docker exec -it servers-redis-stack-1 /bin/bash
+attach-sotopia-redis:
+	docker exec -it redis-stack /bin/bash
 
 # Plane
 download-plane:
 	sh ./plane/download.sh
 
 start-plane:
-	sh ./plane/download.sh
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH)  up -d --quiet-pull
+	cd plane && make start-plane
 
 stop-plane:
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
+	cd plane && make stop-plane
+
+backup-plane:
+	cd plane && make backup-plane
 
 rm-plane-volume:
+	docker volume rm plane-app_redisdata
+	docker volume rm plane-app_uploads
 	docker volume rm plane-app_logs_api
 	docker volume rm plane-app_logs_beat-worker
 	docker volume rm plane-app_logs_migrator
 	docker volume rm plane-app_logs_worker
 	docker volume rm plane-app_pgdata
-	docker volume rm plane-app_redisdata
-	docker volume rm plane-app_uploads
 
 reset-plane:
 	make stop-plane
