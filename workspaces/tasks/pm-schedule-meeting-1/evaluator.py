@@ -56,23 +56,6 @@ def checkpoint3(file_path = '/workspace/conclusion.txt'):
     return check_final_result(file_path=file_path)
 
 
-def calculate_total_score():
-    # Define the scores corresponding to when each function is True
-    scores = {
-        checkpoint1: 1,
-        checkpoint2: 2,
-        checkpoint3: 3
-    }
-
-    total_score = 0
-
-    for func, score in scores.items():
-        if func():
-            total_score += score
-
-    return total_score
-
-
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
