@@ -162,7 +162,7 @@ start-plane:
 	cd plane && make start-plane
 
 stop-plane:
-	cd plane && make start-plane
+	cd plane && make stop-plane
 
 backup-plane:
 	cd plane && make backup-plane
