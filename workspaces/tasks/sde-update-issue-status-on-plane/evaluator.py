@@ -9,9 +9,8 @@ HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-PLANE_PROJECT_ID = "ea796314-eeec-41aa-816d-58be13909bf2"
-
-base_url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/"
+PROJECT_NAME = "RisingWave"
+PLANE_PROJECTS_URL = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
 
 
 headers = {
@@ -21,9 +20,24 @@ headers = {
 
 ############################# helper functions #####################################
 
-def get_active_and_upcoming_cycles():
+def get_project_id(project_name):
+    """Get the project_id for a specific project by its name."""
+    try:
+        response = requests.get(PLANE_PROJECTS_URL, headers=headers)
+        response.raise_for_status()
+        projects = response.json().get('results', [])
+        for project in projects:
+            if project.get('name') == project_name:
+                #print(project)
+                return project.get('id')
+        print(f"Project with name '{project_name}' not found.")
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+    return None
+
+def get_active_and_upcoming_cycles(project_url):
     """Get the active and upcoming cycles for a project using timestamps."""
-    url = f"{base_url}/cycles/"
+    url = f"{project_url}/cycles/"
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -35,23 +49,19 @@ def get_active_and_upcoming_cycles():
             # Convert start_date and end_date to offset-aware UTC datetimes
             start_date = datetime.fromisoformat(cycle['start_date']).replace(tzinfo=timezone.utc)
             end_date = datetime.fromisoformat(cycle['end_date']).replace(tzinfo=timezone.utc)
-            print(f"Cycle: {cycle['name']}, Start: {start_date}, End: {end_date}")
             if start_date <= now <= end_date:
-                print(now)
                 active_cycle = cycle
-                print(f"Active cycle: {active_cycle}")
             elif start_date > now:
                 if not upcoming_cycle or start_date < datetime.fromisoformat(upcoming_cycle['start_date']).replace(tzinfo=timezone.utc):
                     upcoming_cycle = cycle
-                    print(f"Upcoming cycle: {upcoming_cycle}")
         return active_cycle, upcoming_cycle
     except requests.RequestException as e:
         print(f"Error: {e}")
     return None, None
 
-def get_cycle_issues(cycle_id):
+def get_cycle_issues(project_url,cycle_id):
     """Get issues for a specific cycle."""
-    url = f"{base_url}/cycles/{cycle_id}/cycle-issues/"
+    url = f"{project_url}/cycles/{cycle_id}/cycle-issues/"
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -60,9 +70,9 @@ def get_cycle_issues(cycle_id):
         print(f"Error: {e}")
     return []
 
-def get_issues():
+def get_issues(project_url):
     """Get issues for a specific cycle."""
-    url = f"{base_url}/issues/"
+    url = f"{project_url}/issues/"
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -71,9 +81,9 @@ def get_issues():
         print(f"Error: {e}")
     return []
 
-def get_state_details(state_id):
+def get_state_details(project_url,state_id):
     """Get state details for a specific state."""
-    url = f"{base_url}/states/{state_id}"
+    url = f"{project_url}/states/{state_id}"
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -101,6 +111,7 @@ def grade_checkpoint1(active_cycle_issues):
         return False
     if state_details['name'] == 'Done':
         return True
+    logging.error(f"State of issue 'Evaluate data throughput' is {state_details['name']}, expected 'Done'")
     return False
 
 def grade_checkpoint2(all_issues):
@@ -135,17 +146,19 @@ def grade_checkpoints(active_cycle_issues, next_cycle_issues, all_issues):
     ]
 
     points = 0
-    for i, (passed, description) in enumerate(checkpoints):
+    for passed, description in enumerate(checkpoints):
         if passed:
             points += 1
         print(f"{'✓' if passed else '✗'} {description}")
     return points
 
 if __name__ == "__main__":
-    active_cycle, upcoming_cycle = get_active_and_upcoming_cycles()
-    active_cycle_issue_ids = [issue['id'] for issue in get_cycle_issues(active_cycle['id'])]
-    next_cycle_issues_ids = [issue['id'] for issue in get_cycle_issues(upcoming_cycle['id'])]
-    all_issues = get_issues()
+    project_id = get_project_id(PROJECT_NAME)
+    risingWave_url = f"{PLANE_PROJECTS_URL}{project_id}/"
+    active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(risingWave_url)
+    active_cycle_issue_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,active_cycle['id'])]
+    next_cycle_issues_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,upcoming_cycle['id'])]
+    all_issues = get_issues(risingWave_url)
     active_cycle_issues = [issue for issue in all_issues if issue['id'] in active_cycle_issue_ids]
     next_cycle_issues = [issue for issue in all_issues if issue['id'] in next_cycle_issues_ids]
     points = grade_checkpoints(active_cycle_issues, next_cycle_issues, all_issues)

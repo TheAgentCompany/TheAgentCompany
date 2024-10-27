@@ -10,7 +10,7 @@ The issue 'Evaluate data throughput' should be closed (status updated to 'Done')
 .
 ## Checkpoint 2 (1pt)
 
-The issue 'Decrease database latency' should remain open (status should remain 'In Progress').
+The issue 'Decrease database latency' should remain open (status remains 'In Progress').
 
 ## Checkpoint 3 (1pt)
 
