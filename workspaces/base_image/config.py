@@ -24,7 +24,7 @@ GITLAB_USER = "root"
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{SERVER_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-PLANE_API_KEY = os.environ.get("PLANE_API_KEY") or "plane_api_759889ebd3744c96b3d9edcb0b013712"
+PLANE_API_KEY = os.environ.get("PLANE_API_KEY") or "plane_api_569b8e604e0c46d0b65ef56bb9e76f03"
 PLANE_HEADERS = {
     "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
