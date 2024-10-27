@@ -1,8 +1,9 @@
 import requests
 import logging
+import json
 from typing import List
 
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import *
 
 project_path = "root/sotopia"
