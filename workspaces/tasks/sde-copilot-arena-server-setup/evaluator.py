@@ -5,7 +5,7 @@ import sys
 import json
 from typing import List
 
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
 def grade_checkpoint1():
