@@ -268,13 +268,13 @@ def get_plane_project_id(project_name):
         logging.warning(f"Get project id failed: {e}")
         return None
 
-def get_plane_projrct_all_issues(project_id):
+def get_plane_project_all_issues(project_id):
     """Get the issues for a specific project"""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues"
     try:
         response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
-        issues = [issue for issue in response.json().get('results', [])]
+        issues = response.json().get('results', [])
         return issues
     except Exception as e:
         logging.warning(f"Get issues failed: {e}")
