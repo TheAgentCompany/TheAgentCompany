@@ -250,7 +250,7 @@ def get_all_plane_projects():
         return response.json().get('results', [])
     except Exception as e:
         logging.warning(f"Get all projects failed: {e}")
-        return None
+        return []
     
 
 def get_plane_project_id(project_name):
