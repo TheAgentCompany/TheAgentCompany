@@ -1,31 +1,15 @@
-import requests
+import json
 import sys
-
+from scoring import Result, Checkpoint
 from common import *
+from typing import List
+
 rocket=create_rocketchat_client()
 
-def checkpoint1():
-    if len(sys.argv) < 2:
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            return False
+def checkpoint1(trajectory):
     return "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab" in trajectory and "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0" in trajectory
 
-def checkpoint2():
-    if len(sys.argv) < 2:
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            return False
+def checkpoint2(trajectory):
     return "http://the-agent-company.com:3000/home" in trajectory
 
 def checkpoint3():
@@ -42,19 +26,16 @@ def checkpoint4():
 
     if not project_id:
         return False
+
     issue_1 = get_plane_issue_details(project_id, issue_name_1)
     issue_2 = get_plane_issue_details(project_id, issue_name_2)
 
-    if not issue_1:
-        return False
-    if not issue_2:
+    if not issue_1 or not issue_2:
         return False
 
     state_map, id_map = get_plane_state_id_dict(project_id)
 
-    if not state_map:
-        return False
-    if not id_map:
+    if not state_map or not id_map:
         return False
 
     state_1 = issue_1.get('state') == state_map['In Progress']
@@ -63,26 +44,24 @@ def checkpoint4():
     return bool(state_1) and bool(state_2)
 
 
-def calculate_total_score():
-    # Define the scores corresponding to when each function is True
-    scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 2,
-        checkpoint4: 2,
+def grade_checkpoints(trajectory='http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab\nhttp://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0\nhttp://the-agent-company.com:3000/home'):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    }
+    passed1 = checkpoint1(trajectory)
+    checkpoints.append(Checkpoint(1, int(passed1)))
 
-    total_score = 0
+    passed2 = checkpoint2(trajectory)
+    checkpoints.append(Checkpoint(1, int(passed2)))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    passed3 = checkpoint3()
+    checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
-    return total_score
+    passed4 = checkpoint4()
+    checkpoints.append(Checkpoint(2, 2 * int(passed4)))
+    return result
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))
 
 
