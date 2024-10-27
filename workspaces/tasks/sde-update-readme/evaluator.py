@@ -2,34 +2,22 @@ import logging
 import requests
 import urllib.parse
 import base64
+from typing import List
+import json
 
-# GitLab configuration
-base_url = "http://ogma.lti.cs.cmu.edu:8929/api/v4"
+from common import make_gitlab_request, evaluate_with_llm
+from scoring import Result, Checkpoint
+
 project_path = "root/api-server"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 target_title = "## Contribute to this project"
-target_content = "We welcome contributions to this project. Please follow the guidelines to contribute."
-
-
-def grade_checkpoint(check_func, description):
-    try:
-        passed = check_func()
-        print(f"{'✓' if passed else '✗'} {description}")
-        return 1 if passed else 0
-    except Exception as e:
-        logging.error(f"Error while grading checkpoint '{description}': {e}")
-        return 0
 
 
 def extract_readme_content():
-    encoded_path = urllib.parse.quote(project_path, safe="")
-    readme_url = (
-        f"{base_url}/projects/{encoded_path}/repository/files/README.md?ref=main"
-    )
-    print(readme_url)
     try:
-        response = requests.get(readme_url, headers=headers)
+        response = make_gitlab_request(
+            project_identifier=project_path,
+            additional_path="repository/files/README.md?ref=main",
+        )
         response_data = response.json()
 
         if response.status_code == 200:
@@ -64,26 +52,30 @@ def check_readme_content():
     content = extract_readme_content()
     if content is None:
         return False
-    content = content.split(target_title)
-    if len(content) != 2:
-        logging.warning(f"Expected 2 parts, got {len(content)}")
+
+    content_exists = evaluate_with_llm(
+        content=content,
+        predicate="there are **contents** regarding contributing to the project (if only the title is present, this will be false; but if only the content is present, this will be true)",
+        additional_prompt="",
+    )
+
+    if not content_exists:
+        logging.warning(f"README.md does not contain the expected content")
         return False
 
-    content = content[1].strip().split("\n")[0]
-    if content == target_content:
-        logging.info(f"README.md contains the content '{target_content}'")
-        return True
+    return True
+
+
+def grade_checkpoints() -> Result:
+    checkpoints: List[Checkpoint] = []
+    passed1 = check_readme_title()
+    checkpoints.append(Checkpoint(1, int(passed1)))
+
+    passed2 = check_readme_content()
+    checkpoints.append(Checkpoint(1, int(passed2)))
+
+    return Result(checkpoints)
 
 
 if __name__ == "__main__":
-    checkpoints = [
-        (check_readme_title, f"README.md contains the title '{target_title}'"),
-        (check_readme_content, f"README.md contains the content '{target_content}'"),
-    ]
-
-    total_points = 0
-    for check_func, description in checkpoints:
-        points = grade_checkpoint(check_func, description)
-        total_points += points
-
-    print(f"\nFinal score for updating readme check: {total_points}/{len(checkpoints)}")
+    print(json.dumps(grade_checkpoints().to_dict()))
