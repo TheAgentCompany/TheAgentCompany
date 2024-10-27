@@ -1,7 +1,7 @@
 import requests
 import sys
 
-from common import create_rocketchat_client, get_chat_history
+from common import *
 rocket=create_rocketchat_client()
 
 PLANE_BASEURL = "http://the-agent-company.com:8091"
@@ -79,9 +79,10 @@ def checkpoint4():
     issue_1 = get_issue_details(project_id, issue_name_1)
     issue_2 = get_issue_details(project_id, issue_name_2)
 
+    state_map, id_map = get_state_id_map(project_id)
 
-    state_1 = issue_1.get('state') == '1d28d389-3228-4e28-90f6-6dd7adb6ccb3'
-    state_2 = issue_2.get('state') == '1be22ae7-46fd-456f-8ca2-c32fd4f8040a'
+    state_1 = issue_1.get('state') == state_map['In Progress']
+    state_2 = issue_2.get('state') == state_map['Done']
 
     return bool(state_1) and bool(state_2)
 
