@@ -1,11 +1,12 @@
 import requests
+import sys
 
 from common import create_rocketchat_client, get_chat_history
 rocket=create_rocketchat_client()
 
 PLANE_BASEURL = "http://the-agent-company.com:8091"
 PLANE_WORKSPACE_SLUG = "tac"
-api_key = "plane_api_462439dcde4c45ef914a1be945e9521a"
+api_key = "plane_api_f41b459d30bb4e389ec0b9142bfac8cd"
 headers = {"x-api-key": api_key,"Content-Type": "application/json"}
 
 def get_project_id(project_name):
@@ -39,10 +40,28 @@ def get_issue_details(project_id, issue_name):
         print(f"Error: {e}")
     return None
 
-def checkpoint1(trajectory):
+def checkpoint1():
+    if len(sys.argv) < 2:
+        trajectory = ""
+    else:
+        try:
+            with open(sys.argv[1], 'r') as file:
+                trajectory = file.read()
+        except Exception as e:
+            print(f"Error reading trajectory file: {e}")
+            return False
     return "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab" in trajectory and "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0" in trajectory
 
-def checkpoint2(trajectory):
+def checkpoint2():
+    if len(sys.argv) < 2:
+        trajectory = ""
+    else:
+        try:
+            with open(sys.argv[1], 'r') as file:
+                trajectory = file.read()
+        except Exception as e:
+            print(f"Error reading trajectory file: {e}")
+            return False
     return "http://the-agent-company.com:3000/home" in trajectory
 
 def checkpoint3():
