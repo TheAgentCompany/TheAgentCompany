@@ -18,7 +18,7 @@ def check_repository_deleted():
             logging.info(f"Repository '{project_path}' not found (404), as expected.")
             return True
         else:
-            logging.warning(f"Unexpected status code: {response.status_code}")
+            logging.error(f"Unexpected response: {response}")
             return False
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking the repository: {e}")
