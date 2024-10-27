@@ -239,6 +239,19 @@ def check_repo_exists(project_name: str):
     except Exception as e:
         logging.warning(f"Error checking file: {e}")
         return False
+    
+    
+def get_all_plane_projects():
+    """Get all projects in plane."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except Exception as e:
+        logging.warning(f"Get all projects failed: {e}")
+        return None
+    
 
 def get_plane_project_id(project_name):
     """Get the project_id for a specific project by its name."""
