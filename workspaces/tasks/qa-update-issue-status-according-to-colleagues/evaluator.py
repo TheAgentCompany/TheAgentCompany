@@ -4,42 +4,6 @@ import sys
 from common import *
 rocket=create_rocketchat_client()
 
-PLANE_BASEURL = "http://the-agent-company.com:8091"
-PLANE_WORKSPACE_SLUG = "tac"
-api_key = "plane_api_f41b459d30bb4e389ec0b9142bfac8cd"
-headers = {"x-api-key": api_key,"Content-Type": "application/json"}
-
-def get_project_id(project_name):
-    """Get the project_id for a specific project by its name."""
-    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        projects = response.json().get('results', [])
-        for project in projects:
-            if project.get('name') == project_name:
-                return project.get('id')
-        print(f"Project with name '{project_name}' not found.")
-    except requests.RequestException as e:
-        print(f"Error: {e}")
-    return None
-
-def get_issue_details(project_id, issue_name):
-    """Get details of a specific issue in a project."""
-    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        issues = response.json().get('results', [])
-        for issue in issues:
-            if issue.get('name') == issue_name:
-                print(issue)
-                return issue
-        print(f"Issue with name '{issue_name}' not found.")
-    except requests.RequestException as e:
-        print(f"Error: {e}")
-    return None
-
 def checkpoint1():
     if len(sys.argv) < 2:
         trajectory = ""
@@ -74,12 +38,12 @@ def checkpoint4():
     issue_name_1 = "Model: recall rate is 0"
     issue_name_2 = "Model: security problem"
 
-    project_id = get_project_id(project_name)
+    project_id = get_plane_project_id(project_name)
 
-    issue_1 = get_issue_details(project_id, issue_name_1)
-    issue_2 = get_issue_details(project_id, issue_name_2)
+    issue_1 = get_plane_issue_details(project_id, issue_name_1)
+    issue_2 = get_plane_issue_details(project_id, issue_name_2)
 
-    state_map, id_map = get_state_id_map(project_id)
+    state_map, id_map = get_plane_state_id_dict(project_id)
 
     state_1 = issue_1.get('state') == state_map['In Progress']
     state_2 = issue_2.get('state') == state_map['Done']

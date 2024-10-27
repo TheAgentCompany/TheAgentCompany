@@ -1,8 +1,8 @@
-find issue in plane at http://ogma.lti.cs.cmu.edu:8091/tac/projects/2bc631a1-8515-4bca-858e-129337c83c8d/issues/bda7a242-8113-4686-939a-9bf853ac3a83 and http://ogma.lti.cs.cmu.edu:8091/tac/projects/2bc631a1-8515-4bca-858e-129337c83c8d/issues/220dde23-6d9f-44eb-b435-d05ceaeb226c
-go to the rocketchat's in http://ogma.lti.cs.cmu.edu:3000/home
+find issue in plane at http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0 and http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab
+go to the rocketchat's in http://the-agent-company.com:3000/home
 
+* ask Wang Fang for the status of the issue http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0
+* change issue status to which Wang Fang told you
+* ask Mike Chen for the status of the issue http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab
+* change issue status to which Mike Chen told you
 
-* ask Jessica Chen for the status of the issue http://ogma.lti.cs.cmu.edu:8091/tac/projects/2bc631a1-8515-4bca-858e-129337c83c8d/issues/220dde23-6d9f-44eb-b435-d05ceaeb226c
-* change issue status to which Jessica Chen told you
-* ask Emma Lewis for the status of the issue http://ogma.lti.cs.cmu.edu:8091/tac/projects/2bc631a1-8515-4bca-858e-129337c83c8d/issues/bda7a242-8113-4686-939a-9bf853ac3a83
-* change issue status to which Emma Lewis told you
