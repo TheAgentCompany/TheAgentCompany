@@ -36,7 +36,7 @@ def grade_final_checkpoint():
         return False
 
 
-def grade_checkpoints(trajectory=None) -> Result:
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 

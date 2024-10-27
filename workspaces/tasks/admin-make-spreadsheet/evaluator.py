@@ -6,7 +6,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 
-def grade_checkpoints(trajectory=None) -> Result:
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     drinks_count = defaultdict(int)

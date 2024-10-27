@@ -6,7 +6,7 @@ from typing import List
 from scoring import Result, Checkpoint
 
 
-def grade_checkpoints(trajectory=None):
+def grade_checkpoints(trajectory=""):
     # reference answer's detailed computation is documented in README.md
     REFERENCE_ANSWER = 145095
 
