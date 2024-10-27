@@ -2,9 +2,6 @@ import requests
 import logging
 from common import *
 
-project_path = "root/sotopia"
-
-
 # all project get deleted.
 def grade_checkpoint1():
     try:

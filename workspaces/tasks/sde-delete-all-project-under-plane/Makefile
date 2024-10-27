@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-change-branch-policy-image
-CONTAINER_NAME=sde-change-branch-policy
+IMAGE_NAME=sde-delete-all-project-under-plane-image
+CONTAINER_NAME=sde-delete-all-project-under-plane
 
 .PHONY: build run stop
 
