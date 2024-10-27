@@ -1,3 +1,3 @@
-I want to add a contribution section to the api-server repository.
-Find the api-server repository from wiki http://ogma.lti.cs.cmu.edu:8929/root/doc/-/wikis.
+Add a contribution section to the api-server repository.
+Find the api-server repository from wiki http://the-agent-company.com:8929/root/doc/-/wikis.
 Update the README.md file under the root directory of the OpenHands repository by Add a new section titled "Contribute to this project" (use a level 2 heading) with the content: "We welcome contributions to this project. Please follow the guidelines to contribute.". Also remember to add a new blank line after the content to keep the format consistent.
