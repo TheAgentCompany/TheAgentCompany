@@ -1,5 +1,5 @@
-IMAGE_NAME=copilot-arena-server-new-endpoint-image
-CONTAINER_NAME=copilot-arena-server-new-endpoint
+IMAGE_NAME=sde-copilot-arena-server-new-endpoint-image
+CONTAINER_NAME=sde-copilot-arena-server-new-endpoint
 
 .PHONY: build run stop
 
