@@ -240,7 +240,7 @@ def check_repo_exists(project_name: str):
         logging.warning(f"Error checking file: {e}")
         return False
 
-def get_project_id(project_name):
+def get_plane_project_id(project_name):
     """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
@@ -256,7 +256,7 @@ def get_project_id(project_name):
         return None
 
 
-def get_state_id_map(project_id):
+def get_plane_state_id_dict(project_id):
     """Get the relationship between state and id"""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/"
     id_map = {}
@@ -270,10 +270,10 @@ def get_state_id_map(project_id):
             id_map[project['id']]=project['name']
     except Exception as e:
         logging.warning(f"Get project id failed: {e}")
-        return None, None
+        return {}, {}
     return state_map, id_map
 
-def get_issue_details(project_id, issue_name):
+def get_plane_issue_details(project_id, issue_name):
     """Get details of a specific issue in a project."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
