@@ -1,8 +1,7 @@
 import sys
-import json
 import requests
 import logging
-
+import json
 from typing import List
 
 from scoring import Result, Checkpoint
@@ -50,7 +49,7 @@ def grade_checkpoints(trajectory="") -> Result:
     }
 
     for func, total_score in scores.items():
-        checkpoints.append(Checkpoint(total_score, int(func())))
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
     return result
 
