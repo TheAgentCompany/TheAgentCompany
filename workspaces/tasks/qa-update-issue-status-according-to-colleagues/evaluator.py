@@ -47,7 +47,7 @@ def checkpoint4():
     return bool(state_1) and bool(state_2)
 
 
-def grade_checkpoints(trajectory='http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab\nhttp://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0\nhttp://the-agent-company.com:3000/home'):
+def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
