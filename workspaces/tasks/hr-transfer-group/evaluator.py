@@ -1,3 +1,9 @@
+import json
+import logging
+from typing import List
+
+from scoring import Result, Checkpoint
+
 from common import evaluate_with_llm
 from common import create_rocketchat_client
 
@@ -33,29 +39,35 @@ def check_job_description(username: str):
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
     employee = "Li Ming"
     user_name = "li_ming"
 
     res =  check_if_user_in_channel("project-graphdb", employee)
     if res is not None and not res:
-        print("succesfully removed from #project-graphdb channel")
-        points += 1
+        logging.info("succesfully removed from #project-graphdb channel")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
     
     res = check_if_user_in_channel("project-ai", employee)
     if res:
-        print("succesfully added to #project-ai channel")
-        points += 1
+        logging.info("succesfully added to #project-ai channel")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
 
     if check_job_description(user_name):
-        print("Job description succesfully updated")
-        points += 1
+        logging.info("Job description succesfully updated")
+        checkpoints.append(Checkpoint(1, 1))
+    else:
+        checkpoints.append(Checkpoint(1, 0))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/3")
-    return points
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))

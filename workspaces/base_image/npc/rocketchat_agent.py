@@ -139,7 +139,11 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
 
     def constrct_speak_action(self,message):
         action_string = message
-        action_string_formatted = f'{{"action_type": "speak", "argument": "{action_string}"}}'
+        action_data = {
+            "action_type": "speak",
+            "argument": action_string
+        }
+        action_string_formatted = json.dumps(action_data)
         try:
             action = AgentAction.parse_raw(action_string_formatted)
             return action

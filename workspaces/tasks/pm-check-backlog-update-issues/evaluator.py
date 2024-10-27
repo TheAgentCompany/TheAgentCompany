@@ -1,12 +1,14 @@
-import os
 import requests
+import logging
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import create_rocketchat_client
 from config import *
-############################# Init Variables #####################################
+
 # Create RocketChat instance
 rocket = create_rocketchat_client()
-
-############################# Helper Functions #####################################
 
 # RocketChat checks
 def check_channel_exists(channel_name):
@@ -25,6 +27,7 @@ def check_url_1():
     """Check that the channel can be accessed at its URL."""
     url = f"{ROCKETCHAT_URL}/channel/sprint-planning"
     try:
+        # TODO (kritanjalijain): check trajectory to see if the URL was accessed
         return check_channel_exists('sprint-planning') and requests.get(url).status_code == 200
     except requests.RequestException as e:
         print(f"Error checking URL: {e}")
@@ -124,52 +127,56 @@ def check_issue_state(issue, expected_groups):
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
     project_name = "Frontend and Backend Enhancements"
     issue_name = "Set up backend API"
     
     # Checkpoint 1: Access the project
     project_id = get_project_id(project_name)
     if project_id:
-        print("Checkpoint 1 passed: Project accessed on Plane.")
-        points += 2
+        logging.info("Checkpoint 1 passed: Project accessed on Plane.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 1 failed: Project not found on Plane.")
-        return points
+        logging.warning("Checkpoint 1 failed: Project not found on Plane.")
+        checkpoints.append(Checkpoint(2, 0))
 
     # Checkpoint 2: Access the correct issue
-    issue = get_issue_details(project_id, issue_name)
+    issue = get_issue_details(project_id, issue_name) if project_id else None
     if issue and issue['name'] == issue_name:
-        print("Checkpoint 2 passed: Correct issue 'Set up backend API' accessed.")
-        points += 2
+        logging.info("Checkpoint 2 passed: Correct issue 'Set up backend API' accessed.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 2 failed: Correct issue 'Set up backend API' not found.")
+        logging.warning("Checkpoint 2 failed: Correct issue 'Set up backend API' not found.")
+        checkpoints.append(Checkpoint(2, 0))
 
     # Checkpoint 3, 4: Check for message in Rocket.Chat and for the correct response
     if check_message_posted('sprint-planning', ['update', 'completed', 'blocked']):
-        print("Checkpoint 3 passed: Relevant message posted in #sprint-planning.")
-        points += 2
+        logging.info("Checkpoint 3 passed: Relevant message posted in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 3 failed: No relevant message found in #sprint-planning.")
+        logging.warning("Checkpoint 3 failed: No relevant message found in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 0))
 
     # Checkpoint 5: Check if issue status is updated to 'Done'
     if issue and check_issue_state(issue, ['completed']):
-        print("Checkpoint 5 passed: Issue status updated to 'Done'.")
-        points += 1
+        logging.info("Checkpoint 5 passed: Issue status updated to 'Done'.")
+        checkpoints.append(Checkpoint(1, 1))
     else:
-        print("Checkpoint 5 failed: Issue status not updated to 'Done'.")
+        logging.warning("Checkpoint 5 failed: Issue status not updated to 'Done'.")
+        checkpoints.append(Checkpoint(1, 0))
 
     # Final checkpoint: Check for comment mentioning 'rocket.cat'
     if issue and check_issue_comment(project_id, issue['id'], 'rocket.cat'):
-        print("Final checkpoint passed: Comment mentioning 'rocket.cat' found in the issue.")
-        points += 1
+        logging.info("Final checkpoint passed: Comment mentioning 'rocket.cat' found in the issue.")
+        checkpoints.append(Checkpoint(1, 0))
     else:
-        print("Final checkpoint failed: Comment mentioning 'rocket.cat' not found in the issue.")
+        logging.warning("Final checkpoint failed: Comment mentioning 'rocket.cat' not found in the issue.")
+        checkpoints.append(Checkpoint(1, 0))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/8")
-    return points
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))

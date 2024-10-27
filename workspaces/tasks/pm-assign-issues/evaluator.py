@@ -1,9 +1,12 @@
-import os
 import requests
+import logging
+import json
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import create_rocketchat_client
 from config import *
 
-############################# Init Variables #####################################
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
@@ -102,29 +105,20 @@ def check_issue_assigned(project_id, issue_text, assignee):
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
     # Checkpoint 1: Successfully accessed the sprint-planning channel in Rocket.Chat
-    if check_url_1():
-        print("Checkpoint 1 passed: Channel 'sprint-planning' exists and is accessible.")
-        points += 1
-    else:
-        print("Checkpoint 1 failed: Channel 'sprint-planning' is not accessible.")
+    checkpoints.append(Checkpoint(1, int(check_url_1())))
     
     # Checkpoint 2: Created the project in Plane
     project_id = get_project_id("Frontend and Backend Enhancements")
-    print(f"Retrieved project_id: {project_id}")  # Debug print
-    if project_id and check_url_2(project_id):
-        print("Checkpoint 2 passed: Project 'Frontend and Backend Enhancements' created.")
-        points += 1
-    else:
-        print("Checkpoint 2 failed: Project 'Frontend and Backend Enhancements' not found or not accessible.")
+    logging.info(f"Retrieved project_id: {project_id}")
+    checkpoint2_pass = bool(project_id and check_url_2(project_id))
+    checkpoints.append(Checkpoint(1, int(checkpoint2_pass)))
     
-    # Checkpoint 3: Added all participants as project members
-    # Passes if Final Checkpoint part 2 passes
-
-    # Final Checkpoint part 1 : Created issues with appropriate titles
+    # Checkpoint 3: Created issues with appropriate titles
     issues = [
         ('Implement new navigation bar', 'kritanjali.jain'),
         ('Set up backend API', 'john.doe'),
@@ -133,15 +127,14 @@ def evaluate_task():
     all_issues_created = True
     for issue_text, assignee in issues:
         if not check_issue_created(project_id, issue_text):
-            print(f"Final Checkpoint part 1 failed: Issue '{issue_text}' not created.")
+            logging.warning(f"Checkpoint3 failed: Issue '{issue_text}' not created.")
             all_issues_created = False
         else:
-            print(f"Final Checkpoint part 1 passed: Issue '{issue_text}' created.")
+            logging.info(f"Checkpoint3 passed: Issue '{issue_text}' created.")
+
+    checkpoints.append(Checkpoint(1, int(all_issues_created))) 
     
-    if all_issues_created:
-        points += 1
-    
-    # Final Checkpoint part 2 : Assigned tasks to the correct individuals
+    # Final Checkpoint: Assigned tasks to the correct individuals
     issues_and_assignees = [
         ('Implement new navigation bar', '84fc8acf-5167-47c1-afc3-b1c484cd49f7'),
         ('Set up backend API', '427323d8-8a42-4445-8c72-93d997f27f35'),
@@ -150,17 +143,15 @@ def evaluate_task():
     all_issues_assigned = True
     for issue_text, assignee in issues_and_assignees:
         if not check_issue_assigned(project_id, issue_text, assignee):
-            print(f"Final checkpoint part 2 failed: Issue '{issue_text}' not assigned to '{assignee}'.")
+            logging.warning(f"Final checkpoint failed: Issue '{issue_text}' not assigned to '{assignee}'.")
             all_issues_assigned = False
         else:
-            print(f"Final checkpoint part 2 passed: Issue '{issue_text}' assigned to '{assignee}'.")
+            logging.info(f"Final checkpoint passed: Issue '{issue_text}' assigned to '{assignee}'.")
 
-    if all_issues_assigned:
-        points += 2
+    checkpoints.append(Checkpoint(2, 2 * int(all_issues_assigned)))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/5")
-    return points
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))
