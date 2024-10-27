@@ -239,3 +239,64 @@ def check_repo_exists(project_name: str):
     except Exception as e:
         logging.warning(f"Error checking file: {e}")
         return False
+    
+    
+def get_all_plane_projects():
+    """Get all projects in plane."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except Exception as e:
+        logging.warning(f"Get all projects failed: {e}")
+        return []
+    
+
+def get_plane_project_id(project_name):
+    """Get the project_id for a specific project by its name."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        projects = response.json().get('results', [])
+        for project in projects:
+            if project.get('name') == project_name:
+                return project.get('id')
+        logging.info(f"Project with name '{project_name}' not found.")
+    except Exception as e:
+        logging.warning(f"Get project id failed: {e}")
+        return None
+
+
+def get_plane_state_id_dict(project_id):
+    """Get the relationship between state and id"""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/"
+    id_map = {}
+    state_map = {}
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        projects = response.json().get('results', [])
+        for project in projects:
+            state_map[project['name']]=project['id']
+            id_map[project['id']]=project['name']
+    except Exception as e:
+        logging.warning(f"Get project id failed: {e}")
+        return {}, {}
+    return state_map, id_map
+
+def get_plane_issue_details(project_id, issue_name):
+    """Get details of a specific issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        issues = response.json().get('results', [])
+        for issue in issues:
+            if issue.get('name') == issue_name:
+                return issue
+        logging.info(f"Issue with name '{issue_name}' not found.")
+    except requests.RequestException as e:
+        logging.warning(f"Get issue detail failed: {e}")
+        return None
