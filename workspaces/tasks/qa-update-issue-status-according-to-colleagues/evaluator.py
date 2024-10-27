@@ -4,6 +4,8 @@ from scoring import Result, Checkpoint
 from common import *
 from typing import List
 
+from sqlalchemy.testing.plugin.plugin_base import logging
+
 rocket=create_rocketchat_client()
 
 def checkpoint1(trajectory):
@@ -38,8 +40,12 @@ def checkpoint4():
     if not state_map or not id_map:
         return False
 
-    state_1 = issue_1.get('state') == state_map['In Progress']
-    state_2 = issue_2.get('state') == state_map['Done']
+    try:
+        state_1 = issue_1.get('state') == state_map['In Progress']
+        state_2 = issue_2.get('state') == state_map['Done']
+    except Exception as e:
+        logging.warning("Error in get state", e)
+        return False
 
     return bool(state_1) and bool(state_2)
 
