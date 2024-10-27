@@ -1,6 +1,9 @@
 import os
-import logging 
+import logging
+import json
+from typing import List
 
+from scoring import Result, Checkpoint
 from common import evaluate_with_llm
 from common import create_rocketchat_client
 
@@ -69,7 +72,23 @@ def calculate_total_score():
 
     return total_score
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
 
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    # Define the scores corresponding to when each function is True
+    scores = {
+        checkpoint1: 1,
+        checkpoint2: 2,
+        checkpoint3: 3
+    }
+
+    for func, total_score in scores.items():
+        checkpoints.append(total_score, total_score * int(func()))
+
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))
