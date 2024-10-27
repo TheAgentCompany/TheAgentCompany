@@ -2,23 +2,13 @@ import requests
 import logging
 import os
 import sys
+import json
+from typing import List
+from scoring import Result, Checkpoint
 from rocketchat_API.rocketchat import RocketChat  # type: ignore
+from common import create_rocketchat_client, evaluate_with_llm, get_chat_history
 
-SERVER_HOSTNAME = os.getenv("SERVER_HOSTNAME") or "the-agent-company.com"
-ROCKETCHAT_PORT = os.getenv("ROCKETCHAT_PORT") or "3000"
-channel_name = "general"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
-from common import create_rocketchat_client, evaluate_with_llm
-
-user_room_mapping = {
-    "Mark Johnson": "CZYWHd5bCmhj5YcFeRGZyENbrjkxjosMCH",
-    "Jessica Lee": "4qnpxztMbfyYn3rQACZYWHd5bCmhj5YcFe",
-    "David Wong": "CZYWHd5bCmhj5YcFeGTcEyGXzbKiLmQxFc",
-    "Emily Zhou": "CZYWHd5bCmhj5YcFeppuM42XhPD79wwxMv",
-    "Chen Xinyi": "CZYWHd5bCmhj5YcFec2uqaen3naCexvzDE",
-}
-TARGET_STRING = "We identified a promising candidate whose tech stack matches your expertise. Would you be available to conduct a technical interview this week?"
 LEADER_NAME = "Chen Xinyi"
 TARGET_INTERVIEWER = "Emily Zhou"
 
@@ -29,7 +19,7 @@ rocket = create_rocketchat_client()
 def grade_checkpoint1():
     # [2pts] Check the chat history with the leader Chen Xinyi
     try:
-        messages = get_direct_messages(user_room_mapping[LEADER_NAME])
+        messages = get_chat_history(rocket, LEADER_NAME)
         composed_messages = compose_messages(messages)
         chat_with_leader = evaluate_with_llm(
             content=composed_messages,
@@ -49,7 +39,7 @@ def grade_checkpoint1():
 def grade_checkpoint2():
     # [2pts] Check whether examinee chat with Emily Zhou (the right person).
     try:
-        messages = get_direct_messages(user_room_mapping[TARGET_INTERVIEWER])
+        messages = get_chat_history(rocket, TARGET_INTERVIEWER)
         composed_messages = compose_messages(messages)
         chat_with_interviewer = evaluate_with_llm(
             content=composed_messages,
@@ -76,7 +66,7 @@ def grade_checkpoint3():
     target_names = ["Mark Johnson", "Jessica Lee", "David Wong"]
     for name in target_names:
         try:
-            messages = get_direct_messages(user_room_mapping[name])
+            messages = get_chat_history(rocket, name)
             composed_messages = compose_messages(messages)
             chat_with_other = evaluate_with_llm(
                 content=composed_messages,
@@ -97,28 +87,25 @@ def grade_checkpoint3():
     return True
 
 
-def get_direct_messages(room_id):
-    response = rocket.im_history(room_id=room_id).json()
-    if not response.get("success"):
-        print(f"Failed to retrieve DM history. Room ID: {room_id}")
-        return None
-
-    messages = response.get("messages", [])
-    return messages
-
-
 def compose_messages(messages):
-    return "\n".join(
-        f"Message {i+1}: {msg.get('msg', '')}" for i, msg in enumerate(messages)
-    )
+    return "\n".join(f"Message {i+1}: {msg}" for i, msg in enumerate(messages))
+
+
+def grade_checkpoints() -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(2, 2 * int(passed1)))
+
+    passed2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(2, 2 * int(passed2)))
+
+    passed3 = grade_checkpoint3()
+    checkpoints.append(Checkpoint(2, 2 * int(passed3)))
+
+    return result
 
 
 if __name__ == "__main__":
-    passed1 = grade_checkpoint1()
-    passed2 = grade_checkpoint2()
-    passed3 = grade_checkpoint3()
-    print(f"Checkpoint 1: {'✓' if passed1 else '✗'}")
-    print(f"Checkpoint 2: {'✓' if passed2 else '✗'}")
-    print(f"Checkpoint 3: {'✓' if passed3 else '✗'}")
-    points = 2 * int(passed1) + 2 * int(passed2) + 2 * int(passed3)
-    print(f"Final points: {points}")
+    print(json.dumps(grade_checkpoints().to_dict()))
