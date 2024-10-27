@@ -9,7 +9,7 @@ from common import evaluate_chat_history_with_llm
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
 
-def grade_checkpoints(trajectory=None):
+def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 

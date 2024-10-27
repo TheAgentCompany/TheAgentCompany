@@ -5,7 +5,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 
-def grade_checkpoints(trajectory=None):
+def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 

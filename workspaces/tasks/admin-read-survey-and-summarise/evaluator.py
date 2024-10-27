@@ -32,7 +32,7 @@ def checkpoint3(content: str):
         return False
     return 'apple' in content and 'sprite' in content
 
-def grade_checkpoints(trajectory=None):
+def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     scores = {

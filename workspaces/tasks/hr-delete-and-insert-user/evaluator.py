@@ -31,9 +31,10 @@ def checkpoint2(username='dandan_liu'):
 def checkpoint3(channel_name='product', username='dandan_liu'):
     return check_user_added(channel_name=channel_name,username=username)
 
-def grade_checkpoints(trajectory=None):
+def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
