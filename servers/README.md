@@ -17,7 +17,7 @@ Below are the addresses, usernames, and passwords for each service:
 * username: admin
 * password: 
     * current password `cf6a70e7fbef0dc2f6e8c48369b30ab8357b3c10063f5fbe`
-    * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`
+    * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`. This only works if you have admin access to the server where nextcloud is hosted.
     * If you cannot find it, try the following command to get a correct one
     `curl http://ogma.lti.cs.cmu.edu:2999/api/nextcloud-config`
 ## Plane
