@@ -1,10 +1,7 @@
 import json
-import sys
 from scoring import Result, Checkpoint
 from common import *
 from typing import List
-
-from sqlalchemy.testing.plugin.plugin_base import logging
 
 rocket=create_rocketchat_client()
 
