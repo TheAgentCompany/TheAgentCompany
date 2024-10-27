@@ -88,6 +88,7 @@ def pre_init_checks():
     return True
 
 if __name__ == "__main__":
+    # TODO (kritanjalijain): move data population out of this task
     if pre_init_checks():
         print("Pre-initialization checks passed.")
     else:
