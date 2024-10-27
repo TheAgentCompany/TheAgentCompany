@@ -40,10 +40,22 @@ def checkpoint4():
 
     project_id = get_plane_project_id(project_name)
 
+    if not project_id:
+        return False
     issue_1 = get_plane_issue_details(project_id, issue_name_1)
     issue_2 = get_plane_issue_details(project_id, issue_name_2)
 
+    if not issue_1:
+        return False
+    if not issue_2:
+        return False
+
     state_map, id_map = get_plane_state_id_dict(project_id)
+
+    if not state_map:
+        return False
+    if not id_map:
+        return False
 
     state_1 = issue_1.get('state') == state_map['In Progress']
     state_2 = issue_2.get('state') == state_map['Done']
