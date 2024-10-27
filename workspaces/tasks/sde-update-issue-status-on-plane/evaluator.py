@@ -95,58 +95,58 @@ def get_state_details(project_url,state_id):
 def get_issue_by_name(issues, name):
     target_issues = [issue for issue in issues if issue['name'] == name]
     if len(target_issues) == 0:
-        logging.error(f"Issue '{name}' not found in the cycle")
+        logging.info(f"Issue '{name}' not found in the cycle")
         return None
     return target_issues[0]
 
 ############################# grade checkpoints #####################################
 
-def grade_checkpoint1(active_cycle_issues):
+def grade_checkpoint1(project_url, active_cycle_issues):
     target_issue = get_issue_by_name(active_cycle_issues, 'Evaluate data throughput')
     if target_issue is None:
         return False
-    state_details = get_state_details(target_issue['state'])
+    state_details = get_state_details(project_url, target_issue['state'])
     if not state_details:
         logging.error("Error getting state details")
         return False
     if state_details['name'] == 'Done':
         return True
-    logging.error(f"State of issue 'Evaluate data throughput' is {state_details['name']}, expected 'Done'")
+    logging.info(f"State of issue 'Evaluate data throughput' is {state_details['name']}, expected 'Done'")
     return False
 
-def grade_checkpoint2(all_issues):
+def grade_checkpoint2(project_url, all_issues):
     target_issue = get_issue_by_name(all_issues, 'Decrease database latency')
     if target_issue is None:
         return False
-    state_details = get_state_details(target_issue['state'])
+    state_details = get_state_details(project_url,target_issue['state'])
     if not state_details:
         logging.error("Error getting state details")
         return False
     if state_details['name'] == 'In Progress':
         return True
-    logging.error(f"State of issue 'Decrease database latency' is {state_details['name']}, expected 'In Progress'")
+    logging.info(f"State of issue 'Decrease database latency' is {state_details['name']}, expected 'In Progress'")
     return False
 
 def grade_checkpoint3(next_cycle_issues):
     target_issue = get_issue_by_name(next_cycle_issues, 'Decrease database latency')
     if target_issue is None:
-        logging.error("Issue 'Decrease database latency' not moved to the next cycle")
+        logging.info("Issue 'Decrease database latency' not moved to the next cycle")
         return False
     return True
 
 
-def grade_checkpoints(active_cycle_issues, next_cycle_issues, all_issues):
+def grade_checkpoints(project_url, active_cycle_issues, next_cycle_issues, all_issues):
     checkpoints = [
-        (grade_checkpoint1(active_cycle_issues),
+        (grade_checkpoint1(project_url, active_cycle_issues),
          "Issue 'Evaluate data throughput' is in the 'Done' state"),
-        (grade_checkpoint2(all_issues),
+        (grade_checkpoint2(project_url, all_issues),
          "Issue 'Decrease database latency' is in the 'In Progress' state"),
         (grade_checkpoint3(next_cycle_issues),
             "Issue 'Decrease database latency' is moved to the next cycle")
     ]
 
     points = 0
-    for passed, description in enumerate(checkpoints):
+    for passed, description in checkpoints:
         if passed:
             points += 1
         print(f"{'✓' if passed else '✗'} {description}")
@@ -158,9 +158,9 @@ if __name__ == "__main__":
     active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(risingWave_url)
     active_cycle_issue_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,active_cycle['id'])]
     next_cycle_issues_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,upcoming_cycle['id'])]
-    all_issues = get_issues(risingWave_url)
-    active_cycle_issues = [issue for issue in all_issues if issue['id'] in active_cycle_issue_ids]
-    next_cycle_issues = [issue for issue in all_issues if issue['id'] in next_cycle_issues_ids]
-    points = grade_checkpoints(active_cycle_issues, next_cycle_issues, all_issues)
+    risingWave_all_issues = get_issues(risingWave_url)
+    risingWave_active_cycle_issues = [issue for issue in risingWave_all_issues if issue['id'] in active_cycle_issue_ids]
+    risingWave_next_cycle_issues = [issue for issue in risingWave_all_issues if issue['id'] in next_cycle_issues_ids]
+    points = grade_checkpoints(risingWave_url, risingWave_active_cycle_issues, risingWave_next_cycle_issues, risingWave_all_issues)
     print(f"Final Points: {points}/3")
 
