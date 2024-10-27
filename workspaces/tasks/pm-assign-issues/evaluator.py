@@ -115,7 +115,8 @@ def grade_checkpoints(trajectory=""):
     # Checkpoint 2: Created the project in Plane
     project_id = get_project_id("Frontend and Backend Enhancements")
     logging.info(f"Retrieved project_id: {project_id}")
-    checkpoints.append(Checkpoint(1, int(project_id and check_url_2(project_id))))
+    checkpoint2_pass = bool(project_id and check_url_2(project_id))
+    checkpoints.append(Checkpoint(1, int(checkpoint2_pass)))
     
     # Checkpoint 3: Created issues with appropriate titles
     issues = [

@@ -1,10 +1,9 @@
-import os
+import requests
 import logging
 import json
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm
 from common import create_rocketchat_client
 from config import *
 

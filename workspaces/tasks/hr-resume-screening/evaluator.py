@@ -32,8 +32,8 @@ def run_checkpoint_2():
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-    checkpoints.append(Checkpoint(1, int(run_checkpoint_1)))
-    checkpoints.append(Checkpoint(2, 2 * int(run_checkpoint_2)))
+    checkpoints.append(Checkpoint(1, int(run_checkpoint_1())))
+    checkpoints.append(Checkpoint(2, 2 * int(run_checkpoint_2())))
     return result
 
 

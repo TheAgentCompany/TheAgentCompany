@@ -66,7 +66,7 @@ def grade_checkpoints(trajectory=""):
     }
 
     for func, total_score in scores.items():
-        checkpoints.append(total_score, total_score * int(func()))
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
     return result
 

@@ -1,4 +1,3 @@
-import os
 import requests
 from rocketchat_API.rocketchat import RocketChat
 from config import *

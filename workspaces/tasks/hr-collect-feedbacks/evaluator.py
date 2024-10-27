@@ -17,9 +17,10 @@ def grade_checkpoints(trajectory=""):
     performance_evaluatee = "Liu Qiang"
 
     for npc in npcs:
-        checkpoints.append(Checkpoint(1, int(get_chat_history(rocket, npc))))
+        chat_history = get_chat_history(rocket, npc)
+        checkpoints.append(Checkpoint(1, int(len(chat_history) > 0)))
 
-    passed = evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance"):
+    passed = evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance")
     checkpoints.append(Checkpoint(2, 2 * int(passed)))
 
     return result
