@@ -18,6 +18,8 @@ def extract_readme_content():
             project_identifier=project_path,
             additional_path="repository/files/README.md?ref=main",
         )
+        if not response:
+            return None
         response_data = response.json()
 
         if response.status_code == 200:
