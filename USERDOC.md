@@ -18,7 +18,9 @@ This step only needs to be done once across all tasks. It builds a base image
 that can be used by all exam (task) images.
 
 ```bash
-docker build -t base-image workspaces/base_image --no-cache
+cd workspaces/base_image
+make build
+cd -
 ```
 
 ### Step 2: Build Exam Image
@@ -26,25 +28,46 @@ docker build -t base-image workspaces/base_image --no-cache
 An exam image is the image used for a specific task. It can be built via:
 
 ```bash
-docker build -t example-exam-image workspaces/tasks/example --no-cache
+cd workspaces/tasks/example
+make build
 ```
 
 An examinee should finish all its work in a container created out of this image.
-The built container is analagous to a laptop used in an interview or daily work.
+The built image is analagous to a laptop used in an interview or daily work.
 
-Note that the task image is guaranteed to NOT have any `RUN` or `ENTRYPOINT` instruction, but
-it MAY contain an initialization script `/utils/init.sh`.  As a benchmark user
-(e.g. you are the one who'd like to evaluate an agent), you should run
+Now you need to start the container. You can do this by running:
+
+```
+make run
+```
+
+Alternatively, you can start the container manually by running:
+
+```bash
+docker run \
+-e "LITELLM_API_KEY=<your_llm_api_key>" \
+-e "LITELLM_BASE_URL=<your_llm_base_url>" \
+-e "LITELLM_MODEL=<your_llm_model_name>" \
+--name <container_name> -it <image_name> /bin/bash
+```
+
+The benefit is you can easily pass your LLM API information to the container. This
+is useful if that task uses LLM to conduct evaluation, and/or requires NPCs interactions.
+If in doubt, always pass the LLM environment variables.
+
+Once you start the container, you should run the initialization script:
 
 ```bash
 bash /utils/init.sh
 ```
 
-After you start the container and before you let the examinee start the task.
+Now you are ready to launch the agent, OR conduct the task manually.
 
-### Step 3: Launch Agent
 
-This step varies among examinees. We use OpenHands, a platform for software development
+### Step 3: Conduct the Task
+
+This step varies among examinees. If you are conducting the task manually,
+you can skip this section. We use OpenHands, a platform for software development
 agents powered by AI.
 
 OpenHands requires a sandbox environment that the agent needs to run in. It allows
@@ -79,14 +102,28 @@ Once the examinee has finished its work (as of now, we don't enforce timing),
 run the below command in the exam container to grade the exam:
 
 ```bash
-python_default /utils/evaluator.py <optional_trajectory_file_path>
+python_default /utils/eval.py
 ```
 
-Note that the trajectory file path must be an absolute path to the trajectory
-file. There is no specific requirement on the trajectory file's content and format,
+whose usage is:
+
+```
+usage: eval.py [-h] [--trajectory_path TRAJECTORY_PATH] [--output_path OUTPUT_PATH]
+
+Grade checkpoints from trajectory and save results
+
+options:
+  -h, --help            show this help message and exit
+  --trajectory_path TRAJECTORY_PATH
+                        Path to the trajectory file
+  --output_path OUTPUT_PATH
+                        Path to save the output JSON
+```
+
+Note that trajectory file is optional. It is often used to grant partial credits.
+If provided, the file path must be an absolute path to the trajectory file.
+There is no specific requirement on the trajectory file's content and format,
 but it MUST record all steps conducted by the examinee (no matter it's agent or
 human being). Benchmark users are allowed to inspect checkpoint rubrics to ensure
 the trajectory contains all necessary information used in graders, but examinees
 (e.g. agents) are not allowed to read checkpoint rubrics or evaluation code.
-
-Note that trajectory file is optional. It is often used to grant partial credits.
