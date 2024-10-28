@@ -1,5 +1,5 @@
-IMAGE_NAME=copilot-arena-server-easy-add-suffix-image
-CONTAINER_NAME=copilot-arena-server-easy-add-suffix
+IMAGE_NAME=sde-copilot-arena-server-easy-add-suffix-image
+CONTAINER_NAME=sde-copilot-arena-server-easy-add-suffix
 
 .PHONY: build run stop
 
