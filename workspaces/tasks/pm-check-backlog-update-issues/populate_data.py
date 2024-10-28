@@ -1,5 +1,5 @@
 import requests
-import json
+
 import logging
 from common import create_rocketchat_client
 from config import *

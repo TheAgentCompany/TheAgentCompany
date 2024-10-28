@@ -3,7 +3,7 @@ import os
 from io import BytesIO
 from odf.opendocument import load
 from odf.text import P
-import json
+
 from typing import List
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
@@ -147,5 +147,4 @@ def grade_checkpoints(trajectory=""):
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

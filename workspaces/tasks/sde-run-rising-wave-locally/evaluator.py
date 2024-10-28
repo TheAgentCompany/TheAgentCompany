@@ -4,7 +4,7 @@ import logging
 import time
 from subprocess import DEVNULL
 from typing import List
-import json
+
 
 from scoring import Result, Checkpoint
 
@@ -71,5 +71,4 @@ def grade_checkpoints(trajectory="") -> Result:
 
     return result
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

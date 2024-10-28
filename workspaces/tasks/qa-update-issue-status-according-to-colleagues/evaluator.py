@@ -1,4 +1,4 @@
-import json
+
 from scoring import Result, Checkpoint
 from common import *
 from typing import List
@@ -64,7 +64,6 @@ def grade_checkpoints(trajectory=''):
     checkpoints.append(Checkpoint(2, 2 * int(passed4)))
     return result
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+
 
 
