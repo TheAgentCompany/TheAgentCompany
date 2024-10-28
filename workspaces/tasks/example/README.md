@@ -43,9 +43,11 @@ total score based on the checkpoint scores. By default, the strategy is to sum u
 all checkpoint scores. However, benchmark developers can customize the formula
 by providing their customized strategy. In `base_image/scoring.py` you can find
 two pre-defined strategies: `bonus_for_completing_any` and `bonus_for_completing_all`.
-`bonus_for_completing_any` awards full credit for the 1st checkpoint if any of
-the checkpoints is passed. `bonus_for_completing_all` awards full credit for the
-entire task if the last checkpoint is passed. In the example task, we use the
+
+* `bonus_for_completing_any` awards full credit for the 1st checkpoint if any of the checkpoints is passed. 
+* `bonus_for_completing_all` awards full credit for the entire task if the last checkpoint is passed. 
+
+In the example task, we use the
 `bonus_for_completing_all` strategy, because as long as the examinee has passed
 the final checkpoint, it means they completed the entire task. Those strategies
 are commonly used in tasks where there's more than one approach to complete the
