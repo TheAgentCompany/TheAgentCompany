@@ -1,5 +1,5 @@
-IMAGE_NAME=repo_profile_pic-image
-CONTAINER_NAME=repo_profile_pic
+IMAGE_NAME=sde-repo_profile_pic-image
+CONTAINER_NAME=sde-repo_profile_pic
 
 .PHONY: build run stop
 
