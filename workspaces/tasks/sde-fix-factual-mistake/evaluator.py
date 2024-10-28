@@ -1,37 +1,15 @@
-import json
 import logging
-import re
-import sys
 import os
 import yaml
+import json
+from typing import List
 
-yaml_path = '/workspace/openhands/agenthub/micro/math_agent/agent.yaml'
+from common import *
+from scoring import Result, Checkpoint
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
-            return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-        
-        return os.path.isfile(instruction_file_path)
-    
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
+    return check_repo_exists('openhands')
 
 # Check L20 is fixed to be Thursday instead of Saturday
 def grade_checkpoint2():
@@ -84,17 +62,16 @@ def grade_checkpoint(check_func, description):
         logging.warning(f"Error while grading checkpoint '{description}': {e}")
         return 0
 
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    checkpoints.append(Checkpoint(1, grade_checkpoint1()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+
+    return result
+
+
 if __name__ == "__main__":
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands repo is cloned"),
-        (grade_checkpoint2, "L20 is fixed to be Thursday instead of Saturday"),
-        (grade_checkpoint3, "L24 is fixed to be close to 0.620537 instead of 0.603848"),
-    ]
-
-    points = 0
-    for check_func, description in checkpoints:
-        point = grade_checkpoint(check_func, description)
-        points += point 
-        
-
-    print(f"\nFinal points for OpenHands task: {points}/3")
+    print(json.dumps(grade_checkpoints().to_dict()))

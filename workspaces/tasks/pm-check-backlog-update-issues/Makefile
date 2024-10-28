@@ -1,4 +1,4 @@
-IMAGE_NAME=pm-check-backlog-update-issues
+IMAGE_NAME=pm-check-backlog-update-issues-image
 CONTAINER_NAME=pm-check-backlog-update-issues
 
 .PHONY: build run stop

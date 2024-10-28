@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-pm-create-channel-message-image
-CONTAINER_NAME=job-bench-pm-create-channel-message
+IMAGE_NAME=pm-create-channel-message-image
+CONTAINER_NAME=pm-create-channel-message
 
 .PHONY: build run stop
 

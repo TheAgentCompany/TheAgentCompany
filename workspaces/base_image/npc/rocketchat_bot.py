@@ -5,7 +5,7 @@ import os
 
 from rocketchat_API.rocketchat import RocketChat
 
-agent_username = os.getenv('AGENT_USERNAME') or 'jobbench'
+agent_username = os.getenv('AGENT_USERNAME') or 'theagentcompany'
 
 class RocketChatBot(object):
     def __init__(self, botname, passwd, server, command_character=None):
@@ -28,7 +28,7 @@ class RocketChatBot(object):
         for message in messages['messages']:
             if message['u']['username'] != self.botname:
                 pprint(message)
-                # filter out the message not from jobbench
+                # filter out the message not from theagentcompany
                 if message['u']['username'] != agent_username:
                     continue
                 return message['msg']
@@ -128,8 +128,8 @@ message format
   "ts": "2024-09-07T09:07:13.769Z",
   "u": {
     "_id": "qgyxXGaG3uzLq7gDt",
-    "username": "jobbench",
-    "name": "jobbench"
+    "username": "theagentcompany",
+    "name": "theagentcompany"
   },
   "_updatedAt": "2024-09-07T09:07:13.817Z",
   "urls": [],
@@ -155,9 +155,8 @@ message format
 
 import os
 botname = os.getenv('BOTNAME') or "rocket.cat"
-botpassword = os.getenv('BOTPASSWORD') or "jobbench"
+botpassword = os.getenv('BOTPASSWORD') or "theagentcompany"
 server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
-# server_url = 'ogma.lti.cs.cmu.edu:3000'
 bot = RocketChatBot(botname, botpassword, server_url)
 bot.run()
 """

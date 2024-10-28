@@ -20,4 +20,4 @@ def wait_for_rocketchat(retries=300, delay=3):
 
 wait_for_rocketchat()
 
-os.system("make restore-rocketchat")
+os.system("make reset-rocketchat")
