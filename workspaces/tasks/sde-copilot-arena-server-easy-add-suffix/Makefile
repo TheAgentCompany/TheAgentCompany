@@ -1,5 +1,5 @@
-IMAGE_NAME=repo_profile_pic-image
-CONTAINER_NAME=repo_profile_pic
+IMAGE_NAME=sde-copilot-arena-server-easy-add-suffix-image
+CONTAINER_NAME=sde-copilot-arena-server-easy-add-suffix
 
 .PHONY: build run stop
 
