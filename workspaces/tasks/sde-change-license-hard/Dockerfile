@@ -1,1 +1,0 @@
-FROM base-image
