@@ -4,10 +4,27 @@ from scoring import Result, Checkpoint
 from common import *
 from typing import List
 
-from sqlalchemy import false
-
-
 def get_plane_all_issue_state(projects):
+    """
+    Returns a nested dictionary containing issue state counts for each project
+    Return structure:
+    {
+        'JanusGraph': {
+            'Backlog': 0,
+            'Todo': 0,
+            'In Progress': 2,
+            'Done': 4,
+            'Cancelled': 0
+        },
+        'RisingWave': {
+            'Backlog': 0,
+            'Todo': 0,
+            'In Progress': 0,
+            'Done': 6,
+            'Cancelled': 0
+        },
+    }
+    """
     state_count= {}
     try:
         for project in projects:
@@ -40,23 +57,23 @@ def checkpoint1():
 
 def checkpoint2(filepath):
     projects = get_all_plane_projects()
-    state_count_cur = get_plane_all_issue_state(projects)
-
+    new_state = get_plane_all_issue_state(projects)
+    if not new_state:
+        return False      
     try:
         with open(filepath, 'r') as f:
-            state_count_old = json.load(f)
-        active_counts_old = {}
-        for project, statuses in state_count_old.items():
-            for key, value in statuses.items():
-                if key in ['Backlog', 'Todo', 'In Progress'] and value > 0:
-                    statuses[key] -= value
-                    statuses['Done'] += value
-            active_counts_old[project] = statuses
+            old_state = json.load(f)
+        for project, statuses in old_state.items():
+            closed_count = sum(value for key, value in statuses.items() if key in ['Backlog', 'Todo', 'In Progress']) + statuses.get('Done', 0)
+            cancelled_count = statuses.get('Cancelled', 0)
+            if new_state[project]['Cancelled'] != cancelled_count:
+                return False
+            if new_state[project]['Done'] != closed_count:
+                return False
     except Exception as e:
         logging.warning(f"checkpoint2 failed: {e}")
         return False
-
-    return state_count_cur==active_counts_old
+    return True
 
 def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
@@ -65,6 +82,7 @@ def grade_checkpoints(trajectory=''):
     passed1 = checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
 
+    # NOTE: The result.json is generated in pre_init.py
     passed2 = checkpoint2(filepath='result.json')
     checkpoints.append(Checkpoint(2, 2 * int(passed2)))
 
@@ -72,5 +90,4 @@ def grade_checkpoints(trajectory=''):
 
 if __name__ == "__main__":
     print(json.dumps(grade_checkpoints().to_dict()))
-
 

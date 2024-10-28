@@ -8,7 +8,6 @@ def write_json(data, filepath):
     try:
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)
-
         with open(filepath, 'w') as f:
             json.dump(data, f, indent=4)
         return True
