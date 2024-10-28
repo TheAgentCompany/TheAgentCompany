@@ -24,7 +24,7 @@ Below are the addresses, usernames, and passwords for each service:
 * http://ogma.lti.cs.cmu.edu:8091
 * email:`agent@company.com`
 * password:`theagentcompany`
-* API_KEY:`plane_api_759889ebd3744c96b3d9edcb0b013712`
+* API_KEY:`plane_api_83f868352c6f490aba59b869ffdae1cf`
 * If the API_KEY not work, ping @Yufan Song. And feel free to follow [here](https://developers.plane.so/api-reference/introduction) to create your temporary key to develop. We will always reset the server, so your temporary key may be deleted sometime after reset.
 
 ## RocketChat
