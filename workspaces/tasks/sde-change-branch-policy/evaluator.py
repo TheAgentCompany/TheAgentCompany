@@ -1,5 +1,9 @@
 import requests
 import logging
+import json
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import *
 
 project_path = "root/sotopia"
@@ -49,7 +53,18 @@ def grade_checkpoint2():
         return False
 
 
-if __name__ == "__main__":
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed1)))
+
     passed2 = grade_checkpoint2()
-    print(f"Final points for task: {passed1 + passed2}")
+    checkpoints.append(Checkpoint(1, int(passed2)))
+
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))

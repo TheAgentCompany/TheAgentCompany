@@ -1,7 +1,10 @@
 import requests
 import logging
 import urllib
+import json
+from typing import List
 
+from scoring import Result, Checkpoint
 from common import create_rocketchat_client
 from common import make_gitlab_request
 from common import evaluate_with_llm
@@ -17,17 +20,6 @@ readme_path = "README.md"
 rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
-
-def get_history(username):
-    id = ""
-    for item in rocket.users_list().json()['users']:
-        if item['username'] == username:
-            id = item["_id"]
-            break
-    msgs = rocket.im_history(room_id=id).json()['messages']
-    for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-    return msgs
 
 
 def check_repo_exist():
@@ -70,24 +62,18 @@ def check_conversation_with_leader():
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    if check_conversation_with_leader():
-        print("successfully asked leader about the new storage project")
-        points += 1
+    checkpoints.append(Checkpoint(1, int(check_conversation_with_leader())))
 
-    if check_repo_exist():
-        print("new repo successfully created")
-        points += 1
-    
-    if check_readme_content():
-        print("README successfully updated")
-        points += 1
+    checkpoints.append(Checkpoint(1, int(check_repo_exist())))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/3")
-    return points
+    checkpoints.append(Checkpoint(1, int(check_readme_content())))
+
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))

@@ -1,6 +1,11 @@
 import requests
 import logging
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
+
 
 # all project get deleted.
 def grade_checkpoint1():
@@ -22,6 +27,12 @@ def grade_checkpoint1():
         return False
 
 
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, grade_checkpoint1()))
+    return result
+
+
 if __name__ == "__main__":
-    passed1 = int(grade_checkpoint1())
-    print(f"Final points for task: {passed1}")
+    print(json.dumps(grade_checkpoints().to_dict()))

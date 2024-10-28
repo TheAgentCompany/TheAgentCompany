@@ -2,6 +2,10 @@ import requests
 import logging
 import sys
 import os
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
 
 
 def grade_checkpoint1():
@@ -81,9 +85,21 @@ def grade_checkpoint3():
         return False
 
 
-if __name__ == "__main__":
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(2, 2 * int(passed1)))
+
     passed2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(3, 3 * int(passed2)))
+
     passed3 = grade_checkpoint3()
-    points = 2 * int(passed1) + 3 * int(passed2) + 4 * int(passed2)
-    print(f"Final points for task Example: {points}")
+    checkpoints.append(Checkpoint(4, 4 * int(passed3)))
+
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))

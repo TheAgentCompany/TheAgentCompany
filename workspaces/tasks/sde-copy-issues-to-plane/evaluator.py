@@ -1,6 +1,10 @@
 import sys
 import logging
 import requests
+import json
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
 
 
@@ -36,44 +40,16 @@ def grade_checkpoint2():
         logging.warning(f"Error getting issues: {e}")
         return False
 
-def grade_checkpoints(trajectory):
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-    checkpoints = [
-        (grade_checkpoint1, "[FEAT]: Unify evaluation prompt and episode rendering for human readers and Roadmap to Sotopia v0.1 appear in the trajectory"),
-        (grade_checkpoint2, "[FEAT]: Unify evaluation prompt and episode rendering for human readers and Roadmap to Sotopia v0.1 appear on the issues webpage")
-    ]
-    
-    points = 0
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func(trajectory) if grade_func == grade_checkpoint1 else grade_func()
-            if passed:
-                if i == 1:
-                    points = 2
-                else:
-                    points += 1
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
-    
-    return points
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+   
+    return result
+
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-    
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points: {points}/2")
+    print(json.dumps(grade_checkpoints().to_dict()))
