@@ -1,8 +1,12 @@
 import requests
 import os
-from config import *
 import logging
 from datetime import datetime, timezone
+from typing import List
+import json
+
+from scoring import Result, Checkpoint
+from config import *
 
 ############################# init variable #####################################
 HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -135,32 +139,25 @@ def grade_checkpoint3(next_cycle_issues):
     return True
 
 
-def grade_checkpoints(project_url, active_cycle_issues, next_cycle_issues, all_issues):
-    checkpoints = [
-        (grade_checkpoint1(project_url, active_cycle_issues),
-         "Issue 'Evaluate data throughput' is in the 'Done' state"),
-        (grade_checkpoint2(project_url, all_issues),
-         "Issue 'Decrease database latency' is in the 'In Progress' state"),
-        (grade_checkpoint3(next_cycle_issues),
-            "Issue 'Decrease database latency' is moved to the next cycle")
-    ]
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    points = 0
-    for passed, description in checkpoints:
-        if passed:
-            points += 1
-        print(f"{'✓' if passed else '✗'} {description}")
-    return points
+    project_id = get_project_id(PROJECT_NAME)
+    project_url = f"{PLANE_PROJECTS_URL}{project_id}/"
+    active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(project_url)
+    active_cycle_issue_ids = [issue['id'] for issue in get_cycle_issues(project_url,active_cycle['id'])]
+    next_cycle_issues_ids = [issue['id'] for issue in get_cycle_issues(project_url,upcoming_cycle['id'])]
+    all_issues = get_issues(project_url)
+    active_cycle_issues = [issue for issue in all_issues if issue['id'] in active_cycle_issue_ids]
+    next_cycle_issues = [issue for issue in all_issues if issue['id'] in next_cycle_issues_ids]
+
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(project_url, active_cycle_issues))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2(project_url, all_issues))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3(next_cycle_issues))))
+
+    return result
+
 
 if __name__ == "__main__":
-    project_id = get_project_id(PROJECT_NAME)
-    risingWave_url = f"{PLANE_PROJECTS_URL}{project_id}/"
-    active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(risingWave_url)
-    active_cycle_issue_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,active_cycle['id'])]
-    next_cycle_issues_ids = [issue['id'] for issue in get_cycle_issues(risingWave_url,upcoming_cycle['id'])]
-    risingWave_all_issues = get_issues(risingWave_url)
-    risingWave_active_cycle_issues = [issue for issue in risingWave_all_issues if issue['id'] in active_cycle_issue_ids]
-    risingWave_next_cycle_issues = [issue for issue in risingWave_all_issues if issue['id'] in next_cycle_issues_ids]
-    points = grade_checkpoints(risingWave_url, risingWave_active_cycle_issues, risingWave_next_cycle_issues, risingWave_all_issues)
-    print(f"Final Points: {points}/3")
-
+    print(json.dumps(grade_checkpoints().to_dict()))
