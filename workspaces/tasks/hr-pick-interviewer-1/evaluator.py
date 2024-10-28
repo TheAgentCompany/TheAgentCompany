@@ -81,7 +81,7 @@ def compose_messages(messages):
     return "\n".join(f"Message {i+1}: {msg}" for i, msg in enumerate(messages))
 
 
-def grade_checkpoints() -> Result:
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
