@@ -1,12 +1,8 @@
-import requests
 import logging
-import os
-import sys
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from rocketchat_API.rocketchat import RocketChat  # type: ignore
-from common import create_rocketchat_client, evaluate_with_llm, get_chat_history
+from common import create_rocketchat_client, evaluate_chat_history_with_llm
 
 
 LEADER_NAME = "Chen Xinyi"
@@ -19,12 +15,10 @@ rocket = create_rocketchat_client()
 def grade_checkpoint1():
     # [2pts] Check the chat history with the leader Chen Xinyi
     try:
-        messages = get_chat_history(rocket, LEADER_NAME)
-        composed_messages = compose_messages(messages)
-        chat_with_leader = evaluate_with_llm(
-            content=composed_messages,
-            predicate=f"the examinee has a chat with the leader {LEADER_NAME} on the interviewer (there could be some irrelevant messages, but if could can find any message that is related to the interviewer, it should be considered as a chat)",
-            additional_prompt="",
+        chat_with_leader = evaluate_chat_history_with_llm(
+            rocket_client=rocket,
+            username=LEADER_NAME,
+            predicate="the examinee has a chat with the leader {LEADER_NAME} on the interviewer (there could be some irrelevant messages, but if could can find any message that is related to the interviewer, it should be considered as a chat)",
         )
 
         if not chat_with_leader:
@@ -39,12 +33,10 @@ def grade_checkpoint1():
 def grade_checkpoint2():
     # [2pts] Check whether examinee chat with Emily Zhou (the right person).
     try:
-        messages = get_chat_history(rocket, TARGET_INTERVIEWER)
-        composed_messages = compose_messages(messages)
-        chat_with_interviewer = evaluate_with_llm(
-            content=composed_messages,
-            predicate=f"there is a chat on inquiring whether the someone is available for a technical interview",
-            additional_prompt="",
+        chat_with_interviewer = evaluate_chat_history_with_llm(
+            rocket_client=rocket,
+            username=TARGET_INTERVIEWER,
+            predicate="there is a conversation about whether someone is available for a technical interview",
         )
 
         if not chat_with_interviewer:
@@ -66,12 +58,10 @@ def grade_checkpoint3():
     target_names = ["Mark Johnson", "Jessica Lee", "David Wong"]
     for name in target_names:
         try:
-            messages = get_chat_history(rocket, name)
-            composed_messages = compose_messages(messages)
-            chat_with_other = evaluate_with_llm(
-                content=composed_messages,
-                predicate=f"there is a chat on inquiring whether the someone is available for a technical interview",
-                additional_prompt="",
+            chat_with_other = evaluate_chat_history_with_llm(
+                rocket_client=rocket,
+                username=name,
+                predicate="there is a conversation about whether someone is available for a technical interview",
             )
 
             if chat_with_other:
