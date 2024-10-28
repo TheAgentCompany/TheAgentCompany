@@ -5,11 +5,13 @@ import sys
 from io import BytesIO
 from odf.opendocument import load
 from odf.element import Node
-
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
+import json
+from typing import List
 
 from common import llm_evaluate
+from scoring import Result, Checkpoint, bonus_for_completing_any
 
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
@@ -150,22 +152,17 @@ def check_keywords_in_content(content, keywords):
     return found_keywords, score
 
     
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_any)
 
-    passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2()
-    passed3 = grade_checkpoint3()
-    if passed2 or passed3:
-        passed1 = 1
-    points = sum([passed1, passed2, passed3])
-    print(f"Final points for task Create Employee Manual: {points}")
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
+
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))
+
