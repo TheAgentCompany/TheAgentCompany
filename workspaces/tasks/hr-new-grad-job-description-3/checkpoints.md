@@ -3,11 +3,11 @@ This task has 5 points in total. Will check it step by step. Partial credits may
 
 ## Checkpoint 1 (1pt)
 
-Reached out to Zhang Wei about the job requirement.
+Reached out to Zhang Wei about the job responsibiltiies.
 
 ## Checkpoint 2 (1pt)
 
-Reached out to Li Ming about the template location.
+Reached out to Li Ming about the template location, and minimum/preferred job qualifications, and salary range.
 
 ## Checkpoint 3 (1pt)
 
