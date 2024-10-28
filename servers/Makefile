@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
 NEXTCLOUD_HOME?=/home/yufansong/data/nextcloud
-HOSTNAME?=ogma.lti.cs.cmu.edu
+HOSTNAME?=localhost
 FILE_SERVER_PORT?=8081
 GITLAB_PORT?=8929
 NEXTCLOUD_BACKUP_VOLUME_NAME?=nextcloud_aio_backupdir
