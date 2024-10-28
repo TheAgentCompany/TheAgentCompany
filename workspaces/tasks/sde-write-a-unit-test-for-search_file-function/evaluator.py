@@ -7,7 +7,11 @@ import time
 import xml.etree.ElementTree as ET
 import astor
 import re
+import json
+from typing import List
+
 from common import *
+from scoring import Result, Checkpoint
 
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
