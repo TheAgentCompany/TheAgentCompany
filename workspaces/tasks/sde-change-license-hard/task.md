@@ -5,4 +5,4 @@ Find the Colly repository from wiki http://ogma.lti.cs.cmu.edu:8929/root/doc/-/w
 Change the license of the repository to MIT license.
 Find the Streamlit repository from wiki http://ogma.lti.cs.cmu.edu:8929/root/doc/-/wikis.
 Change the license of the repository to MIT license.
-Make sure to clone all the newly changed repositories to your workspace.
+Make sure to clone all the newly changed repositories to a subdirectory called workspace.

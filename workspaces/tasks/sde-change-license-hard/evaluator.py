@@ -10,7 +10,7 @@ GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
 
 def check_url(browser_logs):
-    return (
+    if (
         f"{GITLAB_URL}/root/janusgraph"
         and f"{GITLAB_URL}/root/janusgraph/-/blob/main/LICENSE?ref_type=heads"
         and f"{GITLAB_URL}/root/colly"
@@ -18,41 +18,41 @@ def check_url(browser_logs):
         and f"{GITLAB_URL}/root/streamlit"
         and f"{GITLAB_URL}/root/streamlit/-/blob/main/LICENSE?ref_type=heads"
         in browser_logs
-    )
+    ):
+        return True
+    else:
+        return False
 
 
 def check_code_clone():
     # check path exists
-    if os.path.exists("/workspace/janusgraph"):
-        with open("/workspace/janusgraph/README.MD") as f:
+    if os.path.exists("workspace/janusgraph"):
+        with open("workspace/janusgraph/README.md") as f:
             code_content = f.read()
             if (
-                "JanusGraph is a highly scalable [graph database](https://en.wikipedia.org/wiki/Graph_database)",
-                "optimized for storing and querying large graphs with billions of vertices and edges distributed",
-                "across a multi-machine cluster. JanusGraph is a transactional database that can support thousands",
-                "of concurrent users, complex traversals, and analytic graph queries.",
+                "JanusGraph is a highly scalable [graph database](https://en.wikipedia.org/wiki/Graph_database)"
             ) in code_content:
                 return True
     return False
 
 def check_code_clone_2():
     # check path exists
-    if os.path.exists("/workspace/colly"):
-        with open("/workspace/colly/README.MD") as f:
+    if os.path.exists("workspace/colly"):
+        with open("workspace/colly/README.md") as f:
             code_content = f.read()
             if (
-                "Scrapfly is an enterprise-grade solution providing Web Scraping API that aims to simplify the scraping process by managing everything: real browser rendering, rotating proxies, and fingerprints (TLS, HTTP, browser) to bypass all major anti-bots. Scrapfly also unlocks the observability by providing an analytical dashboard and measuring the success rate/block rate in detail.",
+                "Colly provides a clean interface to write any kind of crawler/scraper/spider."
             ) in code_content:
                 return True
     return False
 
 def check_code_clone_3():
     # check path exists
-    if os.path.exists("/workspace/streamlit"):
-        with open("/workspace/streamlit/README.MD") as f:
+    if os.path.exists("workspace/streamlit"):
+        with open("workspace/streamlit/README.md") as f:
             code_content = f.read()
             if (
-                "Streamlit lets you transform Python scripts into interactive web apps in minutes, instead of weeks. Build dashboards, generate reports, or create chat apps. Once you’ve created an app, you can use our Community Cloud platform to deploy, manage, and share your app.",
+                "Streamlit lets you transform Python scripts into interactive web apps in minutes, instead of weeks."
             ) in code_content:
                 return True
     return False
@@ -61,8 +61,8 @@ def check_code_clone_3():
 
 def check_license_update():
     # check path exists
-    if os.path.exists("/workspace/janusgraph"):
-        with open("/workspace/janusgraph/LICENSE") as f:
+    if os.path.exists("workspace/janusgraph"):
+        with open("workspace/janusgraph/LICENSE") as f:
             code_content = f.read()
             if (
                 "MIT"
@@ -74,8 +74,8 @@ def check_license_update():
 
 def check_license_update_2():
     # check path exists
-    if os.path.exists("/workspace/colly"):
-        with open("/workspace/colly/LICENSE") as f:
+    if os.path.exists("workspace/colly"):
+        with open("workspace/colly/LICENSE") as f:
             code_content = f.read()
             if (
                 "MIT"
@@ -87,8 +87,8 @@ def check_license_update_2():
 
 def check_license_update_3():
     # check path exists
-    if os.path.exists("/workspace/streamlit"):
-        with open("/workspace/streamlit/LICENSE") as f:
+    if os.path.exists("workspace/streamlit"):
+        with open("workspace/streamlit/LICENSE") as f:
             code_content = f.read()
             if (
                 "MIT"
@@ -121,7 +121,10 @@ if __name__ == "__main__":
             [
                 f"ACTION: goto('{GITLAB_URL}/root/janusgraph')",
                  f"{GITLAB_URL}/root/janusgraph/-/blob/main/LICENSE?ref_type=heads",
-                f"ACTION: goto('{GITLAB_URL}/root/sotopia')",
-                 f"{GITLAB_URL}/root/sotopia/-/blob/main/LICENSE?ref_type=heads"          
+                f"ACTION: goto('{GITLAB_URL}/root/colly')",
+                 f"{GITLAB_URL}/root/colly/-/blob/main/LICENSE?ref_type=heads",
+                f"ACTION: goto('{GITLAB_URL}/root/streamlit')",
+                 f"{GITLAB_URL}/root/streamlit/-/blob/main/LICENSE?ref_type=heads"              
             ]
         ) + check_code_clone() + check_license_update() + check_code_clone_2() + check_license_update_2() + check_code_clone_3() + check_license_update_3()
+    print(score)
