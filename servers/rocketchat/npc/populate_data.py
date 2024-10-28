@@ -4,6 +4,10 @@ from redis_om import Migrator, Field
 from sotopia.database import AgentProfile
 import time
 import redis
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from common.logging_config import logger
 
 class NPCDefinition(AgentProfile):
     slack_channels: str = Field(index=False, default_factory=lambda: "")
@@ -15,13 +19,13 @@ def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retr
         try:
             # Test if Redis is responding to PING command
             if client.ping():
-                print("Redis is up and running!")
+                logger.info("Redis is up and running!")
                 return True
         except redis.exceptions.ConnectionError:
-            print(f"Attempt {attempt + 1} failed: Redis not available yet, retrying in {delay} seconds...")
+            logger.warning(f"Attempt {attempt + 1} failed: Redis not available yet, retrying in {delay} seconds...")
             time.sleep(delay)
     
-    print("Failed to connect to Redis after several retries.")
+    logger.error("Failed to connect to Redis after several retries.")
     return False
 
 # NOTE: redis-stack are used to work with the dockerfile in server root path. It is a network shared with redis-stack
@@ -33,7 +37,7 @@ Migrator().run()
 
 with open('npc_definition.json', 'r') as file:
     agent_definitions = json.load(file)
-    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
+    logger.info(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
 def get_by_name(first_name, last_name):
     return AgentProfile.find(AgentProfile.first_name == first_name and AgentProfile.last_name == last_name).execute()
@@ -41,8 +45,9 @@ def get_by_name(first_name, last_name):
 for definition in agent_definitions:
     if get_by_name(definition["first_name"],definition["last_name"]):
         # TODO: shall we support modifications?
-        print(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
+        logger.info(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
         continue
     agent_profile = AgentProfile.parse_obj(definition)
     agent_profile.save()
-    print(f'Inserted {definition["first_name"]} {definition["last_name"]} successfully')
+    logger.info(f'Inserted {definition["first_name"]} {definition["last_name"]} successfully')
+

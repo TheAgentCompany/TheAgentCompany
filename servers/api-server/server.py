@@ -4,9 +4,12 @@ import os
 import json
 import threading
 import requests
-
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from common.logging_config import logger
 
 app = Flask(__name__)
+
 
 def get_git_root():
     try:
@@ -26,23 +29,25 @@ def check_url(url):
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            print("Web service is up!")
+            logger.info("Web service is up!")
             return 200, "Web service is up!"
         else:
             return response.status_code
     except requests.ConnectionError:
-        print("Web service is not available yet. Retrying...")
+        logger.warning("Web service is not available yet. Retrying...")
         return 500, "Web service is not available yet"
 
 def execute_command(command):
     try:
-        print(EXECUTION_DIR, command)
+        logger.info(f"Executing command in {EXECUTION_DIR}: {command}")
         os.chdir(EXECUTION_DIR)
         result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
+        logger.error(f"Command execute failed: {e}")
         return f"Command execute failed: {e}"
     except Exception as e:
+        logger.error(f"Error executing command: {e}")
         return f"Error : {e}"
 
 def async_execute_command(command):
@@ -102,4 +107,7 @@ def healthcheck_plane():
     return jsonify({"message":msg}), code
 
 if __name__ == '__main__':
+    logger.info("Starting API server on port 2999...")
     app.run(host='0.0.0.0', port=2999)
+
+
