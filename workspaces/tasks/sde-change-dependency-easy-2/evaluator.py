@@ -20,35 +20,35 @@ def check_url(browser_logs):
 
 def check_code_clone():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/README.MD") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/README.MD") as f:
             code_content = f.read()
             if (
-                "Welcome to OpenHands (formerly OpenDevin), a platform for software development agents powered by AI.",
+                "Welcome to OpenHands (formerly OpenDevin), a platform for software development agents powered by AI."
             ) in code_content:
                 return True
     return False
 
 def check_poetry_update():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/poetry.lock") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/poetry.lock") as f:
             code_content = f.read()
             if (
                 'version = "0.21.1"'
-                and '"tree-sitter-0.21.1"'
-                in code_content and '"version = "0.21.3"' and '"tree-sitter-0.21.3"' not in code_content
+                and 'tree-sitter-0.21.1'
+                in code_content and 'version = "0.21.3"' and 'tree-sitter-0.21.3' not in code_content
             ):
                 return True
     return False
 
 def check_pyproject_update():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/pyproject.toml") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/pyproject.toml") as f:
             code_content = f.read()
             if (
-                '"tree-sitter = "0.21.1"'
+                'tree-sitter = "0.21.1"'
                 in code_content 
             ):
                 return True
@@ -67,10 +67,12 @@ if __name__ == "__main__":
     )
     print(check_code_clone())
     print(check_poetry_update())
-    print(check_pyproject_update)
-    score =         check_url(
+    print(check_pyproject_update())
+    score =               check_url(
             [
-                f"ACTION: goto('{GITLAB_URL}/root/janusgraph')",
-                 f"{GITLAB_URL}/root/janusgraph/-/blob/main/LICENSE?ref_type=heads"           
+        f"{GITLAB_URL}/root/openhands",
+        f"{GITLAB_URL}/root/openhands/-/blob/main/pyproject.toml?ref_type=heads",
+        f"{GITLAB_URL}/root/openhands/-/blob/main/poetry.lock?ref_type=heads"        
             ]
         ) + check_code_clone() + check_poetry_update() + check_pyproject_update()
+    print(score)
