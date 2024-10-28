@@ -86,6 +86,10 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '')
     """
     Evaluates if a predicate can be inferred from the content, judged by LLM
     """
+    if not content:
+        logging.warning(f"Content is empty, cannot evaluate")
+        return False
+
     try:
         # Construct LLM query
         llm_messages = [{

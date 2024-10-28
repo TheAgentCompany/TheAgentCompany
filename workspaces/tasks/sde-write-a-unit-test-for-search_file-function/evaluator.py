@@ -240,7 +240,10 @@ def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     return True if after_cov_rate<before_cov_rate else False
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -250,15 +253,11 @@ def calculate_total_score():
         checkpoint5: 1
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
-
-    return total_score
+    return result
 
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))
