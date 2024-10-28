@@ -365,3 +365,40 @@ def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
     return []
+
+def get_plane_state_details(project_id,state_id):
+    """
+    Get details for a state.
+    Args:
+        project_id: The ID of the project
+        state_id: The ID of the state
+    Returns:
+        dict: A status configuration object with the following structure:
+            {
+                "id": str,              # Unique UUID for the status
+                "created_at": str,      # ISO 8601 timestamp of creation
+                "updated_at": str,      # ISO 8601 timestamp of last update
+                "name": str,            # Display name of the status
+                "description": str,     # Optional description text
+                "color": str,           # Hex color code for UI display
+                "slug": str,            # URL-friendly identifier
+                "sequence": float,      # Ordering value (e.g., 35000.0)
+                "group": str,           # Status category (e.g., "started")
+                "is_triage": bool,      # Whether status is for triage
+                "default": bool,        # Whether this is the default status
+                "external_source": str | None,  # External system source if any
+                "external_id": str | None,      # External system identifier if any
+                "created_by": str,      # UUID of creating user
+                "updated_by": str | None,  # UUID of last updating user
+                "project": str,         # UUID of associated project
+                "workspace": str        # UUID of associated workspace
+            }
+    """
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/{state_id}"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+    return None
