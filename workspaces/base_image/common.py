@@ -288,7 +288,34 @@ def get_plane_project_all_issues(project_id):
         return []
 
 def get_plane_state_id_dict(project_id):
-    """Get the relationship between state and id"""
+    """Get the relationship between state and id.
+
+    Args:
+        project_id: The ID of the project
+
+    Returns:
+        tuple: A tuple containing two dictionaries:
+            - state_map (dict): Mapping of state names to state IDs
+            - id_map (dict): Mapping of state IDs to state names
+
+    Examples:
+        >>> state_map
+        {
+            'Backlog': '9350e0ce-4d64-4ffc-8071-5918a3c3af4f',
+            'Todo': 'a03edcc9-9934-4432-b93a-ab0a33b02964',
+            'In Progress': '4873d638-bb79-48ef-8449-d1b75e0111a3',
+            'Done': '190e69a1-5f7c-465d-a3ad-0fec204fd365',
+            'Cancelled': 'c5ba193b-fab9-475f-bc4d-3161b2a52c70'
+        }
+        >>> id_map
+        {
+            '9350e0ce-4d64-4ffc-8071-5918a3c3af4f': 'Backlog',
+            'a03edcc9-9934-4432-b93a-ab0a33b02964': 'Todo',
+            '4873d638-bb79-48ef-8449-d1b75e0111a3': 'In Progress',
+            '190e69a1-5f7c-465d-a3ad-0fec204fd365': 'Done',
+            'c5ba193b-fab9-475f-bc4d-3161b2a52c70': 'Cancelled'
+        }
+    """
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/"
     id_map = {}
     state_map = {}
