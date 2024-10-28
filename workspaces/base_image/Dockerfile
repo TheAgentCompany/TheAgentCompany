@@ -1,6 +1,6 @@
 FROM python:3.12
 
-RUN apt-get update && apt-get install -y iputils-ping
+RUN apt-get update && apt-get install -y iputils-ping vim
 
 ################## Basic SETUP ################################
 # create utils directory (examinee MUST not access this directory)
@@ -9,6 +9,8 @@ COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
 COPY common.py /utils
 COPY config.py /utils
+COPY scoring.py /utils
+COPY eval.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -49,9 +51,12 @@ ENV BOT_URL http://the-agent-company.com:3000
 #############################################################
 
 ################## LLM Evaluator/rocketchat NPC SETUP ###############
-ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
-ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
-ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
+# If the task needs to use LLM-based evaluator OR involves NPCs, then
+# LITELLM_API_KEY must be set, along with optional LITELLM_BASE_URL
+# and LITELLM_MODEL variables
+# ENV LITELLM_API_KEY
+# ENV LITELLM_BASE_URL
+# ENV LITELLM_MODEL
 ENV PYTHONPATH="/utils:$PYTHONPATH"
 #############################################################
 

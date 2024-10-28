@@ -1,20 +1,20 @@
 import requests
 import logging
 import urllib
+import json
+from typing import List
 
-BASE_URL = "http://the-agent-company.com:8929/api/v4"
-PROJECT_ID = "root%2Fjanusgraph"
-FILE_PATH = "janusgraph-dist/pom.xml"
-TARGET_KEYWORD = "<docker.build.skip>"
-ACCESS_TOKEN = "root-token"
-HEADERS = {"PRIVATE-TOKEN": ACCESS_TOKEN}
+from scoring import Result, Checkpoint
+from common import *
+
+project_path = "root/janusgraph"
+file_path = "janusgraph-dist/pom.xml"
+target_keyword = "<docker.build.skip>"
 
 def get_file_content():
-    encoded_file_path = urllib.parse.quote(FILE_PATH, safe='')
-    file_url = f"{BASE_URL}/projects/{PROJECT_ID}/repository/files/{encoded_file_path}/raw"
-        
+    encoded_file_path = urllib.parse.quote(file_path, safe='')
     try:
-        response = requests.get(file_url, headers=HEADERS)
+        response = make_gitlab_request(project_path, f"repository/files/{encoded_file_path}/raw")
         response.raise_for_status()
         return response.text
     except requests.exceptions.HTTPError as e:
@@ -32,30 +32,19 @@ def grade_checkpoint1():
         if not content:
             logging.error("Failed to get file content")
             return False
-        has_keyword = TARGET_KEYWORD in content
+        has_keyword = target_keyword in content
         return has_keyword
     except Exception as e:
         logging.error(f"Checkpoint evaluation failed: {e}")
         return False
 
-def grade_checkpoints():
-    checkpoints = [
-        (grade_checkpoint1, "Check docker.build.skip exists")
-    ]
 
-    points = 0
-    for grade_func, description in checkpoints:
-        try:
-            passed = grade_func()
-            points += int(passed)
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
+    return result
 
-    return points
 
 if __name__ == "__main__":
-    # Test the evaluator
-    total_points = grade_checkpoints()
-    print(f"\nTotal points earned: {total_points}/1")
+    print(json.dumps(grade_checkpoints().to_dict()))

@@ -3,6 +3,10 @@
 import os
 import sys
 import logging
+import json
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_any
 
 def grade_checkpoint1(trajectory):
     return "https://ogma.lti.cs.cmu.edu/apps/files/files/626?dir=/Documents/Financials" in trajectory
@@ -91,31 +95,22 @@ def grade_checkpoint8():
     except sqlite3.Error:
         return False
 
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_any)
+
+    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint4()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint5()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint6()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint7()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint8()))
+
+    return result
+    
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
-
-    # if pass checkpoint2, then give full credit for checkpoint1
-    grade_checkpoint1 = grade_checkpoint1(trajectory)
-    grade_checkpoint2 = grade_checkpoint2()
-    first_two_checkpoints = grade_checkpoint2 + max(grade_checkpoint1, grade_checkpoint2)
-
-    points = sum([
-        first_two_checkpoints,
-        grade_checkpoint3(),
-        grade_checkpoint4(),
-        grade_checkpoint5(),
-        grade_checkpoint6(),
-        grade_checkpoint7(),
-        grade_checkpoint8()
-    ])
-
-    print(f"Final points for task: {points}")
+    print(json.dumps(grade_checkpoints().to_dict()))

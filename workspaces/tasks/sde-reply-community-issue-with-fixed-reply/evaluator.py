@@ -1,42 +1,20 @@
-import os
 import sys
-import requests
-import urllib.parse
 import logging
+import json
+from typing import List
 
-from common import llm_evaluate
+from scoring import Result, Checkpoint
+from common import evaluate_with_llm
+from common import make_gitlab_request
 
 # Configuration for gitlab
-base_url = "http://the-agent-company.com:8929/api/v4"
 project_path = "root/openhands"
 issue_id = 4158
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
 
-
-def check_with_llm(msgs, target, expect_result):
-    content = msgs
-
-    if len(content) == 0:
-        return False
-
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" means the \"{target}\"? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
-
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
 
 def get_gitlab_issue_notes():
-    encoded_path = urllib.parse.quote(project_path, safe='')
-    url = f"{base_url}/projects/{encoded_path}/issues/{issue_id}/notes"
     try:
-        response = requests.get(url, headers=headers)
+        response = make_gitlab_request(project_path, f"issues/{issue_id}/notes")
         return response.json()
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
@@ -76,30 +54,28 @@ def checkpoint3():
     if target is None:
         return False
 
-    return check_with_llm(
-        msgs='Alright, let\'s go ahead and increase the timeout limit bya few seconds on issue #4158 and monitory the result. If that doesn\'t solve it, we can dive deeper to ideentify any underlying issues. I\'ll start working on the update now.',
-        target=target,
-        expect_result='yes'
+    return evaluate_with_llm(
+        'Alright, let\'s go ahead and increase the timeout limit bya few seconds on issue #4158 and monitory the result. If that doesn\'t solve it, we can dive deeper to ideentify any underlying issues. I\'ll start working on the update now.',
+        predicate=target,
     )
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
         checkpoint2: 1,
-        checkpoint3: 1,
-
+        checkpoint3: 1
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    return result
 
-    return total_score
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))

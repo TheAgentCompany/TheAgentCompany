@@ -1,27 +1,12 @@
-import os
 import requests
 from rocketchat_API.rocketchat import RocketChat
 from config import *
-############################# Init Variables #####################################
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT =  os.getenv('ROCKETCHAT_PORT') or '3000'
-CHANNEL_NAME = "sprint-planning"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
 from common import create_rocketchat_client
+############################# Init Variables #####################################
+CHANNEL_NAME = "sprint-planning"
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
-
-# Add Plane API variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
 
 ############################# Helper Functions #####################################
 
@@ -41,7 +26,7 @@ def get_channel_room_id(channel_name):
 def get_project_id(project_name):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         projects = response.json().get('results', [])
         for project in projects:
@@ -54,7 +39,7 @@ def get_project_id(project_name):
 def check_issue_exists(project_id, issue_name):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         issues = response.json().get('results', [])
         return any(issue['name'] == issue_name for issue in issues)
@@ -65,7 +50,7 @@ def check_issue_exists(project_id, issue_name):
 def check_cycle_exists(project_id, cycle_name):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         cycles = response.json().get('results', [])
         return any(cycle['name'] == cycle_name for cycle in cycles)
@@ -102,6 +87,7 @@ def pre_init_checks():
     return True
 
 if __name__ == "__main__":
+    # TODO (kritanjalijain): move data population out of this task
     if pre_init_checks():
         print("Pre-initialization checks passed.")
     else:
