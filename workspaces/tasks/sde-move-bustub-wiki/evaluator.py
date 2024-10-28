@@ -28,7 +28,7 @@ def check_key_contents():
     key_links = ["https://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf", "https://engineering.fb.com/2018/12/13/data-infrastructure/hyperloglog/", "https://www.youtube.com/watch?v=lJYufx0bfpw", "https://www.youtube.com/watch?v=2PlrMCiUN_s"]
     
     try:
-        response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
+        response = requests.get(f"doc/-/wikis/HyperLogLog_project").text
     except requests.RequestException as e:
         logging.error(f"Error fetching wiki: {e}")
         return False
@@ -42,7 +42,7 @@ def check_url_file_exist():
     try:
         with open(filename, 'r') as file:
             content = file.read()
-            if f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project" in content:
+            if f"doc/-/wikis/HyperLogLog_project" in content:
                 return True
             return False
     except FileNotFoundError:

@@ -4,6 +4,10 @@ import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 import subprocess
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 def grade_checkpoint1():

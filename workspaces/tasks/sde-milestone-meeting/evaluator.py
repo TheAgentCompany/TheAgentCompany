@@ -5,7 +5,7 @@ from typing import List
 import json
 
 from common import create_rocketchat_client
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_any
 
 
 # Create RocketChat instance
@@ -80,7 +80,7 @@ def get_message(channel):
     
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_any)
 
     passed_checkpoint1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(1, passed_checkpoint1))
