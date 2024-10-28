@@ -1,6 +1,10 @@
 import shutil
 import subprocess
 import logging
+from typing import List
+import json
+
+from scoring import Result, Checkpoint
 
 # OpenJDK is installed
 def grade_checkpoint1():
@@ -34,26 +38,19 @@ def run_command(command):
         logging.error(f"Error running command '{' '.join(command)}': {e}")
         return None
 
-def grade_checkpoint(check_func, description):
-    try:
-        passed = check_func()
-        print(f"{'✓' if passed else '✗'} {description}")
-        return 1 if passed else 0
-    except Exception as e:
-        logging.error(f"Error while grading checkpoint '{description}': {e}")
-        return 0
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    passed_checkpoint1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, passed_checkpoint1))
+
+    passed_checkpoint2 = passed_checkpoint1 and grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, passed_checkpoint2))
+
+    return result
+
 
 if __name__ == "__main__":
-    checkpoints = [
-        (grade_checkpoint1, "OpenJDK is installed (java --version returns 'openjdk xxx')"),
-        (grade_checkpoint2, "OpenJDK 17 is installed (openjdk 17.xx keyword is in it)"),
-    ]
-
-    points = 0
-    for check_func, description in checkpoints:
-        point = grade_checkpoint(check_func, description)
-        points += point
-        if point == 0:
-            break
-
-    print(f"\nFinal points for OpenJDK installation task: {points}/2")
+    print(json.dumps(grade_checkpoints().to_dict()))

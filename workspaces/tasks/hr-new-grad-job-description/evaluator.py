@@ -1,3 +1,8 @@
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
+
 from common import evaluate_with_llm, get_nextcloud_url_in_file, download_nextcloud_content
 
 ############################# Helper Functions #####################################
@@ -23,22 +28,22 @@ def check_job_description_content():
 
 ############################# Evaluator #####################################
 
-def evaluate_task():
-    points = 0
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
     link = get_nextcloud_url_in_file("/workspace/link.txt")
-    if link:
-        points += 1
-        if download_nextcloud_content(link, "/workspace/job_description.md"):
-            points += 1
+    pass_checkpoint1 = bool(link)
+    checkpoints.append(Checkpoint(1, int(pass_checkpoint1)))
 
-        if check_job_description_content():
-            print("Job description succesfully created")
-            points += 1
+    pass_checkpoint2 = pass_checkpoint1 and download_nextcloud_content(link, "/workspace/job_description.md")
+    checkpoints.append(Checkpoint(1, int(pass_checkpoint2)))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/3")
-    return points
+    pass_checkpoint3 = pass_checkpoint2 and check_job_description_content()
+    checkpoints.append(Checkpoint(1, int(pass_checkpoint3)))
+
+    return result
+
 
 if __name__ == "__main__":
-    evaluate_task()
+    print(json.dumps(grade_checkpoints().to_dict()))

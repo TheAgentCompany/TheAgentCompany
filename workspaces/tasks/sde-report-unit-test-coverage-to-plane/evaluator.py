@@ -2,45 +2,18 @@ import os
 import sys
 import logging
 import requests
+import json
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
+from common import *
 
-# Plane Config
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
 PLANE_PROJECT_ID = "73cb74f7-a7ac-4292-a915-e2f59a09a703"
-
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
-            return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-        
-        return os.path.isfile(instruction_file_path)
-    
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
+    return check_repo_exists('openhands')
 
 # Check if run unit test coverage command exists in trajectory
 def grade_checkpoint2(trajectory):
@@ -52,7 +25,7 @@ def grade_checkpoint3():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         if response.status_code == 200:
             issues = response.json().get("results", [])
             for issue in issues:
@@ -70,7 +43,7 @@ def grade_checkpoint4():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         if response.status_code == 200:
             issues = response.json().get("results", [])
             for issue in issues:
@@ -89,44 +62,18 @@ def grade_checkpoint4():
         logging.warning(f"Error checking coverage in issues: {e}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands code cloned in local workspace"),
-        (lambda: grade_checkpoint2(trajectory), "Command about running unit test coverage in agent trajectory"),
-        (grade_checkpoint3, "Post about unit test coverage exists on Plane"),
-        (grade_checkpoint4, "Post contains the correct unit test coverage number")
-    ]
-    
-    points = 0
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func(trajectory) if grade_func == grade_checkpoint2 else grade_func()
-            if passed:
-                if i == 3:  
-                    points = 4 
-                else:
-                    points += 1
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
-    
-    return points
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return file.read()
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+
+    checkpoints.append(Checkpoint(1, grade_checkpoint1()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2(trajectory)))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint4()))
+
+    return result
+
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-    
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points: {points}/4")
+    print(json.dumps(grade_checkpoints().to_dict()))

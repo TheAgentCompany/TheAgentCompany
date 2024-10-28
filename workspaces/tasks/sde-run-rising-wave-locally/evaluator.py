@@ -3,6 +3,10 @@ import subprocess
 import logging
 import time
 from subprocess import DEVNULL
+from typing import List
+import json
+
+from scoring import Result, Checkpoint
 
 def run_command(command):
     if not shutil.which(command[0]):
@@ -53,17 +57,19 @@ def grade_checkpoint2():
         return p, all(item in output for item in ["exam_id", "average_score", "total_scores", "101", "102", "87.74", "88.64", "5"])
     
 
-if __name__ == "__main__":
-    points = 0
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    if grade_checkpoint1():
-        points += 1
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
     
-    process, res = grade_checkpoint2()
-    if res:
-        points += 1
+    process, passed_checkpoint2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     if process is not None:
         process.wait()
 
-    print(f"\nFinal points for running Rising Wave locally: {points}/2")
+    return result
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))

@@ -2,14 +2,12 @@ import requests
 import logging
 import os
 import sys
-from rocketchat_API.rocketchat import RocketChat # type: ignore
-
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
+import json
+from typing import List
 
 from common import create_rocketchat_client
+from scoring import Result, Checkpoint, bonus_for_completing_final
+
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -77,22 +75,20 @@ def get_message(channel):
         return None
 
     return messages
-    
-    
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
 
-    passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2()
-    passed3 = grade_final_checkpoint()
-    points = (int(passed3) + 2) if passed3 >= 1 else int(passed1) + int(passed2)
-    print(f"Final points for task Check High Priority Issue: {points}")
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
+
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+
+    checkpoints.append(Checkpoint(2, 2 * int(grade_final_checkpoint())))    
+
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(grade_checkpoints().to_dict()))
