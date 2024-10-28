@@ -2,6 +2,10 @@ import csv
 import logging
 import sys
 import os
+import json
+from typing import List
+
+from scoring import Result, Checkpoint
 
 # Check http://the-agent-company.com:8929/root/sotopia/-/issues is in the trajectory
 def grade_checkpoint1(trajectory):
