@@ -4,6 +4,9 @@ from scoring import Result, Checkpoint
 from common import *
 from typing import List
 
+from sqlalchemy import false
+
+
 def get_plane_all_issue_state(projects):
     state_count= {}
     try:
@@ -39,15 +42,19 @@ def checkpoint2(filepath):
     projects = get_all_plane_projects()
     state_count_cur = get_plane_all_issue_state(projects)
 
-    with open(filepath, 'r') as f:
-        state_count_old = json.load(f)
-    active_counts_old = {}
-    for project, statuses in state_count_old.items():
-        for key, value in statuses.items():
-            if key in ['Backlog', 'Todo', 'In Progress'] and value > 0:
-                statuses[key] -= value
-                statuses['Done'] += value
-        active_counts_old[project] = statuses
+    try:
+        with open(filepath, 'r') as f:
+            state_count_old = json.load(f)
+        active_counts_old = {}
+        for project, statuses in state_count_old.items():
+            for key, value in statuses.items():
+                if key in ['Backlog', 'Todo', 'In Progress'] and value > 0:
+                    statuses[key] -= value
+                    statuses['Done'] += value
+            active_counts_old[project] = statuses
+    except Exception as e:
+        logging.warning(f"checkpoint2 failed: {e}")
+        return False
 
     return state_count_cur==active_counts_old
 
