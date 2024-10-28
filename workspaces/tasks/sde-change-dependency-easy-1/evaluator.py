@@ -20,19 +20,19 @@ def check_url(browser_logs):
 
 def check_code_clone():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/README.MD") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/README.MD") as f:
             code_content = f.read()
             if (
-                "Welcome to OpenHands (formerly OpenDevin), a platform for software development agents powered by AI.",
+                "Welcome to OpenHands (formerly OpenDevin), a platform for software development agents powered by AI."
             ) in code_content:
                 return True
     return False
 
 def check_poetry_update():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/poetry.lock") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/poetry.lock") as f:
             code_content = f.read()
             if (
                 'uvicorn-0.31.1-py3-none-any.whl'
@@ -44,8 +44,8 @@ def check_poetry_update():
 
 def check_pyproject_update():
     # check path exists
-    if os.path.exists("/workspace/openhands"):
-        with open("/workspace/openhands/pyproject.toml") as f:
+    if os.path.exists("workspace/openhands"):
+        with open("workspace/openhands/pyproject.toml") as f:
             code_content = f.read()
             if (
                 'uvicorn = "0.31.1"'
@@ -75,3 +75,4 @@ if __name__ == "__main__":
         f"{GITLAB_URL}/root/openhands/-/blob/main/poetry.lock?ref_type=heads"             
             ]
         ) + check_code_clone() + check_poetry_update() + check_pyproject_update()
+    print(score)
