@@ -28,6 +28,7 @@ cd -
 An exam image is the image used for a specific task. It can be built via:
 
 ```bash
+# cd workspaces/tasks/<task_name>
 cd workspaces/tasks/example
 make build
 ```
