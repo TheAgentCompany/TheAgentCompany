@@ -1,5 +1,5 @@
 import os
-import json
+
 from typing import List
 
 from PIL import Image
@@ -64,5 +64,4 @@ def grade_checkpoints(trajectory="") -> Result:
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

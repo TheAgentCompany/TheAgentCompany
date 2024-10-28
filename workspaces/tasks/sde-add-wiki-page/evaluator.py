@@ -3,7 +3,7 @@ import os
 import sys
 from typing import List
 import urllib
-import json
+
 
 from scoring import Result, Checkpoint
 from common import make_gitlab_request, llm_complete
@@ -82,5 +82,3 @@ def grade_checkpoints(trajectory="") -> Result:
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))

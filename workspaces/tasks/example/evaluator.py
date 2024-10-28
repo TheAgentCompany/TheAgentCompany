@@ -12,7 +12,7 @@ A good evaluator should:
 
 import requests
 import os
-import json
+
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
@@ -52,5 +52,4 @@ def grade_checkpoints(trajectory="") -> Result:
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

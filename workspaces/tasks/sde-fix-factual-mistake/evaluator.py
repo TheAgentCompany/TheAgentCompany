@@ -1,7 +1,7 @@
 import logging
 import os
 import yaml
-import json
+
 from typing import List
 
 from common import *
@@ -73,5 +73,4 @@ def grade_checkpoints(trajectory="") -> Result:
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+
