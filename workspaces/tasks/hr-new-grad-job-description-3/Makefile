@@ -1,5 +1,5 @@
-IMAGE_NAME=hr-new-grad-job-description-2-image
-CONTAINER_NAME=hr-new-grad-job-description-2
+IMAGE_NAME=hr-new-grad-job-description-3-image
+CONTAINER_NAME=hr-new-grad-job-description-3
 
 .PHONY: build run stop
 
