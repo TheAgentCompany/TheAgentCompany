@@ -372,27 +372,26 @@ def get_plane_state_details(project_id,state_id):
     Args:
         project_id: The ID of the project
         state_id: The ID of the state
-    Returns:
-        dict: A status configuration object with the following structure:
-            {
-                "id": str,              # Unique UUID for the status
-                "created_at": str,      # ISO 8601 timestamp of creation
-                "updated_at": str,      # ISO 8601 timestamp of last update
-                "name": str,            # Display name of the status
-                "description": str,     # Optional description text
-                "color": str,           # Hex color code for UI display
-                "slug": str,            # URL-friendly identifier
-                "sequence": float,      # Ordering value (e.g., 35000.0)
-                "group": str,           # Status category (e.g., "started")
-                "is_triage": bool,      # Whether status is for triage
-                "default": bool,        # Whether this is the default status
-                "external_source": str | None,  # External system source if any
-                "external_id": str | None,      # External system identifier if any
-                "created_by": str,      # UUID of creating user
-                "updated_by": str | None,  # UUID of last updating user
-                "project": str,         # UUID of associated project
-                "workspace": str        # UUID of associated workspace
-            }
+       dict: A status configuration object with the following structure:
+           {
+               "id": str,                # ba9d7f8c-9faf-464e-941e-865cd55f37d9
+               "created_at": str,        # 2024-10-05T20:37:51.143913Z
+               "updated_at": str,        # 2024-10-05T20:37:51.143929Z
+               "name": str,              # In Progress
+               "description": str,       # ""
+               "color": str,             # #F59E0B
+               "slug": str,              # ""
+               "sequence": float,        # 35000.0
+               "group": str,             # started
+               "is_triage": bool,        # false
+               "default": bool,          # false
+               "external_source": str | None,  # null
+               "external_id": str | None,      # null
+               "created_by": str,        # 666d7509-469c-41ba-8ade-fd5e56bfafa6
+               "updated_by": str | None, # null
+               "project": str,           # ea796314-eeec-41aa-816d-58be13909bf2
+               "workspace": str          # a56ce149-8ef9-4401-8de6-4dac6a21b4b1
+           }
     """
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/{state_id}"
     try:
@@ -400,5 +399,5 @@ def get_plane_state_details(project_id,state_id):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
     return None
