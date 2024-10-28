@@ -345,3 +345,81 @@ def get_plane_issue_details(project_id, issue_name):
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
         return None
+
+def get_cycle_issues(project_url: str, cycle_id:str):
+    """
+    Get issues for a specific cycle.
+
+    Args:
+        project_url: The url of the project
+        cycle_id: The ID of the cycle
+
+    Returns:
+        List: A list of issues in the cycle
+    """
+
+
+    url = f"{project_url}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+    return []
+
+def get_issues(project_url):
+    """
+    Get issues for a specific project.
+
+    Args:
+        project_url: The url of the project
+
+    Returns:
+        List: A list of issues in the project
+    """
+    url = f"{project_url}/issues/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+    return []
+
+def get_state_details(project_url,state_id):
+    """
+    Get details for a state.
+
+    Args:
+        project_url: The url of the project
+        state_id: The ID of the state
+
+    Returns:
+        Dict: State details for the given state ID
+    """
+    url = f"{project_url}/states/{state_id}"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+    return None
+
+def get_issue_by_name(issues, name):
+    """
+    Extract issue from a list of issues by name.
+
+    Args:
+        issues: List of issues
+        name: Name of the issue to extract
+
+    Returns:
+        Dict: Issue with given name
+    """
+    target_issues = [issue for issue in issues if issue['name'] == name]
+    if len(target_issues) == 0:
+        logging.info(f"Issue '{name}' not found in the cycle")
+        return None
+    return target_issues[0]
