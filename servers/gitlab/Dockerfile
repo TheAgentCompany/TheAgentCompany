@@ -1,9 +1,9 @@
-FROM gitlab/gitlab-ce:17.3.1-ce.0
+FROM gitlab/gitlab-ce:17.5.1-ce.0
 RUN apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
 
 ENV GITLAB_SKIP_TAIL_LOGS=true
 ENV GITLAB_ROOT_EMAIL="root@local"
-ENV GITLAB_ROOT_PASSWORD="JobBench"
+ENV GITLAB_ROOT_PASSWORD="theagentcompany"
 
 # Copy start script and data to the image
 COPY . /assets
