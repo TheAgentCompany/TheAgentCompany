@@ -403,4 +403,4 @@ def get_plane_state_details(project_id, state_id):
         return response.json()
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
-    return None
+    return dict()
