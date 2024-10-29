@@ -61,9 +61,9 @@ def grade_checkpoints(trajectory=""):
 
     checkpoints.append(Checkpoint(1, int(checkpoint1(trajectory))))
 
-    checkpoints.append(Checkpoint(1, int(check_user_added("webagents", "kritanjali.jain"))))
+    checkpoints.append(Checkpoint(1, int(check_user_added("finance-talk", "david_wong"))))
 
-    checkpoints.append(Checkpoint(1, int(check_message_sent("webagents", "Welcome to the webagents channel!", "theagentcompany"))))
+    checkpoints.append(Checkpoint(1, int(check_message_sent("finance-talk", "Welcome to the finance-talk channel!", "theagentcompany"))))
 
     return result
 
