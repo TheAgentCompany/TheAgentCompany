@@ -2,7 +2,7 @@ import json
 import logging
 
 from common import *
-from scoring import Checkpoint, Result
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from typing import List
 
 rocket = create_rocketchat_client()
