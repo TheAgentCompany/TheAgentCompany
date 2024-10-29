@@ -345,3 +345,62 @@ def get_plane_issue_details(project_id, issue_name):
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
         return None
+
+def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
+    """
+    Get issues for a specific cycle.
+
+    Args:
+        project_id: The ID of the project
+        cycle_id: The ID of the cycle
+
+    Returns:
+        List: A list of issues in the cycle
+    """
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except requests.RequestException as e:
+        logging.error(f"Error: {e}")
+    return []
+
+def get_plane_state_details(project_id, state_id):
+    """
+    Get details for a state.
+    
+    Args:
+        project_id: The ID of the project
+        state_id: The ID of the state
+
+    Returns:
+        dict: A status configuration object with the following structure:
+           {
+               "id": str,                # ba9d7f8c-9faf-464e-941e-865cd55f37d9
+               "created_at": str,        # 2024-10-05T20:37:51.143913Z  
+               "updated_at": str,        # 2024-10-05T20:37:51.143929Z
+               "name": str,              # In Progress
+               "description": str,       # ""
+               "color": str,             # #F59E0B
+               "slug": str,              # ""
+               "sequence": float,        # 35000.0
+               "group": str,             # started
+               "is_triage": bool,        # false
+               "default": bool,          # false
+               "external_source": str | None,  # null
+               "external_id": str | None,      # null
+               "created_by": str,        # 666d7509-469c-41ba-8ade-fd5e56bfafa6
+               "updated_by": str | None, # null
+               "project": str,           # ea796314-eeec-41aa-816d-58be13909bf2
+               "workspace": str          # a56ce149-8ef9-4401-8de6-4dac6a21b4b1
+           }
+    """
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/{state_id}"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.error(f"Error: {e}")
+    return dict()
