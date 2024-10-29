@@ -9,11 +9,10 @@ rocket = create_rocketchat_client()
  
 
 def checkpoint1():
-    h1 = get_chat_history(rocket, 'huang_jie')
-    h2 = get_chat_history(rocket, 'sophia_rodriguez')
-    h3 = get_chat_history(rocket, 'mike_chen')
-    h4 = get_chat_history(rocket, 'sarah_johnson')
-    return bool(h1 and h2 and h3 and h4)
+    passed = True
+    for name in ['huang_jie', 'sophia_rodriguez', 'mike_chen', 'sarah_johnson']:
+        passed = passed and get_chat_history(rocket, name)
+    return passed
 
 def checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
