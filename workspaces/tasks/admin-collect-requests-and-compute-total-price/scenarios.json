@@ -1,0 +1,18 @@
+{
+  "Huang Jie": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "You plan to apply one Monitor (27” Dell UltraSharp 4K and two External Hard Drive (2TB)"
+  },
+  "Sophia Rodriguez": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "You plan to apply five Printer Paper (5000 sheets) and four Notebooks (Pack of 5)"
+  },
+  "Mike Chen": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "You plan to apply one Ergonomic Office Chai and one Desk Lamp"
+  },
+  "Sarah Johnson": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "You plan to apply one Coffee Machine, one Microwave, one Mini Fridge and one Water Dispenser"
+  }
+}
