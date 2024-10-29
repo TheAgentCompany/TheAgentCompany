@@ -14,7 +14,8 @@ def check_all_repositories_deleted():
             logging.info(f"All repositories are deleted.")
             return True
         else:
-            logging.warning(f"Some repositories are not deleted: {response}")
+            repo_names = [repo["name"] for repo in response]
+            logging.warning(f"Some repositories are not deleted: {repo_names}")
             return False
     except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
@@ -24,5 +25,5 @@ def check_all_repositories_deleted():
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-    checkpoints.append(Checkpoint(1, check_all_repositories_deleted()))
+    checkpoints.append(Checkpoint(1, int(check_all_repositories_deleted())))
     return result
