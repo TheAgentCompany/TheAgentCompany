@@ -42,16 +42,16 @@ def grade_checkpoints(trajectory=""):
     checkpoints.append(Checkpoint(1, int(pass_checkpoint1)))
 
     chat_history = get_chat_history(rocket, "li_ming")
-    pass_checkpoint1 = chat_history is not None and len(chat_history) > 0
-    checkpoints.append(Checkpoint(1, int(pass_checkpoint1)))
-
-    link = get_nextcloud_url_in_file("/workspace/link.txt")
-    pass_checkpoint2 = bool(link)
+    pass_checkpoint2 = chat_history is not None and len(chat_history) > 0
     checkpoints.append(Checkpoint(1, int(pass_checkpoint2)))
 
-    pass_checkpoint3 = pass_checkpoint1 and download_nextcloud_content(link, "/workspace/job_description.md")
+    link = get_nextcloud_url_in_file("/workspace/link.txt")
+    pass_checkpoint3 = bool(link)
     checkpoints.append(Checkpoint(1, int(pass_checkpoint3)))
 
-    pass_checkpoint4 = pass_checkpoint2 and check_job_description_content()
+    pass_checkpoint4 = pass_checkpoint3 and download_nextcloud_content(link, "/workspace/job_description.md")
     checkpoints.append(Checkpoint(1, int(pass_checkpoint4)))
+
+    pass_checkpoint5 = pass_checkpoint4 and check_job_description_content()
+    checkpoints.append(Checkpoint(1, int(pass_checkpoint5)))
     return result
