@@ -1,7 +1,10 @@
 import os
-
-import sys
 import logging
+
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
+
 
 ############################# Init Variables #####################################
 # Rocket.Chat variables
@@ -65,26 +68,12 @@ def load_trajectory(file_path):
 
 ############################# Evaluator #####################################
 
-def evaluate(trajectory):
-    points = 0
 
-    if check_trajectory(trajectory):
-        print("bathtub issue accessed")
-        points += 1
-    else:
-        print("bathtub issue not accessed")
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+    checkpoints.append(Checkpoint(1, int(check_trajectory(trajectory))))
+    checkpoints.append(Checkpoint(1, check_project_distributed()))
+    return result
 
-    if check_project_distributed():
-        points += 1
 
-    print(f"Evaluation completed. Final score: {points}/2")
-    return points
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-
-    evaluate(trajectory)

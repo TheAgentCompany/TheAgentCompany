@@ -1,10 +1,14 @@
 import logging
+import json
 import os
 import sys
+from typing import List
+import urllib
+
+
+from scoring import Result, Checkpoint
 from common import make_gitlab_request, llm_complete
 from config import GITLAB_BASEURL, GITLAB_USER
-import urllib
-import json
 from prompts import wiki_evaluation_prompt
 
 PROJECT_PATH = f"{GITLAB_USER}/sotopia"
@@ -60,25 +64,22 @@ def grade_checkpoint3(wiki_page):
     content = llm_response["choices"][0]["message"]["content"].lower().strip()
     return "yes" in content
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
     wiki_page = get_wiki_page()
 
     passed1 = grade_checkpoint1(trajectory)
+    checkpoints.append(Checkpoint(CHECKPOINT_1_SCORE, CHECKPOINT_1_SCORE * int(passed1)))
+
     passed2 = grade_checkpoint2(wiki_page)
-    if not passed2:
-        passed3 = False
-    else:
-        passed3 = grade_checkpoint3(wiki_page)
-    points = CHECKPOINT_1_SCORE * int(passed1) + CHECKPOINT_2_SCORE * int(passed2) + CHECKPOINT_3_SCORE * int(passed3)
-    print(f"Final points for task 'sde-add-wiki-page': {points}")
+    checkpoints.append(Checkpoint(CHECKPOINT_2_SCORE, CHECKPOINT_2_SCORE * int(passed2)))
+
+    passed3 = passed2 and grade_checkpoint3(wiki_page)
+    checkpoints.append(Checkpoint(CHECKPOINT_3_SCORE, CHECKPOINT_3_SCORE * int(passed3)))
+
+    return result
+
+

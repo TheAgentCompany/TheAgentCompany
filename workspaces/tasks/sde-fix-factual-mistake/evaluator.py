@@ -1,8 +1,11 @@
 import logging
 import os
 import yaml
-from common import *
 
+from typing import List
+
+from common import *
+from scoring import Result, Checkpoint
 
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
@@ -59,17 +62,15 @@ def grade_checkpoint(check_func, description):
         logging.warning(f"Error while grading checkpoint '{description}': {e}")
         return 0
 
-if __name__ == "__main__":
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands repo is cloned"),
-        (grade_checkpoint2, "L20 is fixed to be Thursday instead of Saturday"),
-        (grade_checkpoint3, "L24 is fixed to be close to 0.620537 instead of 0.603848"),
-    ]
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    points = 0
-    for check_func, description in checkpoints:
-        point = grade_checkpoint(check_func, description)
-        points += point 
-        
+    checkpoints.append(Checkpoint(1, grade_checkpoint1()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
 
-    print(f"\nFinal points for OpenHands task: {points}/3")
+    return result
+
+
+

@@ -1,6 +1,9 @@
 import logging
 import re
-import sys
+
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 # Check if OpenHands repo is cloned
@@ -51,43 +54,17 @@ def grade_checkpoint4(trajectory):
         logging.warning(f"Error in grade_checkpoint4: {e}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands repo is cloned"),
-        (lambda t: grade_checkpoint2(t), "At least one unit test is collected"),
-        (lambda t: grade_checkpoint3(t), "At least one unit test passes"),
-        (lambda t: grade_checkpoint4(t), "All unit tests pass")
-    ]
 
-    points = 0
-    for grade_func, description in checkpoints:
-        try:
-            passed = grade_func() if grade_func == grade_checkpoint1 else grade_func(trajectory)
-            points += int(passed)
-            print(f"{'✓' if passed else '✗'} {description}")
-            if not passed:
-                break  
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break 
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    return points
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2(trajectory))))   
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3(trajectory))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint4(trajectory))))
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+    return result
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = []
-    else:
-        trajectory = load_trajectory(sys.argv[1])
 
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for OpenHands task: {points}/4")
+

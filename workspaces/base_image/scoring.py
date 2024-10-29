@@ -83,3 +83,38 @@ def bonus_for_completing_final(checkpoints: List[Checkpoint]) -> dict:
         result = sum(cp.result for cp in checkpoints)
     
     return {"total": total, "result": result}
+
+
+# Strategy: get credit for 1st checkpoint as long as any checkpoint passes
+def bonus_for_completing_any(checkpoints: List[Checkpoint]) -> dict:
+    """
+    If any checkpoint is completed successfully (full score),
+    award full points for the 1st checkpoint, regardless of its completion.
+
+    The rationale is many tasks check trajectory as part of their 1st checkpoint,
+    and the information to look up in the trajectory is necessary for any follow-up
+    checkpoint to complete. Thus, as long as any follow-up task completes, the 1st
+    checkpoint should be considered as complete, even if the trajectory is missing,
+    or doesn't contain the keyword that the evaluator is looking for.
+    """
+    if not checkpoints:
+        return {"total": 0, "result": 0}
+    
+    total = sum(cp.total for cp in checkpoints)
+    
+    # Check if any checkpoint got full score
+    any_checkpoint_complete = any(
+        cp.result == cp.total for cp in checkpoints
+    )
+    
+    if any_checkpoint_complete:
+        # Award full points for the first checkpoint
+        first_checkpoint = checkpoints[0]
+        result = first_checkpoint.total + sum(
+            cp.result for cp in checkpoints[1:]
+        )
+    else:
+        # Normal scoring
+        result = sum(cp.result for cp in checkpoints)
+    
+    return {"total": total, "result": result}

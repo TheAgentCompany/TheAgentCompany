@@ -1,5 +1,9 @@
 import requests
+
 import logging
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 project_path = "root/openhands" 
@@ -19,6 +23,7 @@ def grade_checkpoint1():
         logging.error(f"Get comment failed: {e}")
         return False
 
+
 def grade_checkpoint2():
     try: 
         issue_response = make_gitlab_request(project_path, f"issues/{issue_iid}")
@@ -29,7 +34,18 @@ def grade_checkpoint2():
         logging.error(f"Error fetching issue status: {e}")
     return False
 
-if __name__ == "__main__":
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed1)))
+
     passed2 = grade_checkpoint2()
-    print(f"Final points for task: {passed1 + passed2}")
+    checkpoints.append(Checkpoint(1, int(passed2)))
+
+    return result
+
+
+

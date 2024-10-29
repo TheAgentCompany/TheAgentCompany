@@ -2,6 +2,10 @@ import os
 import sys
 import logging
 import requests
+
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
 from common import *
 
@@ -58,44 +62,16 @@ def grade_checkpoint4():
         logging.warning(f"Error checking coverage in issues: {e}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands code cloned in local workspace"),
-        (lambda: grade_checkpoint2(trajectory), "Command about running unit test coverage in agent trajectory"),
-        (grade_checkpoint3, "Post about unit test coverage exists on Plane"),
-        (grade_checkpoint4, "Post contains the correct unit test coverage number")
-    ]
-    
-    points = 0
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func(trajectory) if grade_func == grade_checkpoint2 else grade_func()
-            if passed:
-                if i == 3:  
-                    points = 4 
-                else:
-                    points += 1
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
-    
-    return points
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return file.read()
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-    
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points: {points}/4")
+    checkpoints.append(Checkpoint(1, grade_checkpoint1()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2(trajectory)))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint4()))
+
+    return result
+
+

@@ -8,7 +8,7 @@ import sys
 import logging
 
 from evaluator import grade_checkpoints
-from scoring import Result, Checkpoint
+from scoring import Result
 
 
 def load_trajectory(file_path):

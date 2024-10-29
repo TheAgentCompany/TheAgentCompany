@@ -1,6 +1,10 @@
 import sys
 import requests
 import logging
+
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 # Configuration for gitlab
@@ -34,21 +38,20 @@ def checkpoint2():
     return bool(msgs)
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
         checkpoint2: 2
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    return result
 
-    return total_score
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+

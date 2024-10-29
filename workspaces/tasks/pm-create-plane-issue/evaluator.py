@@ -1,6 +1,9 @@
 import requests
-import sys
 import logging
+
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
 
 
@@ -38,23 +41,14 @@ def grade_checkpoint2(project_id):
                 return True
     return False
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+
     project_id = get_project_id("wdash")
-    passed1 = grade_checkpoint1(trajectory, project_id)
-    passed2 = grade_checkpoint2(project_id)
-    points = 0
-    if passed2:
-        points = 2
-    elif passed1:
-        points = 1
-    print(f"Final points for task: {points}")
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory, project_id))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2(project_id))))
+    return result
+
+

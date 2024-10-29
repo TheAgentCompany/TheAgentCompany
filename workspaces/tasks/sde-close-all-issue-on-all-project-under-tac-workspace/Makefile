@@ -1,5 +1,5 @@
-IMAGE_NAME=copilot-arena-server-new-endpoint-image
-CONTAINER_NAME=copilot-arena-server-new-endpoint
+IMAGE_NAME=sde-close-all-issue-on-all-project-under-tac-workspace-image
+CONTAINER_NAME=sde-close-all-issue-on-all-project-under-tac-workspace
 
 .PHONY: build run stop
 
@@ -12,3 +12,6 @@ run:
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
+
+attach:
+	docker exec -it $(CONTAINER_NAME) /bin/bash

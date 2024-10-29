@@ -1,27 +1,17 @@
 import requests
 import logging
-import os
-import sys
-
-import os
-import requests
-import logging
 
 
-############################# init variable ##################################### 
-
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
-GITLAB_USER = "root"
-GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
+from typing import List
+from scoring import Result, Checkpoint, bonus_for_completing_any
 
 
 def check_trajectory(trajectory):
-    return f"{GITLAB_URL}/bustub/-/issues/759" in trajectory
+    return f"bustub/-/issues/759" in trajectory
 
 def test_wiki():
     try:
-        response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project") 
+        response = requests.get(f"doc/-/wikis/HyperLogLog_project") 
     except requests.RequestException as e:
         logging.error(f"Error fetching wiki: {e}")
         return False
@@ -38,7 +28,7 @@ def check_key_contents():
     key_links = ["https://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf", "https://engineering.fb.com/2018/12/13/data-infrastructure/hyperloglog/", "https://www.youtube.com/watch?v=lJYufx0bfpw", "https://www.youtube.com/watch?v=2PlrMCiUN_s"]
     
     try:
-        response = requests.get(f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project").text
+        response = requests.get(f"doc/-/wikis/HyperLogLog_project").text
     except requests.RequestException as e:
         logging.error(f"Error fetching wiki: {e}")
         return False
@@ -52,7 +42,7 @@ def check_url_file_exist():
     try:
         with open(filename, 'r') as file:
             content = file.read()
-            if f"{GITLAB_URL}/doc/-/wikis/HyperLogLog_project" in content:
+            if f"doc/-/wikis/HyperLogLog_project" in content:
                 return True
             return False
     except FileNotFoundError:
@@ -72,39 +62,23 @@ def load_trajectory(file_path):
         logging.warning(f"Error reading trajectory file: {e}")
         return ""
 
-def evaluate(trajectory):
-    points = 0
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_any)
 
-    if check_trajectory(trajectory):
-        print("bathtub issue accessed")
-        points += 1
-    else:
-        print("bathtub issue not accessed")
+    passed_checkpoint1 = check_trajectory(trajectory)
+    checkpoints.append(Checkpoint(1, passed_checkpoint1))
 
-    if test_wiki():
-        points += 1
+    passed_checkpoint2 = test_wiki()
+    checkpoints.append(Checkpoint(1, passed_checkpoint2))
 
-    if check_key_contents():
-        print("Important information are preserved in copied wiki")
-        points += 1
-    else:
-        print("Missing important information in copied wiki")
+    passed_checkpoint3 = check_key_contents()
+    checkpoints.append(Checkpoint(1, passed_checkpoint3))
 
-    if check_url_file_exist():
-        points += 1
-        print("new wiki URL returned successfully")
-    else:
-        print("new wiki URL not returned successfully")
-    
-    print(f"Evaluation completed. Final score: {points}/4")
-    return points
+    passed_checkpoint4 = check_url_file_exist()
+    checkpoints.append(Checkpoint(1, passed_checkpoint4))
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
+    return result
 
-    evaluate(trajectory)
+
 

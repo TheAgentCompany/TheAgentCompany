@@ -1,7 +1,10 @@
-import os
 import requests
-from rocketchat_API.rocketchat import RocketChat
 from datetime import datetime, timezone
+import logging
+
+from typing import List
+
+from scoring import Result, Checkpoint
 from config import *
 from common import create_rocketchat_client
 
@@ -160,43 +163,46 @@ def check_notifications_sent(channel_name):
                 return True
     return False
 
-def evaluate_task():
-    points = 0
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     project_name = "Frontend and Backend Enhancements"
- 
-    
+    active_cycle = None
+    upcoming_cycle = None
     # Checkpoint 1: Access the project and cycles
     project_id = get_project_id(project_name)
     if project_id:
         active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(project_id)
         if active_cycle and upcoming_cycle:
-            print("Checkpoint 1 passed: Project and cycles accessed on Plane.")
-            points += 1
+            logging.info("Checkpoint 1 passed: Project and cycles accessed on Plane.")
+            checkpoints.append(Checkpoint(1, 1))
         else:
-            print("Checkpoint 1 failed: Active or upcoming cycle not found.")
-            return points
+            logging.warning("Checkpoint 1 failed: Active or upcoming cycle not found.")
+            checkpoints.append(Checkpoint(1, 0))
     else:
-        print("Checkpoint 1 failed: Project not found on Plane.")
-        return points
+        logging.warning("Checkpoint 1 failed: Project not found on Plane.")
+        checkpoints.append(Checkpoint(1, 0))
 
     # Checkpoint 2: Move unfinished issues
     issues_to_check = ["Set up backend API", "Implement new navigation bar", "Write unit tests for authentication"]  # Replace with actual issue names
-    if check_issues_moved(active_cycle, upcoming_cycle, project_id, issues_to_check):
-        print("Checkpoint 2 passed: Issues are in the correct cycles.")
-        points += 2
+    if active_cycle and upcoming_cycle and check_issues_moved(active_cycle, upcoming_cycle, project_id, issues_to_check):
+        logging.info("Checkpoint 2 passed: Issues are in the correct cycles.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 2 failed: Some issues are not in the correct cycles.")
+        logging.warning("Checkpoint 2 failed: Some issues are not in the correct cycles.")
+        checkpoints.append(Checkpoint(2, 0))
 
     # Checkpoint 3: Notify assignees
     if check_notifications_sent('sprint-planning'):
-        print("Checkpoint 3 passed: Notifications sent in #sprint-planning.")
-        points += 2
+        logging.info("Checkpoint 3 passed: Notifications sent in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 3 failed: Notifications not found in #sprint-planning.")
+        logging.warning("Checkpoint 3 failed: Notifications not found in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 0))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/5")
-    return points
+    return result
 
-if __name__ == "__main__":
-    evaluate_task()
+
+

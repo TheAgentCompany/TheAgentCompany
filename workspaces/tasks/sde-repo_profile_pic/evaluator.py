@@ -1,20 +1,11 @@
 import os
 
+from typing import List
+
 from PIL import Image
 import numpy as np
 
-SERVER_HOSTNAME = os.getenv("SERVER_HOSTNAME")
-GITLAB_PORT = os.getenv("GITLAB_PORT")
-GITLAB_USER = "root"
-GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
-
-
-def check_url(browser_logs):
-    return (
-        f"{GITLAB_URL}/root/janusgraph"
-        and "https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/"
-        in browser_logs
-    )
+from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
 def check_code_clone():
@@ -64,15 +55,13 @@ def are_images_equal(image_path1, image_path2):
     return np.all(arr1 == arr2) and arr1.shape == arr2.shape
 
 
-if __name__ == "__main__":
-    print(
-        check_url(
-            [
-                f"ACTION: goto('{GITLAB_URL}/root/api-server')",
-                "ACTION: goto('https://www.pexels.com/photo/a-bee-is-on-a-sunflower-in-a-field-27220813/')",
-            ]
-        )
-    )
-    print(check_code_clone())
-    print(check_download())
-    print(check_readme_update())
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+    checkpoints.append(Checkpoint(1, int(check_code_clone())))
+    checkpoints.append(Checkpoint(1, int(check_download())))
+    checkpoints.append(Checkpoint(1, int(check_readme_update())))
+    return result
+
+
+

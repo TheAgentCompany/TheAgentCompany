@@ -1,5 +1,9 @@
 import logging
 
+from typing import List
+
+from scoring import Result, Checkpoint
+
 from common import create_rocketchat_client
 from common import evaluate_chat_history_with_llm
 from common import get_chat_history
@@ -25,6 +29,12 @@ def run_checkpoint_2():
         )
 
 
-if __name__ == "__main__":
-    points = run_checkpoint_1() + 2 * run_checkpoint_2()
-    print(f"Evaluation completed. Final score: {points}/3")
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, int(run_checkpoint_1())))
+    checkpoints.append(Checkpoint(2, 2 * int(run_checkpoint_2())))
+    return result
+
+
+

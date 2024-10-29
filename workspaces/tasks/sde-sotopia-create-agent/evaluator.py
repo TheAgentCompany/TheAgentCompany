@@ -4,6 +4,10 @@ import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 import subprocess
+
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 def grade_checkpoint1():
@@ -57,28 +61,23 @@ def grade_checkpoint3():
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
-def grade_checkpoints():
-    checkpoints = [
-        (grade_checkpoint1, "Checkpoint 1: create branch", 1),
-        (grade_checkpoint2, "Checkpoint 2: NonVerbalAgent class implemented", 1),
-        (grade_checkpoint3, "Checkpoint 3: Merge request created", 3)
-    ]
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    earned_points = 0
-    for grade_func, description, point_value in checkpoints:
-        try:
-            passed = grade_func()
-            if passed:
-                earned_points += point_value
-            print(f"{'✓' if passed else '✗'} {description}")
-            if not passed:
-                break
-        except Exception as e:
-            logging.error(f"Error while grading checkpoint {description}: {e}")
-            break
+    # Checkpoint 1: create branch
+    passed_checkpoint1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
 
-    return earned_points
+    # Checkpoint 2: NonVerbalAgent class implemented
+    passed_checkpoint2 = passed_checkpoint1 and grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
-if __name__ == "__main__":
-    earned_points = grade_checkpoints()
-    print(f"\nFinal points: {earned_points}/5")
+    # Checkpoint 3: Merge request created
+    passed_checkpoint3 = passed_checkpoint2 and grade_checkpoint3()
+    checkpoints.append(Checkpoint(3, 3 * int(passed_checkpoint3)))
+
+    return result
+
+
+

@@ -1,6 +1,10 @@
 import logging
 import sys
 import urllib.parse
+
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import *
 
 project_path = "root/opensearch"
@@ -43,46 +47,14 @@ def grade_checkpoint2():
         logging.warning(f"Repository exists: {repo_exists}, Branch deleted: {branch_deleted}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (lambda t: grade_checkpoint1(t), "Check if 'permanently delete the branch' exists in the trajectory"),
-        (grade_checkpoint2, "Check if repository exists and branch 'feature/ssl' is deleted")
-    ]
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-    points = 0
-    checkpoint2_passed = False
+    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
 
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func(trajectory) if grade_func != grade_checkpoint2 else grade_func()
-            if i == 1 and passed:
-                checkpoint2_passed = True
-            points += int(passed)
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
+    return result
 
-    # If checkpoint 2 passed, give full points
-    if checkpoint2_passed:
-        points = 2
 
-    return points
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for branch deletion task: {points}/2")

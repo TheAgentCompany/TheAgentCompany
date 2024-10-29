@@ -1,5 +1,8 @@
-import sys
+
 import logging
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import *
 
 GITLAB_ISSUE_URL = "http://the-agent-company.com:8929/root/bustub/-/issues/759"
@@ -39,44 +42,15 @@ def checkpoint3():
         logging.warning(f"Unexpected error in checkpoint3: {e}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (lambda: checkpoint1(trajectory), "GitLab issue page accessed"),
-        (checkpoint2, "Shared page exists and is accessible"),
-        (checkpoint3, "Content verification passed"),
-    ]
-    
-    points = 0
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func()
-            if passed:
-                if i == 2:  
-                    points = 3 
-                else:
-                    points += 1
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
-    
-    return points
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-    
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = []
-    else:
-        trajectory = load_trajectory(sys.argv[1])
+    checkpoints.append(Checkpoint(1, checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, checkpoint2()))
+    checkpoints.append(Checkpoint(1, checkpoint3()))
 
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for moving page to nextcloud task: {points}/3")
+    return result
+
+
+

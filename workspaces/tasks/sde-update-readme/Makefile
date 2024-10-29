@@ -1,5 +1,5 @@
-IMAGE_NAME=repo_profile_pic-image
-CONTAINER_NAME=repo_profile_pic
+IMAGE_NAME=sde-update-readme-image
+CONTAINER_NAME=sde-update-readme
 
 .PHONY: build run stop
 
