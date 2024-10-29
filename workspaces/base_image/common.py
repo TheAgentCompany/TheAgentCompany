@@ -366,16 +366,19 @@ def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
         logging.error(f"Error: {e}")
     return []
 
-def get_plane_state_details(project_id,state_id):
+def get_plane_state_details(project_id, state_id):
     """
     Get details for a state.
+    
     Args:
         project_id: The ID of the project
         state_id: The ID of the state
-       dict: A status configuration object with the following structure:
+
+    Returns:
+        dict: A status configuration object with the following structure:
            {
                "id": str,                # ba9d7f8c-9faf-464e-941e-865cd55f37d9
-               "created_at": str,        # 2024-10-05T20:37:51.143913Z
+               "created_at": str,        # 2024-10-05T20:37:51.143913Z  
                "updated_at": str,        # 2024-10-05T20:37:51.143929Z
                "name": str,              # In Progress
                "description": str,       # ""
