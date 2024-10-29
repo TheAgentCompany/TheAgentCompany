@@ -1,9 +1,10 @@
 # Checkpoints
 
-This task has 3 points in total. Will check it step by step. Partial credits might be granted if only some checkpoints are completed.
+This task has 3 points in total. If the last check passes, then full credits are
+granted. Otherwise, partial credits might be granted if only some checkpoints are
+completed.
 
-
-## Checkpoint 1 (1pts)
+## Checkpoint 1 (1pt)
 
 check had conversation with Huang Jie, Sophia Rodriguez, John Smith, Sarah Johnson
 
