@@ -1,6 +1,8 @@
 # Checkpoints
 
-This task has 3 points in total. Will check it step by step. Partial credits might be granted if only some checkpoints are completed.
+This task has 4 points in total. If the last check passes, then full credits are
+granted. Otherwise, partial credits might be granted if only some checkpoints are
+completed.
 
 ## Checkpoint 1 (1pt)
 
@@ -10,6 +12,6 @@ Get the correct codebase http://the-agent-company:8929/root/janusgraph and go to
 
 Clone the repository locally.
 
-## Checkpoint 3 (1pt)
+## Checkpoint 3 (2pt)
 
 Check the license of the repository.

@@ -1,6 +1,6 @@
-import os
-from config import GITLAB_URL
+import logging
 from common import check_repo_exists
+from scoring import Result, Checkpoint, bonus_for_completing_final
 
 def grade_checkpoint1(trajectory):
     return (
@@ -14,7 +14,7 @@ def grade_checkpoint2():
 def grade_checkpoint3():
     try:
         if check_repo_exists("janusgraph"):
-            with open("/workspace/janusgraph/LICENSE") as f:
+            with open("/workspace/janusgraph/LICENSE.txt") as f:
                 code_content = f.read()
                 if "APACHE-2.0" in code_content and "CC-BY-4.0" not in code_content:
                     return True
@@ -33,9 +33,7 @@ def grade_checkpoints(trajectory="") -> Result:
     passed2 = grade_checkpoint2()
     checkpoints.append(Checkpoint(1, int(passed2)))
 
-    passed3 = grade_final_checkpoint()
+    passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
     return result
-
-grade_checkpoints()
