@@ -233,7 +233,7 @@ def download_nextcloud_content(link: str, output_file_path: str):
 
 PROJECT_FILES = {
     'openhands': '.openhands_instructions',
-    'janusgraph': 'README.md'
+    'janusgraph': '.backportrc.json'
 }
 
 def check_repo_exists(project_name: str):
