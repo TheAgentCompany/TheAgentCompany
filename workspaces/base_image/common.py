@@ -231,8 +231,12 @@ def download_nextcloud_content(link: str, output_file_path: str):
     return True
 
 
+# Use the unique file name to check if the repository is cloned correctly.
 PROJECT_FILES = {
     'openhands': '.openhands_instructions',
+    'janusgraph': '.backportrc.json',
+    'colly': 'xmlelement_test.go',
+    'streamlit': '.ruff.toml'
 }
 
 def check_repo_exists(project_name: str):
