@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pt)
 
-Get the correct codebase http://the-agent-company:8929/root/janusgraph and go to the license to edit the license of the repository by keeping the APACHE-2.0 license and removing the CC-BY-4.0 license.
+Get the correct codebase http://the-agent-company.com:8929/root/janusgraph and go to the license to edit the license of the repository by keeping the APACHE-2.0 license and removing the CC-BY-4.0 license.
 
 ## Checkpoint 2 (1pt)
 
