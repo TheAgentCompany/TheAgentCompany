@@ -9,7 +9,7 @@ check had conversation with Huang Jie, Sophia Rodriguez, John Smith, Sarah Johns
 
 ## Checkpoint 2 (1pt)
 
-check accessed nextcloud through trajectory.txt
+check accessed nextcloud
 
 ## Checkpoint 3 (1pt)
 
