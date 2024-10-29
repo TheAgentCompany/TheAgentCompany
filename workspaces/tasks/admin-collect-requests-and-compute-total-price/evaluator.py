@@ -16,7 +16,7 @@ def checkpoint1():
     return bool(h1 and h2 and h3 and h4)
 
 def checkpoint2(trajectory):
-    return "https://ogma.lti.cs.cmu.edu/apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
+    return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
 
 def checkpoint3(filepath):
     """
