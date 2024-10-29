@@ -68,7 +68,7 @@ def check_readme_content():
     return True
 
 
-def grade_checkpoints() -> Result:
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     passed1 = check_readme_title()
     checkpoints.append(Checkpoint(1, int(passed1)))
@@ -77,7 +77,3 @@ def grade_checkpoints() -> Result:
     checkpoints.append(Checkpoint(1, int(passed2)))
 
     return Result(checkpoints)
-
-
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
