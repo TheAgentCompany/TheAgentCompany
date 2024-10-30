@@ -1,0 +1,2 @@
+Send a bill in 'workspace/bill.csv' to Chen Xinyi to request for reimbursement. 
+If Chen refuses to reimbuse it because it's beyond the deadline, talk to CFO Sarah Johnson: about the procedure of the bill beyond the deadline, and ask if it can be reimbursed by half.
