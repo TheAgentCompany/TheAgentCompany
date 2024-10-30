@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-sotopia-create-agent-image
-CONTAINER_NAME=sde-sotopia-create-agent
+IMAGE_NAME=sde-sotopia-create-agent-wo-repo-image
+CONTAINER_NAME=sde-sotopia-create-agent-wo-repo
 
 .PHONY: build run stop
 
