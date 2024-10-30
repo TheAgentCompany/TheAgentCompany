@@ -82,6 +82,37 @@ def get_chat_history(rocket_client, username: str):
     return history
 
 
+
+def get_channel_room_id(rocket_client, channel_name):
+    """Get the room_id for a specific channel."""
+    response = rocket_client.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return response['channel']['_id']
+    return None
+
+def check_message_posted(rocket_client, channel_name, keywords):
+    """
+    Check if a message containing specific keywords was posted in the specified channel.
+
+    Args:
+        channel_name (str): Name of the Rocket.Chat channel.
+        keywords (list): List of keywords to check in the message content.
+
+    Returns:
+        bool: True if a message containing all keywords is found, False otherwise.
+    """
+    room_id = get_channel_room_id(rocket_client, channel_name)
+    if not room_id:
+        return False
+    
+    messages = rocket_client.channels_history(room_id=room_id, count=10).json().get('messages', [])
+    for message in messages:
+        message_text = message.get("msg", "").lower()
+        # Check if all keywords are present in the message text
+        if all(keyword.lower() in message_text for keyword in keywords):
+            return True
+    return False
+
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
     Evaluates if a predicate can be inferred from the content, judged by LLM
