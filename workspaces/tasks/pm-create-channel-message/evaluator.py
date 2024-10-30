@@ -8,7 +8,6 @@ from common import create_rocketchat_client
 # Rocket.Chat server URL and admin credentials
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
 
@@ -61,9 +60,9 @@ def grade_checkpoints(trajectory=""):
 
     checkpoints.append(Checkpoint(1, int(checkpoint1(trajectory))))
 
-    checkpoints.append(Checkpoint(1, int(check_user_added("webagents", "kritanjali.jain"))))
+    checkpoints.append(Checkpoint(1, int(check_user_added("finance-talk", "david_wong"))))
 
-    checkpoints.append(Checkpoint(1, int(check_message_sent("webagents", "Welcome to the webagents channel!", "theagentcompany"))))
+    checkpoints.append(Checkpoint(1, int(check_message_sent("finance-talk", "Welcome to the finance-talk channel!", "theagentcompany"))))
 
     return result
 
