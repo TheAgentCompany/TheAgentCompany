@@ -4,12 +4,12 @@ This task has 3 points in total.
 
 ## Checkpoint 1 (1pt)
 
-Navigate to the general channel (http://the-agent-company.com:3000/channel/general) 
+Navigate to the general channel (http://the-agent-company.com:3000/channel/help-desk) 
 
 ## Checkpoint 2 (1pt)
 
-Invited Kritanjali Jain to the channel.
+Added Liu Qiang to the channel.
 
 ## Final checkpoint (1pt)
 
-Assigned Kritanjali Jain as a moderator.
+Assigned Liu Qiang as a moderator.

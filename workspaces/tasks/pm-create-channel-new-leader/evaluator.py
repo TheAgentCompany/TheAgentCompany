@@ -30,9 +30,9 @@ def grade_checkpoints(trajectory=""):
 
     checkpoints.append(Checkpoint(1, int(checkpoint1(trajectory))))
 
-    checkpoints.append(Checkpoint(1, int(check_channel_exists("visualwebagent"))))
+    checkpoints.append(Checkpoint(1, int(check_channel_exists("sales-talk"))))
 
-    checkpoints.append(Checkpoint(1, int(check_user_role("kritanjali.jain", "leader"))))
+    checkpoints.append(Checkpoint(1, int(check_user_role("mark_johnson", "leader"))))
 
     return result
 
