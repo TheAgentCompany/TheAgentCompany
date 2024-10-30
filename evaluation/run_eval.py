@@ -57,16 +57,16 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         'goto("http://the-agent-company.com:8929/users/sign_in")',
         'noop(5000)',
         'fill("72", "root")',
-        'fill("78", "JobBench")',
+        'fill("78", "theagentcompany")',
         'click("92")',
     ]
 
     plane_login_actions = [
         'goto("http://the-agent-company.com:8091")',
         'noop(5000)',
-        'fill("67", "job@bench.com")',
+        'fill("67", "agent@company.com")',
         'click("68")',
-        'fill("87", "jobbenchJobBench")',
+        'fill("87", "theagentcompany")',
         'click("94")'
     ]
 
