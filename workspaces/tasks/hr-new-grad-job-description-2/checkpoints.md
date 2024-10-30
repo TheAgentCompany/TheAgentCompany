@@ -1,7 +1,7 @@
 # Checkpoints
 This task has 4 points in total. Will check it step by step. Partial credits may be granted if only some checkpoints are completed.
 
-## Checkpoint 4 (1pt)
+## Checkpoint 1 (1pt)
 
 Reached out to Zhang Wei about the job requirement.
 

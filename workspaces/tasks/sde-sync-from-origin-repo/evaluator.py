@@ -1,6 +1,10 @@
 import requests
 import logging
 import urllib
+
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import *
 
 project_path = "root/janusgraph"
@@ -34,24 +38,12 @@ def grade_checkpoint1():
         logging.error(f"Checkpoint evaluation failed: {e}")
         return False
 
-def grade_checkpoints():
-    checkpoints = [
-        (grade_checkpoint1, "Check docker.build.skip exists")
-    ]
 
-    points = 0
-    for grade_func, description in checkpoints:
-        try:
-            passed = grade_func()
-            points += int(passed)
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
+    return result
 
-    return points
 
-if __name__ == "__main__":
-    # Test the evaluator
-    total_points = grade_checkpoints()
-    print(f"\nTotal points earned: {total_points}/1")
+

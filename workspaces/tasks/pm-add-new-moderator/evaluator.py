@@ -1,6 +1,6 @@
 import os
 import logging
-import json
+
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
@@ -15,7 +15,7 @@ def checkpoint1(trajectory):
 
 
 def checkpoint2(trajectory):
-    return f"channel/general" in trajectory
+    return f"channel/help-desk" in trajectory
 
 
 def check_user_role(username, role):
@@ -36,10 +36,9 @@ def grade_checkpoints(trajectory=""):
 
     checkpoints.append(Checkpoint(1, int(checkpoint2(trajectory))))
 
-    checkpoints.append(Checkpoint(1, int(check_user_role("kritanjali.jain", "moderator"))))
+    checkpoints.append(Checkpoint(1, int(check_user_role("liu_qiang", "moderator"))))
 
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

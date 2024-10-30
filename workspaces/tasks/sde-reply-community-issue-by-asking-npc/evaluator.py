@@ -2,6 +2,9 @@ import os
 import sys
 import logging
 
+from typing import List
+
+from scoring import Result, Checkpoint
 from common import evaluate_with_llm
 from common import make_gitlab_request
 from common import create_rocketchat_client
@@ -89,7 +92,11 @@ def checkpoint4(username='mike_chen'):
 
     return check_with_llm(msgs, predicate=target)
 
-def calculate_total_score():
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -99,14 +106,10 @@ def calculate_total_score():
 
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    return result
 
-    return total_score
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+

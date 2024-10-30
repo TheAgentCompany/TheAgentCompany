@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 from io import BytesIO
-import json
+
 from requests.auth import HTTPBasicAuth
 from typing import List
 import xml.etree.ElementTree as ET
@@ -196,5 +196,4 @@ def grade_checkpoints(trajectory=""):
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
     return result
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

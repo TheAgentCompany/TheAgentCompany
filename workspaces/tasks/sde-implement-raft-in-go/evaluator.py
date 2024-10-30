@@ -3,6 +3,10 @@ import shutil
 import subprocess
 import logging
 
+from typing import List
+
+from scoring import Result, Checkpoint
+
 def run_command(command):
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=False)
@@ -58,27 +62,16 @@ def grade_checkpoint2():
 
     return run_test(["go", "test"])
 
-def grade_checkpoints():
-    checkpoints = [
-        (grade_checkpoint1, "Checkpoint 1: go test -run 2A passes", 5),
-        (grade_checkpoint2, "Checkpoint 2: Full test passes", 5)
-    ]
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    earned_points = 0
-    for grade_func, description, point_value in checkpoints:
-        try:
-            passed = grade_func()
-            if passed:
-                earned_points += point_value
-            print(f"{'✓' if passed else '✗'} {description}")
-            if not passed:
-                break
-        except Exception as e:
-            logging.error(f"Error while grading checkpoint {description}: {e}")
-            break
+    passed_checkpoint1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(5, passed_checkpoint1))
 
-    return earned_points
+    passed_checkpoint2 = passed_checkpoint1 and grade_checkpoint2()
+    checkpoints.append(Checkpoint(5, passed_checkpoint2))
 
-if __name__ == "__main__":
-    earned_points = grade_checkpoints()
-    print(f"\nFinal points: {earned_points}/10")
+    return result
+
+
