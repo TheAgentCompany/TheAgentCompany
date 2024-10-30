@@ -8,7 +8,7 @@ import logging
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
 NEXCTCLOUD_PORT = os.getenv('NEXCTCLOUD_PORT') or '80'
-NEXCTCLOUD_URL = f"http://{SERVER_HOSTNAME}:{NEXCTCLOUD_PORT}"
+NEXCTCLOUD_URL = f"https://{SERVER_HOSTNAME}:{NEXCTCLOUD_PORT}"
 
 ############################# util function #####################################  
 # Set up logging

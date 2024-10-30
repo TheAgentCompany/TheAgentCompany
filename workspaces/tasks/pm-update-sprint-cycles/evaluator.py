@@ -1,31 +1,17 @@
-import os
 import requests
-from rocketchat_API.rocketchat import RocketChat
 from datetime import datetime, timezone
+import logging
+
+from typing import List
+
+from scoring import Result, Checkpoint
+from config import *
+from common import create_rocketchat_client
 
 ############################# Init Variables #####################################
-# Rocket.Chat variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu' 
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
-# Plane variables
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-PLANE_PORT =  os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu" 
-API_KEY = os.getenv('PLANE_API') 
-
-headers = {
-    "x-api-key": API_KEY,
-    "Content-Type": "application/json"
-}
-
-# Initialize RocketChat client
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
 
 ############################# Helper Functions #####################################
 
@@ -41,7 +27,7 @@ def get_project_id(project_name):
     """Get the project_id for a specific project by its name."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         projects = response.json().get('results', [])
         for project in projects:
@@ -57,7 +43,7 @@ def get_active_and_upcoming_cycles(project_id):
     """Get the active and upcoming cycles for a project using timestamps."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         cycles = response.json().get('results', [])
         now = datetime.now(timezone.utc)
@@ -85,7 +71,7 @@ def get_cycle_issues(project_id, cycle_id):
     """Get issues for a specific cycle."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         return response.json().get('results', [])
     except requests.RequestException as e:
@@ -108,14 +94,14 @@ def check_issue_state(issue, expected_groups):
     # First, get the issue details to retrieve the state ID
     issue_url = f"{PLANE_BASEURL}/api/v1/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/"
     try:
-        issue_response = requests.get(issue_url, headers=headers)
+        issue_response = requests.get(issue_url, headers=PLANE_HEADERS)
         issue_response.raise_for_status()
         issue_details = issue_response.json()
         state_id = issue_details['state']
         
         # Now, get the state details
         state_url = f"{PLANE_BASEURL}/api/v1/workspaces/{workspace_slug}/projects/{project_id}/states/{state_id}/"
-        state_response = requests.get(state_url, headers=headers)
+        state_response = requests.get(state_url, headers=PLANE_HEADERS)
         state_response.raise_for_status()
         state_details = state_response.json()
         state_group = state_details.get('group')
@@ -172,48 +158,51 @@ def check_notifications_sent(channel_name):
     
     messages = rocket.channels_history(room_id=room_id, count=20).json().get('messages', [])
     for message in messages:
-        if message['u']['username'] == 'jobbench':  # Adjust this to the expected username
+        if message['u']['username'] == 'theagentcompany':  # Adjust this to the expected username
             if 'has been moved to the next sprint' in message['msg']:
                 return True
     return False
 
-def evaluate_task():
-    points = 0
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     project_name = "Frontend and Backend Enhancements"
- 
-    
+    active_cycle = None
+    upcoming_cycle = None
     # Checkpoint 1: Access the project and cycles
     project_id = get_project_id(project_name)
     if project_id:
         active_cycle, upcoming_cycle = get_active_and_upcoming_cycles(project_id)
         if active_cycle and upcoming_cycle:
-            print("Checkpoint 1 passed: Project and cycles accessed on Plane.")
-            points += 1
+            logging.info("Checkpoint 1 passed: Project and cycles accessed on Plane.")
+            checkpoints.append(Checkpoint(1, 1))
         else:
-            print("Checkpoint 1 failed: Active or upcoming cycle not found.")
-            return points
+            logging.warning("Checkpoint 1 failed: Active or upcoming cycle not found.")
+            checkpoints.append(Checkpoint(1, 0))
     else:
-        print("Checkpoint 1 failed: Project not found on Plane.")
-        return points
+        logging.warning("Checkpoint 1 failed: Project not found on Plane.")
+        checkpoints.append(Checkpoint(1, 0))
 
     # Checkpoint 2: Move unfinished issues
     issues_to_check = ["Set up backend API", "Implement new navigation bar", "Write unit tests for authentication"]  # Replace with actual issue names
-    if check_issues_moved(active_cycle, upcoming_cycle, project_id, issues_to_check):
-        print("Checkpoint 2 passed: Issues are in the correct cycles.")
-        points += 2
+    if active_cycle and upcoming_cycle and check_issues_moved(active_cycle, upcoming_cycle, project_id, issues_to_check):
+        logging.info("Checkpoint 2 passed: Issues are in the correct cycles.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 2 failed: Some issues are not in the correct cycles.")
+        logging.warning("Checkpoint 2 failed: Some issues are not in the correct cycles.")
+        checkpoints.append(Checkpoint(2, 0))
 
     # Checkpoint 3: Notify assignees
     if check_notifications_sent('sprint-planning'):
-        print("Checkpoint 3 passed: Notifications sent in #sprint-planning.")
-        points += 2
+        logging.info("Checkpoint 3 passed: Notifications sent in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 2))
     else:
-        print("Checkpoint 3 failed: Notifications not found in #sprint-planning.")
+        logging.warning("Checkpoint 3 failed: Notifications not found in #sprint-planning.")
+        checkpoints.append(Checkpoint(2, 0))
 
-    # Final result
-    print(f"Evaluation completed. Final score: {points}/5")
-    return points
+    return result
 
-if __name__ == "__main__":
-    evaluate_task()
+
+

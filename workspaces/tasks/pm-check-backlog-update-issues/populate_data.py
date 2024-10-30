@@ -1,19 +1,14 @@
-import os
 import requests
-import json
+
 import logging
-from rocketchat_API.rocketchat import RocketChat
+from common import create_rocketchat_client
+from config import *
+
 
 ############################# Initialization Variables #####################################
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 CHANNEL_NAME = "sprint-planning"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
-
-# Initialize the RocketChat client with username and password
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 ############################# Logging Setup #####################################  
 logging.basicConfig(level=logging.INFO,    
@@ -24,23 +19,11 @@ logging.basicConfig(level=logging.INFO,
     ])
 logger = logging.getLogger("Data Population")
 
-############################# Plane API Functions #####################################
-
-PLANE_HOSTNAME = os.getenv('PLANE_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{PLANE_HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "cmu"
-API_KEY = os.getenv('PLANE_API') 
-
-headers = {
-    "x-api-key": API_KEY,
-    "Content-Type": "application/json"
-}
 
 def get_project_id(project_name):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         projects = response.json().get('results', [])
         for project in projects:
@@ -58,7 +41,7 @@ def create_issue(project_id, name, state_group):
         "state_group": state_group
     }
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response = requests.post(url, headers=PLANE_HEADERS, data=json.dumps(data))
         response.raise_for_status()
         logger.info(f"Successfully created issue '{name}' with state group '{state_group}'")
         return response.json()
@@ -69,7 +52,7 @@ def create_issue(project_id, name, state_group):
 def issue_exists(project_id, name):
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=PLANE_HEADERS)
         response.raise_for_status()
         issues = response.json().get('results', [])
         return any(issue['name'] == name for issue in issues)
@@ -89,7 +72,7 @@ def create_channel(channel_name):
         return None
 
 def post_message(user_credentials, channel_id, message):
-    user_rocket = RocketChat(user_credentials['username'], user_credentials['password'], server_url=ROCKETCHAT_URL)
+    user_rocket = create_rocketchat_client(user_credentials['username'], user_credentials['password'])
     response = user_rocket.chat_post_message(message, room_id=channel_id).json()
     if response.get('success'):
         logger.info(f"Message posted to channel by {user_credentials['username']}.")
@@ -148,7 +131,7 @@ def populate_channel():
     # Define user credentials
     users = [
         {'name': 'John Doe', 'password': 'John.Doe', 'email': 'John.Doe@cmu.edu.com', 'username': 'John.Doe'},
-        {'name': 'Rocket Cat', 'password': 'jobbench', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
+        {'name': 'Rocket Cat', 'password': 'theagentcompany', 'email': 'rocket.Cat@email.com', 'username': 'rocket.cat'}
     ]
 
     user_credentials_list = []

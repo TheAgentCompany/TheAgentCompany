@@ -1,28 +1,29 @@
 import requests
 import logging
-import os
-import sys
-from rocketchat_API.rocketchat import RocketChat # type: ignore
 from bs4 import BeautifulSoup
+from typing import List
 
-HOSTNAME = os.getenv('HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
-ROCKETCHAT_URL = f"http://{HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'jobbench'
-ADMIN_PASS = 'jobbench'
 
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+from common import create_rocketchat_client
+from scoring import Result, Checkpoint, bonus_for_completing_any
+
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
-    urls = [f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
-            f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
+    urls = [f"http://the-agent-company.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
+            f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
     return any(url in trajectory for url in urls)
 
 def grade_checkpoint2():
-    url = f"http://ogma.lti.cs.cmu.edu:8929/root/janusgraph/-/merge_requests/4657"
+    url = f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests/4657"
 
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.RequestException as e:
+        logging.error(f"Error fetching PR: {e}")
+        return False
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -31,7 +32,7 @@ def grade_checkpoint2():
             if element and element['data-state'] == "merged":
                 return True
     else:
-        print(f"Failed to fetch the webpage: {response.status_code}")
+        logging.error(f"Failed to fetch the webpage: {response.status_code}")
 
     return False
 
@@ -77,20 +78,19 @@ def get_message(channel):
     return messages
     
     
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_any)
 
-    passed1 = grade_checkpoint1(trajectory)
-    passed2 = grade_checkpoint2()
-    passed3 = grade_final_checkpoint()
-    points = sum([passed1, passed2, passed3])
-    print(f"Final points for task Check High Priority Issue: {points}")
+    passed_checkpoint1 = grade_checkpoint1(trajectory)
+    checkpoints.append(Checkpoint(1, passed_checkpoint1))
+
+    passed_checkpoint2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, passed_checkpoint2))
+
+    passed_final_checkpoint = grade_final_checkpoint()
+    checkpoints.append(Checkpoint(1, passed_final_checkpoint))
+
+    return result
+
+

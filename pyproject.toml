@@ -13,3 +13,4 @@ package-mode = false
 python = "^3.12"
 pyyaml = "*"
 openhands-ai = { git = "https://github.com/All-Hands-AI/OpenHands.git", rev = "4dfc7a7ef01bcc78a974d8af12ec7f3a2bc9b097" }
+flask = ">=3.0.3"

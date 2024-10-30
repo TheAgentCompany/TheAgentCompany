@@ -1,0 +1,1 @@
+Delete the stale branch feature/ssl from http://ogma.lti.cs.cmu.edu:8929/root/OpenSearch

@@ -5,7 +5,7 @@ FROM redis/redis-stack-server:7.4.0-v0
 
 # Install Python requests library
 RUN apt-get update && apt-get install -y pip
-RUN pip install sotopia==0.1.0-rc.1
+RUN pip install sotopia==0.1.2
 # Install to fix the problem
 RUN pip install hiredis==3.0.0
 
@@ -13,9 +13,9 @@ RUN mkdir -p /workspace
 COPY *.py /workspace
 COPY *.json /workspace
 
-# Redis Username: default, Password: jobbench
+# Redis Username: default, Password: theagentcompany
 # Redis service URL: localhost/:6379
-# ENV REDIS_OM_URL redis://default:jobbench@localhost/:6379
+# ENV REDIS_OM_URL redis://default:theagentcompany@localhost/:6379
 ENV REDIS_OM_URL redis://localhost:6379
 
 # RocketChat NPC name, password, RocketChat service URL

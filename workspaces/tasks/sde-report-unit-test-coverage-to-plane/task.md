@@ -1,0 +1,3 @@
+1. Clone http://the-agent-company.com:8929/root/openhands project to /workspace
+2. Run and check the unit test coverage of openhands directory
+3. Create an issue on http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/ to request the coverage to be improved. The issue title should follow the format "Openhands unit test coverage xx.xx%, needs to be improved", where the coverage value should be displayed with 2 decimal places. 
