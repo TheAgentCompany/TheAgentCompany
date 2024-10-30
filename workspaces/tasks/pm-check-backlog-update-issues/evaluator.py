@@ -9,8 +9,8 @@ from config import *
 
 
 # Configuration
-PLANE_BASE_URL = 'http://the-agent-company.com:8091'
-PLANE_WORKSPACE_SLUG ='tac'
+PLANE_BASE_URL = os.getenv("PLANE_BASE_URL") or 'http://the-agent-company.com:8091'
+PLANE_WORKSPACE_SLUG =os.getenv("PLANE_WORKSPACE_SLUG") or 'tac'
 PLANE_API_TOKEN = os.getenv("PLANE_API_TOKEN")
 PLANE_HEADERS = {'Authorization': f'Bearer {os.getenv("PLANE_API_TOKEN")}'}
 
