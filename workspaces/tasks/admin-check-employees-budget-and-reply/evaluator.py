@@ -1,7 +1,6 @@
 import json
 import logging
 
-from altair import value
 from common import *
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from typing import List
