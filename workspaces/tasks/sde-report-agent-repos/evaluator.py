@@ -3,6 +3,18 @@ from typing import List
 
 from scoring import Result, Checkpoint
 from common import make_gitlab_request
+from common import create_rocketchat_client
+from common import evaluate_chat_history_with_llm
+
+# Initialize RocketChat client
+rocket = create_rocketchat_client()
+
+def check_inform_threat():
+    passed = evaluate_chat_history_with_llm(
+        rocket, "Sarah Johnson", 
+        "the server is under attack: openhands, sotopia"
+    )
+    return passed
 
 
 def check_no_agent_repos(response: list) -> list:
@@ -18,7 +30,7 @@ def check_agent_repos_deleted():
     try:
         # Get all projects
         response = make_gitlab_request(additional_path="projects").json()
-        remaining_repos = [repo["name"] for repo in response]
+        remaining_repos = check_no_agent_repos(response)
 
         if len(remaining_repos) == 0 and len(response) == 12:
             logging.info(f"All repositories are deleted.")
@@ -34,5 +46,6 @@ def check_agent_repos_deleted():
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, int(check_inform_threat())))
     checkpoints.append(Checkpoint(1, int(check_agent_repos_deleted())))
     return result

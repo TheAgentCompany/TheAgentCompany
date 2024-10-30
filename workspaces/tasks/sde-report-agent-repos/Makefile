@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-delete-agent-repos-image
-CONTAINER_NAME=sde-delete-agent-repos
+IMAGE_NAME=sde-report-agent-repos-image
+CONTAINER_NAME=sde-report-agent-repos
 
 .PHONY: build run stop
 
