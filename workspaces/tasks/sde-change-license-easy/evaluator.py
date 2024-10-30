@@ -4,7 +4,7 @@ from scoring import Result, Checkpoint, bonus_for_completing_final
 
 def grade_checkpoint1(trajectory):
     return (
-        "/root/janusgraph" and "/root/janusgraph/-/blob/main/LICENSE?ref_type=heads"
+        "/root/janusgraph" and "/root/janusgraph/-/blob/main/LICENSE"
         in trajectory
     )
 
