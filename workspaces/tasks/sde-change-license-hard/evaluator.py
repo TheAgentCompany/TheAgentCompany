@@ -15,19 +15,19 @@ def grade_checkpoint3():
     try:
         with open("/workspace/janusgraph/LICENSE.txt") as f:
             code_content = f.read()
-            if "APACHE-2.0" not in code_content and "CC-BY-4.0" not in code_content and "MIT" in code_content:
-                return True
+            if not ("APACHE-2.0" not in code_content and "CC-BY-4.0" not in code_content and "MIT" in code_content):
+                return False
         with open("/workspace/colly/LICENSE.txt") as f:
             code_content = f.read()
-            if "Apache License" not in code_content and "MIT" in code_content:
-                return True
+            if not ("Apache License" not in code_content and "MIT" in code_content):
+                return False
         with open("/workspace/streamlit/LICENSE") as f:
             code_content = f.read()
-            if "Apache License" not in code_content and "MIT" in code_content:
-                return True
+            if not ("Apache License" not in code_content and "MIT" in code_content):
+                return False
     except Exception as e:
         logging.warning(f"Error checking license: {e}")
-    return False
+    return True
 
 
 def grade_checkpoints(trajectory="") -> Result:
