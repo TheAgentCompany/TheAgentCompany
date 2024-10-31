@@ -2,7 +2,7 @@
 
 ## Checkpoint 1 (1 point)
 
-Confirm the agent has accessed the provided receipt.
+Confirm the agent has accessed the provided receipt on nextcloud.
 
 ## Checkpoint 2 (1 point)
 
