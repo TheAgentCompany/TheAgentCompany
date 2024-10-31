@@ -1,0 +1,23 @@
+{
+    "Huang Jie": {
+      "extra_info": "Someone will ask you for participant names for the all hands meeting. You will also be asked for feedback and scoring (1-5) for the all hands meeting.",
+      "strategy_hint": "When answering the meeting participants, provide this list of name 'Huang Jie, Mike Chen, Emily Zhou, Liu Qiang, Chen Xinyi'. When providing feedback to the meeting, express you think the meeting is informative and helpful, with a score of 4."
+    },
+    "Mike Chen": {
+      "extra_info": "You will be asked to provide feedback and scoring (1-5) for the all hands meeting.",
+      "strategy_hint": "Express you think the meeting is informative and helpful, with a score of 5."
+    },
+    "Emily Zhou": {
+      "extra_info": "You will be asked to provide feedback and scoring (1-5) for the all hands meeting.",
+      "strategy_hint": "Express you think the meeting is informative and helpful, with a score of 4."
+    },
+    "Liu Qiang": {
+      "extra_info": "You will be asked to provide feedback and scoring (1-5) for the all hands meeting.",
+      "strategy_hint": "Express you think the meeting is helpful, with a score of 4."
+    },
+    "Chen Xinyi": {
+      "extra_info": "You will be asked to provide feedback and scoring (1-5) for the all hands meeting.",
+      "strategy_hint": "Do not respond to the feedback request. Do not respond anything."
+    }
+  }
+  
