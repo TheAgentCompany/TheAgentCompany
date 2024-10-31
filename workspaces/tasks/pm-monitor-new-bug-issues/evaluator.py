@@ -1,25 +1,18 @@
-import requests
 import logging
-import os
-import sys
-from rocketchat_API.rocketchat import RocketChat # type: ignore
+from scoring import Result, Checkpoint, bonus_for_completing_final
+from common import create_rocketchat_client
+from config import *
 
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-ADMIN_USERNAME = 'theagentcompany'
-ADMIN_PASS = 'theagentcompany'
-
-rocket = RocketChat(ADMIN_USERNAME, ADMIN_PASS, server_url=ROCKETCHAT_URL)
+############################# Init Variables #####################################
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     required_url_parts = [
-        "http://ogma.lti.cs.cmu.edu:8929/root/openhands/-/issues/",
+        "http://the-agent-company.com/root/openhands/-/issues/",
         "label_name[]=bug",
         "sort=created_date",
-        "state=opened",
-        "first_page_size=20"
+        "state=opened"
     ]
     return all(part in trajectory for part in required_url_parts)
 
@@ -47,7 +40,7 @@ def grade_final_checkpoint():
     
     for msg in messages:
         message_text = msg.get('msg', '').lower()
-        issues_present = sum(1 for num in issue_numbers if num.lower() in message_text)
+        issues_present = sum(1 for num in issue_numbers if num in message_text)
         info_present = sum(1 for info in required_info if info in message_text)
         
         if issues_present >= 3 and info_present == len(required_info):
@@ -78,29 +71,20 @@ def get_message(channel):
 
     return messages
     
-    
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
+    # Checkpoint 1: Accessed OpenHands GitLab repo with correct filters
     passed1 = grade_checkpoint1(trajectory)
+    checkpoints.append(Checkpoint(total=1, result=int(passed1)))
+
+    # Checkpoint 2: Summary message posted in RocketChat #project-ai channel
     passed2 = grade_checkpoint2()
-    passed3 = grade_final_checkpoint()
-    
-    points = 0
-    if passed3 == 2:
-        points = 4
-    elif passed3 == 1:
-        points = 3
-    else:
-        points = int(passed1) + int(passed2)
-    
-    print(f"Final points for task Check High Priority Issue: {points}")
+    checkpoints.append(Checkpoint(total=1, result=int(passed2)))
+
+    # Final checkpoint: Detailed message posted in RocketChat #project-ai channel
+    final_result = grade_final_checkpoint()
+    checkpoints.append(Checkpoint(total=1, result=int(final_result)))
+
+    return result
