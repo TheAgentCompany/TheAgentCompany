@@ -350,17 +350,6 @@ def get_plane_issue_details(project_id, issue_name):
         logging.warning(f"Get issue detail failed: {e}")
         return None
     
-def get_plane_state_details(project_id, state_id):
-    """Get details of a specific state in a project."""
-    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/{state_id}"
-    try:
-        response = requests.get(url, headers=PLANE_HEADERS)
-        response.raise_for_status()
-        return response.json()
-    except requests.RequestException as e:
-        logging.warning(f"Get state detail failed: {e}")
-        return None
-    
 def get_plane_cycle_details(project_id, cycle_name):
     """Get details of a specific cycle in a project."""
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
