@@ -11,7 +11,6 @@ A good evaluator should:
 """
 
 import os
-import requests
 import pandas as pd
 
 from typing import List
@@ -31,16 +30,22 @@ def grade_checkpoint2():
 
 
 def grade_checkpoint3():
+    if not os.path.exists("/workspace/meeting_feedback.xlsx"):
+        return False
     df = pd.read_excel("/workspace/meeting_feedback.xlsx")
     return sorted(df["Name"].tolist()) == ['Chen Xinyi', 'Emily Zhou', 'Huang Jie', 'Liu Qiang', 'Mike Chen']
 
 
 def grade_checkpoint4():
+    if not os.path.exists("/workspace/meeting_feedback.xlsx"):
+        return False
     df = pd.read_excel("/workspace/meeting_feedback.xlsx")
     row = df[df["Name"]=="Chen Xinyi"]
     return (pd.isna(row["Score"]).tolist()[0]) and (pd.isna(row["Feedback"]).tolist()[0])
 
 def grade_checkpoint5():
+    if not os.path.exists("/workspace/meeting_feedback.xlsx"):
+        return False
     df = pd.read_excel("/workspace/meeting_feedback.xlsx")
     others_df = df[df["Name"] != "Chen Xinyi"]
     others_feedback = others_df["Feedback"].tolist()
