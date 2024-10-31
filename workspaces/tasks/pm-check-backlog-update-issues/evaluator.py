@@ -4,15 +4,8 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_plane_project_id, get_plane_state_id_dict, get_plane_project_all_issues, check_message_posted
+from common import create_rocketchat_client, get_plane_project_id, get_plane_state_id_dict, get_plane_project_all_issues, check_rocketchat_message_posted
 from config import *
-
-
-# Configuration
-PLANE_BASE_URL = os.getenv("PLANE_BASE_URL") or 'http://the-agent-company.com:8091'
-PLANE_WORKSPACE_SLUG =os.getenv("PLANE_WORKSPACE_SLUG") or 'tac'
-PLANE_API_TOKEN = os.getenv("PLANE_API_TOKEN")
-PLANE_HEADERS = {'Authorization': f'Bearer {os.getenv("PLANE_API_TOKEN")}'}
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -30,12 +23,12 @@ def grade_checkpoint2():
     keywords = ["noder-3", "enhance error handling mechanism in node-red flows", "liu_qiang"]
     
     # Reuse check_message_posted with the defined keywords
-    return check_message_posted(rocket, "project-lowcode", keywords)
+    return check_rocketchat_message_posted(rocket, "project-lowcode", keywords)
 
 def grade_checkpoint3():
     """Check if a follow-up message confirming updates to Plane was already posted in Rocket.Chat."""
     follow_up_message = ["Okay I will update Plane to reflect this"]
-    return check_message_posted(rocket, "project-lowcode", follow_up_message)
+    return check_rocketchat_message_posted(rocket, "project-lowcode", follow_up_message)
 
 def grade_final_checkpoint():
     """Check if the issue 'Enhance Error Handling Mechanism in Node-RED Flows' in the 'Node-RED' project has a status of 'Done'."""

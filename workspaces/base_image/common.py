@@ -83,14 +83,14 @@ def get_chat_history(rocket_client, username: str):
 
 
 
-def get_channel_room_id(rocket_client, channel_name):
+def get_rocketchat_channel_room_id(rocket_client, channel_name):
     """Get the room_id for a specific channel."""
     response = rocket_client.channels_info(channel=channel_name).json()
     if response.get('success'):
         return response['channel']['_id']
     return None
 
-def check_message_posted(rocket_client, channel_name, keywords):
+def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
     """
     Check if a message containing specific keywords was posted in the specified channel.
 
@@ -101,7 +101,7 @@ def check_message_posted(rocket_client, channel_name, keywords):
     Returns:
         bool: True if a message containing all keywords is found, False otherwise.
     """
-    room_id = get_channel_room_id(rocket_client, channel_name)
+    room_id = get_rocketchat_channel_room_id(rocket_client, channel_name)
     if not room_id:
         return False
     
