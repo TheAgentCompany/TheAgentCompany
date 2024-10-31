@@ -1,1 +1,1 @@
-You need to pick Emily Zhou as interviewer. You need to talk to her in Rocketchat (http://the-agent-company.com:3000). You should write down Yes in `/workspace/accept.txt` if she agrees in the end.
+You need to pick Emily Zhou as interviewer. Try to talk to her in Rocketchat (http://the-agent-company.com:3000). Follow your colleagues' suggestions to see if you can persuade her to interview. You should write down Yes in `/workspace/accept.txt` if she agrees in the end.
