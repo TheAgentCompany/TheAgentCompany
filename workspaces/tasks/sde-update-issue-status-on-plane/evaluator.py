@@ -101,7 +101,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3(next_cycle_issues))))
 
     return result
-
-
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
