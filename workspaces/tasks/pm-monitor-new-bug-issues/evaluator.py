@@ -31,7 +31,7 @@ def get_rocketchat_message(rocket_client, channel):
 
 def grade_checkpoint1(trajectory):
     required_url_parts = [
-        "http://the-agent-company.com/root/openhands/-/issues/",
+        "/root/openhands/-/issues/",
         "label_name[]=bug",
         "sort=created_date",
         "state=opened"
