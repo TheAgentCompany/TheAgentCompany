@@ -1,6 +1,6 @@
 # checkpoints
 
-This task has 6 points in total.
+This task has 6 points in total. We intentionally make David Wong non-responsive as a trap.
 
 ## Checkpoint 1 (2pt)
 Check the chat history with the leader Chen Xinyi
