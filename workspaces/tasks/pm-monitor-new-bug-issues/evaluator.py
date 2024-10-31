@@ -1,5 +1,6 @@
 import logging
-from scoring import Result, Checkpoint, bonus_for_completing_final
+from typing import List
+from scoring import Result, Checkpoint, bonus_for_completing_final, get_rocketchat_message
 from common import create_rocketchat_client
 from config import *
 
@@ -17,7 +18,7 @@ def grade_checkpoint1(trajectory):
     return all(part in trajectory for part in required_url_parts)
 
 def grade_checkpoint2():
-    messages = get_message("project-ai")
+    messages = get_rocketchat_message(rocket, "project-ai")
     if not messages:
         return False
     
@@ -31,7 +32,7 @@ def grade_checkpoint2():
     return False
 
 def grade_final_checkpoint():
-    messages = get_message("project-ai")
+    messages = get_rocketchat_message(rocket, "project-ai")
     if not messages:
         return False
     
@@ -49,27 +50,6 @@ def grade_final_checkpoint():
             return 1
     
     return 0
-
-def get_message(channel):
-    response = rocket.channels_info(channel=channel).json()
-    if not response.get('success'):
-        print(f"Failed to retrieve {channel} channel info.")
-        return None
-
-    room_id = response['channel']['_id']
-
-    response = rocket.channels_history(room_id=room_id).json()
-    if not response.get('success'):
-        print("Failed to retrieve message history.")
-        return None
-
-    messages = response.get('messages', [])
-
-    if not messages:
-        print("No messages found.")
-        return None
-
-    return messages
     
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
@@ -85,6 +65,6 @@ def grade_checkpoints(trajectory=""):
 
     # Final checkpoint: Detailed message posted in RocketChat #project-ai channel
     final_result = grade_final_checkpoint()
-    checkpoints.append(Checkpoint(total=1, result=int(final_result)))
+    checkpoints.append(Checkpoint(total=2, result=int(final_result)))
 
     return result

@@ -81,6 +81,26 @@ def get_chat_history(rocket_client, username: str):
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+def get_rocketchat_message(rocket_client, channel):
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        print(f"Failed to retrieve {channel} channel info.")
+        return None
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        print("Failed to retrieve message history.")
+        return None
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        print("No messages found.")
+        return None
+
+    return messages
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
