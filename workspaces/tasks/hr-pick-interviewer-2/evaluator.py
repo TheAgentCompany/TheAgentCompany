@@ -83,7 +83,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
     return result
-
-
-if __name__ == "__main__":
-    print(grade_checkpoints())
