@@ -36,6 +36,8 @@ def create_issues_in_gitlab():
     if not issue2_exists:
         logger.info("Creating issue 2 in Gitlab")
         issue2_response = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", method = "POST", data={"title": ISSUE_2})
+        if issue2_response.status_code != 201:
+            logger.error(f"Failed to create issue 2 in Gitlab: {issue2_response.text}")
         issue2_id = issue2_response.json()["iid"]
         make_gitlab_request(GITLAB_PROJECT_PATH, f"issues/{issue2_id}?state_event=close", method = "PUT")
     return

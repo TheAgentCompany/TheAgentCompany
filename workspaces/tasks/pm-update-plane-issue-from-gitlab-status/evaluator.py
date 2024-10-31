@@ -21,6 +21,8 @@ ISSUE_2 = "Optimize Retry Mechanism for Out of Memory Errors"
 
 def get_issue_url(issue_name):
     issues = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", data={"search": issue_name})
+    if issues is None or issues.status_code != 200:
+        return None
     for issue in issues.json():
         if issue["title"] == issue_name:
             return issue["web_url"]
