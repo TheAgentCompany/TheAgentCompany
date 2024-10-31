@@ -2,6 +2,8 @@
 # it acts as a sanity checker without verifying correctness of tasks' contents
 name: Validate all task images
 
+# * Always run on "main"
+# * Always run on PRs
 on:
   pull_request:
   push:
