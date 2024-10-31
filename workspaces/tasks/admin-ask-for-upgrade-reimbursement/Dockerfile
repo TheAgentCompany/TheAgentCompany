@@ -1,3 +1,2 @@
 FROM base-image
-
-COPY bill.csv /workspace
+COPY scenarios.json /npc
