@@ -28,12 +28,11 @@ def checkpoint3():
         'huang_jie': 5001,
         'chen_xinyi': 18780
     }
-    passed = True
     for key, value in consume_dict.items():
         chat_history = get_chat_history(rocket, key)
-        is_chat_have_value = any(str(value) in chat for chat in chat_history)
-        passed = passed and is_chat_have_value
-    return passed
+        if not any(str(value) in chat for chat in chat_history):
+              return False
+    return True
 
 
 def grade_checkpoints(trajectory=''):
