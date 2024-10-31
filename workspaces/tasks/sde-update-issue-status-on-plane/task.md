@@ -1,0 +1,1 @@
+There are two issues 'Evaluate data throughput' and 'Decrease database latency' that need to be updated in the Sprint 1 of the RisingWave project on Plane (http://the-agent-company.com:8091/). The issue 'Evaluate data throughput' is completed so update it's status to 'Done'. The issue 'Decrease database latency' is still in progress so keep it open and move it to the next sprint.
