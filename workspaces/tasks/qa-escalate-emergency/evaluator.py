@@ -32,7 +32,7 @@ def grade_checkpoint3():
         timestamp_cto = datetime.strptime(chat_with_cto[0]['ts'], "%Y-%m-%dT%H:%M:%S.%fZ").timestamp()
         time_diff = timestamp_cto - timestamp_sde
         logging.info(f"Time difference: {time_diff}")
-        return time_diff > 600
+        return time_diff >= 600
     except:
         logging.error(f"Error computing time difference", exc_info=True)
         return False
