@@ -16,7 +16,7 @@ def grade_checkpoint1():
 
         for repo in response:
             repo_name = repo["name"]
-            repo_id = repo["id"]
+            repo_id = str(repo["id"])
             merge_requests = make_gitlab_request(project_identifier=repo_id, additional_path="merge_requests", params={"state": "opened"}).json()
             if len(merge_requests) > 0:
                 logging.warning(f"Some PRs are not closed in repository {repo_name}.")
@@ -25,7 +25,7 @@ def grade_checkpoint1():
         return True
 
     except Exception as e:
-        logging.error(f"Error occurred while checking the repository: {e}")
+        logging.error(f"Error occurred while checking the repository", exc_info=True)
         return False
 
 
