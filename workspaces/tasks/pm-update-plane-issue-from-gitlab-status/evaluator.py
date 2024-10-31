@@ -29,11 +29,11 @@ def get_issue_url(issue_name):
 
 def grade_checkpoint1(trajectory):
     url = get_issue_url(ISSUE_1)
-    return url in trajectory
+    return url is not None and url in trajectory
 
 def grade_checkpoint2(trajectory):
     url = get_issue_url(ISSUE_2)
-    return url in trajectory
+    return url is not None and url in trajectory
 
 def grade_checkpoint3(trajectory):
     url = "http://the-agent-company.com:8091/tac/projects/f04e5c07-8fa2-4eaf-a35b-5cacf3f1d025/issues/"
