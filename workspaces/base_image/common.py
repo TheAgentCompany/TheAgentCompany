@@ -155,7 +155,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', data: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,7 +167,7 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, json=data)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
@@ -434,3 +434,25 @@ def get_plane_state_details(project_id, state_id):
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
     return dict()
+
+def create_plane_issue(project_id, issue_name):
+    """ Create an issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"name": issue_name})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Create issue failed: {e}")
+        return None
+    
+def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
+    """ Add an issue to a cycle."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"issues": [issue_id]})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Add issue to cycle failed: {e}")
+        return None

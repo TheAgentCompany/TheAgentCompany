@@ -4,11 +4,11 @@ This task has 7 points in total.
 
 ## Checkpoint 1 (1pt)
 
-Visited "Improve Logging for Bulk Request Failures" issue page (http://the-agent-company.com:8929/root/janusgraph/-/issues/4659)
+Visited "Improve Logging for Bulk Request Failures" issue page
 
 ## Checkpoint 2 (1pt)
 
-Visited "Optimize Retry Mechanism for Out of Memory Errors" issue page (http://the-agent-company.com:8929/root/janusgraph/-/issues/4660)
+Visited "Optimize Retry Mechanism for Out of Memory Errors" issue page
 
 ## Checkpoint 3 (1pts)
 
