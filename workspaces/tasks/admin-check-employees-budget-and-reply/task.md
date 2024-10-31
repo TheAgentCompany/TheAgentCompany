@@ -7,4 +7,4 @@
 2. Retrieve equipment prices from Nextcloud at:
    https://ogma.lti.cs.cmu.edu/apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true
 
-3. Each department (Marketing, Product, and HR) has a budget of $1,000 for equipment purchases, and calculate whether each department's budget is sufficient and send responses to their respective managers.
+3. Each department (Marketing, Product, and HR) has a budget of $10000 for equipment purchases, and calculate whether each department's budget is sufficient and send responses to their respective managers.
