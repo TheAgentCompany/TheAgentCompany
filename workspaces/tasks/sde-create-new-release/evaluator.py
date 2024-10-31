@@ -45,8 +45,11 @@ def check_release_title():
 
 def check_release_content():
     most_recent_release = get_most_recent_release()
+    if most_recent_release is None:
+        return False
+
     description = most_recent_release["description"]
-    
+
     if description.strip("\n").strip(" ") == release_description.strip("\n").strip(" "):
         return True
     return False
