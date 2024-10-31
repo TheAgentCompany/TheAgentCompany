@@ -8,4 +8,4 @@ Confirmed reported the security issue and relevant repositories to Sarah Johnson
 
 ## Final Checkpoint (1pt)
 
-The `openhands` and `sotopia` repositories on http://the-agent-company.com:8929/ are deleted.
+The `openhands`, `sotopia`, and `copilot-arena-server` repositories on http://the-agent-company.com:8929/ are deleted.
