@@ -1,7 +1,3 @@
-"""
-Check if there's at least one joined channel and one unjoined channel in Rocket.Chat
-"""
-
 import logging
 
 from common import make_gitlab_request
