@@ -1,15 +1,3 @@
-"""Summary of evaluator for example task
-
-You don't have to write a summary for the evaluator, although documentation is
-strongly encouraged.
-
-A good evaluator should:
-1. be robust - it shouldn't abort because of its own bug or lack of fail over mechanism
-2. be deterministic and idempotent
-3. grant partial credits if possible
-4. encourage but not require trajectory for grading
-"""
-
 import os
 import requests
 from typing import List
@@ -22,7 +10,7 @@ rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1(trajectory):
-    return "/workspace/receipt.jpg" in trajectory
+    return "https://ogma.lti.cs.cmu.edu/apps/files/files/1423?dir=/Documents/Financials&openfile=true" in trajectory
 
 
 def grade_checkpoint2(trajectory):
