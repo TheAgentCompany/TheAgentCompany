@@ -39,7 +39,7 @@ def check_release_title():
     most_recent_release = get_most_recent_release()
     if most_recent_release is None:
         return False
-    if most_recent_release['title'] == "release-2024-10-12":
+    if most_recent_release['name'] == "release-2024-10-12":
         return True
     return False
 
@@ -61,7 +61,7 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    checkpoints.append(Checkpoint(1, int(check_release_content())))
+    checkpoints.append(Checkpoint(1, int(check_release_title())))
 
     checkpoints.append(Checkpoint(1, int(check_release_content())))
 
