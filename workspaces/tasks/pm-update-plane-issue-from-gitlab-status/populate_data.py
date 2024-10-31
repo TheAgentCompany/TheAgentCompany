@@ -18,6 +18,8 @@ logger = logging.getLogger("Functionality Test")
 def create_issues_in_gitlab():
     return
 
+def create_issues_in_plane():
+    return
 
 if __name__ == "__main__":
     # Create issues in GitLab

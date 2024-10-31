@@ -4,8 +4,7 @@ import json
 from typing import List
 
 from scoring import Result, Checkpoint
-from eval import load_trajectory
-from common import get_plane_issue_details, get_plane_state_details, get_plane_issues_in_cycle, get_plane_cycle_details
+from common import get_plane_issue_details, get_plane_state_details, get_plane_issues_by_project_cycle, get_plane_cycle_details
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 1
@@ -22,11 +21,11 @@ def grade_checkpoint1(trajectory):
     url = "http://the-agent-company.com:8929/root/janusgraph/-/issues/4659"
     return url in trajectory
 
-def grade_checkpoint2():
+def grade_checkpoint2(trajectory):
     url = "http://the-agent-company.com:8929/root/janusgraph/-/issues/4660"
     return url in trajectory
 
-def grade_checkpoint3():
+def grade_checkpoint3(trajectory):
     url = "http://the-agent-company.com:8091/tac/projects/f04e5c07-8fa2-4eaf-a35b-5cacf3f1d025/issues/"
     return url in trajectory
 
@@ -34,7 +33,8 @@ def grade_checkpoint4():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_1)
     issue_id = issue["id"]
     cycle = get_plane_cycle_details(PROJECT_ID, CYCLE_NAME)
-    issues_in_cycle = get_plane_issues_in_cycle(PROJECT_ID, cycle["id"])
+    print("cycle", cycle)
+    issues_in_cycle = get_plane_issues_by_project_cycle(PROJECT_ID, cycle["id"])
     for issue in issues_in_cycle:
         if issue["id"] == issue_id:
             return True
@@ -70,5 +70,4 @@ def grade_checkpoints(trajectory="") -> Result:
 
 
 if __name__ == "__main__":
-    trajectory = load_trajectory()
-    print(json.dumps(grade_checkpoints(trajectory).to_dict()))
+    print(json.dumps(grade_checkpoints().to_dict()))
