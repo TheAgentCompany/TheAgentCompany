@@ -57,11 +57,14 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str):
+def get_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
     2) and the account used to create rocket client instance
+
+    If content_only is True, only return the content of the messages, otherwise return all attributes,
+    including but not limited to message content, timestamp, etc.
 
     Returns the messages as a list. If no history, returns an empty list.
     """
@@ -76,7 +79,10 @@ def get_chat_history(rocket_client, username: str):
         return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    if content_only:
+        reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    else:
+        reversed_history = [] if msgs is None else msgs
     history = reversed_history[::-1]
     logging.info(f'Chat history with {username} is: {history}')
     return history
@@ -155,7 +161,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,7 +173,7 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, params=params)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
