@@ -12,7 +12,7 @@ rocket = create_rocketchat_client()
 def check_inform_threat():
     passed = evaluate_chat_history_with_llm(
         rocket, "Sarah Johnson", 
-        "the server is under attack: openhands, sotopia, copilot-arena-server"
+        "server is required for inspection: openhands, sotopia, copilot-arena-server"
     )
     return passed
 
