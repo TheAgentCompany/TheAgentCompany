@@ -29,7 +29,7 @@ def check_emily_info():
     if "Berkeley" not in education: return 0
     if any([c not in work for c in ["Google", "Amazon"]]): return 0
     if any([c not in skills for c in [
-        "Python", "Java, C++", "JavaScript", "React", "Node.js", 
+        "Python", "Java", "C++", "JavaScript", "React", "Node.js", 
         "Flask", "Git", "Docker", "AWS", "MySQL"
     ]]): return 0
     return 1
