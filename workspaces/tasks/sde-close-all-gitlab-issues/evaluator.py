@@ -32,6 +32,3 @@ def grade_checkpoint1():
 def grade_checkpoints(trajectory="") -> Result:
     checkpoint1 = Checkpoint(2, 2*int(grade_checkpoint1()))
     return Result([checkpoint1], bonus_for_completing_final)
-
-if __name__ == "__main__":
-    print(grade_checkpoints().to_dict())
