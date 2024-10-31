@@ -1,17 +1,7 @@
-Move all unfinished issues from the current sprint to the next sprint and inform the relevant assignees in the `#sprint-planning` channel on Rocket.Chat.
+Move all unfinished issues from the current sprint to the next sprint for the project "RisingWave" and inform the relevant assignees in the `#project-streamdb` channel on Rocket.Chat.
+Access Plane at http://the-agent-company.com:8091/. Navigate to 'Cycles' in the "RisingWave" project. Identify all issues that remain "To Do" or "In Progress" or "Backlog" in the active sprint.
 
-Steps:
+Move Issues to Next Sprint. Select each unfinished issue and change its sprint assignment to the upcoming sprint cycle.
 
-1. Access Plane:
-   - Navigate to 'Cycles' in the "Frontend and Backend Enhancements" project.
-   - Identify all issues that remain "To Do" or "In Progress" or "Blocked" in the active sprint.
-
-2. Move Issues to Next Sprint:
-   - Select each unfinished issue and change its sprint assignment to the upcoming sprint cycle.
-   - Add a comment to the issue with the following format:'Overflow from last sprint'
-
-3. Notify Assignees on Rocket.Chat:
-   - In the `#sprint-planning` channel, post a message tagging the relevant team members for each issue using the format:
+Notify Assignees on Rocket.Chat. at http://the-agent-company.com:3000/project-streamdb In the `#project-streamdb` channel, post a message tagging the relevant team members for each issue using the format:
      '@AssigneeName, your issue [Issue Title/ID] has been moved to the next sprint. Please prioritize it accordingly.'
-
-This task ensures smooth transition of unfinished work into the next sprint and keeps all team members informed.
