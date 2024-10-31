@@ -155,7 +155,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,7 +167,7 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, params=params)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
