@@ -1,4 +1,1 @@
-pip:
-  - flask
-  - sqlite3
-  - sqlcipher3-binary
+- rocketchat
