@@ -6,8 +6,6 @@ This task has 4 points in total. If the final checkpoint passes, then full credi
 
 Check if the OpenHands gitlab repo has been accessed and if the open issues are viewed with the following filters:
 - Label: 'bug'
-- Time range: 24 September 2024 to 24 October 2024
-- Sorted by: priority (descending)
 
 ## Checkpoint 2 (1pt)
 

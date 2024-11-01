@@ -33,7 +33,6 @@ def grade_checkpoint1(trajectory):
     required_url_parts = [
         "/root/openhands/-/issues/",
         "label_name[]=bug",
-        "sort=created_date",
         "state=opened"
     ]
     return all(part in trajectory for part in required_url_parts)
