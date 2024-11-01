@@ -11,7 +11,7 @@ rocket = create_rocketchat_client()
 def checkpoint1():
     passed = True
     for name in ['jessica_lee', 'huang_jie', 'chen_xinyi']:
-        passed = passed and bool(get_chat_history(rocket, name))
+        passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
 def checkpoint2(trajectory):
@@ -29,7 +29,7 @@ def checkpoint3():
         'chen_xinyi': 18780
     }
     for key, value in consume_dict.items():
-        chat_history = get_chat_history(rocket, key)
+        chat_history = get_rocketchat_personal_chat_history(rocket, key)
         if not any(str(value) in chat for chat in chat_history):
               return False
     return True

@@ -218,7 +218,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
