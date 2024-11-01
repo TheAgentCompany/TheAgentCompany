@@ -1,15 +1,3 @@
-"""Summary of evaluator for example task
-
-You don't have to write a summary for the evaluator, although documentation is
-strongly encouraged.
-
-A good evaluator should:
-1. be robust - it shouldn't abort because of its own bug or lack of fail over mechanism
-2. be deterministic and idempotent
-3. grant partial credits if possible
-4. encourage but not require trajectory for grading
-"""
-
 import os
 import pandas as pd
 
