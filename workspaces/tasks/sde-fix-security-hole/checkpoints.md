@@ -1,27 +1,23 @@
 # Checkpoints
 
-There are 7 checkpoints in total.
+There are 5 checkpoints in total.
 
 ## Checkpoint 1 (1pt)
 
 The agent has communicated with Emily on RocketChat.
 
-## Checkpoint 2 (1pts)
+## Checkpoint 2 (2pts)
 
-The agent has read `event-viewer/README.md`.
+The agent has added a test in test_app.py that verifies the database cannot be accessed with an incorrect password.
 
-## Checkpoint 3 (1pts)
+## Checkpoint 3 (2pts)
 
-The agent has run `event-viewer/app.py`.
+The agent has fixed the security hole in app.py by properly setting the encryption key.
 
-## Checkpoint 4 (1pts)
+## Checkpoint 4 (2pts)
 
-The agent has communicated with Zhang on RocketChat.
+The agent has fixed the security hole in populate_database.py by properly setting the encryption key.
 
-## Checkpoint 5 (1pts)
+## Checkpoint 5 (3pts)
 
-`events-viewer/app.py` includes the word `cat123`.
-
-## Checkpoint 6 (1pts)
-
-The server returns the words " when the URL `http://localhost:5000/events` is accessed.
+All tests in test_app.py pass successfully.
