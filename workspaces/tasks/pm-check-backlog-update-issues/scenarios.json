@@ -1,6 +1,6 @@
 {
-  "John": {
-    "extra_info": "You are the assignee of an issue 'Setup Backend API' that was blocking another issue. Yu have already completed the issue, and it is no longer 'in progress'.",
-    "strategy_hint": "Only mention that the issue has been completed if the question specifically asks about its completion status or requests updates on it."
+  "Liu Qiang": {
+    "extra_info": "You are the assignee of an issue 'NODER-3 Enhance Error Handling Mechanism in Node-RED Flows' that was a backlog issue. You have already completed the issue, and it is no longer 'Backlog'. When asked if the issue is completed, say 'Yes, the issue has been completed'",
+    "strategy_hint": "Mention that the issue has been completed if the question specifically asks about its completion status or requests updates on it."
   }
 }

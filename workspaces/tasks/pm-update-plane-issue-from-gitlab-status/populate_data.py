@@ -28,14 +28,14 @@ def create_issues_in_gitlab():
     issue1_exists = ISSUE_1 in [issue["title"] for issue in issue1.json()]
     if not issue1_exists:
         logger.info("Creating issue 1 in Gitlab")
-        make_gitlab_request(GITLAB_PROJECT_PATH, "issues", method = "POST", data={"title": ISSUE_1})
+        make_gitlab_request(GITLAB_PROJECT_PATH, "issues", method = "POST", params={"title": ISSUE_1})
 
     issue2_exists = False
     issue2 = make_gitlab_request(GITLAB_PROJECT_PATH, "issues")
     issue2_exists = ISSUE_2 in [issue["title"] for issue in issue2.json()]
     if not issue2_exists:
         logger.info("Creating issue 2 in Gitlab")
-        issue2_response = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", method = "POST", data={"title": ISSUE_2})
+        issue2_response = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", method = "POST", params={"title": ISSUE_2})
         if issue2_response.status_code != 201:
             logger.error(f"Failed to create issue 2 in Gitlab: {issue2_response.text}")
         issue2_id = issue2_response.json()["iid"]

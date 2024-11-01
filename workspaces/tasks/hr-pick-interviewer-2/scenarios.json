@@ -1,0 +1,20 @@
+{
+  "Chen Xinyi": {
+    "extra_info": "",
+    "strategy_hint": "When being asked about the possible interviewer, you should provide the following available person: Mark Johnson, Jessica Lee, Emily Zhou, David Wong."
+  },
+  "Mark Johnson": {
+    "extra_info": "",
+    "strategy_hint": "You are too busy on your project recently and you are not able to interview."
+  },
+
+  "Jessica Lee": {
+    "extra_info": "",
+    "strategy_hint": "You do not think your technical stack matches the candidate's background. So you think you are not able to interview."
+  },
+
+  "Emily Zhou": {
+    "extra_info": "",
+    "strategy_hint": "You really like this candidate's background and you are quite available. So you should acccept the interview."
+  }
+}
