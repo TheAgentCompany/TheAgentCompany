@@ -1,33 +1,14 @@
 import logging
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client
+from common import create_rocketchat_client, get_rocketchat_channel_history
 from config import *
 
 ############################# Init Variables #####################################
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-def get_rocketchat_message(rocket_client, channel):
-    response = rocket_client.channels_info(channel=channel).json()
-    if not response.get('success'):
-        print(f"Failed to retrieve {channel} channel info.")
-        return None
 
-    room_id = response['channel']['_id']
-
-    response = rocket_client.channels_history(room_id=room_id).json()
-    if not response.get('success'):
-        print("Failed to retrieve message history.")
-        return None
-
-    messages = response.get('messages', [])
-
-    if not messages:
-        print("No messages found.")
-        return None
-
-    return messages
 
 def grade_checkpoint1(trajectory):
     required_url_parts = [
@@ -38,7 +19,7 @@ def grade_checkpoint1(trajectory):
     return all(part in trajectory for part in required_url_parts)
 
 def grade_checkpoint2():
-    messages = get_rocketchat_message(rocket, "project-ai")
+    messages = get_rocketchat_channel_history(rocket, "project-ai")
     if not messages:
         return False
     
@@ -52,7 +33,7 @@ def grade_checkpoint2():
     return False
 
 def grade_final_checkpoint():
-    messages = get_rocketchat_message(rocket, "project-ai")
+    messages = get_rocketchat_channel_history(rocket, "project-ai")
     if not messages:
         return False
     
