@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 DATABASE = 'events.db'
-DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'cat123')  # Default password for development
 
 def get_db():
     db = sqlite3.connect(DATABASE)

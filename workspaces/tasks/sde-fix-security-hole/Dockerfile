@@ -25,5 +25,7 @@ RUN pip install requests
 COPY scenarios.json /npc
 
 # Copy files into the workspace
-COPY events-viewer.zip /workspace/
-COPY events.db /workspace/
+COPY events-viewer /workspace/events-viewer/
+
+# Install Python requirements for the events-viewer
+RUN pip install -r /workspace/events-viewer/requirements.txt

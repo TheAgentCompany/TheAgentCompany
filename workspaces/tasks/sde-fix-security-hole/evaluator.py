@@ -1,61 +1,66 @@
-"""Evaluator for sde-debug-crashed-server."""
+"""Evaluator for sde-fix-security-hole."""
 
 import os
 import sys
 import logging
-import re
 import requests
+from typing import List
 
-def grade_checkpoint1(trajectory):
-    return "Emily" in trajectory and "RocketChat" in trajectory
+from common import get_chat_history, create_rocketchat_client
+from scoring import Result, Checkpoint, bonus_for_completing_final
 
-def grade_checkpoint2(trajectory):
-    return "ssh" in trajectory
+def grade_checkpoint1(trajectory=""):
+    """The agent has communicated with Emily on RocketChat."""
+    rocket = create_rocketchat_client()
+    messages = get_chat_history(rocket, "Emily")
+    return len(messages) > 0
 
-def grade_checkpoint3():
-    return os.path.exists('/workspace/pr-viewer/README.md')
+def grade_checkpoint2(trajectory=""):
+    """The agent has read event-viewer/README.md."""
+    return "event-viewer/README.md" in trajectory
 
-def grade_checkpoint4():
-    return os.path.exists('/workspace/pr-viewer/logs/gunicorn.log')
+def grade_checkpoint3(trajectory=""):
+    """The agent has run event-viewer/app.py."""
+    return "python3 event-viewer/app.py" in trajectory or "python event-viewer/app.py" in trajectory
 
-def grade_checkpoint5(trajectory):
-    return "Zhang" in trajectory and "RocketChat" in trajectory
+def grade_checkpoint4(trajectory=""):
+    """The agent has communicated with Zhang on RocketChat."""
+    rocket = create_rocketchat_client()
+    messages = get_chat_history(rocket, "Zhang")
+    return len(messages) > 0
 
-def grade_checkpoint6():
+def grade_checkpoint5():
+    """app.py includes the word cat123."""
     try:
-        with open('/workspace/pr-viewer/config.toml', 'r') as file:
+        with open('/workspace/TheAgentCompany/workspaces/tasks/sde-fix-security-hole/events-viewer/app.py', 'r') as file:
             content = file.read()
-            return bool(re.search(r'db_password.*dbcat456', content))
+            return 'cat123' in content
     except FileNotFoundError:
         return False
 
-def grade_checkpoint7():
+def grade_checkpoint6():
+    """The server returns events when accessed."""
     try:
-        response = requests.get('http://localhost:5000/')
-        return "pr-viewer" in response.text.lower()
+        response = requests.get('http://localhost:5000/events')
+        return response.status_code == 200 and len(response.json()) > 0
     except requests.RequestException:
         return False
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, partial credit might not be granted")
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-    points = sum([
-        grade_checkpoint1(trajectory),
-        grade_checkpoint2(trajectory),
-        grade_checkpoint3(),
-        grade_checkpoint4(),
-        grade_checkpoint5(trajectory),
-        grade_checkpoint6(),
-        grade_checkpoint7()
-    ])
+    # Define the scores corresponding to when each function is True
+    scores = {
+        lambda: grade_checkpoint1(trajectory): 1,
+        lambda: grade_checkpoint2(trajectory): 1,
+        lambda: grade_checkpoint3(trajectory): 1,
+        lambda: grade_checkpoint4(trajectory): 1,
+        grade_checkpoint5: 1,
+        grade_checkpoint6: 1
+    }
 
-    print(f"Final points for task: {points}")
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
+
+    return result
