@@ -22,7 +22,7 @@
         "last_name": "Johnson",
         "age": 42,
         "occupation": "CTO",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Technical strategy planning, R&D team leadership, new technology assessment; Project: Oversees all technical projects; Skills: N/A",
         "slack_channels": "All technical channels, #general, #tech-talk"
@@ -32,7 +32,7 @@
         "last_name": "Ming",
         "age": 35,
         "occupation": "Database Team Project Manager",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Managing database projects, resource coordination, ensuring timely delivery; Project: JanusGraph (Graph Database); Skills: Java, distributed systems",
         "slack_channels": "#project-graphdb, #engineering, #tech-talk"
@@ -42,7 +42,7 @@
         "last_name": "Wei",
         "age": 31,
         "occupation": "Senior Software Engineer (Streaming Database Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing and optimizing core streaming database functionalities; Project: RisingWave (Streaming Database); Skills: Rust, database systems",
         "slack_channels": "#project-streamdb, #engineering, #tech-talk"
@@ -52,7 +52,7 @@
         "last_name": "Fang",
         "age": 28,
         "occupation": "AI Researcher (AI Team)",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Designing and implementing machine learning models, optimizing model performance; Project: OpenHands (LLM project); Skills: Python, machine learning, LLM",
         "slack_channels": "#project-ai, #engineering, #tech-talk"
@@ -62,7 +62,7 @@
         "last_name": "Chen",
         "age": 33,
         "occupation": "Senior Software Engineer (AI Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing and optimizing LLM inference engines; Project: llama.cpp (LLM inference project); Skills: C++, CUDA, performance optimization",
         "slack_channels": "#project-ai, #engineering, #tech-talk"
@@ -72,7 +72,7 @@
         "last_name": "Zhou",
         "age": 29,
         "occupation": "Software Engineer (Web Crawler Team)",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Designing and implementing web crawler functionalities; Project: Colly (Web Crawler Framework); Skills: Go, distributed systems",
         "slack_channels": "#project-webcrawler, #engineering, #tech-talk"
@@ -82,7 +82,7 @@
         "last_name": "Qiang",
         "age": 36,
         "occupation": "Quality Assurance Engineer",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing test strategies, executing tests, ensuring product quality; Project: All projects (focusing on testing and quality); Skills: N/A",
         "slack_channels": "All project channels, #engineering, #tech-talk"
@@ -92,7 +92,7 @@
         "last_name": "Sharma",
         "age": 27,
         "occupation": "Documentation Engineer",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Writing technical documentation, maintaining wiki, improving documentation processes; Project: Documentation (Wiki); Skills: N/A",
         "slack_channels": "All project channels, #engineering, #tech-talk"
@@ -102,7 +102,7 @@
         "last_name": "Johnson",
         "age": 40,
         "occupation": "Sales Director",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing sales strategies, managing sales team, expanding client relationships; Project: N/A (Sales); Skills: N/A",
         "slack_channels": "#sales-marketing, #general"
@@ -112,7 +112,7 @@
         "last_name": "Lee",
         "age": 32,
         "occupation": "Marketing Manager",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Developing marketing strategies, managing brand image, organizing marketing events; Project: N/A (Marketing); Skills: N/A",
         "slack_channels": "#sales-marketing, #general"
@@ -122,7 +122,7 @@
         "last_name": "Xinyi",
         "age": 30,
         "occupation": "Human Resources Manager",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Recruitment, employee training, compensation management; Project: N/A (HR); Skills: N/A",
         "slack_channels": "#hr-announcements, #general"
@@ -132,7 +132,7 @@
         "last_name": "Wong",
         "age": 45,
         "occupation": "Finance Director",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Financial planning, budget management, financial reporting; Project: N/A (Finance); Skills: N/A",
         "slack_channels": "#general"
@@ -142,7 +142,7 @@
         "last_name": "Jie",
         "age": 34,
         "occupation": "Product Manager (Search Engine Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Defining product requirements, planning product roadmap, communicating with clients; Project: OpenSearch (Search Engine); Skills: N/A",
         "slack_channels": "#project-search, #product, #tech-talk"
@@ -152,7 +152,7 @@
         "last_name": "Rodriguez",
         "age": 37,
         "occupation": "UX Designer",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Designing user interfaces, improving user experience, conducting user research; Project: All projects (focusing on user experience); Skills: N/A",
         "slack_channels": "All project channels, #product, #tech-talk"
@@ -162,7 +162,7 @@
         "last_name": "Turner",
         "age": 30,
         "occupation": "Software Engineer (Low-Code Platform Team)",
-        "gender": "Male",
+        "gender": "Man",
         "gender_pronoun": "He/Him",
         "public_info": "Responsibilities: Developing low-code platform features; Project: Node-RED (Low-Code Platform); Skills: N/A",
         "slack_channels": "#project-lowcode, #engineering, #tech-talk"
@@ -172,7 +172,7 @@
         "last_name": "Lewis",
         "age": 33,
         "occupation": "Software Engineer (API Team)",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Developing API functionalities using Python; Project: API-server; Skills: N/A",
         "slack_channels": "#engineering, #tech-talk"
@@ -182,7 +182,7 @@
         "last_name": "Chen",
         "age": 28,
         "occupation": "Frontend Software Engineer",
-        "gender": "Female",
+        "gender": "Woman",
         "gender_pronoun": "She/Her",
         "public_info": "Responsibilities: Developing user interfaces, implementing responsive designs, optimizing web performance; Project: E-commerce Website Redesign; Skills: N/A",
         "slack_channels": "#project-ecommerce, #frontend, #tech-talk"

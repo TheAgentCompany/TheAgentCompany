@@ -8,7 +8,7 @@ import redis
 class NPCDefinition(AgentProfile):
     slack_channels: str = Field(index=False, default_factory=lambda: "")
 
-def wait_for_redis(host='localhost', port=6379, password='jobbench', retries=300, delay=1):
+def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retries=300, delay=1):
     client = redis.StrictRedis(host=host, port=port, password=password)
     
     for attempt in range(retries):
@@ -33,16 +33,16 @@ Migrator().run()
 
 with open('npc_definition.json', 'r') as file:
     agent_definitions = json.load(file)
-    logging.info(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
-def get_by_first_name(first_name):
-    return NPCDefinition.find(NPCDefinition.first_name == first_name).execute()
+def get_by_name(first_name, last_name):
+    return AgentProfile.find(AgentProfile.first_name == first_name and AgentProfile.last_name == last_name).execute()
 
 for definition in agent_definitions:
-    if get_by_first_name(definition["first_name"]):
+    if get_by_name(definition["first_name"],definition["last_name"]):
         # TODO: shall we support modifications?
-        logging.info(f'NPC ({definition["first_name"]}) already inserted, skip')
+        print(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
         continue
-    agent_profile = NPCDefinition.parse_obj(definition)
+    agent_profile = AgentProfile.parse_obj(definition)
     agent_profile.save()
-    logging.info(f'Inserted {definition["first_name"]} successfully')
+    print(f'Inserted {definition["first_name"]} {definition["last_name"]} successfully')

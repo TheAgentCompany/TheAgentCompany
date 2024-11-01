@@ -1,17 +1,8 @@
 import os
 import requests
 import logging
+from config import *
 
-############################# init variable ##################################### 
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'ogma.lti.cs.cmu.edu'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-API_KEY = os.getenv('PLANE_API')
-headers = {
-        "x-api-key": API_KEY,
-        "Content-Type": "application/json"
-}
 
 ############################# util function #####################################  
 # Set up logging
@@ -28,7 +19,7 @@ logger = logging.getLogger("Functionality Test")
 
 def check_api_sanity():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/"
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request("GET", url, headers=PLANE_HEADERS)
     if response.status_code != 200:
         logger.error("Invalid API Key / Workspace")
 

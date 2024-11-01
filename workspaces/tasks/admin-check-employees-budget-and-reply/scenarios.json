@@ -1,0 +1,14 @@
+{
+  "Jessica Lee": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for five Ergonomic Office Chair (Herman Miller), five Standing Desk (Electric Adjustable), three Meeting Table."
+  },
+  "Huang Jie": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Desktop Computer (HP WorkStation), three Wireless Mouse, three Wireless Keyboard"
+  },
+  "Chen Xinyi": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for ten Laptop (Dell XPS 15), ten Monitor Stand"
+  }
+}

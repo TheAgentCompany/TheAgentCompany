@@ -1,5 +1,5 @@
-IMAGE_NAME=job-bench-sde-check-high-priority-issue
-CONTAINER_NAME=job-bench-sde-check-high-priority-issue
+IMAGE_NAME=sde-check-high-priority-issue-image
+CONTAINER_NAME=sde-check-high-priority-issue
 
 .PHONY: build run stop
 
