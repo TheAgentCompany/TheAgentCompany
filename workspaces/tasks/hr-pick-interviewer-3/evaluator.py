@@ -27,7 +27,7 @@ def grade_checkpoint1():
 
 
 def grade_checkpoint2():
-    # [2pts] Check whether examinee chat with Jessica Lee.
+    # [1pt] Check whether examinee chat with Jessica Lee.
     try:
         chat_with_interviewer = evaluate_chat_history_with_llm(
             rocket_client=rocket,
@@ -37,7 +37,7 @@ def grade_checkpoint2():
 
         if not chat_with_interviewer:
             logging.error(
-                f"The hr does not send the right message to the potential interviewer Jessica Lee"
+                f"Right message was not conveyed to the potential interviewer Jessica Lee"
             )
             return False
 
@@ -49,7 +49,7 @@ def grade_checkpoint2():
 
 
 def grade_checkpoint3():
-    # [2pts] Check whether examinee write Yes in `/workspace/accept.txt`.
+    # [1pt] Check whether examinee write Yes in `/workspace/accept.txt`.
     try:
         with open("/workspace/accept.txt", "r") as f:
             content = f.read().strip()
