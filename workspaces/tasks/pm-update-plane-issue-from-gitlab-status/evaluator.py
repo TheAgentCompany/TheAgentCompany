@@ -21,7 +21,7 @@ ISSUE_2 = "Optimize Retry Mechanism for Out of Memory Errors"
 
 def get_issue_url(issue_name):
     issues = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", params={"search": issue_name})
-    if issues is None or issues.status_code != 200:
+    if issues is None:
         return None
     for issue in issues.json():
         if issue["title"] == issue_name:
@@ -41,9 +41,15 @@ def grade_checkpoint3(trajectory):
 
 def grade_checkpoint4():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_1)
+    if issue is None:
+        return False
     issue_id = issue["id"]
     cycle = get_plane_cycle_details(PROJECT_ID, CYCLE_NAME)
+    if cycle is None:
+        return False
     issues_in_cycle = get_plane_issues_by_project_cycle(PROJECT_ID, cycle["id"])
+    if issues_in_cycle is None:
+        return False
     for issue in issues_in_cycle:
         if issue["id"] == issue_id:
             return True
@@ -51,7 +57,11 @@ def grade_checkpoint4():
 
 def grade_checkpoint5():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_2)
+    if issue is None:
+        return False
     state = get_plane_state_details(PROJECT_ID, issue["state"])
+    if state is None:
+        return False
     return state["group"] == "completed"
     
 
