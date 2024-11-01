@@ -14,7 +14,7 @@ def grade_checkpoint1():
         chat_with_leader = evaluate_chat_history_with_llm(
             rocket_client=rocket,
             username="Emily Zhou",
-            predicate="the person (Emily Zhou) agrees to interview.",
+            predicate="In the end, the person (Emily Zhou) agrees to interview.",
         )
 
         if not chat_with_leader:
@@ -53,7 +53,7 @@ def grade_checkpoint3():
     try:
         with open("/workspace/accept.txt", "r") as f:
             content = f.read().strip()
-            if "Yes" not in content:
+            if "yes" not in content.lower():
                 logging.error(
                     f"The examinee does not write Yes in /workspace/accept.txt"
                 )
@@ -73,13 +73,9 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(2, 2 * int(passed1)))
 
     passed2 = grade_checkpoint2()
-    checkpoints.append(Checkpoint(2, 2 * int(passed2)))
+    checkpoints.append(Checkpoint(1, int(passed2)))
 
     passed3 = grade_checkpoint3()
-    checkpoints.append(Checkpoint(2, 2 * int(passed3)))
+    checkpoints.append(Checkpoint(1, int(passed3)))
 
     return result
-
-
-if __name__ == "__main__":
-    print(grade_checkpoints().to_dict())
