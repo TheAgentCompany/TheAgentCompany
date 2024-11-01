@@ -81,7 +81,7 @@ def grade_checkpoint_final():
 
 ############################# Evaluator #####################################
 
-def grade_checkpoints(trajectory="http://the-agent-company.com/tac/projects/fa5a17b9-71c7-4b1f-96bb-f73d85f135b3/settings/members/"):
+def grade_checkpoints(trajectory):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
