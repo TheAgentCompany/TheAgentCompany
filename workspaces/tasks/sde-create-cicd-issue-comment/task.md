@@ -5,7 +5,7 @@ Navigate to the gitlab repository for the JanusGraph project, and create a CI/CD
 
 Create a new branch for your changes, and make a merge request to merge your changes into the main branch.
 
-Once you're done, request review from Li, and once approved, merge your changes into the main branch.
+Once you're done, merge your changes into the main branch.
 
 Once it's in the main branch, open up an issue called "Dummy Issue" with a body more than 100 characters, and verify that the CI/CD action generates a comment saying "All issue titles must start with 'fix:', 'chore:', or 'feat:'".
 
