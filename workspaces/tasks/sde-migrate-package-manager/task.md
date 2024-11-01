@@ -1,0 +1,1 @@
+Migrate the whole Sotopia repo dependency management system from poetry (https://python-poetry.org/) to uv (https://github.com/astral-sh/uv)
