@@ -76,7 +76,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(CHECKPOINT_5_POINTS, CHECKPOINT_5_POINTS * int(passed5)))
 
     return result
-
-
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
