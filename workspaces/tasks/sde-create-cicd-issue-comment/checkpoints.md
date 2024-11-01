@@ -12,7 +12,7 @@ Sent a merge request to add the CI/CD action.
 
 ## Checkpoint 3 (1pt)
 
-Requested review from Li, and once approved, merged the merge request.
+Merged the merge request.
 
 ## Checkpoint 4 (1pt)
 
