@@ -19,7 +19,7 @@ from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
 def grade_checkpoint1(trajectory):
-    policy_file_path = "https://ogma.lti.cs.cmu.edu/apps/files/files/1363?dir=/Documents/Administrative%20Specialist"
+    policy_file_path = "apps/files/files/1363?dir=/Documents/Administrative%20Specialist"
     return policy_file_path in trajectory
 
 def grade_checkpoint2():
