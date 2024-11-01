@@ -386,6 +386,21 @@ def get_plane_issue_details(project_id, issue_name):
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
         return None
+    
+def get_plane_cycle_details(project_id, cycle_name):
+    """Get details of a specific cycle in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        cycles = response.json().get('results', [])
+        for cycle in cycles:
+            if cycle.get('name') == cycle_name:
+                return cycle
+        logging.info(f"Cycle with name '{cycle_name}' not found.")
+    except requests.RequestException as e:
+        logging.warning(f"Get cycle detail failed: {e}")
+        return None
 
 def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
     """
@@ -445,3 +460,25 @@ def get_plane_state_details(project_id, state_id):
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
     return dict()
+
+def create_plane_issue(project_id, issue_name):
+    """ Create an issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"name": issue_name})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Create issue failed: {e}")
+        return None
+    
+def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
+    """ Add an issue to a cycle."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"issues": [issue_id]})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Add issue to cycle failed: {e}")
+        return None
