@@ -57,11 +57,14 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str):
+def get_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
     2) and the account used to create rocket client instance
+
+    If content_only is True, only return the content of the messages, otherwise return all attributes,
+    including but not limited to message content, timestamp, etc.
 
     Returns the messages as a list. If no history, returns an empty list.
     """
@@ -76,11 +79,45 @@ def get_chat_history(rocket_client, username: str):
         return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    if content_only:
+        reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    else:
+        reversed_history = [] if msgs is None else msgs
     history = reversed_history[::-1]
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+
+
+def get_rocketchat_channel_room_id(rocket_client, channel_name):
+    """Get the room_id for a specific channel."""
+    response = rocket_client.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return response['channel']['_id']
+    return None
+
+def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
+    """
+    Check if a message containing specific keywords was posted in the specified channel.
+
+    Args:
+        channel_name (str): Name of the Rocket.Chat channel.
+        keywords (list): List of keywords to check in the message content.
+
+    Returns:
+        bool: True if a message containing all keywords is found, False otherwise.
+    """
+    room_id = get_rocketchat_channel_room_id(rocket_client, channel_name)
+    if not room_id:
+        return False
+    
+    messages = rocket_client.channels_history(room_id=room_id, count=10).json().get('messages', [])
+    for message in messages:
+        message_text = message.get("msg", "").lower()
+        # Check if all keywords are present in the message text
+        if all(keyword.lower() in message_text for keyword in keywords):
+            return True
+    return False
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
@@ -155,7 +192,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,7 +204,7 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, params=params)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
@@ -231,8 +268,12 @@ def download_nextcloud_content(link: str, output_file_path: str):
     return True
 
 
+# Use the unique file name to check if the repository is cloned correctly.
 PROJECT_FILES = {
     'openhands': '.openhands_instructions',
+    'janusgraph': '.backportrc.json',
+    'colly': 'xmlelement_test.go',
+    'streamlit': '.ruff.toml'
 }
 
 def check_repo_exists(project_name: str):

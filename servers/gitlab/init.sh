@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Run the original wrapper script, but remove the last 2 lines
 # NOTE: this magic number 2 comes from the fact that 17.3.1-ce.0 version's
@@ -69,9 +69,10 @@ if ls /assets/exports/*.tar.gz 1> /dev/null 2>&1; then
                 echo "Project $project_id import status: $status"
             elif [ "$status" != "finished" ]; then
                 echo "Error: Unexpected status for project $project_id: $status"
-                break
+                exit 1
             else
                 echo "Project $project_id import succeeded with status: $status"
+                sleep 10
                 break
             fi
             sleep 30
