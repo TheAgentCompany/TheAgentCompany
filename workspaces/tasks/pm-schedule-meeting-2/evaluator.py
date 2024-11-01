@@ -1,17 +1,10 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
+import logging
 
-import datetime
+from typing import List
 
-from common import llm_evaluate
-
-# Set environment variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-# Construct RocketChat URL
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from scoring import Result, Checkpoint
+from common import evaluate_with_llm
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -43,18 +36,15 @@ def check_final_result(file_path):
     # Read the content of the file and call litellm
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
-        messages = [{"content": f"Does the phrase \"\"{content}\"\" include Friday? Please answer 'yes' if it does, or 'no' if it doesn't.", "role": "user"}]
 
-    # Check result
-    llm_resonse = llm_evaluate(messages)
-    print(llm_resonse)
-
-    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-        print("there is a meeting in this week")
-        return True
-    else:
-        print("there is not a meeting in this week")
+    if len(content) == 0:
+        logging.warning("there is no content in the txt")
         return False
+
+    predicate = 'the meeting is scheduled on Friday'
+    additional_prompt = 'If meeting is not mentioned, but Friday is mentioned, that is fine'
+    return evaluate_with_llm(content, predicate, additional_prompt)
+
 
 def checkpoint1(username='emily_zhou'):
     return get_history(username=username)
@@ -66,7 +56,10 @@ def checkpoint3(file_path = '/workspace/conclusion.txt'):
     return check_final_result(file_path=file_path)
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -74,15 +67,9 @@ def calculate_total_score():
         checkpoint3: 3
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    return result
 
-    return total_score
-
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
 

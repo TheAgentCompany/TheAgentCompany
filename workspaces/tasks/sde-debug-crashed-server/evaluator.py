@@ -5,15 +5,10 @@ import sys
 import logging
 import re
 import requests
-from rocketchat_API.rocketchat import RocketChat
 
-# Set environment variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
+from typing import List
 
-# Construct RocketChat URL
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from scoring import Result, Checkpoint
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -56,7 +51,10 @@ def checkpoint5():
     except:
         return False
 
-def calculate_total_score():
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     scores = {
         checkpoint1: 1,
         checkpoint2: 1,
@@ -65,28 +63,24 @@ def calculate_total_score():
         checkpoint5: 4,
     }
 
-    total_score = 0
-
     # Check RocketChat messages
     emily_msgs = get_history(username='emily_zhou')
-    print(emily_msgs)
+    logging.info(emily_msgs)
+
     zhang_msgs = get_history(username='zhang_wei')
-    print(zhang_msgs)
+    logging.info(zhang_msgs)
+
     for func, score in scores.items():
         if func == checkpoint5:
-            if func():
-                total_score += score
+            checkpoints.append(Checkpoint(score, score * int(func())))
         elif func == checkpoint1 or func == checkpoint2:
-            if func(emily_msgs):
-                total_score += score
+            checkpoints.append(Checkpoint(score, score * int(func(emily_msgs))))
         elif func == checkpoint3 or func == checkpoint4:
-            if func(zhang_msgs):
-                total_score += score
+            checkpoints.append(Checkpoint(score, score * int(func(zhang_msgs))))
         else:
             raise ValueError(f"Unknown checkpoint: {func}")
 
-    return total_score
+    return result
 
-# Compute the total points
-total = calculate_total_score()
-print(f"\nTotal points: {total}")
+
+

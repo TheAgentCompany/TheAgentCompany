@@ -1,20 +1,16 @@
-import requests
 import os
-from rocketchat_API.rocketchat import RocketChat
+import logging
 
-# Rocket.Chat server URL and admin credentials
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-channel_name = "general"
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
+from typing import List
 
+from scoring import Result, Checkpoint
 from common import create_rocketchat_client
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-def check_url(browser_logs):
-    return f"{ROCKETCHAT_URL}/channel/general" in browser_logs
+def check_url(trajectory):
+    return f"channel/general" in trajectory
 
 
 def get_channel_room_id(channel_name):
@@ -41,7 +37,13 @@ def check_message_sent(channel_name, message, username):
                 return True
     return False
 
-if __name__ == "__main__":
-    test_url = f"{ROCKETCHAT_URL}/channel/general"
-    print(check_url(f"ACTION: goto('{test_url}')"))
-    print(check_message_sent("general", "Hi", "theagentcompany"))
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(1, check_url(trajectory)))
+    checkpoints.append(Checkpoint(1, check_message_sent("general", "Hi", "theagentcompany")))
+    return result
+
+
+

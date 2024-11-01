@@ -8,6 +8,10 @@ set -ex
 SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu} | grep PING | awk -F'[()]' '{print $2}')
 echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
 
+if [ -f "/utils/pre_init.sh" ]; then
+    bash /utils/pre_init.sh
+fi
+
 if [ -f "/utils/pre_init.py" ]; then
     python_default /utils/pre_init.py
 fi
@@ -27,6 +31,10 @@ fi
 ######################################
 
 ########## POST INIT PHASE ###########
+if [ -f "/utils/post_init.sh" ]; then
+    bash /utils/post_init.sh
+fi
+
 if [ -f "/utils/post_init.py" ]; then
     python_default /utils/post_init.py
 fi

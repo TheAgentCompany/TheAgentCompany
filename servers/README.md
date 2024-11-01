@@ -10,20 +10,22 @@ Below are the addresses, usernames, and passwords for each service:
 ## GitLab
 * service url: http://ogma.lti.cs.cmu.edu:8929/
 * root email: `root@local`
-* root password: `JobBench`
+* root password: `theagentcompany`
 
 ## NextCloud
 * service url: https://ogma.lti.cs.cmu.edu/login
 * username: admin
 * password: 
     * current password `cf6a70e7fbef0dc2f6e8c48369b30ab8357b3c10063f5fbe`
-    * if out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`
-
+    * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`. This only works if you have admin access to the server where nextcloud is hosted.
+    * If you cannot find it, try the following command to get a correct one
+    `curl http://ogma.lti.cs.cmu.edu:2999/api/nextcloud-config`
 ## Plane
 * http://ogma.lti.cs.cmu.edu:8091
 * email:`agent@company.com`
 * password:`theagentcompany`
-* API_KEY:`plane_api_569b8e604e0c46d0b65ef56bb9e76f03`
+* API_KEY:`plane_api_83f868352c6f490aba59b869ffdae1cf`
+* If the API_KEY not work, ping @Yufan Song. And feel free to follow [here](https://developers.plane.so/api-reference/introduction) to create your temporary key to develop. We will always reset the server, so your temporary key may be deleted sometime after reset.
 
 ## RocketChat
 * http://ogma.lti.cs.cmu.edu:3000/

@@ -1,31 +1,14 @@
-import json
 import logging
 import re
-import sys
-import os
+
+from typing import List
+
+from scoring import Result, Checkpoint
+from common import *
 
 # Check the repo has been cloned
 def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        if not os.path.isdir(openhands_path):
-            logging.warning("OpenHands directory not found")
-            return False
-        
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        
-        instruction_file_path = os.path.join(openhands_path, ".openhands_instructions")
-        return os.path.isfile(instruction_file_path)
-    
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
+    return check_repo_exists('openhands')
     
 # Check all the test passed
 def grade_checkpoint2(trajectory):
@@ -49,41 +32,18 @@ def grade_checkpoint2(trajectory):
         logging.warning(f"Error in grade_checkpoint2: {e}")
         return False
 
-def grade_checkpoints(trajectory):
-    checkpoints = [
-        (grade_checkpoint1, "OpenHands code cloned in local workspace"),
-        (lambda: grade_checkpoint2(trajectory), "open_file function's unit tests are PASS in history")
-    ]
 
-    points = 0
-    for grade_func, description in checkpoints:
-        try:
-            passed = grade_func()
-            points += int(passed)
-            print(f"{'✓' if passed else '✗'} {description}")
-            if not passed:
-                break  
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break 
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
 
-    return points
+    passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed1)))
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+    passed2 = passed1 and grade_checkpoint2(trajectory)
+    checkpoints.append(Checkpoint(1, int(passed2)))
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
+    return result
 
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points for OpenHands task: {points}/2")
+
+

@@ -1,0 +1,2 @@
+You are going to pick an interviewer for a candidate. You should ask hiring resource manager Chen Xinyi in Rocketchat (http://the-agent-company.com:3000) about who is available to interview. 
+Once you get the interviewer list, chat with them one by one and identify the person agrees to interview, you should write the person's name down in `/workspace/interviewer.txt` file locally.

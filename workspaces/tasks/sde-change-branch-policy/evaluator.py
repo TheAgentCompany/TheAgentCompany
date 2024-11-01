@@ -1,17 +1,17 @@
 import requests
 import logging
 
-base_url = "http://the-agent-company.com:8929/api/v4"
-project_id = "root%2Fsotopia"
-access_token = "root-token"
-headers = {"PRIVATE-TOKEN": access_token}
+from typing import List
 
+from scoring import Result, Checkpoint, bonus_for_completing_final
+from common import *
 
+project_path = "root/sotopia"
+
+# check the `allowed to merge` is only for `maintainers`
 def grade_checkpoint1():
-    # check the `allowed to merge` is only for `maintainers`
-    branch_url = f"{base_url}/projects/{project_id}/protected_branches"
     try:
-        response = requests.get(branch_url, headers=headers)
+        response = make_gitlab_request(project_path, "protected_branches")
         response.raise_for_status()
         data = response.json()
         for branch in data:
@@ -30,12 +30,10 @@ def grade_checkpoint1():
         logging.error(f"Error fetching branch data: {e}")
         return False
 
-
+# check `allowed to merge and push` is changed to `maintainers and developers`
 def grade_checkpoint2():
-    # check `allowed to merge and push` is changed to `maintainers and developers`
-    branch_url = f"{base_url}/projects/{project_id}/protected_branches"
     try:
-        response = requests.get(branch_url, headers=headers)
+        response = make_gitlab_request(project_path, "protected_branches")
         response.raise_for_status()
         data = response.json()
         for branch in data:
@@ -55,7 +53,17 @@ def grade_checkpoint2():
         return False
 
 
-if __name__ == "__main__":
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed1)))
+
     passed2 = grade_checkpoint2()
-    print(f"Final points for task: {passed1 + passed2}")
+    checkpoints.append(Checkpoint(1, int(passed2)))
+
+    return result
+
+
+
