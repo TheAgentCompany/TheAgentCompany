@@ -15,12 +15,12 @@ def grade_checkpoint1():
         chat_with_target = evaluate_chat_history_with_llm(
             rocket_client=rocket,
             username="Mike Chen",
-            predicate="the examinee chat with Mike Chen on 'llama3.1 context size related code'",
+            predicate="there is a conversation about 'llama3.1 context size related code'",
         )
 
         if not chat_with_target:
             logging.error(
-                f"the examinee asks Mike Chen on 'llama3.1 context size' related questions'"
+                f"the examinee does not ask Mike Chen on 'llama3.1 context size' related questions'"
             )
             return False
         return True
@@ -58,7 +58,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(3, 3 * int(passed2)))
 
     return result
-
-
-if __name__ == "__main__":
-    print(grade_checkpoints().to_dict())
