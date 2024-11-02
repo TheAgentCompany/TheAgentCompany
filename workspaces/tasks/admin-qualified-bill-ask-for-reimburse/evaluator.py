@@ -1,7 +1,7 @@
 import os
 import requests
 from typing import List
-from common import get_chat_history
+from common import get_rocketchat_personal_chat_history
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 # Initialize RocketChat client
@@ -28,7 +28,7 @@ def grade_checkpoints(trajectory="") -> Result:
     passed2 = grade_checkpoint2(trajectory)
     checkpoints.append(Checkpoint(1, int(passed2)))
 
-    chat_history = get_chat_history(rocket, "Mike Chen")
+    chat_history = get_rocketchat_personal_chat_history(rocket, "Mike Chen")
     passed3 = len(chat_history) > 0
     checkpoints.append(Checkpoint(1, int(passed3)))
 
