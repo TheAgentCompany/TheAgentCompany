@@ -40,7 +40,7 @@ def grade_checkpoint3():
     try:
         with open('/workspace/sotopia/.github/workflows/cli_tests.yml', 'r') as file:
             content = file.read()
-            if 'architecture: [amd64, x86_64]' in content or 'architecture: [x86_64, amd64]' in content:
+            if 'amd64' in content and 'x86' in content:
                 logging.info("CI for amd and x86 is added in cli_tests.yml.")
                 predicate = "CI for amd and x86 is added"
                 llm_result = evaluate_with_llm(content, predicate)
