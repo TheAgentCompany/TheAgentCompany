@@ -10,13 +10,13 @@ rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1():
-    # [3pts] Check if the correct PR number (#8676) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the chat with Chen Xinyi.
-    
+    # [3pts] Check if the correct PR number (#8676) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the file `/workspace/related_pr.txt`.
+
     try:
         get_correct_pr = evaluate_chat_history_with_llm(
             rocket_client=rocket,
             username="Chen Xinyi",
-            predicate="the examinee mentioned the correct PR number (#8676) in the chat with Chen Xinyi",
+            predicate="the examinee mentioned the correct PR number (8676) in the chat with Chen Xinyi (only mentioning 8676 is enough)",
         )
 
         if not get_correct_pr:
@@ -28,7 +28,6 @@ def grade_checkpoint1():
         return False
 
 
-
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
@@ -37,6 +36,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(3, 3 * int(passed1)))
 
     return result
-
-if __name__ == "__main__":
-    print(grade_checkpoints().to_dict())

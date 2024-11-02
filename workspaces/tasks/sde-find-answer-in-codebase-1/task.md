@@ -1,1 +1,1 @@
-Your colleague Chen Xinyi wants to know which pull requests in llama.cpp (http://ogma.lti.cs.cmu.edu:8929/root/llama.cpp) improves the context window of llama3.1 series models. Find the most recent related merged pull request number (starting in #) and send to her.
+Your colleague Chen Xinyi wants to know which pull requests in llama.cpp (http://ogma.lti.cs.cmu.edu:8929/root/llama.cpp) improves the context window of llama3.1 series models. Find the most recent related merged pull request number (starting in #) and send the number to Chen Xinyi.
