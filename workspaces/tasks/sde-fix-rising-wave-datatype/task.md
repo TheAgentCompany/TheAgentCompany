@@ -1,0 +1,1 @@
+Clone the RisingWave repository to the workspace directory. You need to fix vnode count data type when querying system table rw_fragments by changing it to i32. Then create a merge request with the title "fix(meta): fix vnode count data type when querying system table rw_fragments" for this change.
