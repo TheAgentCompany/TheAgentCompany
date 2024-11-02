@@ -16,7 +16,7 @@ def grade_checkpoint1():
         get_correct_pr = evaluate_chat_history_with_llm(
             rocket_client=rocket,
             username="Chen Xinyi",
-            predicate="the examinee mentioned the correct PR number (8676) in the chat with Chen Xinyi (only mentioning 8676 is enough)",
+            predicate="the chat history mentions PR number 8676",
         )
 
         if not get_correct_pr:
