@@ -14,4 +14,4 @@ Confirmed conversation with Mike Chen.
 
 ## Checkpoint 4 (1 point)
 
-Confirmed conversation about the correct reimburseable price ($215.03) in the chat with Mike Chen.
+Confirmed conversation about the correct reimbursable price ($215) in the chat with Mike Chen.

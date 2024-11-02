@@ -10,11 +10,11 @@ rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1(trajectory):
-    return "https://ogma.lti.cs.cmu.edu/apps/files/files/1423?dir=/Documents/Financials&openfile=true" in trajectory
+    return "apps/files/files/1423?dir=/Documents/Financials" in trajectory
 
 
 def grade_checkpoint2(trajectory):
-    return "https://ogma.lti.cs.cmu.edu/apps/files/files/1363?dir=/Documents/Administrative%20Specialist" in trajectory
+    return "apps/files/files/1363?dir=/Documents/Administrative%20Specialist" in trajectory
 
 
 
@@ -32,7 +32,7 @@ def grade_checkpoints(trajectory="") -> Result:
     passed3 = len(chat_history) > 0
     checkpoints.append(Checkpoint(1, int(passed3)))
 
-    passed4 = "215.03" in ' '.join(chat_history)
+    passed4 = "215" in ' '.join(chat_history)
     checkpoints.append(Checkpoint(1, int(passed4)))
 
     return result
