@@ -1,4 +1,4 @@
-IMAGE_NAME=hr-check-attendance-multiple-days-deparment-image
+IMAGE_NAME=hr-check-attendance-multiple-days-department-image
 CONTAINER_NAME=hr-check-attendance-multiple-days-department
 
 .PHONY: build run stop
