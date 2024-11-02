@@ -4,6 +4,7 @@ import os
 import sys
 from rocketchat_API.rocketchat import RocketChat # type: ignore
 import subprocess
+from sotopia.database import AgentProfile
 
 from typing import List
 
@@ -50,15 +51,20 @@ def grade_checkpoint3():
         with open(file_path, 'r') as file:
             for line in file:
                 character = json.loads(line)
-                if character['occupation'] == 'doctor':
-                    if character['gender'] == 'male':
+                try:
+                    AgentProfile.parse_obj(character)
+                except Exception as e:
+                    logging.error(f"Error occurred while loading the character: {e}")
+                    return False
+                if character['occupation'].lower() == 'doctor':
+                    if character['gender'].lower() == 'male':
                         doctors['male'] += 1
-                    elif character['gender'] == 'female':
+                    elif character['gender'].lower() == 'female':
                         doctors['female'] += 1
-                elif character['occupation'] == 'nurse':
-                    if character['gender'] == 'male':
+                elif character['occupation'].lower() == 'nurse':
+                    if character['gender'].lower() == 'male':
                         nurses['male'] += 1
-                    elif character['gender'] == 'female':
+                    elif character['gender'].lower() == 'female':
                         nurses['female'] += 1
 
         if doctors['male'] == 3 and doctors['female'] == 3 and nurses['male'] == 3 and nurses['female'] == 3:
