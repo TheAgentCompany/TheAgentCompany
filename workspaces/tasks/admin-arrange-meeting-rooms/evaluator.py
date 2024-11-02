@@ -3,7 +3,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
 
 REFERENCE_ANSWER = 3
@@ -30,7 +30,7 @@ def grade_checkpoint_1() -> bool:
 
 
 def grade_checkpoint_2() -> bool:
-    history = get_chat_history(rocket_client, 'Chen Xinyi')
+    history = get_rocketchat_personal_chat_history(rocket_client, 'Chen Xinyi')
     for msg in history:
         if str(REFERENCE_ANSWER) in msg:
             return True

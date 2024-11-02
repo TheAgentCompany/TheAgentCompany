@@ -57,7 +57,7 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str, content_only: bool = True):
+def get_rocketchat_personal_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
@@ -88,6 +88,42 @@ def get_chat_history(rocket_client, username: str, content_only: bool = True):
     return history
 
 
+def get_rocketchat_channel_history(rocket_client, channel):
+    """
+    Retrieve the message history of a specific public channel from the RocketChat server.
+
+    Parameters:
+        rocket_client: The RocketChat client instance, authenticated and connected to the server.
+        channel (str): The name of the channel to retrieve messages from.
+
+    Returns:
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
+
+    Example:
+        >>> messages = get_rocketchat_channel_history(rocket_client, "general")
+        >>> for message in messages:
+        >>>     print(message["msg"])
+    """
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        logging.warning("Failed to retrieve message history.")
+        return []
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        logging.warning("No messages found.")
+        return []
+
+    return messages
 
 def get_rocketchat_channel_room_id(rocket_client, channel_name):
     """Get the room_id for a specific channel."""
@@ -181,7 +217,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False

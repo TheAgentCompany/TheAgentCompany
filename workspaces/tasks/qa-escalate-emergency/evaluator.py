@@ -3,7 +3,7 @@ from typing import List
 from datetime import datetime
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
 
 SDE_NAME = "Zhang Wei"
@@ -14,16 +14,16 @@ rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1():
-    return bool(get_chat_history(rocket, SDE_NAME))
+    return bool(get_rocketchat_personal_chat_history(rocket, SDE_NAME))
 
 
 def grade_checkpoint2():
-    return bool(get_chat_history(rocket, CTO_NAME))
+    return bool(get_rocketchat_personal_chat_history(rocket, CTO_NAME))
 
 
 def grade_checkpoint3():
-    chat_with_sde = get_chat_history(rocket, SDE_NAME, content_only=False)
-    chat_with_cto = get_chat_history(rocket, CTO_NAME, content_only=False)
+    chat_with_sde = get_rocketchat_personal_chat_history(rocket, SDE_NAME, content_only=False)
+    chat_with_cto = get_rocketchat_personal_chat_history(rocket, CTO_NAME, content_only=False)
     try:
         # check whether the first message sent to CTO is at least 10 minutes after the first message sent to SDE
         logging.info(f"First message sent to SDE: {chat_with_sde[0]['ts']}")

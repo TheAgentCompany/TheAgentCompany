@@ -3,7 +3,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 from common import create_rocketchat_client
-from common import get_chat_history
+from common import get_rocketchat_personal_chat_history
 from common import evaluate_chat_history_with_llm
 
 # Initialize RocketChat client
@@ -17,7 +17,7 @@ def grade_checkpoints(trajectory=""):
     performance_evaluatee = "Liu Qiang"
 
     for npc in npcs:
-        chat_history = get_chat_history(rocket, npc)
+        chat_history = get_rocketchat_personal_chat_history(rocket, npc)
         checkpoints.append(Checkpoint(1, int(len(chat_history) > 0)))
 
     passed = evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance")
