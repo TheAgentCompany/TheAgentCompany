@@ -79,7 +79,6 @@ def grade_checkpoint3():
         for line in f:
             line=line.strip()
             if line == new_line:
-                logging.warning("")
                 return True
     logging.warning(f"Did not find the modified target line")
     return False
