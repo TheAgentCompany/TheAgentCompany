@@ -27,7 +27,6 @@ def read_excel(filename):
 
 
 def parse_department_data(filename):
-    # Initialize the data structure
     data = {
         "Department": [],
         "Name": []
