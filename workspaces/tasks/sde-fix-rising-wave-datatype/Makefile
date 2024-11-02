@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-fix-risingwave-datatype-image
-CONTAINER_NAME=sde-fix-risingwave-datatype
+IMAGE_NAME=sde-fix-rising-wave-datatype-image
+CONTAINER_NAME=sde-fix-rising-wave-datatype
 
 .PHONY: build run stop
 
