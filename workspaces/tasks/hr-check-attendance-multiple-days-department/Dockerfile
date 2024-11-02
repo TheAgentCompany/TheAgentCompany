@@ -6,5 +6,3 @@ RUN pip install openpyxl==3.1.5
 
 COPY april-attendance-data.csv /utils
 COPY department.txt /utils
-COPY department-april-attendance.xlsx /workspace
-COPY trajectory.txt /workspace
