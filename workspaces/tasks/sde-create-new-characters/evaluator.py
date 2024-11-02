@@ -1,8 +1,5 @@
-import requests
 import logging
 import os
-import sys
-from rocketchat_API.rocketchat import RocketChat # type: ignore
 import subprocess
 from sotopia.database import AgentProfile
 
