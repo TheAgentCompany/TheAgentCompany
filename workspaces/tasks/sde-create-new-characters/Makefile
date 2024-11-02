@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-sotopia-create-new-characters-image
-CONTAINER_NAME=sde-sotopia-create-new-characters
+IMAGE_NAME=sde-create-new-characters-image
+CONTAINER_NAME=sde-create-new-characters
 
 .PHONY: build run stop
 
