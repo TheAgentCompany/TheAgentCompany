@@ -10,7 +10,7 @@ rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1():
-    # [3pts] Check if the correct PR number (#8676) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the file `/workspace/related_pr.txt`.
+    # [3pts] Check if the correct PR number (#8676) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the chat with Chen Xinyi.
 
     try:
         get_correct_pr = evaluate_chat_history_with_llm(
