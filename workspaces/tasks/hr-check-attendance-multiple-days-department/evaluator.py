@@ -33,7 +33,6 @@ def parse_department_data(filename):
     }
 
     with open(filename, "r") as f:
-        # Parse the input text
         for line in f.readlines():
             line = line.strip().strip('\n')
             department, names = line.split(':')
