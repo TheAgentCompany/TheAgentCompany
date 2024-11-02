@@ -120,7 +120,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(grade_checkpoint5(project_id))))
 
     return result
-
-
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
