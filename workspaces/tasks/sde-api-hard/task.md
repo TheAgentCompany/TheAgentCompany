@@ -1,0 +1,3 @@
+You want to get the brief instruction of the issues and do some filtering, so first you need to find the related api interface in Plane (http://the-agent-company.com:8091).
+To be more specific, you want to get the latest 10 issues in the issue list sorted by the due date in a specific workspace (let's say `tac`), what api should you request and what are the parameters.
+Try to find the api by looking at the network request, then find out the api url as well as the required parameters (assume cursor set to 10:0:0). Write the full url (include the parameter for GET) to `/workspace/url_for_issues.txt`
