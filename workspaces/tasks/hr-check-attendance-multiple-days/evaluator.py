@@ -89,7 +89,7 @@ def grade_checkpoint2():
         return False
     try:
         df = standardize_df(pd.read_excel("/workspace/april-attendance.xlsx"))
-        return set(df.columns).issubset(set(["name", "averageworklength", "on-timedeparturecount", "latearrivalcount"]))
+        return set(df.columns).issuperset(set(["name", "averageworklength", "on-timedeparturecount", "latearrivalcount"]))
     except Exception:
         return False
 
