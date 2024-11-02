@@ -12,8 +12,8 @@ def checkpoint2(trajectory):
     return "http://the-agent-company.com:3000/home" in trajectory
 
 def checkpoint3():
-    msgs_1 = get_chat_history(rocket, username='mike_chen')
-    msgs_2 = get_chat_history(rocket, username='wang_fang')
+    msgs_1 = get_rocketchat_personal_chat_history(rocket, username='mike_chen')
+    msgs_2 = get_rocketchat_personal_chat_history(rocket, username='wang_fang')
     return bool(msgs_1) and bool(msgs_2)
 
 def checkpoint4():

@@ -57,7 +57,7 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str, content_only: bool = True):
+def get_rocketchat_personal_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
@@ -88,6 +88,42 @@ def get_chat_history(rocket_client, username: str, content_only: bool = True):
     return history
 
 
+def get_rocketchat_channel_history(rocket_client, channel):
+    """
+    Retrieve the message history of a specific public channel from the RocketChat server.
+
+    Parameters:
+        rocket_client: The RocketChat client instance, authenticated and connected to the server.
+        channel (str): The name of the channel to retrieve messages from.
+
+    Returns:
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
+
+    Example:
+        >>> messages = get_rocketchat_channel_history(rocket_client, "general")
+        >>> for message in messages:
+        >>>     print(message["msg"])
+    """
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        logging.warning("Failed to retrieve message history.")
+        return []
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        logging.warning("No messages found.")
+        return []
+
+    return messages
 
 def get_rocketchat_channel_room_id(rocket_client, channel_name):
     """Get the room_id for a specific channel."""
@@ -181,7 +217,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
@@ -386,6 +422,21 @@ def get_plane_issue_details(project_id, issue_name):
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
         return None
+    
+def get_plane_cycle_details(project_id, cycle_name):
+    """Get details of a specific cycle in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        cycles = response.json().get('results', [])
+        for cycle in cycles:
+            if cycle.get('name') == cycle_name:
+                return cycle
+        logging.info(f"Cycle with name '{cycle_name}' not found.")
+    except requests.RequestException as e:
+        logging.warning(f"Get cycle detail failed: {e}")
+        return None
 
 def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
     """
@@ -445,3 +496,25 @@ def get_plane_state_details(project_id, state_id):
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
     return dict()
+
+def create_plane_issue(project_id, issue_name):
+    """ Create an issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"name": issue_name})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Create issue failed: {e}")
+        return None
+    
+def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
+    """ Add an issue to a cycle."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"issues": [issue_id]})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Add issue to cycle failed: {e}")
+        return None
