@@ -7,16 +7,17 @@ Clone the sotopia repo from gitlab. (i.e., `git clone http://the-agent-company.c
 
 ## Checkpoint 2 (1pt)
 
-Create a new branch called `feature/nonVerbalAgent` in the local sotopia repo following the contribution guidelines in the docs.
+Create a new branch called `feature/actionAgent` in the local sotopia repo following the contribution guidelines in the docs.
 
-## Checkpoint 3 (1pt)
+## Checkpoint 3 (2pt)
 
-Write python code to create a new agent called `NonVerbalAgent` that can only issue non-verbal communication in the `sotopia/agents/llm_agent.py` file.
-(Ensure that the new agent class `NonVerbalAgent` inherits from `LLMAgent` and includes the keyword "NonVerbalAgent". We will only perform a basic sanity test to verify this.)
+Write python code to create a new agent called `ActionAgent` that can only issue action commands in the `sotopia/agents/llm_agent.py` file.
+(Ensure that the new agent class `ActionAgent` inherits from `LLMAgent` and includes the keyword "ActionAgent". We will only perform a basic sanity test to verify this.)
 
-## Checkpoint 4 (3pt)
-First login the gitlab with the following username and password:
+## Checkpoint 4 (1pt)
 
-Commit the change to the gitlab
+Make sure the new branch pass the mypy check.
 
-Merge request
+## Checkpoint 5 (1pt)
+
+Push the change to the gitlab and make a pull request
