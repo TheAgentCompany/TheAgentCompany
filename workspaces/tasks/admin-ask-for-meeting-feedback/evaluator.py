@@ -3,13 +3,13 @@ import pandas as pd
 
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
 rocket = create_rocketchat_client()
 
 
 def grade_checkpoint1():
-    chat = get_chat_history(rocket, "Huang Jie")
+    chat = get_rocketchat_personal_chat_history(rocket, "Huang Jie")
     return len(chat) > 0
 
 
