@@ -83,11 +83,11 @@ def grade_checkpoints(trajectory="") -> Result:
     passed_checkpoint1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
 
-    # Checkpoint 2: NonVerbalAgent class implemented
+    # Checkpoint 2: medical_characters.jsonl is present
     passed_checkpoint2 = passed_checkpoint1 and grade_checkpoint2()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
-    # Checkpoint 3: Merge request created
+    # Checkpoint 3: Gender parity check passed
     passed_checkpoint3 = passed_checkpoint2 and grade_checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed_checkpoint3)))
 
