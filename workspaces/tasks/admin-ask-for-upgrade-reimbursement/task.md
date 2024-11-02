@@ -1,2 +1,2 @@
 Send the expenses record in 'https://ogma.lti.cs.cmu.edu/apps/files/files/1435?dir=/Documents/Financials&openfile=true' to Chen Xinyi (on http://the-agent-company.com:3000/) to request for reimbursement. 
-If Chen refuses to reimbuse it because it's beyond the deadline, talk to CTO Sarah Johnson: about the procedure of the bill beyond the deadline, and ask if it can be reimbursed by half of the total expenses.
+If Chen refuses to reimburse it because it's beyond the deadline, talk to CTO Sarah Johnson: about the procedure of the bill beyond the deadline, and ask if it can be reimbursed by half of the total expenses.

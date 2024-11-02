@@ -22,7 +22,7 @@ def grade_checkpoints(trajectory=""):
     if mentioned_price:
         score = 2
     if not mentioned_price:
-        fuzzy_mention = evaluate_with_llm(str(chat_history), "Can I reimburse for half of the price of the bill, which is $365?")
+        fuzzy_mention = evaluate_with_llm(str(chat_history), "someone asks if they can get reimbursed for half of the bill, which is $365")
         score = int(fuzzy_mention)
     checkpoints.append(Checkpoint(2, score))    
 
