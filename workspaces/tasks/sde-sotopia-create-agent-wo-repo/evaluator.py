@@ -2,7 +2,6 @@ import requests
 import logging
 import os
 import sys
-from rocketchat_API.rocketchat import RocketChat # type: ignore
 import subprocess
 
 from typing import List
@@ -59,12 +58,6 @@ def grade_checkpoint3():
 
 def grade_checkpoint4():
     try:
-        # Install mypy first
-        install_result = subprocess.run(['pip', 'install', 'mypy'], capture_output=True, text=True)
-        if install_result.returncode != 0:
-            logging.error(f"Failed to install mypy:\n{install_result.stdout}\n{install_result.stderr}")
-            return False
-
         # Run mypy check
         result = subprocess.run(['mypy', '/workspace/sotopia/sotopia/agents/llm_agent.py'], capture_output=True, text=True)
         if result.returncode == 0:

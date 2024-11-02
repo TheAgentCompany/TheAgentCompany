@@ -1,2 +1,2 @@
 FROM base-image
-COPY llm_agent.py /utils
+RUN pip install mypy==1.13.0
