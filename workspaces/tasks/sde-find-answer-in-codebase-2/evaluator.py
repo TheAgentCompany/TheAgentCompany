@@ -2,7 +2,7 @@ import logging
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, evaluate_chat_history_with_llm
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
 
 # Create RocketChat instance
@@ -13,11 +13,8 @@ def grade_checkpoint1():
     # [3pts] Check if the correct PR number (#9711) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the chat with Chen Xinyi.
 
     try:
-        get_correct_pr = evaluate_chat_history_with_llm(
-            rocket_client=rocket,
-            username="Chen Xinyi",
-            predicate="the examinee mentioned the correct PR number (9711) in the chat with Chen Xinyi (only mentioning 9711 is enough)",
-        )
+        messages = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
+        get_correct_pr = ("9711" in str(messages).lower())
 
         if not get_correct_pr:
             logging.error(f"The examinee does not mention the correct PR number")
