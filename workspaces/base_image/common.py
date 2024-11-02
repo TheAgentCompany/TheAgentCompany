@@ -97,32 +97,31 @@ def get_rocketchat_channel_history(rocket_client, channel):
         channel (str): The name of the channel to retrieve messages from.
 
     Returns:
-        list: A list of messages from the specified channel. If no messages are found, returns None.
-              If an error occurs in retrieving the channel info or message history, also returns None.
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
 
     Example:
         >>> messages = get_rocketchat_channel_history(rocket_client, "general")
-        >>> if messages:
-        >>>     for message in messages:
-        >>>         print(message["msg"])
+        >>> for message in messages:
+        >>>     print(message["msg"])
     """
     response = rocket_client.channels_info(channel=channel).json()
     if not response.get('success'):
-        print(f"Failed to retrieve {channel} channel info.")
-        return None
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
 
     room_id = response['channel']['_id']
 
     response = rocket_client.channels_history(room_id=room_id).json()
     if not response.get('success'):
-        print("Failed to retrieve message history.")
-        return None
+        logging.warning("Failed to retrieve message history.")
+        return []
 
     messages = response.get('messages', [])
 
     if not messages:
-        print("No messages found.")
-        return None
+        logging.warning("No messages found.")
+        return []
 
     return messages
 
