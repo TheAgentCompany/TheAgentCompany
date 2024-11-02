@@ -1,4 +1,4 @@
-Your task is to migrate the Sotopia repository's dependency management system from poetry (https://python-poetry.org/) to UV (https://github.com/astral-sh/uv).
+Your task is to migrate the Sotopia (on GitLab) repository's dependency management system from poetry (https://python-poetry.org/) to UV (https://github.com/astral-sh/uv).
 
 This involves:
 1. Updating all GitHub workflow files to use UV instead of poetry for dependency management
