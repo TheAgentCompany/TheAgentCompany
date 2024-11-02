@@ -11,7 +11,7 @@ from common import *
 
 def grade_checkpoint1():
     try:
-        result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/actionAgent'], capture_output=True, text=True)
+        result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/dev-container'], capture_output=True, text=True)
         if 'feature/dev-container' in result.stdout:
             logging.info("Branch 'feature/dev-container' exists in the local repository.")
             return True

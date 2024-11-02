@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 6 points in total.
+This task has 7 points in total.
 
 ## Checkpoint 1 (1pt)
 Clone the repo (i.e., `git clone http://the-agent-company.com:8929/root/sotopia.git`), and create a new branch `feature/dev-container`
