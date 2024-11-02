@@ -14,9 +14,9 @@ TARGET_FILE = "src/meta/src/controller/utils.rs"
 
 ############################# helper functions #####################################
 
-def merge_request_exists(project_id, merge_request_title):
+def open_merge_request_exists(project_id, merge_request_title):
     merge_request = get_gitlab_merge_request_by_title(project_id, merge_request_title) if project_id else None
-    return merge_request is not None
+    return merge_request is not None and merge_request['state'] == 'opened'
 
 def get_merge_request_file_changes(project_id, merge_request):
     merge_request_diffs = make_gitlab_request(project_id,f"merge_requests/{merge_request['iid']}/diffs") if merge_request is not None and 'iid' in merge_request else None
@@ -48,6 +48,7 @@ def get_merge_request_file_changes(project_id, merge_request):
                     file_change['deleted'].append(content)
         file_changes.append(file_change)
     return file_changes
+
 
 ############################# grade checkpoints #####################################
 
@@ -85,7 +86,7 @@ def grade_checkpoint3():
 
 
 def grade_checkpoint4(project_id):
-    return merge_request_exists(project_id, "fix(meta): fix vnode count data type when querying system table rw_fragments")
+    return open_merge_request_exists(project_id, "fix(meta): fix vnode count data type when querying system table rw_fragments")
 
 def grade_checkpoint5(project_id):
     merge_request = get_gitlab_merge_request_by_title(project_id,"fix(meta): fix vnode count data type when querying system table rw_fragments") if project_id else None

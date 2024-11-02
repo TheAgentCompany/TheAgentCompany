@@ -18,8 +18,9 @@ The modified target line "pub vnode_count: i32," should exist.
 
 ## Checkpoint 4 (1pt)
 
-Merge request with the title "fix(meta): fix vnode count data type when querying system table rw_fragments" should exist.
+Open merge request with the title "fix(meta): fix vnode count data type when querying system table rw_fragments" should exist.
 
 ## Checkpoint 5 (1pt)
 
 Merge request should have the correct file changes.
+
