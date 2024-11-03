@@ -90,6 +90,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
 
     TODO: right now we assume all login actions succeed. We need to add some sanity
     checks to ensure that login is successful.
+
+    TODO: we only need login actions for dependencies of the task.
     """
     nextcloud_password = get_nextcloud_password()
 
@@ -162,6 +164,16 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
         "bash /utils/init.sh"
+    )
+    action = CmdRunAction(command=command)
+    logger.info(action, extra={'msg_type': 'ACTION'})
+    obs = runtime.run_action(action)
+    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+    assert obs.exit_code == 0
+
+    # TODO (boxuanli): remove this once reset is called by init.sh
+    command = (
+        "bash /utils/reset.sh"
     )
     action = CmdRunAction(command=command)
     logger.info(action, extra={'msg_type': 'ACTION'})
