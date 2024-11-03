@@ -13,7 +13,7 @@ total_wait=0
 reset_services=()
 
 # Check for each service using grep
-if grep -q "rocketchat" dependencies.yml; then
+if grep -q "rocketchat" /utils/dependencies.yml; then
     echo "Resetting rocketchat..."
     curl -X POST "http://the-agent-company.com:2999/api/reset-rocketchat"
     reset_services+=("rocketchat")
@@ -22,7 +22,7 @@ if grep -q "rocketchat" dependencies.yml; then
     fi
 fi
 
-if grep -q "plane" dependencies.yml; then
+if grep -q "plane" /utils/dependencies.yml; then
     echo "Resetting plane..."
     curl -X POST "http://the-agent-company.com:2999/api/reset-plane"
     reset_services+=("plane")
@@ -31,7 +31,7 @@ if grep -q "plane" dependencies.yml; then
     fi
 fi
 
-if grep -q "gitlab" dependencies.yml; then
+if grep -q "gitlab" /utils/dependencies.yml; then
     echo "Resetting gitlab..."
     curl -X POST "http://the-agent-company.com:2999/api/reset-gitlab"
     reset_services+=("gitlab")
@@ -40,7 +40,7 @@ if grep -q "gitlab" dependencies.yml; then
     fi
 fi
 
-if grep -q "nextcloud" dependencies.yml; then
+if grep -q "nextcloud" /utils/dependencies.yml; then
     echo "Resetting nextcloud..."
     curl -X POST "http://the-agent-company.com:2999/api/reset-nextcloud"
     reset_services+=("nextcloud")
