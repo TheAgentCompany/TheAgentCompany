@@ -10,7 +10,7 @@ from common import *
 
 def grade_checkpoint1():
     try:
-        result = subprocess.run(['curl', '-I', 'https://nextcloud.example.com/s/your-file-link'], capture_output=True, text=True)
+        result = subprocess.run(['curl', '-I', 'https://ogma.lti.cs.cmu.edu/apps/files/files/1555?dir=/Documents/Data%20Analysis&openfile=true'], capture_output=True, text=True)
         if result.returncode == 0:
             logging.info("Agent visited the file link on NextCloud.")
             return True
