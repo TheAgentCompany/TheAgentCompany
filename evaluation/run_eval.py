@@ -106,6 +106,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         'fill("57", "theagentcompany")',
         'click("60")',
         # after login, a popup asking to change hostname appears. We need to click on cancel button.
+        # TODO: this sometimes fails, seems bid is not deterministic
         'click("219")',
     ]
 
@@ -116,15 +117,13 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         'click("98")',
     ]
 
+    # TODO: this sometimes fails, seems bid for plane login is not deterministic
     plane_login_actions = [
         'goto("http://the-agent-company.com:8091")',
         'noop(5000)', 
         'fill("65", "agent@company.com")',
-        'noop(3000)', 
         'click("66")',
-        'noop(3000)', 
         'fill("85", "theagentcompany")',
-        'noop(3000)', 
         'click("92")'
     ]
 
