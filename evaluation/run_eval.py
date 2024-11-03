@@ -28,6 +28,8 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
+        # TODO: make OpenHands support providing trajectories path as a filename,
+        # apart from a directory path
         trajectories_path=outputs_path,
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
@@ -117,13 +119,13 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     plane_login_actions = [
         'goto("http://the-agent-company.com:8091")',
         'noop(5000)', 
-        'fill("67", "agent@company.com")',
+        'fill("65", "agent@company.com")',
         'noop(3000)', 
-        'click("68")',
+        'click("66")',
         'noop(3000)', 
-        'fill("87", "theagentcompany")',
+        'fill("85", "theagentcompany")',
         'noop(3000)', 
-        'click("94")'
+        'click("92")'
     ]
 
     all_login_actions = [
@@ -230,7 +232,7 @@ if __name__ == '__main__':
         raise ValueError(f'Could not find LLM config: --llm_config {args.llm_config}')
 
     logger.info(f"Task image name is {args.task_image_name}")
-    config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.trajectories_path), llm_config)
+    config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.outputs_path), llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
 
@@ -241,7 +243,7 @@ if __name__ == '__main__':
     state = run_solver(runtime, args.task_image_name, config)
 
     # this path is the absolute path in the runtime container
-    trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
+    trajectory_path = f'/outputs/{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
     run_evaluator(runtime, llm_config, trajectory_path, result_path)
