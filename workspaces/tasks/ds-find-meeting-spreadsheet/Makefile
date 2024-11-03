@@ -1,5 +1,5 @@
-IMAGE_NAME=admin-find-meeting-spreadsheet-image
-CONTAINER_NAME=admin-find-meeting-spreadsheet
+IMAGE_NAME=admin-ds-find-meeting-spreadsheet-image
+CONTAINER_NAME=admin-ds-find-meeting-spreadsheet
 
 .PHONY: build run stop attach
 
