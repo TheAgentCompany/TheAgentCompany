@@ -1,8 +1,5 @@
-import requests
 import logging
 import os
-import sys
-import subprocess
 
 from typing import List
 
