@@ -1,5 +1,5 @@
 IMAGE_NAME=pm-copy-plane-issues-to-gitlab-image
-CONTAINER_NAME=pm-copy-plane-issues-to-gitlab-status
+CONTAINER_NAME=pm-copy-plane-issues-to-gitlab
 
 .PHONY: build run stop
 
