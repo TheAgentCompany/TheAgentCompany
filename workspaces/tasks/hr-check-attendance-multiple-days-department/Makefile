@@ -1,5 +1,5 @@
-IMAGE_NAME=admin-qualified-bill-ask-for-reimburse-image
-CONTAINER_NAME=admin-qualified-bill-ask-for-reimburse
+IMAGE_NAME=hr-check-attendance-multiple-days-department-image
+CONTAINER_NAME=hr-check-attendance-multiple-days-department
 
 .PHONY: build run stop
 
