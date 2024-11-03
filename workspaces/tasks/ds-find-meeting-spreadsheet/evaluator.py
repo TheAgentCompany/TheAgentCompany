@@ -1,34 +1,55 @@
-import re
+import requests
 import logging
+import os
+import sys
+import subprocess
 
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import *
 
-def grade_checkpoints(trajectory=""):
+def grade_checkpoint1():
+    try:
+        with open('/workspace/link.txt', 'r') as file:
+            link = file.read().strip()
+            if link == "https://ogma.lti.cs.cmu.edu/apps/files/files/1447?dir=/Documents/Data%20Analysis&openfile=true":
+                logging.info("Correct link found in link.txt.")
+                return True
+            else:
+                logging.warning("Incorrect link found in link.txt.")
+                return False
+    except FileNotFoundError:
+        logging.error("File link.txt not found.")
+        return False
+    except Exception as e:
+        logging.error(f"Error occurred while checking link.txt: {e}")
+        return False
+
+def grade_checkpoint2():
+    try:
+        if os.path.isfile('/workspace/Seed Area Estimates.xlsx'):
+            logging.info("File 'Seed Area Estimates.xlsx' successfully downloaded.")
+            return True
+        else:
+            logging.warning("File 'Seed Area Estimates.xlsx' not found.")
+            return False
+    except Exception as e:
+        logging.error(f"Error occurred while checking the file: {e}")
+        return False
+
+
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    total_score = 2
-    try:
-        with open('/workspace/ans.txt', 'r') as file:
-            content = file.read().strip()
-            
-            # Use regex to find all numbers in the content
-            numbers = re.findall(r'\b\d+\b', content)
-            
-            # Check if there's exactly one number
-            if len(numbers) != 1:
-                checkpoints.append(Checkpoint(total_score, 0))
-            else:
-                number = int(numbers[0])
-                if number == 4:
-                    checkpoints.append(Checkpoint(total_score, 2))
-                else:
-                    checkpoints.append(Checkpoint(total_score, 0))
-    except FileNotFoundError:
-        logging.warning('/workspace/ans.txt is not found')
-        checkpoints.append(Checkpoint(total_score, 0))
+    # Checkpoint 1: Clone the repository
+    passed_checkpoint1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
+
+    # Checkpoint 2: create branch
+    passed_checkpoint2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     return result
 
