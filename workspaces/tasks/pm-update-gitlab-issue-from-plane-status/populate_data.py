@@ -1,6 +1,6 @@
 import logging
 from config import GITLAB_USER
-from common import create_plane_issue, get_plane_issue_details, get_plane_cycle_details, add_plane_issue_to_cycle, get_plane_project_id, make_gitlab_request, update_plane_issue_details, get_plane_state
+from common import get_plane_project_id, make_gitlab_request
 
 GITLAB_PROJECT_PATH=f"{GITLAB_USER}/openhands"
 
