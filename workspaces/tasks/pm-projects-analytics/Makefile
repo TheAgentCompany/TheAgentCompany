@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-sprint-analytics-image
-CONTAINER_NAME=pm-sprint-analytics
+IMAGE_NAME=pm-projects-analytics-image
+CONTAINER_NAME=pm-projects-analytics
 
 .PHONY: build run stop
 
