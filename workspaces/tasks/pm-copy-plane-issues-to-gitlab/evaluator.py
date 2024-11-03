@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import get_plane_issue_details, get_plane_state_details, get_plane_issues_by_project_cycle, get_plane_cycle_details, get_plane_project_id, make_gitlab_request
+from common import get_plane_project_id, make_gitlab_request
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1
@@ -52,10 +52,10 @@ def grade_checkpoints(trajectory="") -> Result:
     passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(CHECKPOINT_1_POINTS, CHECKPOINT_1_POINTS * int(passed1)))
 
-    passed2 = grade_checkpoint2(trajectory)
+    passed2 = grade_checkpoint2()
     checkpoints.append(Checkpoint(CHECKPOINT_2_POINTS, CHECKPOINT_2_POINTS * int(passed2)))
 
-    passed3 = grade_checkpoint3(trajectory)
+    passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(CHECKPOINT_3_POINTS, CHECKPOINT_3_POINTS * int(passed3)))
 
     passed4 = grade_checkpoint4()
