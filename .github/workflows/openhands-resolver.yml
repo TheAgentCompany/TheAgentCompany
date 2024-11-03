@@ -10,7 +10,7 @@ jobs:
     if: github.event.label.name == 'fix-me'
     with:
       issue_number: ${{ github.event.issue.number }}
-      max-iterations: 300
+      max_iterations: 300
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
