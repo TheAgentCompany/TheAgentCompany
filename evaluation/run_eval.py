@@ -1,7 +1,8 @@
 import asyncio
 import os
 import base64
-
+import requests
+import json
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -44,7 +45,39 @@ def get_config(
     return config
 
 
+def get_nextcloud_password():
+    """
+    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
+    
+    Returns:
+        str: The NEXTCLOUD_PASSWORD value
+    
+    Raises:
+        requests.RequestException: If API call fails
+        KeyError: If NEXTCLOUD_PASSWORD is not in response
+        json.JSONDecodeError: If response is not valid JSON
+    """
+    url = "http://the-agent-company.com:2999/api/nextcloud-config"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an exception for bad status codes
+        
+        data = response.json()
+        return data["NEXTCLOUD_PASSWORD"]
+        
+    except requests.RequestException as e:
+        print(f"Error making API request: {e}")
+        raise
+    except (KeyError, json.JSONDecodeError) as e:
+        print(f"Error processing response: {e}")
+        raise
+
+
+
 def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
+    nextcloud_password = get_nextcloud_password()
+
     rocketchat_login_actions = [
         'goto("http://the-agent-company.com:3000/")',
         'noop(5000)',
