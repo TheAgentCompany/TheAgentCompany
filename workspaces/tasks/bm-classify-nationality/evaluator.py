@@ -1,7 +1,4 @@
-import os
-
 from typing import List
-
 import pandas as pd
 from common import get_rocketchat_personal_chat_history, create_rocketchat_client
 from scoring import Result, Checkpoint, bonus_for_completing_final
