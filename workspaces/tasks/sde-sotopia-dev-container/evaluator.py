@@ -81,7 +81,7 @@ def grade_checkpoint5():
         else:
             logging.warning(f"Unexpected status code: {response.status_code}")
             return False
-    except requests.RequestException as e:
+    except Exception as e:
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
