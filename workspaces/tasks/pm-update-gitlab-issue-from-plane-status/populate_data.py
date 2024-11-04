@@ -9,17 +9,6 @@ PLANE_PROJECT_ID = get_plane_project_id(PLANE_PROJECT_NAME)
 ISSUE_1 = "Model: recall rate is 0"
 ISSUE_2 = "Model: security problem"
 
-############################# Logging Setup #####################################  
-# Set up logging
-logging.basicConfig(level=logging.INFO,    
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.StreamHandler()  # Log messages to the console
-    ])
-logger = logging.getLogger("Functionality Test")
-
-############################# Utility Functions ##################################### 
 
 def create_issues_in_gitlab():
     issue1_exists = False
