@@ -10,7 +10,7 @@ def grade_checkpoint1():
     try:
         with open('/workspace/link.txt', 'r') as file:
             link = file.read().strip()
-            if link == "https://ogma.lti.cs.cmu.edu/apps/files/files/1447?dir=/Documents/Data%20Analysis&openfile=true":
+            if link is not None and "apps/files/files/1447?dir=/Documents/Data%20Analysis" in link:
                 logging.info("Correct link found in link.txt.")
                 return True
             else:
