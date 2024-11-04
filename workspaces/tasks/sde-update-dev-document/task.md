@@ -1,4 +1,4 @@
-Go to Gitlab at http://the-agent-company.com:8929/ and clone project sotopia. Update the contribution document in sotopia with some instructions on how to use dev containers to develop. Be sure to include 3 subtitles in your update in the doc:
+Go to Gitlab at http://the-agent-company.com:8929/ and clone project sotopia to /workspace directory. Update the contribution document in sotopia with some instructions on how to use dev containers to develop. Be sure to include 3 subtitles in your update in the doc:
 - Using vscode
 - Other ides or editors
 - Without dev containers
