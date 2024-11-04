@@ -57,7 +57,7 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str, content_only: bool = True):
+def get_rocketchat_personal_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
@@ -88,6 +88,42 @@ def get_chat_history(rocket_client, username: str, content_only: bool = True):
     return history
 
 
+def get_rocketchat_channel_history(rocket_client, channel):
+    """
+    Retrieve the message history of a specific public channel from the RocketChat server.
+
+    Parameters:
+        rocket_client: The RocketChat client instance, authenticated and connected to the server.
+        channel (str): The name of the channel to retrieve messages from.
+
+    Returns:
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
+
+    Example:
+        >>> messages = get_rocketchat_channel_history(rocket_client, "general")
+        >>> for message in messages:
+        >>>     print(message["msg"])
+    """
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        logging.warning("Failed to retrieve message history.")
+        return []
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        logging.warning("No messages found.")
+        return []
+
+    return messages
 
 def get_rocketchat_channel_room_id(rocket_client, channel_name):
     """Get the room_id for a specific channel."""
@@ -181,7 +217,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
@@ -210,6 +246,53 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         logging.error(f"GitLab API request failed: {e}")
         return None
 
+def get_gitlab_project_id(project_name:str):
+    """
+    Get project ID for gitlab project
+
+    Args:
+        project_name: The name of the project
+
+    Returns:
+        str: The ID of the project
+
+    """
+    projects = make_gitlab_request(None,"projects")
+    if not projects:
+        logging.warning(f"No gitlab projects found")
+        return None
+    else:
+        projects = projects.json()
+    target_projects = [project['id'] for project in projects if project['name']==project_name]
+    if len(target_projects) == 0:
+        logging.warning(f"No gitlab projects found for project name {project_name}")
+        return None
+    else:
+        return str(target_projects[0])
+
+def get_gitlab_merge_request_by_title(project_id:str, merge_request_title:str):
+    """
+    Get merge request by title
+
+    Args:
+        project_id: The ID of the project
+        merge_request_title: The title of the merge request
+
+    Returns:
+        dict: The merge request object
+    """
+    merge_requests = make_gitlab_request(project_id,"merge_requests")
+    if not merge_requests:
+        logging.warning(f"No gitlab merge requests found")
+        return None
+    else:
+        merge_requests = merge_requests.json()
+    target_merge_requests = [merge_request for merge_request in merge_requests if merge_request['title'].strip().lower()==merge_request_title.strip().lower()]
+    if len(target_merge_requests) == 0:
+        logging.warning(f"No gitlab merge requests found for title {merge_request_title}")
+        return None
+    else:
+        return target_merge_requests[0]
 
 def get_nextcloud_url_in_file(filename: str):
     try:
@@ -273,7 +356,8 @@ PROJECT_FILES = {
     'openhands': '.openhands_instructions',
     'janusgraph': '.backportrc.json',
     'colly': 'xmlelement_test.go',
-    'streamlit': '.ruff.toml'
+    'streamlit': '.ruff.toml',
+    'risingwave': 'risedev.yml'
 }
 
 def check_repo_exists(project_name: str):
