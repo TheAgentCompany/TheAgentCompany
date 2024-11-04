@@ -8,6 +8,10 @@ from datetime import datetime
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+
+# Create RocketChat instance
+rocket = create_rocketchat_client()
 
 def check_excel_file_exists(file_path):
     abs_path = os.path.abspath(file_path)
@@ -125,11 +129,18 @@ def standardize_df(df):
 
 
 def grade_checkpoint1(trajectory):
-    urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "/apps/files/files/1242?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance"]
     return all(url in trajectory for url in urls)
 
 
 def grade_checkpoint2():
+    chat_history1 = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
+    chat_history2 = get_rocketchat_personal_chat_history(rocket, "David Wong")
+    chat_history3 = get_rocketchat_personal_chat_history(rocket, "Mark Johnson")
+    return len(chat_history1) > 0 and len(chat_history2) > 0 and len(chat_history3) > 0
+
+
+def grade_checkpoint3():
     if not check_excel_file_exists("/workspace/department-april-attendance.xlsx"):
         return False
     try:
@@ -139,7 +150,7 @@ def grade_checkpoint2():
         return False
 
 
-def grade_checkpoint3():
+def grade_checkpoint4():
     agent_output = standardize_df(read_excel("/workspace/department-april-attendance.xlsx"))
 
     department_df = parse_department_data('/utils/department.txt')
@@ -161,4 +172,5 @@ def grade_checkpoints(trajectory=""):
     checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
     checkpoints.append(Checkpoint(1, grade_checkpoint2()))
     checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint4()))
     return result
