@@ -3,7 +3,7 @@ import pptx
 import requests
 from typing import List
 from common import create_rocketchat_client
-from common import get_chat_history
+from common import get_rocketchat_personal_chat_history
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 # Initialize RocketChat client
@@ -77,7 +77,7 @@ def grade_content():
     return passed3, passed4, passed5
         
 def grade_checkpoint6():
-    chat_history = get_chat_history(rocket, "Huang Jie")
+    chat_history = get_rocketchat_personal_chat_history(rocket, "Huang Jie")
     return '/workspace/openhands_intro.pptx' in ' '.join(chat_history)
 
 
