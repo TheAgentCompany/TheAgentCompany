@@ -1,5 +1,5 @@
-IMAGE_NAME=admin-nonqualified-bill-ask-for-reimburse-image
-CONTAINER_NAME=admin-nonqualified-bill-ask-for-reimburse
+IMAGE_NAME=sde-find-answer-in-codebase-3-image
+CONTAINER_NAME=sde-find-answer-in-codebase-3
 
 .PHONY: build run stop
 

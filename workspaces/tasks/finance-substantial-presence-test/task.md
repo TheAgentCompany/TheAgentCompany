@@ -1,0 +1,5 @@
+As a financial consultant, one of your daily tasks is to help our employees with their adhoc tax questions.
+
+Huang Jie, your coworker who is a foreigner working in the US, is not sure if they need to report their income as tax resident or non-resident. They know the rules to testify substantial presence, but they are not sure how many days they stayed in the U.S. in 2023. Under /workspace folder, you could find their travel history in 2023. Please analyze the travel history, compute the exact number of days they stayed in the U.S. in 2023. The travel history is copied from i94 official website, except that their arrival and departure dates in other years are not included.
+
+Please reach out to Huang on RocketChat (http://the-agent-company.com:3000/) and tell them the answer. Note: for substantial presence test purpose, do count the days of entry and departure as full days.

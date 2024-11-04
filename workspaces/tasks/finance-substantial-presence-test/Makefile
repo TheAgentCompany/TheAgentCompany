@@ -1,5 +1,5 @@
-IMAGE_NAME=admin-qualified-bill-ask-for-reimburse-image
-CONTAINER_NAME=admin-qualified-bill-ask-for-reimburse
+IMAGE_NAME=finance-substantial-presence-test-image
+CONTAINER_NAME=finance-substantial-presence-test
 
 .PHONY: build run stop
 
@@ -12,3 +12,6 @@ run:
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
+
+attach:
+	docker exec -it $(CONTAINER_NAME) /bin/bash
