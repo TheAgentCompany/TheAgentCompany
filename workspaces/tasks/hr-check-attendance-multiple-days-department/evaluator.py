@@ -68,8 +68,8 @@ def analyze_csv(filename):
 
         # Calculate work length in hours
         def work_length(row):
-            clock_in = pd.Timestamp.combine(pd.Timestamp.today(), row['Clock-in'])
-            clock_out = pd.Timestamp.combine(pd.Timestamp.today(), row['Clock-out'])
+            clock_in = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-in'])
+            clock_out = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-out'])
             return (clock_out - clock_in).seconds / 3600
 
         start_time = datetime.strptime("17:30", "%H:%M").time()

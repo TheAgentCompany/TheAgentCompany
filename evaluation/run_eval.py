@@ -1,7 +1,8 @@
 import asyncio
 import os
 import base64
-
+import requests
+import json
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -44,7 +45,59 @@ def get_config(
     return config
 
 
+def get_nextcloud_password():
+    """
+    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
+
+    TODO: this is a temporary solution. Once #169 is solved,
+    we should be able to use a hard-coded password to avoid
+    this extra API call.
+    
+    Returns:
+        str: The NEXTCLOUD_PASSWORD value
+    
+    Raises:
+        requests.RequestException: If API call fails
+        KeyError: If NEXTCLOUD_PASSWORD is not in response
+        json.JSONDecodeError: If response is not valid JSON
+    """
+    url = "http://the-agent-company.com:2999/api/nextcloud-config"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an exception for bad status codes
+        
+        data = response.json()
+        return data["NEXTCLOUD_PASSWORD"]
+        
+    except requests.RequestException as e:
+        print(f"Error making API request: {e}")
+        raise
+    except (KeyError, json.JSONDecodeError) as e:
+        print(f"Error processing response: {e}")
+        raise
+
+
+
 def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
+    """
+    Logs in to all the websites that are needed for the evaluation.
+    Once logged in, the sessions would be cached in the browser, so OpenHands
+    agent doesn't need to log in to these websites again.
+
+    TODO: right now we assume all login actions succeed. We need to add some sanity
+    checks to ensure that login is successful.
+    """
+    nextcloud_password = get_nextcloud_password()
+
+    nextcloud_login_actions = [
+        'goto("https://ogma.lti.cs.cmu.edu")',
+        'noop(5000)',
+        'fill("121", "admin")',
+        f'fill("126", "{nextcloud_password}")',
+        'click("134")'
+    ]
+
     rocketchat_login_actions = [
         'goto("http://the-agent-company.com:3000/")',
         'noop(5000)',
@@ -71,6 +124,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     ]
 
     all_login_actions = [
+        ('nextcloud', nextcloud_login_actions),
         ('rocket_chat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
         ('plane', plane_login_actions),
