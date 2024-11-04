@@ -4,6 +4,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import get_plane_project_id, make_gitlab_request
 from config import GITLAB_USER
+from scoring import bonus_for_completing_final
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 2
@@ -37,7 +38,7 @@ def grade_checkpoint2():
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_final)
 
     passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(CHECKPOINT_1_POINTS, CHECKPOINT_1_POINTS * int(passed1)))
