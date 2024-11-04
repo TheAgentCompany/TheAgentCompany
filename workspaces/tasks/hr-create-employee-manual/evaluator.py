@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import json
 from typing import List
 
-from common import llm_evaluate
+from common import llm_complete
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 NEXTCLOUD_USERNAME = 'admin'
@@ -66,7 +66,7 @@ def grade_checkpoint3():
         messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         # Check result
-        llm_resonse = llm_evaluate(messages)
+        llm_resonse = llm_complete(messages)
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
             score += 1            
