@@ -21,19 +21,22 @@ def grade_checkpoint1(trajectory):
     return url in trajectory
 
 def grade_checkpoint2():
-    points = 0
+    point_1 = False
+    point_2 = False
     issues = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", params={"search": ISSUE_1})
     if issues is not None:
         for issue in issues.json():
             if issue["title"] == ISSUE_1:
-                points += issue["state"] == "opened"
+                if issue["state"] == "opened":
+                    point_1 = True
 
     issues = make_gitlab_request(GITLAB_PROJECT_PATH, "issues", params={"search": ISSUE_2})
     if issues is not None:
         for issue in issues.json():
             if issue["title"] == ISSUE_2:
-                points += issue["state"] == "closed"
-    return points
+                if issue["state"] == "closed":
+                    point_2 = True
+    return point_1 + point_2
 
 
 def grade_checkpoints(trajectory="") -> Result:
@@ -43,6 +46,6 @@ def grade_checkpoints(trajectory="") -> Result:
     passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(CHECKPOINT_1_POINTS, CHECKPOINT_1_POINTS * int(passed1)))
 
-    passed2 = grade_checkpoint2()
-    checkpoints.append(Checkpoint(CHECKPOINT_2_POINTS, passed2))
+    points2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(CHECKPOINT_2_POINTS, points2))
     return result
