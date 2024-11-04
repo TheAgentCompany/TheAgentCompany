@@ -1,7 +1,3 @@
-"""
-Evaluator for the task <Delete all Rocket.Chat channels>
-"""
-
 import os
 import logging
 from typing import List
