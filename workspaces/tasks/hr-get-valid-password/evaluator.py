@@ -27,6 +27,8 @@ def grade_checkpoint3():
     return os.path.exists("/workspace/password.txt")
 
 def grade_checkpoint4():
+    if not os.path.exists("/workspace/password.txt"):
+        return False
     with open("/workspace/password.txt", "r") as f:
         password = f.read().strip()
 
