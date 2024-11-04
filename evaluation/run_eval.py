@@ -120,6 +120,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     ]
 
     # TODO: this sometimes fails, seems bid for plane login is not deterministic
+    # TODO (yufansong): plane reset is not stable, and sometimes it fails to launch
     plane_login_actions = [
         'goto("http://the-agent-company.com:8091")',
         'noop(5000)', 
