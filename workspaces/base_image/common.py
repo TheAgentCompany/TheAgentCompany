@@ -57,11 +57,14 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str):
+def get_rocketchat_personal_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
     2) and the account used to create rocket client instance
+
+    If content_only is True, only return the content of the messages, otherwise return all attributes,
+    including but not limited to message content, timestamp, etc.
 
     Returns the messages as a list. If no history, returns an empty list.
     """
@@ -76,11 +79,81 @@ def get_chat_history(rocket_client, username: str):
         return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    if content_only:
+        reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    else:
+        reversed_history = [] if msgs is None else msgs
     history = reversed_history[::-1]
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+
+def get_rocketchat_channel_history(rocket_client, channel):
+    """
+    Retrieve the message history of a specific public channel from the RocketChat server.
+
+    Parameters:
+        rocket_client: The RocketChat client instance, authenticated and connected to the server.
+        channel (str): The name of the channel to retrieve messages from.
+
+    Returns:
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
+
+    Example:
+        >>> messages = get_rocketchat_channel_history(rocket_client, "general")
+        >>> for message in messages:
+        >>>     print(message["msg"])
+    """
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        logging.warning("Failed to retrieve message history.")
+        return []
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        logging.warning("No messages found.")
+        return []
+
+    return messages
+
+def get_rocketchat_channel_room_id(rocket_client, channel_name):
+    """Get the room_id for a specific channel."""
+    response = rocket_client.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return response['channel']['_id']
+    return None
+
+def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
+    """
+    Check if a message containing specific keywords was posted in the specified channel.
+
+    Args:
+        channel_name (str): Name of the Rocket.Chat channel.
+        keywords (list): List of keywords to check in the message content.
+
+    Returns:
+        bool: True if a message containing all keywords is found, False otherwise.
+    """
+    room_id = get_rocketchat_channel_room_id(rocket_client, channel_name)
+    if not room_id:
+        return False
+    
+    messages = rocket_client.channels_history(room_id=room_id, count=10).json().get('messages', [])
+    for message in messages:
+        message_text = message.get("msg", "").lower()
+        # Check if all keywords are present in the message text
+        if all(keyword.lower() in message_text for keyword in keywords):
+            return True
+    return False
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
@@ -144,7 +217,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
@@ -155,7 +228,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,12 +240,78 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, params=params)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
         return None
 
+def get_gitlab_project_id(project_name:str):
+    """
+    Get project ID for gitlab project
+
+    Args:
+        project_name: The name of the project
+
+    Returns:
+        str: The ID of the project
+
+    """
+    projects = make_gitlab_request(None,"projects")
+    if not projects:
+        logging.warning(f"No gitlab projects found")
+        return None
+    else:
+        projects = projects.json()
+    target_projects = [project['id'] for project in projects if project['name']==project_name]
+    if len(target_projects) == 0:
+        logging.warning(f"No gitlab projects found for project name {project_name}")
+        return None
+    else:
+        return str(target_projects[0])
+
+def get_gitlab_merge_request_by_title(project_id:str, merge_request_title:str):
+    """
+    Get merge request by title
+
+    Args:
+        project_id: The ID of the project
+        merge_request_title: The title of the merge request
+
+    Returns:
+        dict: The merge request object
+    """
+    merge_requests = make_gitlab_request(project_id,"merge_requests")
+    if not merge_requests:
+        logging.warning(f"No gitlab merge requests found")
+        return None
+    else:
+        merge_requests = merge_requests.json()
+    target_merge_requests = [merge_request for merge_request in merge_requests if merge_request['title'].strip().lower()==merge_request_title.strip().lower()]
+    if len(target_merge_requests) == 0:
+        logging.warning(f"No gitlab merge requests found for title {merge_request_title}")
+        return None
+    else:
+        return target_merge_requests[0]
+
+def get_gitlab_file_in_mr(mr: dict, file_path: str) -> str:
+    """
+    Get the content of a file in a merge request.
+
+    Args:
+        mr: The merge request object
+        file_path: The path to the file 
+
+    Returns:
+        str: The content of the file
+    """
+    mr_sha = mr['sha']
+    file_path_in_url = urllib.parse.quote(file_path, safe='')
+    path = f"repository/files/{file_path_in_url}/raw?ref={mr_sha}"
+    resp = make_gitlab_request(str(mr['project_id']), path)
+    if not resp:
+        return None
+    return resp.text
 
 def get_nextcloud_url_in_file(filename: str):
     try:
@@ -231,8 +370,13 @@ def download_nextcloud_content(link: str, output_file_path: str):
     return True
 
 
+# Use the unique file name to check if the repository is cloned correctly.
 PROJECT_FILES = {
     'openhands': '.openhands_instructions',
+    'janusgraph': '.backportrc.json',
+    'colly': 'xmlelement_test.go',
+    'streamlit': '.ruff.toml',
+    'risingwave': 'risedev.yml'
 }
 
 def check_repo_exists(project_name: str):
@@ -288,7 +432,34 @@ def get_plane_project_all_issues(project_id):
         return []
 
 def get_plane_state_id_dict(project_id):
-    """Get the relationship between state and id"""
+    """Get the relationship between state and id.
+
+    Args:
+        project_id: The ID of the project
+
+    Returns:
+        tuple: A tuple containing two dictionaries:
+            - state_map (dict): Mapping of state names to state IDs
+            - id_map (dict): Mapping of state IDs to state names
+
+    Examples:
+        >>> state_map
+        {
+            'Backlog': '9350e0ce-4d64-4ffc-8071-5918a3c3af4f',
+            'Todo': 'a03edcc9-9934-4432-b93a-ab0a33b02964',
+            'In Progress': '4873d638-bb79-48ef-8449-d1b75e0111a3',
+            'Done': '190e69a1-5f7c-465d-a3ad-0fec204fd365',
+            'Cancelled': 'c5ba193b-fab9-475f-bc4d-3161b2a52c70'
+        }
+        >>> id_map
+        {
+            '9350e0ce-4d64-4ffc-8071-5918a3c3af4f': 'Backlog',
+            'a03edcc9-9934-4432-b93a-ab0a33b02964': 'Todo',
+            '4873d638-bb79-48ef-8449-d1b75e0111a3': 'In Progress',
+            '190e69a1-5f7c-465d-a3ad-0fec204fd365': 'Done',
+            'c5ba193b-fab9-475f-bc4d-3161b2a52c70': 'Cancelled'
+        }
+    """
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/"
     id_map = {}
     state_map = {}
@@ -317,4 +488,100 @@ def get_plane_issue_details(project_id, issue_name):
         logging.info(f"Issue with name '{issue_name}' not found.")
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
+        return None
+    
+def get_plane_cycle_details(project_id, cycle_name):
+    """Get details of a specific cycle in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        cycles = response.json().get('results', [])
+        for cycle in cycles:
+            if cycle.get('name') == cycle_name:
+                return cycle
+        logging.info(f"Cycle with name '{cycle_name}' not found.")
+    except requests.RequestException as e:
+        logging.warning(f"Get cycle detail failed: {e}")
+        return None
+
+def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
+    """
+    Get issues for a specific cycle.
+
+    Args:
+        project_id: The ID of the project
+        cycle_id: The ID of the cycle
+
+    Returns:
+        List: A list of issues in the cycle
+    """
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json().get('results', [])
+    except requests.RequestException as e:
+        logging.error(f"Error: {e}")
+    return []
+
+def get_plane_state_details(project_id, state_id):
+    """
+    Get details for a state.
+    
+    Args:
+        project_id: The ID of the project
+        state_id: The ID of the state
+
+    Returns:
+        dict: A status configuration object with the following structure:
+           {
+               "id": str,                # ba9d7f8c-9faf-464e-941e-865cd55f37d9
+               "created_at": str,        # 2024-10-05T20:37:51.143913Z  
+               "updated_at": str,        # 2024-10-05T20:37:51.143929Z
+               "name": str,              # In Progress
+               "description": str,       # ""
+               "color": str,             # #F59E0B
+               "slug": str,              # ""
+               "sequence": float,        # 35000.0
+               "group": str,             # started
+               "is_triage": bool,        # false
+               "default": bool,          # false
+               "external_source": str | None,  # null
+               "external_id": str | None,      # null
+               "created_by": str,        # 666d7509-469c-41ba-8ade-fd5e56bfafa6
+               "updated_by": str | None, # null
+               "project": str,           # ea796314-eeec-41aa-816d-58be13909bf2
+               "workspace": str          # a56ce149-8ef9-4401-8de6-4dac6a21b4b1
+           }
+    """
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/states/{state_id}"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.error(f"Error: {e}")
+    return dict()
+
+def create_plane_issue(project_id, issue_name):
+    """ Create an issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"name": issue_name})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Create issue failed: {e}")
+        return None
+    
+def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
+    """ Add an issue to a cycle."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"issues": [issue_id]})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Add issue to cycle failed: {e}")
         return None

@@ -92,6 +92,8 @@ stop-gitlab:
 
 # rebuild destroys the gitlab image and start from scratch
 # useful when you have new data to bake into the image
+# Note: this will take at least 10 hours to build since we have quite a few
+# large repositories to bake into the image
 rebuild-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
@@ -103,7 +105,7 @@ rebuild-gitlab: init
 	else \
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
-	@echo "start gitlab from clean state..."
+	@echo "rebuild gitlab from clean state..."
 	docker compose build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again

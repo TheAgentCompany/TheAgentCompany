@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 import astor
 import re
 from typing import List
-import json
+
 
 from scoring import Result, Checkpoint
 from common import *
@@ -261,5 +261,4 @@ def grade_checkpoints(trajectory="") -> Result:
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

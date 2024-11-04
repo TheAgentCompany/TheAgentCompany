@@ -1,0 +1,11 @@
+# New Task Creation Instructions
+
+If your job is to create a new task,
+
+1. read `README.md` and other linked files to get a better idea of this repo and the repository structure
+2. look through the `TheAgentCompany/workspaces/tasks directory` and find another task that is similar to the one you want to create. read the files in the directory as a reference
+3. create a new directory in the `TheAgentCompany/workspaces/tasks` directory, appropriately named for your new task
+4. from the task description provided to you, write out `task.md`, `checkpoints.md` within this directory
+5. implement all the other necessary files, following the example of another similar task (or tasks)
+6. take a look at the .github/workflows directory, and check to see if the workflows will pass given the new files you implemented
+7. finally, double-check the format of all the files in the new directory to make sure that they are similar to other similar tasks

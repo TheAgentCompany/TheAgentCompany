@@ -2,7 +2,7 @@ import requests
 import logging
 from bs4 import BeautifulSoup
 from typing import List
-import json
+
 
 from common import create_rocketchat_client
 from scoring import Result, Checkpoint, bonus_for_completing_any
@@ -93,5 +93,4 @@ def grade_checkpoints(trajectory="") -> Result:
 
     return result
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

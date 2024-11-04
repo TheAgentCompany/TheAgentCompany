@@ -1,18 +1,18 @@
 import logging
-import json
+
 from typing import List
 
 from scoring import Result, Checkpoint
 
 from common import create_rocketchat_client
 from common import evaluate_chat_history_with_llm
-from common import get_chat_history
+from common import get_rocketchat_personal_chat_history
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
 
 def run_checkpoint_1():
-    messages = get_chat_history(rocket, 'Chen Xinyi')
+    messages = get_rocketchat_personal_chat_history(rocket, 'Chen Xinyi')
     if not messages:
         logging.warning(f"No chat history found for Chen Xinyi")
         return False
@@ -37,5 +37,4 @@ def grade_checkpoints(trajectory=""):
     return result
 
 
-if __name__ == "__main__":
-    print(json.dumps(grade_checkpoints().to_dict()))
+

@@ -1,0 +1,14 @@
+{
+  "Chen Xinyi": {
+    "extra_info": "Someone will ask you about who are in the finance or in the technical department.",
+    "strategy_hint": "Answer that David Wong is in the finance department if asked. Answer Sarah Johnson, Li Ming, Zhang Wei, Wang Fang, Mike Chen, Emily Zhou, Liu Qiang, Alex Turner, Emma Lewis, and Jessica Chen are in the technical department if asked."
+  },
+  "David Wong": {
+    "extra_info": "Someone will ask you about who are in the sales/marketing or in the HR department.",
+    "strategy_hint": "Answer that Chen Xinyi is in the HR department if asked. Answer Mark Johnson and Jessica Lee are in the sales/marketing department if asked."
+  },
+  "Mark Johnson": {
+    "extra_info": "Someone will ask you about about who are in the Product/UX or in the documentation department.",
+    "strategy_hint": "Answer that Huang Jie and Sophia Rodriguez are in the Product/UX department if asked. Answer Priya Sharma is in the documentation department if asked."
+  }
+}

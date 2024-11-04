@@ -16,9 +16,57 @@ contain rubrics used for grading.
 Every task folder should have a `checkpoints.md` that documents the checkpoint rubrics.
 
 Every task folder must have an `evaluator.py` that can be run to grade the
-examinee's work. It must take exactly one CLI argument that is a path to the
-trajectory file. There's no specific format requirement on the trajectory file,
-but it MUST document the necessary steps conducted by the examinee.
+examinee's work. The `evaluator.py` must not have a main function. Instead, it
+must have a `grade_checkpoints` function that returns a `Result` object.
+
+Here's an example, which you can also find in this example task's `evaluator.py`:
+
+```python
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
+
+    passed1 = grade_checkpoint1(trajectory)
+    checkpoints.append(Checkpoint(1, int(passed1)))
+
+    passed2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, int(passed2)))
+
+    passed3 = grade_final_checkpoint()
+    checkpoints.append(Checkpoint(2, 2 * int(passed3)))
+
+    return result
+```
+
+`Result` object contains a list of `Checkpoint` objects, and a strategy to calculate
+total score based on the checkpoint scores. By default, the strategy is to sum up
+all checkpoint scores. However, benchmark developers can customize the formula
+by providing their customized strategy. In `base_image/scoring.py` you can find
+two pre-defined strategies: `bonus_for_completing_any` and `bonus_for_completing_all`.
+
+* `bonus_for_completing_any` awards full credit for the 1st checkpoint if any of the checkpoints is passed. 
+* `bonus_for_completing_all` awards full credit for the entire task if the last checkpoint is passed. 
+
+In the example task, we use the
+`bonus_for_completing_all` strategy, because as long as the examinee has passed
+the final checkpoint, it means they completed the entire task. Those strategies
+are commonly used in tasks where there's more than one approach to complete the
+task, OR when some checkpoints use trajectory file for validation.
+
+
+### Trajectory file
+
+Some tasks require the examinee to conduct a series of steps, but not every step
+can be validated easily. For example, whether the examinee has accessed a web page
+is hard to validate programmatically. In this case, it is okay for benchmark developers
+to validate the trajectory file that documents the steps conducted. For example,
+whether a specific URL appears in the trajectory file.
+
+There's no specific format requirement on the trajectory file,
+but it MUST document the necessary steps conducted by the examinee. A trajectory
+file usually includes the URLs accessed, the commands run, the files modified, etc.
+
+Note: benchmark developers shall use the trajectory file as the last resort.
 
 ## Build time (Dockerfile)
 
