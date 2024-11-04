@@ -3,6 +3,7 @@ import os
 import base64
 import requests
 import json
+from typing import Callable
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -13,7 +14,7 @@ from openhands.core.config import (
 )
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
-from openhands.events.action import CmdRunAction, BrowseInteractiveAction, MessageAction
+from openhands.events.action import Action, CmdRunAction, BrowseInteractiveAction, MessageAction
 from openhands.events.observation import BrowserOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
@@ -177,10 +178,54 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         "bash /utils/reset.sh"
     )
     action = CmdRunAction(command=command)
+    action.timeout = 1000
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
     assert obs.exit_code == 0
+
+
+def codeact_user_response(
+    state: State,
+    encapsulate_solution: bool = False,
+    try_parse: Callable[[Action], str] | None = None,
+) -> str:
+    encaps_str = (
+        (
+            'Please encapsulate your final answer (answer ONLY) within <solution> and </solution>.\n'
+            'For example: The answer to the question is <solution> 42 </solution>.\n'
+        )
+        if encapsulate_solution
+        else ''
+    )
+    msg = (
+        'Please continue working on the task on whatever approach you think is suitable.\n'
+        'If you think you have solved the task, please first send your answer to user through message and then finish the interaction.\n'
+        f'{encaps_str}'
+        'IMPORTANT: YOU SHOULD NEVER ASK FOR HUMAN HELP.\n'
+    )
+
+    if state.history:
+        # check if the last action has an answer, if so, early exit
+        if try_parse is not None:
+            last_action = state.history.get_last_action()
+            ans = try_parse(last_action)
+            if ans is not None:
+                return '/exit'
+
+        # check if the agent has tried to talk to the user 3 times, if so, let the agent know it can give up
+        user_msgs = [
+            event
+            for event in state.history.get_events()
+            if isinstance(event, MessageAction) and event.source == 'user'
+        ]
+        if len(user_msgs) >= 2:
+            # let the agent know that it can give up when it has tried 3 times
+            return (
+                msg
+                + 'If you want to give up, run: <execute_bash> exit </execute_bash>.\n'
+            )
+    return msg
 
 
 def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
@@ -193,6 +238,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
             sid=task_name,
             initial_user_action=MessageAction(content=instruction),
             runtime=runtime,
+            fake_user_response_fn=codeact_user_response,
         )
     )
     logger.info(state)
