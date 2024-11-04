@@ -28,7 +28,7 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Grade checkpoints from trajectory and save results')
     parser.add_argument('--trajectory_path', required=False, default=None, help='Path to the trajectory file')
-    parser.add_argument('--output_path', required=False, default='./output.json', help='Path to save the output JSON')
+    parser.add_argument('--result_path', required=False, default='./result.json', help='Path to save the evaluation result JSON')
 
     # Parse arguments
     args = parser.parse_args()
@@ -52,7 +52,7 @@ def main():
         # Save result to JSON file
         result_json = result.to_dict()
         logging.info(f'result is: {result_json}')
-        with open(args.output_path, 'w') as f:
+        with open(args.result_path, 'w') as f:
             json.dump(result_json, f, indent=4)
             
     except Exception:
