@@ -2,7 +2,8 @@ import os
 import pptx
 import requests
 from typing import List
-from common import create_rocketchat_client, get_chat_history
+from common import create_rocketchat_client
+from common import get_chat_history
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 # Initialize RocketChat client
