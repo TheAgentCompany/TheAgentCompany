@@ -42,7 +42,7 @@ def grade_checkpoint3(text: str):
 def grade_checkpoint4(text: str):
     keywords = [
         "web browsing",
-        "webarena", "mind2web",
+        "webarena", "miniwob",
     ]
     return all([k in text for k in keywords])
 
