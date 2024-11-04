@@ -15,4 +15,4 @@ password.txt file exists.
 
 ## Checkpoint 4 (2pts)
 
-The final password is valid
+The final password is valid.
