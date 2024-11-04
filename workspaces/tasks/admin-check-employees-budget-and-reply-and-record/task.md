@@ -10,4 +10,4 @@
 
 3. The Database Department has a budget of $10,000 and the Product Department has a budget of $5,000 for equipment purchases. Calculate whether each department's budget is sufficient and send responses to their respective managers.
 
-4. Record any changes in their equipment needs and write down /workspace/result.txt. If there are no changes, no recording is needed.
+4. Record any changes in their equipment needs and write down /workspace/result.txt eq someone remove some equipment . If there are no changes, no recording is needed.

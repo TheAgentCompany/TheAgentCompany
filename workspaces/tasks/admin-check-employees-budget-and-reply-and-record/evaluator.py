@@ -1,11 +1,6 @@
-import json
 import logging
-
-# from common import *
-# from scoring import Result, Checkpoint, bonus_for_completing_final
-
-from workspaces.base_image.common import *
-from workspaces.base_image.scoring import Result, Checkpoint, bonus_for_completing_final
+from common import *
+from scoring import Result, Checkpoint, bonus_for_completing_final
 
 from typing import List
 
@@ -15,7 +10,7 @@ rocket = create_rocketchat_client()
 def checkpoint1():
     passed = True
     for name in ['li_ming', 'zhang_wei', 'huang_jie', 'sophia_rodriguez']:
-        passed = passed and bool(get_chat_history(rocket, name))
+        passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
 
@@ -42,14 +37,10 @@ def checkpoint3():
     total cost 1499*3+69*3+99*3=5001
 
     """
-    consume_dict = {
-        "Li Ming": 1195 * 5 + 649 * 5,
-        "Zhang Wei": 899 * 3,
-        "Huang Jie": 1499 * 3 + 69 * 3,
-        "Sophia Rodriguez": 99 * 3
-    }
+    consume_dict = {'Li Ming': 9220, 'Zhang Wei': 2697, 'Huang Jie': 4704, 'Sophia Rodriguez': 297}
+
     for key, value in consume_dict.items():
-        chat_history = get_chat_history(rocket, key)
+        chat_history = get_rocketchat_personal_chat_history(rocket, key)
         if not any(str(value) in chat for chat in chat_history):
             return False
     return True
@@ -64,17 +55,24 @@ def checkpoint4(file_path):
 
     Product:
     total cost 1499*3+69*3+99*3=5001
-    can remove one Wireless Mouse, than total cost 1499*3+69*2+99*3=4932
+    can remove one Wireless Keyboard, than total cost 1499*3+69*2+99*3=4932
 
     """
     if not file_path:
         return False
 
-    with open(file_path, 'r') as f:
-        result = evaluate_with_llm(content=f,
-                                   predicate='remove two Meeting Table and one Standing Desk (Electric Adjustable), remove one Wireless Mouse',
-                                   additional_prompt='')
-        return result == 'yes'
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+
+    except Exception as e:
+        logging.error(f"Error processing file {file_path}: {e}")
+        return False
+
+    return evaluate_with_llm(
+        content=content,
+        predicate='remove two Meeting Tables, remove one Standing Desk (Electric Adjustable), remove one Wireless Keyboard',
+        additional_prompt='')
 
 
 def grade_checkpoints(trajectory=''):
