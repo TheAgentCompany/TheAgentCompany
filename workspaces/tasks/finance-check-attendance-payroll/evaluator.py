@@ -95,8 +95,8 @@ def final_earnings_df(hourly_rate, employee_df):
     return z
 
 def grade_checkpoint1(trajectory):
-    urls = [f"/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "https://ogma.lti.cs.cmu.edu/apps/files/files/1263?dir=/Documents/Human%20Resources%20Team/Attendance&openfile=true"]
-    return any(url in trajectory for url in urls)
+    urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "/apps/files/files/1263?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    return all(url in trajectory for url in urls)
 
 
 def grade_checkpoint2():

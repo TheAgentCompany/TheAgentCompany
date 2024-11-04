@@ -1,5 +1,5 @@
-IMAGE_NAME=hr-check-attendance-payroll-image
-CONTAINER_NAME=hr-check-attendance-payroll
+IMAGE_NAME=finance-check-attendance-payroll-image
+CONTAINER_NAME=finance-check-attendance-payroll
 
 .PHONY: build run stop
 
