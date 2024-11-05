@@ -30,37 +30,39 @@ def grade_checkpoint2() -> bool:
 
 def grade_checkpoint3() -> int:
     """
-    Check if the summary message in Rocket.Chat contains the specific metrics.
-    Award points based on the number of metrics present in the message.
+    Check if the summary messages in Rocket.Chat contain the specific metrics.
+    Award points based on the number of metrics present across messages.
     """
     messages = get_rocketchat_channel_history(rocket, "kudos")
     if not messages:
         return 0  # No points if no messages are found
 
     # Define the expected metrics as text for easier comparison
-    expected_metrics_text = [
-        f"{metric}: {count}" for metric, count in EXPECTED_METRICS.items()
-    ]
+    expected_metrics_text = {
+        f"{metric}: {count}": False for metric, count in EXPECTED_METRICS.items()
+    }
     
     # Check each message to see how many of the expected metrics it contains
     for message in messages:
-        message_text = message.get("msg", "").lower() 
+        message_text = message.get("msg", "").lower()
         
-        # Count the number of metrics found in the message
-        metrics_found = sum(
-            1 for expected_text in expected_metrics_text if expected_text.lower() in message_text
-        )
+        # Update the tracking dictionary for each metric found in the messages
+        for metric_text in expected_metrics_text:
+            if metric_text.lower() in message_text:
+                expected_metrics_text[metric_text] = True
 
-        # Assign points based on the number of metrics found
-        if metrics_found == len(expected_metrics_text):
-            return 3  # Full points if all metrics are present
-        elif metrics_found >= 4:
-            return 2  # Partial points if most metrics are present
-        elif metrics_found >= 2:
-            return 1  # Minimum points if some metrics are present
-    
+    # Count the number of metrics that were found across all messages
+    metrics_found_count = sum(expected_metrics_text.values())
+
+    # Assign points based on the total number of unique metrics found
+    if metrics_found_count == len(expected_metrics_text):
+        return 3  # Full points if all metrics are present across messages
+    elif metrics_found_count >= 4:
+        return 2  # Partial points if most metrics are present
+    elif metrics_found_count >= 2:
+        return 1  # Minimum points if some metrics are present
+
     return 0  # No points if fewer than 2 metrics are present
-
 
 
 def grade_checkpoints(trajectory: str) -> Result:
