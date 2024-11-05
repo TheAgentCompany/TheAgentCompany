@@ -4,7 +4,7 @@ As a project manager for the RisingWave project, you need to update the project 
 
 2. Close the milestone named "Alpha Release" as it has been completed.
 
-3. Create a new milestone named "Beta Release" with a due date of the 15th of next month.
+3. Create a new milestone named "Beta Release".
 
 4. Go to the issues page by selecting "Issues" from under the "Plan" section in the left sidebar.
 
