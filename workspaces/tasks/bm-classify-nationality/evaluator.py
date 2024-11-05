@@ -79,11 +79,9 @@ def evaluate_classifications(df):
     return 0  # No points if accuracy is below 50%
 
 
-
-
 def grade_checkpoint1(trajectory):
     """Check if the 'Customer.xlsx' file on Nextcloud was accessed."""
-    required_url_part = "https://ogma.lti.cs.cmu.edu/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
+    required_url_part = "/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
     return required_url_part in trajectory
 
 def grade_checkpoint2():
@@ -105,13 +103,13 @@ def grade_checkpoint3():
     if not messages:
         return False
 
-    # Check each message to see if it contains all the required keywords
-    for message_text in messages:
-        message_text = message_text.lower()
-        if all(keyword in message_text for keyword in required_keywords):
-            return True
 
-    return False
+    # Join all messages into a single text to allow for distributed keyword search
+    combined_message_text = "\n".join(message.lower() for message in messages)
+
+    # Check if all required keywords are present in the combined text
+    return all(keyword in combined_message_text for keyword in required_keywords)
+
 
 
 def grade_final_checkpoint():
@@ -128,11 +126,12 @@ def grade_final_checkpoint():
     if not messages:
         return 0
 
-    # Check each message to see if it contains both required counts
-    for message_text in messages:
-        message_text = message_text.lower()
-        if all(info in message_text for info in required_info):
-            return 2  # Full points for a complete report
+    # Join all messages into a single text to allow for distributed information search
+    combined_message_text = "\n".join(message.lower() for message in messages)
+
+    # Check if all required information is present in the combined text
+    if all(info in combined_message_text for info in required_info):
+        return 2  # Full points for a complete report
 
     return 0
 
