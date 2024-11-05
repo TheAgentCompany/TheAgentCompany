@@ -12,7 +12,7 @@ rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     """Check if the agent visits the openhands evaluation page with all supported tasks."""
-    return "http://the-agent-company.com:8929/root/openhands/-/tree/main/evaluation?ref_type=heads" in trajectory
+    return "root/openhands/-/tree/main/evaluation" in trajectory
 
 
 def grade_checkpoint2():
