@@ -15,26 +15,14 @@ rocket = create_rocketchat_client()
 ROCKETCHAT_URL = "http://the-agent-company.com:3000/home"
 
 TEAM = ["mark_johnson", "sarah_johnson", "li_ming", "zhang_wei", "mike_chen"]
+VALID_PASSWORDS = ["Fl0w3r#Br1ght", "Tr@ff1cL1ght99", "Dragon2024@Fly", "Cl0ud#Danc3r15", "Sunsh1ne@2024"]
+VALID_PASSWORDS = dict(zip(TEAM, VALID_PASSWORDS))
 NUM_USERS = len(TEAM)
 
-EXPONENTAL_BACKOFF_CONSTANT = 2
+EXPONENTAL_BACKOFF_CONSTANT = 2.25
 
 def is_valid_password(user, password):
-    if not 12 <= len(password) <= 16:
-        return False
-    if not any(c.isupper() for c in password):
-        return False
-    if not any(c.islower() for c in password):
-        return False
-    if not any(c.isdigit() for c in password):
-        return False
-    if not any(c in "!@#$%^&*" for c in password):
-        return False
-    if any(c * 3 in password for c in password):
-        return False
-    if user in password:
-        return False
-    return True
+    return password == VALID_PASSWORDS[user]
 
 def grade_checkpoint1(trajectory):
     return ROCKETCHAT_URL in trajectory
@@ -54,7 +42,8 @@ def grade_checkpoint3():
         return 0
     with open("/workspace/passwords.txt", "r") as f:
         for line in f:
-            user, password = line.strip()
+            items = line.strip().split(": ")
+            user, password = items[0], items[1]
             num_valid_passwords += 0.5 * is_valid_password(user, password)
     return min(num_valid_passwords, NUM_USERS)
 
