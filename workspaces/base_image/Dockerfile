@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y iputils-ping vim
 RUN mkdir -p /utils
 COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
+COPY reset.sh /utils/
+RUN chmod +x /utils/reset.sh
 COPY common.py /utils
 COPY config.py /utils
 COPY scoring.py /utils
