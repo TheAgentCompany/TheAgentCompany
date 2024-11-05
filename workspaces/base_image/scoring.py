@@ -140,7 +140,7 @@ def bonus_for_completing_any_of_given_checkpoints(given_checkpoints):
         any_checkpoint_complete = any(
             cp.result == cp.total for cp in [checkpoints[i - 1] for i in given_checkpoints]
         )
-        
+    
         if any_checkpoint_complete:
             # Award full points for the first checkpoint
             first_checkpoint = checkpoints[0]
