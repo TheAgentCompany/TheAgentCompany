@@ -1,4 +1,4 @@
-IMAGE_NAME=pm-plan-personnel-for-new-project
+IMAGE_NAME=pm-plan-personnel-for-new-project-image
 CONTAINER_NAME=pm-plan-personnel-for-new-project
 
 .PHONY: build run stop
