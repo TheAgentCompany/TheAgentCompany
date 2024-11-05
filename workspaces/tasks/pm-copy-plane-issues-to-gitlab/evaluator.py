@@ -1,15 +1,14 @@
 import json
 from typing import List
 
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_any_of_given_checkpoints
 from common import get_plane_project_id, make_gitlab_request
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 1
 CHECKPOINT_3_POINTS = 1
-CHECKPOINT_4_POINTS = 2
-CHECKPOINT_5_POINTS = 2
+CHECKPOINT_4_POINTS = 1
 
 GITLAB_PROJECT_PATH = f"{GITLAB_USER}/janusgraph"
 
@@ -34,21 +33,18 @@ def grade_checkpoint1(trajectory):
     return url in trajectory
 
 def grade_checkpoint2():
-    return not check_issue_exists_in_gitlab(TODO_ISSUE_1)
+    return not check_issue_exists_in_gitlab(TODO_ISSUE_1) and not check_issue_exists_in_gitlab(TODO_ISSUE_2)
 
 def grade_checkpoint3():
-    return not check_issue_exists_in_gitlab(TODO_ISSUE_2)
-
-def grade_checkpoint4():
     return check_issue_exists_in_gitlab(NEW_ISSUE_1)
 
-def grade_checkpoint5():
+def grade_checkpoint4():
     return check_issue_exists_in_gitlab(NEW_ISSUE_2)
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
-
+    result = Result(checkpoints, bonus_for_completing_any_of_given_checkpoints([3, 4]))
+ 
     passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(CHECKPOINT_1_POINTS, CHECKPOINT_1_POINTS * int(passed1)))
 
@@ -60,8 +56,5 @@ def grade_checkpoints(trajectory="") -> Result:
 
     passed4 = grade_checkpoint4()
     checkpoints.append(Checkpoint(CHECKPOINT_4_POINTS, CHECKPOINT_4_POINTS * int(passed4)))
-
-    passed5 = grade_checkpoint5()
-    checkpoints.append(Checkpoint(CHECKPOINT_5_POINTS, CHECKPOINT_5_POINTS * int(passed5)))
 
     return result
