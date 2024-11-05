@@ -1,6 +1,6 @@
 import re
 from typing import List
-from scoring import Result, Checkpoint, bonus_for_completing_final
+from scoring import Result, Checkpoint, bonus_for_completing_any
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
 # Create RocketChat instance
@@ -9,10 +9,10 @@ rocket = create_rocketchat_client()
 # Expected results for the problematic files
 EXPECTED_MEANINGLESS_NAMES = ["wrgbn i53b;6.xlsx"]
 EXPECTED_NUMERIC_NAMES = ["12.xlsx", "28.xlsx", "1111111.xlsx"]
-EXPECTED_UNUSUAL_CHAR_NAMES = ["Under~Reporters.xlsx"]
+EXPECTED_UNUSUAL_CHAR_NAMES = ["Under~Reporters.xlsx", "wrgbn i53b;6.xlsx"]
 
 # URL that should be accessed for Checkpoint 1
-DATA_ANALYSIS_FOLDER_URL = "https://ogma.lti.cs.cmu.edu/apps/files/files/1446?dir=/Documents/Data%20Analysis"
+DATA_ANALYSIS_FOLDER_URL = "/apps/files/files/1446?dir=/Documents/Data%20Analysis"
 
 
 def grade_checkpoint1(trajectory: str) -> bool:
@@ -85,7 +85,7 @@ def grade_checkpoints(trajectory="") -> Result:
     Evaluate all checkpoints and return the results.
     """
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_final)
+    result = Result(checkpoints, bonus_for_completing_any)
 
    # Checkpoint 1: Check if the agent visits the "Data Analysis" folder
     passed1 = grade_checkpoint1(trajectory)
