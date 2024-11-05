@@ -4,11 +4,11 @@ import os
 import time
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, num_rocketchat_users_contacted
 
 CHECKPOINT_1_POINTS = 1
-CHECKPOINT_2_POINTS = 2.5
-CHECKPOINT_3_POINTS = 2.5
+CHECKPOINT_2_POINTS = 5
+CHECKPOINT_3_POINTS = 5
 
 rocket = create_rocketchat_client()
 
@@ -19,32 +19,27 @@ VALID_PASSWORDS = ["Fl0w3r#Br1ght", "Tr@ff1cL1ght99", "Dragon2024@Fly", "Cl0ud#D
 VALID_PASSWORDS = dict(zip(TEAM, VALID_PASSWORDS))
 NUM_USERS = len(TEAM)
 
-EXPONENTAL_BACKOFF_CONSTANT = 2.25
-
 def is_valid_password(user, password):
-    return password == VALID_PASSWORDS[user]
+    return user in VALID_PASSWORDS and password == VALID_PASSWORDS[user]
 
 def grade_checkpoint1(trajectory):
     return ROCKETCHAT_URL in trajectory
 
 def grade_checkpoint2():
-    users_contacted = 0
-    for idx, user in enumerate(TEAM):
-        time.sleep(EXPONENTAL_BACKOFF_CONSTANT ** idx)
-        chat_history = get_rocketchat_personal_chat_history(rocket, user)
-        users_contacted += 0.5 * (chat_history is not None and len(chat_history) > 0)
-        # have exponential backoff to avoid rate limiting
-    return users_contacted
+    return num_rocketchat_users_contacted(rocket, TEAM)
 
 def grade_checkpoint3():
     num_valid_passwords = 0
     if not os.path.exists("/workspace/passwords.txt"):
         return 0
     with open("/workspace/passwords.txt", "r") as f:
-        for line in f:
+        lines = f.readlines()
+        for line in lines:
             items = line.strip().split(": ")
+            if len(items) != 2:
+                continue
             user, password = items[0], items[1]
-            num_valid_passwords += 0.5 * is_valid_password(user, password)
+            num_valid_passwords += is_valid_password(user, password)
     return min(num_valid_passwords, NUM_USERS)
 
 def grade_checkpoints(trajectory="") -> Result:
