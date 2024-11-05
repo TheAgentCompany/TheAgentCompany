@@ -1,0 +1,10 @@
+{
+  "Chen Xinyi": {
+    "extra_info": "Someone will ask you to send documents for effort, competencies, and salary for people involved in building a web app for Janus Graph.",
+    "strategy_hint": "Answer with providing them the docs"
+  },
+  "Sarah Johnson": {
+    "extra_info": "Someone will message you about a project plan. They will provide a document containing the project plan as well as an expected end month and dollar amount.",
+    "strategy_hint": "Answer with them confirming you have recieved their message"
+  }
+}
