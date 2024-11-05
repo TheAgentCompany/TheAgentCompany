@@ -1,9 +1,5 @@
 # Checkpoints
-This task has 5 points in total.
-
-## Checkpoint 1 (1pt)
-
-Visited RocketChat. (http://the-agent-company.com:3000/home)
+This task has 4 points in total.
 
 ## Checkpoint 2 (1pt)
 
