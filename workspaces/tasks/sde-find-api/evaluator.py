@@ -13,7 +13,7 @@ def grade_checkpoint1():
             url = f.read()
             if not evaluate_with_llm(
                 content=url,
-                predicate="the agent provides a url and the url has the same pattern as `http://the-agent-company:8091/api/workspaces/tac/issues/`",
+                predicate="the agent provides a url and the url has the same pattern as `http://the-agent-company.com:8091/api/workspaces/tac/issues/`",
             ):
                 logging.error(
                     f"The correct url does not exist in the `/workspace/url_for_issues.txt`"
@@ -29,7 +29,7 @@ def grade_checkpoint2():
     # [2pts] Check whether examinee get the correct parameter `order_by=-target_date, per_page=10, cursor=10:0:0`
 
     try:
-        with open("/workspace/parameters.txt", "r") as f:
+        with open("/workspace/url_for_issues.txt", "r") as f:
             parameters = f.read()
             if not evaluate_with_llm(
                 content=parameters,

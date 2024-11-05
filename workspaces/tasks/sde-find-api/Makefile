@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-api-hard-image
-CONTAINER_NAME=sde-api-hard
+IMAGE_NAME=sde-find-api-image
+CONTAINER_NAME=sde-find-api
 
 .PHONY: build run stop
 
