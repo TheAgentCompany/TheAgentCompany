@@ -14,9 +14,7 @@ CHECKPOINT_5_POINTS = 1
 
 PROJECT_NAME = 'risingwave'
 PROJECT_PATH = f"{GITLAB_USER}/{PROJECT_NAME}"
-BASE_URL = "http://the-agent-company.com:8929"
-MILESTONES_URL = f"{BASE_URL}/root/{PROJECT_NAME}/-/milestones"
-ISSUES_URL = f"{BASE_URL}/root/{PROJECT_NAME}/-/issues"
+MILESTONES_URL = f"root/{PROJECT_NAME}/-/milestones"
 ISSUE_1_TITLE = 'Implement stream processing engine'
 ISSUE_2_TITLE = 'Integrate with Kafka'
 
@@ -88,15 +86,15 @@ def grade_checkpoints(trajectory="") -> Result:
     passed2 = grade_checkpoint2()
     checkpoints.append(Checkpoint(CHECKPOINT_2_POINTS, CHECKPOINT_2_POINTS * int(passed2)))
 
-    # Checkpoint 3: Created the "Beta Release" milestone with correct due date
+    # Checkpoint 3: Created the "Beta Release" milestone
     passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(CHECKPOINT_3_POINTS, CHECKPOINT_3_POINTS * int(passed3)))
 
-    # Checkpoint 4: Visited the "Implement stream processing engine" issue
+    # Checkpoint 4: Assigned "Implement stream processing engine" to "Beta Release" milestone 
     passed4 = grade_checkpoint4()
     checkpoints.append(Checkpoint(CHECKPOINT_4_POINTS, CHECKPOINT_4_POINTS * int(passed4)))
 
-    # Checkpoint 5: Visited the "Integrate with Kafka" issue
+    # Checkpoint 5: Assigned "Integrate with Kafka" to "Beta Release" milestone
     passed5 = grade_checkpoint5()
     checkpoints.append(Checkpoint(CHECKPOINT_5_POINTS, CHECKPOINT_5_POINTS * int(passed5)))
 
