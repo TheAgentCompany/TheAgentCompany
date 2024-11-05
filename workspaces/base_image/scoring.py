@@ -123,6 +123,7 @@ def bonus_for_completing_any_of_given_checkpoints(given_checkpoints):
     """
     If the given checkpoints are completed successfully (full score),
     award full points for the 1st checkpoint, regardless of its completion.
+
     The rationale is many tasks check trajectory as part of their 1st checkpoint,
     and the information to look up in the trajectory is necessary for some of the follow-up
     checkpoints to complete. Thus, as long as any of these follow-up tasks completes, the 1st
@@ -132,14 +133,14 @@ def bonus_for_completing_any_of_given_checkpoints(given_checkpoints):
     def scoring_strategy(checkpoints: List[Checkpoint]) -> dict:
         if not checkpoints:
             return {"total": 0, "result": 0}
-
+        
         total = sum(cp.total for cp in checkpoints)
-
+        
         # Check if any of the given checkpoints got full score
         any_checkpoint_complete = any(
             cp.result == cp.total for cp in [checkpoints[i - 1] for i in given_checkpoints]
         )
-
+    
         if any_checkpoint_complete:
             # Award full points for the first checkpoint
             first_checkpoint = checkpoints[0]
@@ -149,7 +150,7 @@ def bonus_for_completing_any_of_given_checkpoints(given_checkpoints):
         else:
             # Normal scoring
             result = sum(cp.result for cp in checkpoints)
-
+        
         return {"total": total, "result": result}
-
+    
     return scoring_strategy
