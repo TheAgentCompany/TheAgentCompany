@@ -21,9 +21,10 @@ def get_channel_room_id(channel_name):
     return None
 
 def check_channel_exists(channel_name):
-    channels = rocket.channels_list().json()
-    channel_names = channels.get("channels")
-    return any(current_channel['name'] == channel_name for current_channel in channel_names)
+    response = rocket.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return True
+    return False
 
 def check_user_added(channel_name, username):
     room_id = get_channel_room_id(channel_name)
