@@ -1,5 +1,3 @@
-import logging
-from datetime import datetime
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_any_of_given_checkpoints

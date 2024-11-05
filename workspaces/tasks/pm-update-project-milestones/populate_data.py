@@ -1,4 +1,3 @@
-import logging
 from config import GITLAB_USER
 from common import make_gitlab_request
 
