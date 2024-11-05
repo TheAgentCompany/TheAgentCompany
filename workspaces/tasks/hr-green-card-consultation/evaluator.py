@@ -27,10 +27,10 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
 
-    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
 
-    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
 
     return result
