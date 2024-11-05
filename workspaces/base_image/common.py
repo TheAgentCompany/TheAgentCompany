@@ -313,6 +313,25 @@ def get_gitlab_merge_request_by_title(project_id:str, merge_request_title:str):
     else:
         return target_merge_requests[0]
 
+def get_gitlab_file_in_mr(mr: dict, file_path: str) -> str:
+    """
+    Get the content of a file in a merge request.
+
+    Args:
+        mr: The merge request object
+        file_path: The path to the file 
+
+    Returns:
+        str: The content of the file
+    """
+    mr_sha = mr['sha']
+    file_path_in_url = urllib.parse.quote(file_path, safe='')
+    path = f"repository/files/{file_path_in_url}/raw?ref={mr_sha}"
+    resp = make_gitlab_request(str(mr['project_id']), path)
+    if not resp:
+        return None
+    return resp.text
+
 def get_nextcloud_url_in_file(filename: str):
     try:
         with open(filename, 'r') as file:
