@@ -26,26 +26,48 @@ def grade_checkpoint2():
 
 
 def grade_checkpoint3():
-    return len(pptx.Presentation(SLIDES_PATH).slides) == 5
+    if not os.path.exists(SLIDES_PATH):
+        return False
+
+    try:
+        slides = pptx.Presentation(SLIDES_PATH).slides
+        return len(slides) == 5
+    except Exception as e:
+        logging.warning(f"Error opening slides: {e}")
+        return False
 
 
 def grade_checkpoint4():
-    presentation = pptx.Presentation(SLIDES_PATH)
-    for slide, name in zip(presentation.slides, LEADERSHIP_NAMES):
-        slide_texts = get_all_texts_from_slide(slide)
-        if name.lower() not in slide_texts:
-            logging.warning(f"Name {name} not found in slide {slide_texts}")
-            return False
+    if not os.path.exists(SLIDES_PATH):
+        return False
+
+    try:
+        slides = pptx.Presentation(SLIDES_PATH).slides
+        for slide, name in zip(slides, LEADERSHIP_NAMES):
+            slide_texts = get_all_texts_from_slide(slide)
+            if name.lower() not in slide_texts:
+                logging.warning(f"Name {name} not found in slide {slide_texts}")
+                return False
+    except Exception as e:
+        logging.warning(f"Error getting slide texts: {e}")
+        return False
     return True
 
 
 def grade_checkpoint5():
-    presentation = pptx.Presentation(SLIDES_PATH)
-    for slide, position in zip(presentation.slides, LEADERSHIP_POSITIONS):
-        slide_texts = get_all_texts_from_slide(slide)
-        if position.lower() not in slide_texts:
-            logging.warning(f"Position {position} not found in slide {slide_texts}")
-            return False
+    if not os.path.exists(SLIDES_PATH):
+        return False
+
+    try:
+        slides = pptx.Presentation(SLIDES_PATH).slides
+        for slide, position in zip(slides, LEADERSHIP_POSITIONS):
+            slide_texts = get_all_texts_from_slide(slide)
+            if position.lower() not in slide_texts:
+                logging.warning(f"Position {position} not found in slide {slide_texts}")
+                return False
+    except Exception as e:
+        logging.warning(f"Error getting slide texts: {e}")
+        return False
     return True
 
 
