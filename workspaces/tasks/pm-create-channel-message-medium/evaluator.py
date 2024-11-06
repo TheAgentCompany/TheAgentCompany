@@ -1,14 +1,10 @@
 import os
+import logging
 
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import get_rocketchat_channel_room_id, check_rocketchat_message_posted,create_rocketchat_client
-
-# Rocket.Chat server URL and admin credentials
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -23,7 +19,7 @@ def check_channel_exists(channel_name):
 def check_user_added(rocket_client, channel_name, username):
     room_id = get_rocketchat_channel_room_id(rocket_client, channel_name)
     if not room_id:
-        print(f"Failed to find room ID for channel #{channel_name}.")
+        logging.warning(f"Failed to find room ID for channel #{channel_name}.")
         return False
     members = rocket.channels_members(channel=channel_name).json()
     users_list = members.get("members")
