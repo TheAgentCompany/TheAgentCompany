@@ -1,5 +1,5 @@
-IMAGE_NAME=ds-find-meeting-spreadsheet-image
-CONTAINER_NAME=ds-find-meeting-spreadsheet
+IMAGE_NAME=ds-calculate-spreadsheet-stats-image
+CONTAINER_NAME=ds-calculate-spreadsheet-stats
 
 .PHONY: build run stop attach
 
