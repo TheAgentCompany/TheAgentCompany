@@ -12,7 +12,7 @@ EXPECTED_NUMERIC_NAMES = ["12.xlsx", "28.xlsx", "1111111.xlsx"]
 EXPECTED_UNUSUAL_CHAR_NAMES = ["Under~Reporters.xlsx", "wrgbn i53b;6.xlsx"]
 
 # URL that should be accessed for Checkpoint 1
-DATA_ANALYSIS_FOLDER_URL = "/apps/files/files/1446?dir=/Documents/Data%20Analysis"
+DATA_ANALYSIS_FOLDER_URL = "/Documents/Data%20Analysis"
 
 
 def grade_checkpoint1(trajectory: str) -> bool:
