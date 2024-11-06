@@ -392,7 +392,7 @@ def check_file_in_nextcloud_directory(file_name, dir_name):
         for response in root.findall(".//{DAV:}response"):
             href = response.find("{DAV:}href").text
             if file_name in href:
-                print(f"File '{file_name}' found.")
+                logging.info(f"File '{file_name}' found.")
                 return True
 
         # If loop completes and file is not found
