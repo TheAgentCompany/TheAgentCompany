@@ -28,18 +28,18 @@ def checkpoint3():
         'mike_chen': 1799
     }
     for key, value in balance_dict.items():
-        chat_history = get_rocketchat_personal_chat_history(rocket, key)
-        if not any(str(value) in chat for chat in chat_history):
+        is_value = evaluate_chat_history_with_llm(rocket, key, value)
+        if not is_value:
               return False
 
     state_dict = {
-        'sophia_rodriguez': 'under budget',
-        'huang_jie': 'under budget',
-        'mike_chen': 'over budget'
+        'Sophia Rodriguez': 'under budget',
+        'Huang Jie': 'under budget',
+        'Mike Chen': 'exceed budget'
     }
     for key, value in state_dict.items():
-        chat_history = evaluate_chat_history_with_llm(rocket, key, value)
-        if not any(str(value) in chat for chat in chat_history):
+        is_value = evaluate_chat_history_with_llm(rocket, key, value)
+        if not is_value:
               return False
 
     return True

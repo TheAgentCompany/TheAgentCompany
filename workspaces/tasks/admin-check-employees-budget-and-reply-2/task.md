@@ -7,6 +7,6 @@
 2. Retrieve equipment prices from Nextcloud at:
    https://ogma.lti.cs.cmu.edu/apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true
 
-3. Request their total budgets and expenses from the first half of this month from Jessica Lee
+3. Request their total budgets and expenses from the first half of this month from Chen Xinyi
 
 4. Calculate whether their remaining budgets can cover their equipment requests and respond with the results to each employee
