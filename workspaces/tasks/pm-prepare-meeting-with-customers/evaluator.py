@@ -78,7 +78,7 @@ def grade_content():
         
 def grade_checkpoint6():
     chat_history = get_rocketchat_personal_chat_history(rocket, "Huang Jie")
-    return '/workspace/openhands_intro.pptx' in ' '.join(chat_history)
+    return 'openhands_intro.pptx' in ' '.join(chat_history)
 
 
 def grade_checkpoints(trajectory="") -> Result:
