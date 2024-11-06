@@ -48,7 +48,7 @@ def grade_checkpoint4():
     for issue in issues_in_cycle:
         if issue["id"] == issue_id:
             return True
-    return 
+    return False
 
     
 def grade_checkpoints(trajectory="") -> Result:
