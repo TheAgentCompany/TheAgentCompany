@@ -52,19 +52,19 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    passed1 = grade_checkpoint1(trajectory)
+    passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, 1 * int(passed1)))
 
     passed2 = grade_checkpoint2()
     checkpoints.append(Checkpoint(1, 1 * int(passed2)))
 
-    passed3 = grade_checkpoint3(trajectory)
+    passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(1, 1 * int(passed3)))
 
     passed4 = grade_checkpoint4()
     checkpoints.append(Checkpoint(1, 1 * int(passed4)))
 
-    passed5 = grade_checkpoint5(trajectory)
+    passed5 = grade_checkpoint5()
     checkpoints.append(Checkpoint(1, 1 * int(passed5)))
 
     passed6 = grade_checkpoint6()
