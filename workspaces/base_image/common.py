@@ -1,3 +1,4 @@
+import base64
 import os
 import logging
 import urllib
@@ -188,20 +189,61 @@ def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
             return True
     return False
 
-def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
+def download_image_from_url(image_url, output_file_path):
+    try:
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            with open(output_file_path, "wb") as file:
+                file.write(response.content)
+            logging.info(f"Image downloaded from {image_url} to {output_file_path}")
+            return output_file_path
+        else:
+            logging.error(f"Failed to download image from {image_url}: {response}")
+            return None
+    except Exception as e:
+        logging.error(f"Failed to download image from {image_url}: {e}")
+        return None
+
+def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None):
     """
     Evaluates if a predicate can be inferred from the content, judged by LLM
     """
-    if not content:
-        logging.warning(f"Content is empty, cannot evaluate")
+    if not content and not image_path:
+        logging.warning(f"Both content and image are empty, cannot evaluate")
         return False
+    elif content and image_path:
+        query = f'Does the content """{content}""" and following picture indicate {predicate}?'
+    elif content:
+        query = f'Does the content """{content}""" indicate {predicate}?'
+    else:
+        query = f'Does the following picture indicate {predicate}?'
+
+    query += f' Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
+    content = [
+        {
+            "type": "text",
+            "text": query
+        }
+    ]
+    if image_path:
+        try:
+            with open(image_path, "rb") as f:
+                base64_image = base64.b64encode(f.read()).decode('utf-8')
+        except Exception as e:
+            logging.error(f"Failed to read image from {image_path}: {e}")
+            return False
+        content.append({
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/jpeg;base64,{base64_image}"
+            }
+        })
 
     try:
         # Construct LLM query
         llm_messages = [{
             "role": "user",
-            "content": f'Does the content """{content}""" indicate {predicate}?'
-                      f'Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
+            "content": content
         }]
 
         # Call LLM for evaluation
