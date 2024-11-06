@@ -1,0 +1,1 @@
+Navigate to NextCloud at https://ogma.lti.cs.cmu.edu/apps/files/files and find "Software Engineer.pdf" under "Documents/Human Resources Team". Use built-in feature in NextCloud to generate QR code and store the picture in "/workspace/qrcode_image.png" in local storage.
