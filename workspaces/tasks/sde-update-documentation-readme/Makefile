@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-update-readme-image
-CONTAINER_NAME=sde-update-readme
+IMAGE_NAME=sde-update-documentation-readme-image
+CONTAINER_NAME=sde-update-documentation-readme
 
 .PHONY: build run stop
 
