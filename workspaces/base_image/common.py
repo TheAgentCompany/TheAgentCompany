@@ -411,8 +411,7 @@ def get_binary_file_content_nextcloud(file_name, dir_name):
     if response.status_code == 200:
         return response.content
     else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
+        logging.error(f"Error: {response.status_code}, {response.text}")
         return None
 
 # Use the unique file name to check if the repository is cloned correctly.
