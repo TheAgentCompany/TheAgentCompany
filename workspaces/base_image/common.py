@@ -396,11 +396,10 @@ def check_file_in_nextcloud_directory(file_name, dir_name):
                 return True
 
         # If loop completes and file is not found
-        print(f"File '{file_name}' not found.")
+        logging.warning(f"File '{file_name}' not found.")
         return False
     else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
+        logging.error(f"Error: {response.status_code}, {response.text}")
         return None
 
 def get_binary_file_content_nextcloud(file_name, dir_name):
