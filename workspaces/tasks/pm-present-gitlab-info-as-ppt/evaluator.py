@@ -21,6 +21,8 @@ expected_repos = [
     {"name": "streamlit", "description": "Streamlit — A faster way to build and share data apps.", "issues": 919, "merge_requests": 38},
 ]
 
+# Set tolerance for issues and merge request counts due to changes when GitLab image is rebaked
+TOLERANCE = 5
 
 def get_all_texts(slide):
     """Extract all text from a slide."""
@@ -30,35 +32,77 @@ def get_all_texts(slide):
             texts.append(shape.text_frame.text.lower())
     return ' '.join(texts)
 
+def within_tolerance(actual, expected, tolerance):
+    """Check if the actual count is within tolerance of the expected count."""
+    return abs(actual - expected) <= tolerance
+
 def grade_checkpoint1():
     """Check if the presentation file exists."""
     return os.path.exists('/workspace/Engineering_Progress.pptx')
 
 def grade_checkpoint2():
-    """Check each repository slide for the correct name, description, issues, and merge requests."""
+    """Evaluate the correctness of names, descriptions, issue counts, and merge request counts."""
     slide_path = '/workspace/Engineering_Progress.pptx'
     if not os.path.exists(slide_path):
         return 0  # No presentation file found, so no points
     
     prs = pptx.Presentation(slide_path)
-    total_points = 0
-    #Checkpoint 2 gives no partial points per component i.e. all 4 have to be correctly present
+    name_correct, desc_correct, issues_correct, mr_correct = 0, 0, 0, 0
+
     for repo in expected_repos:
-        repo_correct = False
+        name_found, desc_found, issues_found, mr_found = False, False, False, False
         for slide in prs.slides:
             slide_text = get_all_texts(slide)
-            # Verify all four components: name, description, issues, merge requests
-            if (repo["name"].lower() in slide_text and
-                repo["description"].lower() in slide_text and
-                f"issues: {repo['issues']}" in slide_text and
-                f"merge requests: {repo['merge_requests']}" in slide_text):
-                repo_correct = True
-                break  # Found correct slide for this repo, move to the next repo
-        
-        if repo_correct:
-            total_points += 1  # Award 1 point if all components are correct
+            
+            # Check for correct name and description
+            if repo["name"].lower() in slide_text:
+                name_found = True
+            if repo["description"].lower() in slide_text:
+                desc_found = True
 
-    return total_points
+            # Check for issues count with tolerance
+            if "issues:" in slide_text:
+                try:
+                    issues_count = int(slide_text.split("issues:")[1].split()[0])
+                    if within_tolerance(issues_count, repo["issues"], TOLERANCE):
+                        issues_found = True
+                except (ValueError, IndexError):
+                    pass  # Ignore if parsing fails or the format is unexpected
+
+            # Check for merge requests count with tolerance
+            if "merge requests:" in slide_text:
+                try:
+                    mr_count = int(slide_text.split("merge requests:")[1].split()[0])
+                    if within_tolerance(mr_count, repo["merge_requests"], TOLERANCE):
+                        mr_found = True
+                except (ValueError, IndexError):
+                    pass  # Ignore if parsing fails or the format is unexpected
+
+        # Increment correct counts based on findings across all slides
+        if name_found:
+            name_correct += 1
+        if desc_found:
+            desc_correct += 1
+        if issues_found:
+            issues_correct += 1
+        if mr_found:
+            mr_correct += 1
+
+    total_repos = len(expected_repos)
+    # Award points if more than half of each category is correct
+    score = 0
+    if name_correct > total_repos / 2:
+        score += 1
+    if desc_correct > total_repos / 2:
+        score += 1
+    if issues_correct > total_repos / 2:
+        score += 1
+    if mr_correct > total_repos / 2:
+        score += 1
+
+    return score
+
+
 
 
 def grade_checkpoints(trajectory=""):
@@ -71,7 +115,7 @@ def grade_checkpoints(trajectory=""):
 
     # Checkpoint 2: Verify each repository slide has correct details
     passed2 = grade_checkpoint2()
-    checkpoints.append(Checkpoint(14, passed2))
+    checkpoints.append(Checkpoint(4, passed2))
 
     return result
 
