@@ -37,7 +37,7 @@ def grade_checkpoint3():
         return False
     
     # Read CSV and get unique names
-    df = pd.read_csv('utils/april-attendance-data.csv')
+    df = pd.read_csv('/utils/april-attendance-data.csv')
     expected_members = df['Name'].unique().tolist()
     expected_members = [name.lower() for name in expected_members]
     

@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-monthly-attendance-slide-image
-CONTAINER_NAME=pm-monthly-attendance-slide
+IMAGE_NAME=pm-monthly-attendance-slides-image
+CONTAINER_NAME=pm-monthly-attendance-slides
 
 .PHONY: build run stop
 
