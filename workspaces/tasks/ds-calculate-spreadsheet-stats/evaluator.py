@@ -47,7 +47,7 @@ def grade_checkpoint3():
 def grade_checkpoints(trajectory=""):
     """Evaluate all checkpoints and return the results."""
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_final)
+    result = Result(checkpoints)
 
     # Checkpoint 1: Verify existence of data_stats.py
     passed1 = grade_checkpoint1()

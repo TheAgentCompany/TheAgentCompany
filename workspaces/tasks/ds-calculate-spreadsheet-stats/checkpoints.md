@@ -1,12 +1,12 @@
 # Checkpoints
 
-This task has 3 points in total.
+This task has 5 points in total.
 
 ## Checkpoint 1 (1pts)
 
 Check if "/workspace/data_stats.py" exists
 
-## Checkpoint 2 (1pts)
+## Checkpoint 2 (3pts)
 
 Check if the reported numbers of average row/column counts are correctly reported in rocketchat conversation with Jessica Lee
 
