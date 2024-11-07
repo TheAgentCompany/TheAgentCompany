@@ -648,3 +648,18 @@ def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
     except requests.RequestException as e:
         logging.warning(f"Add issue to cycle failed: {e}")
         return None
+
+
+def get_all_texts_from_slide(slide):
+    """Obtain all text content from the slide."""
+    if slide is None:
+        return ""
+
+    texts = []
+
+    for shape in slide.shapes:
+        if shape.has_text_frame:
+            text = shape.text_frame.text
+            texts.append(text.lower())
+
+    return ' '.join(texts)
