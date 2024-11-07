@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-sprint-analytics-image
-CONTAINER_NAME=pm-sprint-analytics
+IMAGE_NAME=bm-classify-nationality-image
+CONTAINER_NAME=bm-classify-nationality
 
 .PHONY: build run stop
 

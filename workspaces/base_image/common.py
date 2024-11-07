@@ -87,6 +87,25 @@ def get_rocketchat_personal_chat_history(rocket_client, username: str, content_o
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+def num_rocketchat_users_contacted(rocket_client, users):
+    """
+    returns the number of users contacted in the users list
+
+    Args:
+        rocket_client: RocketChat client instance
+        users: List of usernames to check
+
+    Returns:
+        int: Number of users contacted
+    """
+    contacted_users = 0
+    user_list = rocket_client.users_list().json()
+    for item in user_list['users']:
+        if item.get('username') in users:
+            id = item["_id"]
+            msgs = rocket_client.im_history(room_id=id).json()['messages']
+            contacted_users += msgs is not None and len(msgs) > 0
+    return contacted_users
 
 def get_rocketchat_channel_history(rocket_client, channel):
     """
@@ -585,3 +604,18 @@ def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
     except requests.RequestException as e:
         logging.warning(f"Add issue to cycle failed: {e}")
         return None
+
+
+def get_all_texts_from_slide(slide):
+    """Obtain all text content from the slide."""
+    if slide is None:
+        return ""
+
+    texts = []
+
+    for shape in slide.shapes:
+        if shape.has_text_frame:
+            text = shape.text_frame.text
+            texts.append(text.lower())
+
+    return ' '.join(texts)
