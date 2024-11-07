@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-update-readme-image
-CONTAINER_NAME=sde-update-readme
+IMAGE_NAME=sde-change-doublequotes-image
+CONTAINER_NAME=sde-change-doublequotes
 
 .PHONY: build run stop
 
