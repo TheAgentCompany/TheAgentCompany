@@ -1,8 +1,7 @@
 import os
 import pptx
-import requests
 from typing import List
-from common import create_rocketchat_client
+from common import create_rocketchat_client, get_all_texts_from_slide
 from common import get_rocketchat_personal_chat_history
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
@@ -17,18 +16,6 @@ def grade_checkpoint1(trajectory):
 
 def grade_checkpoint2():
     return os.path.exists('/workspace/openhands_intro.pptx')
-
-
-def get_all_texts(slide):
-    """Obtain all text content from the slide."""
-    texts = []
-    
-    for shape in slide.shapes:
-        if shape.has_text_frame:
-            text = shape.text_frame.text
-            texts.append(text.lower())
-    
-    return ' '.join(texts)
 
 
 def grade_checkpoint3(text: str):
@@ -63,7 +50,7 @@ def grade_content():
     se, web, misc = "", "", ""
     prs = pptx.Presentation(slide_path)
     for slide in prs.slides:
-        slide_texts = get_all_texts(slide)
+        slide_texts = get_all_texts_from_slide(slide)
         if "software engineer" in slide_texts:
             se += slide_texts
         elif "web browsing" in slide_texts:
