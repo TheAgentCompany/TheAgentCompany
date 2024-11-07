@@ -1,6 +1,5 @@
 import os
 import pptx
-import requests
 from typing import List
 from common import create_rocketchat_client
 from common import get_rocketchat_personal_chat_history
@@ -54,8 +53,7 @@ def grade_checkpoint3():
     
     if not attendance_slide_text:
         return False
-
-    # Check if each member's attendance record is present in the format "name: 10 times"
+    # Reference solution showed attendance of 10 times for all members
     return all(f"{member}: 10 times" in attendance_slide_text.lower() for member in expected_members)
 
 def grade_checkpoint4():
