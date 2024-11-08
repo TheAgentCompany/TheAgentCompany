@@ -33,6 +33,17 @@ for task_dir in *; do
     echo "Error: Dockerfile in $task_dir does not contain 'FROM base-image'"
     exit 1
   fi
+  # we don't allow CMD or ENTRYPOINT in task Dockerfiles, because OpenHands, or any other
+  # agent might need to build their custom images on top of the task image, and override
+  # the default CMD or ENTRYPOINT
+  if grep -q "^[[:space:]]*CMD" "Dockerfile"; then
+    echo "Error: Dockerfile in $task_dir contains CMD instruction which is not allowed"
+    exit 1
+  fi
+  if grep -q "^[[:space:]]*ENTRYPOINT" "Dockerfile"; then
+    echo "Error: Dockerfile in $task_dir contains ENTRYPOINT instruction which is not allowed"
+    exit 1
+  fi
 
   # 4. Check Makefile structure
   if [ ! -f "Makefile" ]; then
