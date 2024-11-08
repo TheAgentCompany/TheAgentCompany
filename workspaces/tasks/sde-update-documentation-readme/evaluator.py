@@ -108,5 +108,3 @@ def grade_checkpoints(trajectory="") -> Result:
 
     return Result(checkpoints)
 
-result = grade_checkpoints("FAKE")
-print(result)
