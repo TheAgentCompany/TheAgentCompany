@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-sql-exercise-image
-CONTAINER_NAME=sde-sql-exercise
+IMAGE_NAME=ds-sql-exercise-image
+CONTAINER_NAME=ds-sql-exercise
 
 .PHONY: build run stop
 
