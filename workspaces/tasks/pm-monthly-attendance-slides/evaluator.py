@@ -1,8 +1,11 @@
 import os
 import pptx
 from typing import List
-from common import create_rocketchat_client
-from common import get_rocketchat_personal_chat_history
+from common import (
+    create_rocketchat_client,
+    get_rocketchat_personal_chat_history,
+    get_all_texts_from_slide
+)
 from scoring import Result, Checkpoint, bonus_for_completing_any
 import pandas as pd
 
@@ -12,7 +15,7 @@ rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
     """Check if the 'april-attendance-data.xlsx' file on Nextcloud was accessed."""
-    required_url_part = "apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance&openfile=true"
+    required_url_part = "/Documents/Human%20Resources%20Team/Attendance"
     return required_url_part in trajectory
 
 
@@ -20,14 +23,6 @@ def grade_checkpoint2():
     """Check if the attendance slide exists at the specified path."""
     return os.path.exists('/workspace/April Attendance.pptx')
 
-def get_all_texts(slide):
-    """Obtain all text content from the slide."""
-    texts = []
-    for shape in slide.shapes:
-        if shape.has_text_frame:
-            text = shape.text_frame.text
-            texts.append(text.lower())
-    return ' '.join(texts)
 
 def grade_checkpoint3():
     """Check if the slide contains attendance records for everyone."""
@@ -46,7 +41,7 @@ def grade_checkpoint3():
     
     # Find the slide titled 'April Attendance'
     for slide in prs.slides:
-        slide_text = get_all_texts(slide)
+        slide_text = get_all_texts_from_slide(slide)
         if 'april attendance' in slide_text.lower():
             attendance_slide_text = slide_text
             break
