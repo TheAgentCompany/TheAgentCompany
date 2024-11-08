@@ -23,9 +23,9 @@ def checkpoint3():
     mike_chen:  $1,799
     """
     balance_dict = {
-        'sophia_rodriguez': 168,
-        'huang_jie': 899,
-        'mike_chen': 1799
+        'Sophia Rodriguez': 168,
+        'Huang Jie': 899,
+        'Mike Chen': 1799
     }
     for key, value in balance_dict.items():
         is_value = evaluate_chat_history_with_llm(rocket, key, value)
