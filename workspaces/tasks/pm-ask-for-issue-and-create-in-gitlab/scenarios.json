@@ -1,0 +1,10 @@
+{
+    "Li Ming": {
+      "extra_info": "Someone will ask for an issue to create and the milestone to assign it to in GitLab",
+      "strategy_hint": "The issue you should give is 'Improve Logging for Bulk Request Failures' and the milestone you should give is 'release-1.9'"
+    },
+    "Mike Chen": {
+      "extra_info": "Someone will ask for an issue to create and the milestone to assign it to in GitLab",
+      "strategy_hint": "The issue you should give is 'Improve Logging for Bulk Request Failures' and the milestone you should give is 'release-1.9'"
+    }
+  }
