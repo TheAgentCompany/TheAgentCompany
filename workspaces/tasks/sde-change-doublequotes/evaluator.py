@@ -10,29 +10,6 @@ import re
 from scoring import Result, Checkpoint
 from common import *
 
-
-# Check if OpenHands repo is cloned
-def grade_checkpoint1():
-    openhands_path = '/workspace/openhands'
-    try:
-        # Check if the directory exists
-        if not os.path.isdir(openhands_path):
-            logging.warning("No dir found")
-            return False
-        # Get all files in the directory
-        files = os.listdir(openhands_path)
-        # Check if there's at least one file
-        if not files:
-            logging.warning("No file found")
-            return False
-        instruction_file_name = ".openhands_instructions"
-        instruction_file_path = os.path.join(openhands_path, instruction_file_name)
-
-        return os.path.isfile(instruction_file_path)
-
-    except Exception as e:
-        logging.warning(f"Error in grade_checkpoint1: {e}")
-        return False
     
 def grade_checkpoint2():
     openhands_path = '/workspace/openhands/agenthub/codeact_agent/__init__.py'
