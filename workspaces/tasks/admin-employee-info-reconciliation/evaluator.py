@@ -23,7 +23,7 @@ def load_employees_csv():
 
 
 def grade_checkpoint_1() -> bool:
-    return num_rocketchat_users_contacted(rocket_client, ['Priya Sharma', 'Sophia Rodriguez', 'Zhang Wei']) == 3
+    return num_rocketchat_users_contacted(rocket_client, ['priya_sharma', 'sophia_rodriguez', 'zhang_wei']) == 3
 
 
 def grade_checkpoint_2() -> bool:
