@@ -55,7 +55,7 @@ def grade_checkpoints(trajectory=""):
 
     # Checkpoint 2: Verify reported row/column counts in RocketChat message
     passed2 = grade_checkpoint2()
-    checkpoints.append(Checkpoint(1, int(passed2)))
+    checkpoints.append(Checkpoint(3, 3 * int(passed2)))
 
     # Checkpoint 3: Verify conversation with Jessica Li regarding analysis completion and script path
     passed3 = grade_checkpoint3()
