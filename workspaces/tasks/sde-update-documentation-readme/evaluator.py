@@ -34,18 +34,17 @@ def extract_readme_content():
         return None
 
 
-# check if the README.md contains the expected content
-def check_readme_content1():
+def check_readme_content_repo(repo_name, link):
     content = extract_readme_content()
     if content is None:
         return False
     
-    if 'api-server' not in content or 'http://the-agent-company.com:8929/root/api-server' not in content:
+    if repo_name not in content or link not in content:
         return False
 
     content_exists = evaluate_with_llm(
         content=content,
-        predicate="there should be an api-server repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
+        predicate=f"there should be a {repo_name} repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
         additional_prompt="",
     )
 
@@ -55,235 +54,11 @@ def check_readme_content1():
 
     return True
 
-def check_readme_content2():
+def check_readme_content_contact():
     content = extract_readme_content()
     if content is None:
         return False
-    
-    if 'bustub' not in content or 'http://the-agent-company.com:8929/root/bustub' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a bustub repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content3():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'colly' not in content or 'http://the-agent-company.com:8929/root/colly' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a colly repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-
-def check_readme_content4():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'janusgraph' not in content or 'http://the-agent-company.com:8929/root/janusgraph' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a janusgraph repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content5():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'llama.cpp' not in content or 'http://the-agent-company.com:8929/root/llama.cpp' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a llama.cpp repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-
-def check_readme_content6():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'node-red' not in content or 'http://the-agent-company.com:8929/root/node-red' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a node-red repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-
-def check_readme_content7():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'openhands' not in content or 'http://the-agent-company.com:8929/root/openhands' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a openhands repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content8():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'opensearch' not in content or 'http://the-agent-company.com:8929/root/opensearch' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a opensearch repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content9():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'raft' not in content or 'http://the-agent-company.com:8929/root/raft' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a raft repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content10():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'risingwave' not in content or 'http://the-agent-company.com:8929/root/risingwave' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a risingwave repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content11():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'sotopia' not in content or 'http://the-agent-company.com:8929/root/sotopia' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a sotopia repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-
-def check_readme_content12():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    
-    if 'streamlit' not in content or 'http://the-agent-company.com:8929/root/streamlit' not in content:
-        return False
-
-    content_exists = evaluate_with_llm(
-        content=content,
-        predicate="there should be a streamlit repository link and one-sentence description (if either of the link, title name, or description is missing, this will be false; if all of these exist, this will be true)",
-        additional_prompt="",
-    )
-
-    if not content_exists:
-        logging.warning(f"README.md does not contain the expected content")
-        return False
-
-    return True
-
-def check_readme_content13():
-    content = extract_readme_content()
-    if content is None:
-        return False
-    if 'contact' not in content or 'mikechen@example.com' not in content:
+    if 'mikechen@example.com' not in content:
         return False
     else:
         return True
@@ -292,43 +67,46 @@ def check_readme_content13():
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
 
-    passed1 = check_readme_content1()
+    passed1 = check_readme_content_repo('api-server', 'http://the-agent-company.com:8929/root/api-server')
     checkpoints.append(Checkpoint(1, int(passed1)))
 
-    passed2 = check_readme_content2()
-    checkpoints.append(Checkpoint(2, int(passed2)))
+    passed2 = check_readme_content_repo('bustub', 'http://the-agent-company.com:8929/root/bustub')
+    checkpoints.append(Checkpoint(1, int(passed2)))
 
-    passed3 = check_readme_content3()
-    checkpoints.append(Checkpoint(3, int(passed3)))
+    passed3 = check_readme_content_repo('colly',  'http://the-agent-company.com:8929/root/colly')
+    checkpoints.append(Checkpoint(1, int(passed3)))
 
-    passed4 = check_readme_content4()
-    checkpoints.append(Checkpoint(4, int(passed4)))
+    passed4 = check_readme_content_repo('janusgraph',  'http://the-agent-company.com:8929/root/janusgraph')
+    checkpoints.append(Checkpoint(1, int(passed4)))
 
-    passed5 = check_readme_content5()
-    checkpoints.append(Checkpoint(5, int(passed5)))
+    passed5 = check_readme_content_repo('llama.cpp',  'http://the-agent-company.com:8929/root/llama.cpp')
+    checkpoints.append(Checkpoint(1, int(passed5)))
 
-    passed6 = check_readme_content6()
-    checkpoints.append(Checkpoint(6, int(passed6)))
+    passed6 = check_readme_content_repo('node-red',  'http://the-agent-company.com:8929/root/node-red')
+    checkpoints.append(Checkpoint(1, int(passed6)))
 
-    passed7 = check_readme_content7()
-    checkpoints.append(Checkpoint(7, int(passed7)))
+    passed7 = check_readme_content_repo('openhands',  'http://the-agent-company.com:8929/root/openhands')
+    checkpoints.append(Checkpoint(1, int(passed7)))
 
-    passed8 = check_readme_content8()
-    checkpoints.append(Checkpoint(8, int(passed8)))
+    passed8 = check_readme_content_repo('opensearch',  'http://the-agent-company.com:8929/root/opensearch')
+    checkpoints.append(Checkpoint(1, int(passed8)))
 
-    passed9 = check_readme_content9()
-    checkpoints.append(Checkpoint(9, int(passed9)))
+    passed9 = check_readme_content_repo('raft',  'http://the-agent-company.com:8929/root/raft')
+    checkpoints.append(Checkpoint(1, int(passed9)))
 
-    passed10 = check_readme_content10()
-    checkpoints.append(Checkpoint(10, int(passed10)))
+    passed10 = check_readme_content_repo('risingwave',  'http://the-agent-company.com:8929/root/risingwave')
+    checkpoints.append(Checkpoint(1, int(passed10)))
 
-    passed11 = check_readme_content11()
-    checkpoints.append(Checkpoint(11, int(passed11)))
+    passed11 = check_readme_content_repo('sotopia',  'http://the-agent-company.com:8929/root/sotopia')
+    checkpoints.append(Checkpoint(1, int(passed11)))
 
-    passed12 = check_readme_content12()
-    checkpoints.append(Checkpoint(12, int(passed12)))
+    passed12 = check_readme_content_repo('streamlit',  'http://the-agent-company.com:8929/root/streamlit')
+    checkpoints.append(Checkpoint(1, int(passed12)))
 
-    passed13 = check_readme_content13()
-    checkpoints.append(Checkpoint(13, int(passed13)))
+    passed13 = check_readme_content_contact()
+    checkpoints.append(Checkpoint(1, int(passed13)))
 
     return Result(checkpoints)
+
+result = grade_checkpoints("FAKE")
+print(result)
