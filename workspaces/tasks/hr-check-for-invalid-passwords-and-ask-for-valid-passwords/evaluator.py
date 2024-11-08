@@ -10,6 +10,7 @@ CHECKPOINT_2_POINTS = 2
 rocket = create_rocketchat_client()
 
 USERS_WITH_INVALID_PASSWORDS = ["mark_johnson", "mike_chen"]
+USERS_WITH_VALID_PASSWORDS = ["sarah_johnson", "li_ming", "zhang_wei"]
 VALID_PASSWORDS = {
     "mark_johnson": "Fl0w3r#Br1ght",
     "sarah_johnson": "Tr@ff1cL1ght99",
@@ -23,7 +24,7 @@ def is_valid_password(user, password):
     return user in VALID_PASSWORDS and password == VALID_PASSWORDS[user]
 
 def grade_checkpoint1():
-    return num_rocketchat_users_contacted(rocket, USERS_WITH_INVALID_PASSWORDS) == len(USERS_WITH_INVALID_PASSWORDS)
+    return num_rocketchat_users_contacted(rocket, USERS_WITH_INVALID_PASSWORDS) == len(USERS_WITH_INVALID_PASSWORDS) and num_rocketchat_users_contacted(rocket, USERS_WITH_VALID_PASSWORDS) == 0
 
 def grade_checkpoint2():
     num_valid_passwords = 0

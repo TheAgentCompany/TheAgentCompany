@@ -1,4 +1,4 @@
-You have all of the team's passwords /workspace/passwords.txt. Some of these passwords are incorrect. You have to identify the incorrect passwords and contact the people who provided them using RocketChat to get new valid passwords. You have to update the passwords.txt file with the correct passwords. The final passwords.txt file should contain the correct passwords for all team members. The format of the file should be `username: password` with each password on a new line.
+You have all of the team's passwords /workspace/passwords.txt. Some of these passwords are incorrect. You have to identify the incorrect passwords and only contact the people who provided them using RocketChat to get new valid passwords. You have to update the passwords.txt file with the correct passwords. The final passwords.txt file should contain the correct passwords for all team members. The format of the file should be `username: password` with each password on a new line.
 
 The password rules are as follows:
 1. Length must be between 12-16 characters
