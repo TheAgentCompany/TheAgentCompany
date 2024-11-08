@@ -18,7 +18,7 @@ expected_results = {
 # Read each task's result file
 def read_file_content(task_number):
     try:
-        with open(f'task{task_number}.txt', 'r') as f:
+        with open(f'/workspace/task{task_number}.txt', 'r') as f:
             content = f.read().strip()
         return content
     except Exception as e:

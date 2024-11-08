@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS sales;
 DROP TABLE IF EXISTS products;
 
 CREATE TABLE products (
@@ -33,35 +32,3 @@ INSERT INTO products VALUES
 (18, 'Portable Scanner S2', 179.99, 'Office Equipment', 'Scanners', 70, 'Canon'),
 (19, 'Tablet Pro T1', 899.99, 'Electronics', 'Accessories', 90, 'Dell'),
 (20, 'LED Monitor M3', 399.99, 'Electronics', 'Monitors', 120, 'LG');
-
-CREATE TABLE sales (
-    sale_id INTEGER PRIMARY KEY,      
-    product_id INTEGER,
-    sale_date DATE,                   
-    quantity INTEGER,
-    actual_price REAL,                
-    region TEXT,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
-);
-
-INSERT INTO sales (sale_id, product_id, sale_date, quantity, actual_price, region) VALUES 
-(1, 10, '2024-01-15', 3, 1699.99, 'North'),
-(2, 10, '2024-01-16', 2, 1699.99, 'South'),
-(3, 1, '2024-01-15', 2, 1199.99, 'East'),
-(4, 1, '2024-01-17', 1, 1199.99, 'West'),
-(5, 19, '2024-01-18', 3, 849.99, 'North'),
-(6, 2, '2024-01-19', 2, 479.99, 'South'),
-(7, 11, '2024-01-20', 4, 549.99, 'East'),
-(8, 3, '2024-01-21', 5, 27.99, 'West'),
-(9, 12, '2024-01-22', 3, 119.99, 'North'),
-(10, 20, '2024-01-23', 2, 379.99, 'South'),
-(11, 4, '2024-01-24', 2, 289.99, 'North'),
-(12, 5, '2024-01-25', 1, 679.99, 'South'),
-(13, 6, '2024-01-26', 3, 189.99, 'East'),
-(14, 7, '2024-01-27', 2, 389.99, 'West'),
-(15, 8, '2024-01-28', 1, 879.99, 'North'),
-(16, 9, '2024-01-29', 4, 239.99, 'South'),
-(17, 13, '2024-01-30', 1, 479.99, 'East'),
-(18, 14, '2024-01-31', 2, 959.99, 'West'),
-(19, 15, '2024-02-01', 3, 289.99, 'North'),
-(20, 16, '2024-02-02', 2, 579.99, 'South');
