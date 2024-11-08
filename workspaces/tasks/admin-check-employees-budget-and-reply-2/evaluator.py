@@ -14,7 +14,7 @@ def checkpoint1():
     return passed
 
 def checkpoint2(trajectory):
-    return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist" in trajectory
+    return "dir=/Documents/Administrative%20Specialist" in trajectory
 
 def checkpoint3():
     """
