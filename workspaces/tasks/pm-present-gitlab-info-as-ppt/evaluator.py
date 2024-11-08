@@ -3,6 +3,7 @@ from typing import List
 from config import *
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import pptx
+from common import get_all_texts_from_slide
 
 expected_repos = [
     {"name": "api-server", "description": "", "issues": 0, "merge_requests": 0},
@@ -24,14 +25,6 @@ expected_repos = [
 # Set tolerance for issues and merge request counts due to changes when GitLab image is rebaked
 TOLERANCE = 5
 
-def get_all_texts(slide):
-    """Extract all text from a slide."""
-    texts = []
-    for shape in slide.shapes:
-        if shape.has_text_frame:
-            texts.append(shape.text_frame.text.lower())
-    return ' '.join(texts)
-
 def within_tolerance(actual, expected, tolerance):
     """Check if the actual count is within tolerance of the expected count."""
     return abs(actual - expected) <= tolerance
@@ -52,7 +45,7 @@ def grade_checkpoint2():
     for repo in expected_repos:
         name_found, desc_found, issues_found, mr_found = False, False, False, False
         for slide in prs.slides:
-            slide_text = get_all_texts(slide)
+            slide_text = get_all_texts_from_slide(slide)
             
             # Check for correct name and description
             if repo["name"].lower() in slide_text:
