@@ -11,7 +11,6 @@ from scoring import Result, Checkpoint
 from common import *
 
 
-
 # Check if OpenHands repo is cloned
 def grade_checkpoint1():
     openhands_path = '/workspace/openhands'
@@ -118,7 +117,7 @@ def grade_checkpoint5(trajectory):
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    passed1 = grade_checkpoint1()
+    passed1 = check_repo_exists("openhands")
     checkpoints.append(Checkpoint(1, int(passed1)))
 
     passed2 = grade_checkpoint2()
