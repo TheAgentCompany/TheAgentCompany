@@ -4,8 +4,7 @@
    - Mike Chen
    at http://the-agent-company.com:3000/home
 
-2. Retrieve equipment prices from Nextcloud at:
-   https://ogma.lti.cs.cmu.edu/apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true
+2. Retrieve equipment prices from Nextcloud in /Documents/Administrative%20Specialist/products.pdf
 
 3. Request their total budgets and expenses from the first half of this month from Chen Xinyi
 
