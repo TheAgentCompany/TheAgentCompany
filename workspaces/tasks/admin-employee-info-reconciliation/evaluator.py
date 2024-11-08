@@ -30,35 +30,55 @@ def grade_checkpoint_2() -> bool:
     csv = load_employees_csv()
     if csv is None:
         return False
-    return 'Chen Xinyi' in csv['Name'].values
+
+    try:
+        return 'Chen Xinyi' in csv['name'].values
+    except Exception as e:
+        logging.error(f'Error checking Chen Xinyi: {e}')
+        return False
 
 
 def grade_checkpoint_3() -> bool:
     csv = load_employees_csv()
     if csv is None:
         return False
-    if 'Priya Sharma' not in csv['Name'].values:
+
+    try:
+        if 'Priya Sharma' not in csv['name'].values:
+            return False
+        return csv.loc[csv['name'] == 'Priya Sharma', 'email'].values[0] == 'priyasharma@example.com' and \
+               csv.loc[csv['name'] == 'Priya Sharma', 'phone'].values[0] == '516-837-4592'
+    except Exception as e:
+        logging.error(f'Error checking Priya Sharma: {e}')
         return False
-    return csv.loc[csv['Name'] == 'Priya Sharma', 'Email'].values[0] == 'priyasharma@example.com' and \
-           csv.loc[csv['Name'] == 'Priya Sharma', 'Phone'].values[0] == '516-837-4592'
 
 
 def grade_checkpoint_4() -> bool:
     csv = load_employees_csv()
     if csv is None:
         return False
-    if 'Sophia Rodriguez' not in csv['Name'].values:
+
+    try:
+        if 'Sophia Rodriguez' not in csv['name'].values:
+            return False
+        return csv.loc[csv['name'] == 'Sophia Rodriguez', 'phone'].values[0] == '858-624-7193'
+    except Exception as e:
+        logging.error(f'Error checking Sophia Rodriguez: {e}')
         return False
-    return csv.loc[csv['Name'] == 'Sophia Rodriguez', 'Phone'].values[0] == '858-624-7193'
 
 
 def grade_checkpoint_5() -> bool:
     csv = load_employees_csv()
     if csv is None:
         return False
-    if 'Zhang Wei' not in csv['Name'].values:
+
+    try:
+        if 'Zhang Wei' not in csv['name'].values:
+            return False
+        return csv.loc[csv['name'] == 'Zhang Wei', 'phone'].values[0] == '425-967-3841'
+    except Exception as e:
+        logging.error(f'Error checking Zhang Wei: {e}')
         return False
-    return csv.loc[csv['Name'] == 'Zhang Wei', 'Phone'].values[0] == '425-967-3841'
 
 
 def grade_checkpoints(trajectory=""):
@@ -69,10 +89,10 @@ def grade_checkpoints(trajectory=""):
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_2())))
 
-    checkpoints.append(Checkpoint(3, int(grade_checkpoint_3())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_3())))
 
-    checkpoints.append(Checkpoint(4, int(grade_checkpoint_4())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_4())))
 
-    checkpoints.append(Checkpoint(5, int(grade_checkpoint_5())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_5())))
 
     return result
