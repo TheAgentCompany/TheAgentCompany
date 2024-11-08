@@ -6,9 +6,8 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
 RUN mkdir -p /data
-
 COPY init.sql /data/
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+
+# init the table
+RUN sqlite3 /data/database.db < /data/init.sql
