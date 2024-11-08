@@ -18,9 +18,9 @@ def checkpoint2(trajectory):
 
 def checkpoint3():
     """
-    sophia_rodriguez: $69+$99
-    huang_jie: $899
-    mike_chen:  $1,799
+    Sophia Rodriguez: $69+$99
+    Huang Jie: $899
+    Mike Chen:  $1,799
     """
     balance_dict = {
         'Sophia Rodriguez': 168,
