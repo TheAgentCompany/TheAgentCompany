@@ -3,8 +3,9 @@ import logging
 from typing import List
 import re
 import numpy as np
+from io import BytesIO
 
-from common import check_file_in_nextcloud_directory, download_nextcloud_content
+from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud
 from scoring import Result, Checkpoint, bonus_for_completing_any
 from config import NEXTCLOUD_URL
 
@@ -20,11 +21,17 @@ def grade_checkpoint2():
     if not check_file_in_nextcloud_directory(file_name, dir_name):
         return 0
 
-    if not download_nextcloud_content("{NEXTCLOUD_URL}/apps/files/files/1421?dir=/Documents/Financials/flagged_payments.xlsx", "/workspace/flagged_payments.xlsx"):
+    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    if not content:
         logging.warning("Failed to download content")
         return 0
-    
-    flagged_df = pd.read_excel('/workspace/flagged_payments.xlsx')
+
+    # read content as df
+    try:
+        flagged_df = pd.read_excel(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read flagged_payments.xlsx: {e}")
+        return 0
 
     required_columns = ["Payment_ID", "Issue"]
     if not all(column in flagged_df.columns for column in required_columns):
@@ -44,8 +51,13 @@ def grade_checkpoint2():
         return 1
     
 def grade_checkpoint3():
-    flagged_df = pd.read_excel('/workspace/flagged_payments.xlsx')
-    if flagged_df.empty:
+    file_name = "flagged_payments.xlsx"
+    dir_name = "Documents/Financials"
+    try:
+        content = get_binary_file_content_nextcloud(file_name, dir_name)
+        flagged_df = pd.read_excel(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read flagged_payments.xlsx: {e}")
         return 0
     
     # Load the uploaded Excel files
@@ -138,8 +150,8 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints, bonus_for_completing_any)
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint3())))
 
     return result
 

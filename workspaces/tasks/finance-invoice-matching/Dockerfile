@@ -1,5 +1,7 @@
 FROM base-image
 
-# install libraries needed for evaluation
-COPY invoice.xlsx /utils
+RUN pip install pandas==2.2.3
+RUN pip install openpyxl==3.1.2
+
+COPY invoices.xlsx /utils
 COPY payments.xlsx /utils
