@@ -1,9 +1,5 @@
 import asyncio
 import os
-import base64
-import requests
-import json
-from typing import Callable
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -18,6 +14,8 @@ from openhands.events.action import Action, CmdRunAction, BrowseInteractiveActio
 from openhands.events.observation import BrowserOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
+
+from browsing import pre_login
 
 
 def get_config(
@@ -45,116 +43,6 @@ def get_config(
     )
     config.set_llm_config(llm_config)
     return config
-
-
-def get_nextcloud_password():
-    """
-    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
-
-    TODO: this is a temporary solution. Once #169 is solved,
-    we should be able to use a hard-coded password to avoid
-    this extra API call.
-    
-    Returns:
-        str: The NEXTCLOUD_PASSWORD value
-    
-    Raises:
-        requests.RequestException: If API call fails
-        KeyError: If NEXTCLOUD_PASSWORD is not in response
-        json.JSONDecodeError: If response is not valid JSON
-    """
-    url = "http://the-agent-company.com:2999/api/nextcloud-config"
-    
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an exception for bad status codes
-        
-        data = response.json()
-        return data["NEXTCLOUD_PASSWORD"]
-        
-    except requests.RequestException as e:
-        print(f"Error making API request: {e}")
-        raise
-    except (KeyError, json.JSONDecodeError) as e:
-        print(f"Error processing response: {e}")
-        raise
-
-
-
-def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
-    """
-    Logs in to all the websites that are needed for the evaluation.
-    Once logged in, the sessions would be cached in the browser, so OpenHands
-    agent doesn't need to log in to these websites again.
-
-    TODO: right now we assume all login actions succeed. We need to add some sanity
-    checks to ensure that login is successful.
-
-    TODO: we only need login actions for dependencies of the task.
-    """
-    nextcloud_password = get_nextcloud_password()
-
-    nextcloud_login_actions = [
-        'goto("https://ogma.lti.cs.cmu.edu")',
-        'fill("121", "admin")',
-        f'fill("126", "{nextcloud_password}")',
-        'click("134")'
-    ]
-
-    rocketchat_login_actions = [
-        'goto("http://the-agent-company.com:3000/")',
-        'fill("52", "theagentcompany")',
-        'fill("57", "theagentcompany")',
-        'click("60")',
-        # after login, a popup asking to change hostname appears. We need to click on cancel button.
-        # TODO: this sometimes fails, seems bid is not deterministic
-        'click("219")',
-    ]
-
-    gitlab_login_actions = [
-        'goto("http://the-agent-company.com:8929/users/sign_in")',
-        'fill("78", "root")',
-        'fill("84", "theagentcompany")',
-        'click("98")',
-    ]
-
-    # TODO: this sometimes fails, seems bid for plane login is not deterministic
-    # TODO (yufansong): plane reset is not stable, and sometimes it fails to launch
-    plane_login_actions = [
-        'goto("http://the-agent-company.com:8091")',
-        'noop(5000)', 
-        'fill("65", "agent@company.com")',
-        'click("66")',
-        'fill("85", "theagentcompany")',
-        'click("92")'
-    ]
-
-    all_login_actions = [
-        ('nextcloud', nextcloud_login_actions),
-        ('rocket_chat', rocketchat_login_actions),
-        ('gitlab', gitlab_login_actions),
-        ('plane', plane_login_actions),
-    ]
-
-    for (website_name, login_actions) in all_login_actions:
-        if save_screenshots:
-            directory = os.path.join(screenshots_dir, website_name)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            image_id = 0
-        for instruction in login_actions:
-            action = BrowseInteractiveAction(
-                browser_actions=instruction
-            )
-            action.timeout = 10000
-            logger.info(action, extra={'msg_type': 'ACTION'})
-            obs: BrowserOutputObservation = runtime.run_action(action)
-            logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-            if save_screenshots:
-                image_data = base64.b64decode(obs.screenshot)
-                with open(os.path.join(directory, f'{image_id}.png'), 'wb') as file:
-                    file.write(image_data)
-                    image_id += 1
 
 
 def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
