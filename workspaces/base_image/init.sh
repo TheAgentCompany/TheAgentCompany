@@ -4,9 +4,17 @@ set -e
 ########## PRE INIT PHASE ############
 
 # Use synthetic service hostname, the-agent-company.com in tasks and point it
-# to your real service host
+# to the real service host
 SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu} | grep PING | awk -F'[()]' '{print $2}')
 echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
+
+# Reset services if declared as a dependency
+# TODO: always reset once ready for release
+# For now, only reset if RESET_ENV is set, so that the server doesn't suffer from
+# concurrent reset calls from multiple developers
+if [ -n "$RESET_ENV" ]; then
+    bash /utils/reset.sh
+fi
 
 if [ -f "/utils/pre_init.sh" ]; then
     bash /utils/pre_init.sh

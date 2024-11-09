@@ -50,20 +50,11 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
+        # TODO: remove this once ready for release
+        f"RESET_ENV=true"
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
-    logger.info(action, extra={'msg_type': 'ACTION'})
-    obs = runtime.run_action(action)
-    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-    assert obs.exit_code == 0
-
-    # TODO (boxuanli): remove this once reset is called by init.sh
-    command = (
-        "bash /utils/reset.sh"
-    )
-    action = CmdRunAction(command=command)
-    action.timeout = 1000
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
