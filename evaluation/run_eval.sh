@@ -48,7 +48,7 @@ echo "Outputs path: $OUTPUTS_PATH"
 # Navigate to base image directory and build
 echo "Building base image..."
 cd ../workspaces/base_image
-make build
+# make build
 
 # Navigate to tasks directory
 cd ../tasks
@@ -78,11 +78,6 @@ for task_dir in */; do
     cd ../../../evaluation
     # TODO: use CLI arg to specify llm_config
     poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --task-image-name "${task_name}-image"
-
-    echo "Removing task image and volumes..."
-    docker stop $(docker ps -a -q -f name=openhands-runtime-*)
-    docker rm -v $(docker ps -a -q -f name=openhands-runtime-*)
-    docker rmi $(docker images "openhands-runtime-*" -q) 
 
     # Return to tasks directory for next iteration
     cd ../tasks
