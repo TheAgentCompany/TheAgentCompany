@@ -56,7 +56,7 @@ echo "Server hostname: $SERVER_HOSTNAME"
 # Navigate to base image directory and build
 echo "Building base image..."
 cd ../workspaces/base_image
-# make build
+make build
 
 # Navigate to tasks directory
 cd ../tasks

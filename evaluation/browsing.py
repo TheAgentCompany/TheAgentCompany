@@ -302,7 +302,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
             browser_action.timeout = 10000
             logger.info(browser_action, extra={'msg_type': 'ACTION'})
             obs: BrowserOutputObservation = runtime.run_action(browser_action)
-            # logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+            logger.debug(obs, extra={'msg_type': 'OBSERVATION'})
             if save_screenshots:
                 image_data = base64.b64decode(obs.screenshot)
                 with open(os.path.join(directory, f'{image_id}.png'), 'wb') as file:
