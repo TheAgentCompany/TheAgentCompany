@@ -13,8 +13,12 @@ echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
 # For now, only reset if RESET_ENV is set, so that the server doesn't suffer from
 # concurrent reset calls from multiple developers
 if [ -n "$RESET_ENV" ]; then
+    echo "Resetting services..."
     bash /utils/reset.sh
+else
+    echo "Skipping service reset"
 fi
+
 
 if [ -f "/utils/pre_init.sh" ]; then
     bash /utils/pre_init.sh
