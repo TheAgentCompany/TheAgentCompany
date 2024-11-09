@@ -261,19 +261,19 @@ def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str,
 if __name__ == '__main__':
     parser = get_parser()
     parser.add_argument(
-        '--task_image_name',
+        '--task-image-name',
         type=str,
         default='example-exam-image',
         help='Task image name',
     )
     parser.add_argument(
-        '--outputs_path',
+        '--outputs-path',
         type=str,
         default='./outputs',
         help='Folder path to save trajectories and evaluation results'
     )
     parser.add_argument(
-        '--server_hostname',
+        '--server-hostname',
         type=str,
         default='ogma.lti.cs.cmu.edu',
         help='Server hostname, e.g. ogma.lti.cs.cmu.edu'

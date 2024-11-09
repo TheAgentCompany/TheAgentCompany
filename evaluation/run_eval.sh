@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
             LLM_CONFIG="$2"
             shift 2
             ;;
-        --outputs_path)
+        --outputs-path)
             OUTPUTS_PATH="$2"
             shift 2
             ;;
@@ -36,8 +36,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Using LLM config: $llm_config"
-echo "Outputs path: $outputs_path"
+# Convert outputs_path to absolute path
+if [[ ! "$OUTPUTS_PATH" = /* ]]; then
+    # If path is not already absolute (doesn't start with /), make it absolute
+    OUTPUTS_PATH="$(cd "$(dirname "$OUTPUTS_PATH")" 2>/dev/null && pwd)/$(basename "$OUTPUTS_PATH")"
+fi
+
+echo "Using LLM config: $LLM_CONFIG"
+echo "Outputs path: $OUTPUTS_PATH"
 
 # Navigate to base image directory and build
 echo "Building base image..."
@@ -71,11 +77,13 @@ for task_dir in */; do
     echo "Running evaluation for $task_name..."
     cd ../../../evaluation
     # TODO: use CLI arg to specify llm_config
-    poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs_path $OUTPUTS_PATH --task_image_name "${task_name}-image"
+    poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --task-image-name "${task_name}-image"
 
-    echo "Removing task image..."
-    docker rm "${task_name}-image"
-    
+    echo "Removing task image and volumes..."
+    docker stop $(docker ps -a -q -f name=openhands-runtime-*)
+    docker rm -v $(docker ps -a -q -f name=openhands-runtime-*)
+    docker rmi $(docker images "openhands-runtime-*" -q) 
+
     # Return to tasks directory for next iteration
     cd ../tasks
 done
