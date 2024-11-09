@@ -59,7 +59,7 @@ for task_dir in */; do
     task_name=${task_dir%/}
 
     # Check if evaluation file exists
-    if [ -f "$outputs_path/eval_${task_name}-image.json" ]; then
+    if [ -f "$OUTPUTS_PATH/eval_${task_name}-image.json" ]; then
         echo "Skipping $task_name - evaluation file already exists"
         continue
     fi
