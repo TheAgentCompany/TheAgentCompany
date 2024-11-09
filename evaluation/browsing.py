@@ -114,20 +114,13 @@ def find_matching_anchor(content: str, selector: str) -> Optional[str]:
     
     # Clean up selector and create a pattern
     selector = selector.lower().strip()
-    words = selector.split()
     
-    # Score each element based on how many words from the selector it matches
-    matches = []
     for anchor, description in elements.items():
-        description = description.lower()
-        score = sum(1 for word in words if word in description)
-        if score > 0:
-            matches.append((score, anchor))
-    
-    # Return the anchor with the highest match score
-    if matches:
-        matches.sort(reverse=True)
-        return matches[0][1]
+        description = description.lower().strip()
+        if selector in description:
+            logger.warning(f"MATCH FOUND, {anchor}")
+            return anchor
+
     return None
 
 def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
@@ -246,7 +239,7 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
             ActionType.FILL,
             "textbox 'Email', clickable, focused",
             "agent@company.com",
-        )
+        ),
         ClickAction("button 'Continue'"),
         # 'fill("85", "theagentcompany")',
         # 'click("92")'
@@ -265,11 +258,11 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
             if not os.path.exists(directory):
                 os.makedirs(directory)
             image_id = 0
-        obs = None
+        obs: BrowserOutputObservation = None
         for action in login_actions:
             # Resolve any descriptive selectors to anchor IDs
-            if obs and obs.content:
-                action = resolve_action(action, obs.content)
+            if obs:
+                action = resolve_action(action, obs.get_agent_obs_text())
             
             # Convert the action to an instruction string
             instruction = action.to_instruction()
