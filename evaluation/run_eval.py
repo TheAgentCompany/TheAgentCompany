@@ -183,38 +183,18 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     assert obs.exit_code == 0
 
 
-def codeact_user_response(
-    state: State,
-    encapsulate_solution: bool = False,
-    try_parse: Callable[[Action], str] | None = None,
-) -> str:
-    encaps_str = (
-        (
-            'Please encapsulate your final answer (answer ONLY) within <solution> and </solution>.\n'
-            'For example: The answer to the question is <solution> 42 </solution>.\n'
-        )
-        if encapsulate_solution
-        else ''
-    )
+def codeact_user_response(state: State) -> str:
     msg = (
         'Please continue working on the task on whatever approach you think is suitable.\n'
-        'If you think you have solved the task, please first send your answer to user through message and then finish the interaction.\n'
-        f'{encaps_str}'
+        'If you think you have solved the task, please finish the interaction.\n'
         'IMPORTANT: YOU SHOULD NEVER ASK FOR HUMAN HELP.\n'
     )
 
     if state.history:
-        # check if the last action has an answer, if so, early exit
-        if try_parse is not None:
-            last_action = state.history.get_last_action()
-            ans = try_parse(last_action)
-            if ans is not None:
-                return '/exit'
-
         # check if the agent has tried to talk to the user 3 times, if so, let the agent know it can give up
         user_msgs = [
             event
-            for event in state.history.get_events()
+            for event in state.history
             if isinstance(event, MessageAction) and event.source == 'user'
         ]
         if len(user_msgs) >= 2:
