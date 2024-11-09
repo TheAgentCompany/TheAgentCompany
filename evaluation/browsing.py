@@ -231,7 +231,8 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         NoopAction(1000),
         ClickAction("button 'Login', clickable"),
         NoopAction(1000),
-        # TODO: after login, a popup asking to change hostname appears. We need to click on cancel button.
+        # after login, a popup asking to change hostname appears. We need to click on cancel button.
+        ClickAction("button 'Cancel', clickable")
     ]
 
     gitlab_login_actions = [
@@ -261,8 +262,13 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
         ),
         NoopAction(1000),
         ClickAction("button 'Continue'"),
-        # 'fill("85", "theagentcompany")',
-        # 'click("92")'
+        NoopAction(1000),
+        InputAction(
+            "textbox 'Enter password', clickable",
+            "theagentcompany"
+        ),
+        NoopAction(1000),
+        ClickAction("button 'Go to workspace'")
     ]
 
     all_login_actions = [
