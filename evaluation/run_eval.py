@@ -10,8 +10,7 @@ from openhands.core.config import (
 )
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
-from openhands.events.action import Action, CmdRunAction, BrowseInteractiveAction, MessageAction
-from openhands.events.observation import BrowserOutputObservation
+from openhands.events.action import CmdRunAction, MessageAction
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
 
