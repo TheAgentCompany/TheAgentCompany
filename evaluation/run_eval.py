@@ -51,7 +51,7 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
         # TODO: remove this once ready for release
-        f"RESET_ENV=true"
+        "RESET_ENV=true "
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
