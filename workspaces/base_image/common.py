@@ -35,7 +35,7 @@ def checkpoint(func):
             return func(*args, **kwargs)
         except Exception as e:
             logging.error(f"Error in {func.__name__}: {str(e)}")
-            return 0
+            return False
     return wrapper
     
 
