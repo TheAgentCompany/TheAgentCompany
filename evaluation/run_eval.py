@@ -29,9 +29,7 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
-        # TODO: make OpenHands support providing trajectories path as a filename,
-        # apart from a directory path
-        trajectories_path=outputs_path,
+        trajectories_path=os.path.join(outputs_path, f'traj_{base_container_image}.json'),
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -185,38 +183,18 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     assert obs.exit_code == 0
 
 
-def codeact_user_response(
-    state: State,
-    encapsulate_solution: bool = False,
-    try_parse: Callable[[Action], str] | None = None,
-) -> str:
-    encaps_str = (
-        (
-            'Please encapsulate your final answer (answer ONLY) within <solution> and </solution>.\n'
-            'For example: The answer to the question is <solution> 42 </solution>.\n'
-        )
-        if encapsulate_solution
-        else ''
-    )
+def codeact_user_response(state: State) -> str:
     msg = (
         'Please continue working on the task on whatever approach you think is suitable.\n'
-        'If you think you have solved the task, please first send your answer to user through message and then finish the interaction.\n'
-        f'{encaps_str}'
+        'If you think you have solved the task, please finish the interaction.\n'
         'IMPORTANT: YOU SHOULD NEVER ASK FOR HUMAN HELP.\n'
     )
 
     if state.history:
-        # check if the last action has an answer, if so, early exit
-        if try_parse is not None:
-            last_action = state.history.get_last_action()
-            ans = try_parse(last_action)
-            if ans is not None:
-                return '/exit'
-
         # check if the agent has tried to talk to the user 3 times, if so, let the agent know it can give up
         user_msgs = [
             event
-            for event in state.history.get_events()
+            for event in state.history
             if isinstance(event, MessageAction) and event.source == 'user'
         ]
         if len(user_msgs) >= 2:
@@ -263,19 +241,19 @@ def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str,
 if __name__ == '__main__':
     parser = get_parser()
     parser.add_argument(
-        '--task_image_name',
+        '--task-image-name',
         type=str,
         default='example-exam-image',
         help='Task image name',
     )
     parser.add_argument(
-        '--outputs_path',
+        '--outputs-path',
         type=str,
         default='./outputs',
         help='Folder path to save trajectories and evaluation results'
     )
     parser.add_argument(
-        '--server_hostname',
+        '--server-hostname',
         type=str,
         default='ogma.lti.cs.cmu.edu',
         help='Server hostname, e.g. ogma.lti.cs.cmu.edu'
@@ -301,7 +279,7 @@ if __name__ == '__main__':
     state = run_solver(runtime, args.task_image_name, config)
 
     # this path is the absolute path in the runtime container
-    trajectory_path = f'/outputs/{args.task_image_name}.json'
+    trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
     run_evaluator(runtime, llm_config, trajectory_path, result_path)
