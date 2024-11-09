@@ -13,7 +13,7 @@ fi
 
 # Navigate to base image directory and build
 echo "Building base image..."
-cd ../workspace/base_image
+cd ../workspaces/base_image
 make build
 
 # Navigate to tasks directory
