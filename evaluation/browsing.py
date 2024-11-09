@@ -188,7 +188,7 @@ def get_nextcloud_password():
         raise
 
 
-def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
+def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, screenshots_dir='screenshots'):
     """
     Logs in to all the websites that are needed for the evaluation.
     Once logged in, the sessions would be cached in the browser, so OpenHands
@@ -272,12 +272,16 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
 
     all_login_actions = [
         ('nextcloud', nextcloud_login_actions),
-        ('rocket_chat', rocketchat_login_actions),
+        ('rocketchat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
         ('plane', plane_login_actions),
     ]
     
     for (website_name, login_actions) in all_login_actions:
+        if website_name not in services:
+            logger.info(f"Skipping login for {website_name} because it's not in the list of services to reset")
+            continue
+
         if save_screenshots:
             directory = os.path.join(screenshots_dir, website_name)
             if not os.path.exists(directory):
