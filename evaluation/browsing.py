@@ -18,9 +18,8 @@ class ActionType(Enum):
     GOTO = auto()
     FILL = auto()
     CLICK = auto()
-    HOVER = auto()
-    SELECT = auto()
-    PRESS_KEY = auto()
+    NOOP = auto()
+
 
 @dataclass
 class Selector:
@@ -53,18 +52,31 @@ class GotoAction(BrowserAction):
     def to_instruction(self) -> str:
         return f'goto("{self.url}")'
 
+
+@dataclass
+class NoopAction(BrowserAction):
+    milliseconds: int
+    
+    def __init__(self, milliseconds: int):
+        super().__init__(ActionType.NOOP)
+        self.milliseconds = milliseconds
+    
+    def to_instruction(self) -> str:
+        return f'noop({self.milliseconds})'
+
+
 @dataclass
 class InputAction(BrowserAction):
     selector: Selector
     value: str
     
-    def __init__(self, action_type: ActionType, selector: Union[str, Selector], value: str):
-        super().__init__(action_type)
+    def __init__(self, selector: Union[str, Selector], value: str):
+        super().__init__(ActionType.FILL)
         self.selector = selector if isinstance(selector, Selector) else Selector(selector)
         self.value = value
     
     def to_instruction(self) -> str:
-        return f'{self.action_type.name.lower()}("{self.selector}", "{self.value}")'
+        return f'fill("{self.selector}", "{self.value}")'
 
 @dataclass
 class ClickAction(BrowserAction):
@@ -134,7 +146,7 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
             if anchor:
                 new_selector = Selector(anchor, is_anchor=True)
                 if isinstance(action, InputAction):
-                    return InputAction(action.action_type, new_selector, action.value)
+                    return InputAction(new_selector, action.value)
                 else:
                     return ClickAction(new_selector)
             else:
@@ -190,47 +202,51 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     nextcloud_password = get_nextcloud_password()
     nextcloud_login_actions = [
         GotoAction("https://ogma.lti.cs.cmu.edu"),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox 'Login with username or email', clickable",
             "admin"
         ),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox 'Password', clickable",
             nextcloud_password
         ),
+        NoopAction(1000),
         ClickAction("button 'Log in', clickable")
     ]
 
     rocketchat_login_actions = [
         GotoAction("http://the-agent-company.com:3000"),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox '', clickable, focused",
             "theagentcompany"
         ),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox '', clickable",
             "theagentcompany"
         ),
+        NoopAction(1000),
         ClickAction("button 'Login', clickable"),
+        NoopAction(1000),
         # TODO: after login, a popup asking to change hostname appears. We need to click on cancel button.
     ]
 
     gitlab_login_actions = [
         GotoAction("http://the-agent-company.com:8929/users/sign_in"),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox 'Username or primary email'",
             "root"
         ),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox 'Password'",
             "theagentcompany"
         ),
+        NoopAction(1000),
         ClickAction("button 'Sign in', clickable")
     ]
 
@@ -238,11 +254,12 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
     # TODO (yufansong): plane reset is not stable, and sometimes it fails to launch
     plane_login_actions = [
         GotoAction("http://the-agent-company.com:8091"),
+        NoopAction(1000),
         InputAction(
-            ActionType.FILL,
             "textbox 'Email', clickable, focused",
             "agent@company.com",
         ),
+        NoopAction(1000),
         ClickAction("button 'Continue'"),
         # 'fill("85", "theagentcompany")',
         # 'click("92")'
