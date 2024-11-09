@@ -76,7 +76,6 @@ for task_dir in */; do
     # Navigate to evaluation folder and run evaluation
     echo "Running evaluation for $task_name..."
     cd ../../../evaluation
-    # TODO: use CLI arg to specify llm_config
     poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --task-image-name "${task_name}-image"
 
     echo "Removing task image and volumes..."
