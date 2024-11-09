@@ -29,9 +29,7 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
-        # TODO: make OpenHands support providing trajectories path as a filename,
-        # apart from a directory path
-        trajectories_path=outputs_path,
+        trajectories_path=os.path.join(outputs_path, f'traj_{base_container_image}.json'),
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -301,7 +299,7 @@ if __name__ == '__main__':
     state = run_solver(runtime, args.task_image_name, config)
 
     # this path is the absolute path in the runtime container
-    trajectory_path = f'/outputs/{args.task_image_name}.json'
+    trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
     run_evaluator(runtime, llm_config, trajectory_path, result_path)

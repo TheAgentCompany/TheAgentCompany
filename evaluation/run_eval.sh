@@ -35,11 +35,19 @@ for task_dir in */; do
     
     # Navigate to evaluation folder and run evaluation
     echo "Running evaluation for $task_name..."
-    cd ../../evaluation
-    poetry run python run_eval.py --task_image_name "${task_name}-image"
+    cd ../../../evaluation
+    # TODO: use CLI arg to specify llm_config
+    poetry run python run_eval.py --llm-config claude --task_image_name "${task_name}-image"
+
+    # Return to current directory
+    cd -
+
+    # Remove task image
+    echo "Removing task image..."
+    make stop
     
     # Return to tasks directory for next iteration
-    cd ../tasks
+    cd ..
 done
 
 echo "All evaluation completed successfully!"
