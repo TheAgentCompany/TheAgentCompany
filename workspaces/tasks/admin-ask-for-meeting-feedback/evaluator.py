@@ -1,4 +1,5 @@
 import os
+import logging
 import pandas as pd
 
 from typing import List
@@ -27,20 +28,28 @@ def grade_checkpoint3():
 def grade_checkpoint4():
     if not os.path.exists("/workspace/meeting_feedback.xlsx"):
         return False
-    df = pd.read_excel("/workspace/meeting_feedback.xlsx")
-    row = df[df["Name"]=="Chen Xinyi"]
-    return (pd.isna(row["Score"]).tolist()[0]) and (pd.isna(row["Feedback"]).tolist()[0])
+    try:
+        df = pd.read_excel("/workspace/meeting_feedback.xlsx")
+        row = df[df["Name"]=="Chen Xinyi"]
+        return (pd.isna(row["Score"]).tolist()[0]) and (pd.isna(row["Feedback"]).tolist()[0])
+    except Exception as e:
+        logging.warning(f"Error parsing Excel file: {e}")
+        return False
 
 def grade_checkpoint5():
     if not os.path.exists("/workspace/meeting_feedback.xlsx"):
         return False
-    df = pd.read_excel("/workspace/meeting_feedback.xlsx")
-    others_df = df[df["Name"] != "Chen Xinyi"]
-    others_feedback = others_df["Feedback"].tolist()
-    if not all(["helpful" in feedback for feedback in others_feedback]):
-        return False
-    others_scores = others_df["Score"].tolist()
-    if min(others_scores) < 4:
+    try:
+        df = pd.read_excel("/workspace/meeting_feedback.xlsx")
+        others_df = df[df["Name"] != "Chen Xinyi"]
+        others_feedback = others_df["Feedback"].tolist()
+        if not all(["helpful" in feedback for feedback in others_feedback]):
+            return False
+        others_scores = others_df["Score"].tolist()
+        if min(others_scores) < 4:
+            return False
+    except Exception as e:
+        logging.warning(f"Error parsing Excel file: {e}")
         return False
     return True
 
