@@ -6,6 +6,7 @@ import base64
 import os
 import requests
 import json
+import sys
 
 from openhands.core.logger import openhands_logger as logger
 from openhands.events.action import BrowseInteractiveAction
@@ -30,7 +31,7 @@ class Selector:
     is_anchor: bool = False
     
     def __str__(self) -> str:
-        return f"{'#' if self.is_anchor else ''}{self.value}"
+        return f"{self.value}"
 
 @dataclass
 class BrowserAction:
@@ -118,7 +119,6 @@ def find_matching_anchor(content: str, selector: str) -> Optional[str]:
     for anchor, description in elements.items():
         description = description.lower().strip()
         if selector in description:
-            logger.warning(f"MATCH FOUND, {anchor}")
             return anchor
 
     return None
@@ -137,6 +137,9 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
                     return InputAction(action.action_type, new_selector, action.value)
                 else:
                     return ClickAction(new_selector)
+            else:
+                logger.error(f"NO MATCH FOUND FOR SELECTOR, {action.selector}")
+                return None
     return action
 
 
@@ -263,7 +266,11 @@ def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screensh
             # Resolve any descriptive selectors to anchor IDs
             if obs:
                 action = resolve_action(action, obs.get_agent_obs_text())
-            
+
+            if not action:
+                logger.error(f"FAILED TO RESOLVE ACTION, {action}")
+                sys.exit(1)
+
             # Convert the action to an instruction string
             instruction = action.to_instruction()
             
