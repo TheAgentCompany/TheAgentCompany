@@ -155,40 +155,7 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
     return action
 
 
-def get_nextcloud_password():
-    """
-    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
-
-    TODO: this is a temporary solution. Once #169 is solved,
-    we should be able to use a hard-coded password to avoid
-    this extra API call.
-    
-    Returns:
-        str: The NEXTCLOUD_PASSWORD value
-    
-    Raises:
-        requests.RequestException: If API call fails
-        KeyError: If NEXTCLOUD_PASSWORD is not in response
-        json.JSONDecodeError: If response is not valid JSON
-    """
-    url = "http://the-agent-company.com:2999/api/nextcloud-config"
-    
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an exception for bad status codes
-        
-        data = response.json()
-        return data["NEXTCLOUD_PASSWORD"]
-        
-    except requests.RequestException as e:
-        print(f"Error making API request: {e}")
-        raise
-    except (KeyError, json.JSONDecodeError) as e:
-        print(f"Error processing response: {e}")
-        raise
-
-
-def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, screenshots_dir='screenshots'):
+def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, save_screenshots=True, screenshots_dir='screenshots'):
     """
     Logs in to all the websites that are needed for the evaluation.
     Once logged in, the sessions would be cached in the browser, so OpenHands
@@ -199,7 +166,6 @@ def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, scre
 
     TODO: we only need login actions for dependencies of the task.
     """
-    nextcloud_password = get_nextcloud_password()
     nextcloud_login_actions = [
         GotoAction("https://ogma.lti.cs.cmu.edu"),
         NoopAction(1000),
