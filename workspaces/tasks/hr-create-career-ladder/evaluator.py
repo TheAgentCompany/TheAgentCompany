@@ -1,16 +1,15 @@
-import os
 from io import BytesIO
 from typing import List
 from odf.opendocument import load
 from odf.element import Node
 
-from common import llm_evaluate, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history
+from common import llm_complete, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
-    urls = [f"/Documents/Human%20Resources%20Team"]
+    urls = [f"/Documents/Human%20Resources%20Team/Personell_File.odt"]
             
     return any(url in trajectory for url in urls)
 
@@ -24,11 +23,17 @@ def grade_checkpoint2():
 
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
+        personell_names = [
+            "Sarah Johnson", "Li Ming", "Zhang Wei", "Wang Fang", "Mike Chen",
+            "Emily Zhou", "Liu Qiang", "Priya Sharma", "Mark Johnson", "Jessica Lee",
+            "Chen Xinyi", "David Wong", "Huang Jie", "Sophia Rodriguez", "Alex Turner",
+            "Emma Lewis", "Jessica Chen"
+        ]
 
-        messages = [{"content": f"You are asked to grade the following content: \"\"{text_content}\"\" \n Is this a valid career ladder Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
+        messages = [{"content": f"You are asked to grade the following draft career ladder from an HR: \"\"{text_content}\"\" \n Is this a valid career ladder design, with all employee names mentioned, and introduces their potential growth paths? The employees are listed below: {" ".join(personell_names)} Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         try: 
-            llm_resonse = llm_evaluate(messages)
+            llm_resonse = llm_complete(messages)
         except Exception as e:
             print(f"Error: {e}")
             return 0
@@ -54,7 +59,7 @@ def grade_checkpoint3():
         messages = [{"content": f"You are asked to grade the following message: \"\"{message_text}\"\" \n Is the message about the new career ladder design and asking for suggestions? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         try:
-            llm_resonse = llm_evaluate(messages)
+            llm_resonse = llm_complete(messages)
         except Exception as e:
             print(f"Error: {e}")
             return 0
