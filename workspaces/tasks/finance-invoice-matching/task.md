@@ -1,4 +1,4 @@
-Find the provided payments file at https://ogma.lti.cs.cmu.edu/apps/files/files/1421?dir=/Documents/Financials/payments.xlsx&openfile=true and the invoice PDFs in the directory https://ogma.lti.cs.cmu.edu/apps/files/files/1422?dir=/Documents/Financials/invoices_pdfs. 
+Navigate to Nextcloud at https://ogma.lti.cs.cmu.edu. Find the provided payments file at "/Documents/Financials/payments.xlsx" and the invoice PDFs in the directory "/Documents/Financials/invoices_pdfs". 
 
 Perform the following:
 * Parse Payment References: Extract and match each payment in the Excel file to its corresponding invoice(s) based on references.

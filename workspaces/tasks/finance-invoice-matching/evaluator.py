@@ -11,7 +11,7 @@ from config import NEXTCLOUD_URL
 
 
 def grade_checkpoint1(trajectory):
-    urls = [f"{NEXTCLOUD_URL}/apps/files/files/1421?dir=/Documents/Financials/payments.xlsx&openfile=true", f"{NEXTCLOUD_URL}/apps/files/files/1422?dir=/Documents/Financials/invoices_pdfs"]
+    urls = [f"/Documents/Financials/payments.xlsx&openfile=true", f"/Documents/Financials/invoices_pdfs"]
             
     return all(url in trajectory for url in urls)
 
