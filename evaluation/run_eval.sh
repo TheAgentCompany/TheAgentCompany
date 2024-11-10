@@ -17,6 +17,9 @@ fi
 LLM_CONFIG="claude"
 # OUTPUTS_PATH is the path to save trajectories and evaluation results
 OUTPUTS_PATH="outputs"
+# SERVER_HOSTNAME is the hostname of the server that hosts all the web services,
+# including RocketChat, NextCloud, GitLab, and Plane.
+SERVER_HOSTNAME="ogma.lti.cs.cmu.edu"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -27,6 +30,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --outputs-path)
             OUTPUTS_PATH="$2"
+            shift 2
+            ;;
+        --server-hostname)
+            SERVER_HOSTNAME="$2"
             shift 2
             ;;
         *)
@@ -44,11 +51,12 @@ fi
 
 echo "Using LLM config: $LLM_CONFIG"
 echo "Outputs path: $OUTPUTS_PATH"
+echo "Server hostname: $SERVER_HOSTNAME"
 
 # Navigate to base image directory and build
 echo "Building base image..."
 cd ../workspaces/base_image
-# make build
+make build
 
 # Navigate to tasks directory
 cd ../tasks
@@ -76,10 +84,14 @@ for task_dir in */; do
     # Navigate to evaluation folder and run evaluation
     echo "Running evaluation for $task_name..."
     cd ../../../evaluation
-    poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --task-image-name "${task_name}-image"
+    poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
+
+    # Prune unused images and volumes
+    docker images "ghcr.io/all-hands-ai/runtime" -q | xargs -r docker rmi -f
+    docker system prune -f
 
     # Return to tasks directory for next iteration
-    cd ../tasks
+    cd ../workspaces/tasks
 done
 
 echo "All evaluation completed successfully!"
