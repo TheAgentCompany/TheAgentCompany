@@ -1,9 +1,10 @@
 import asyncio
 import os
-import base64
+from typing import List
+import yaml
 import requests
 import json
-from typing import Callable
+
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -14,10 +15,12 @@ from openhands.core.config import (
 )
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
-from openhands.events.action import Action, CmdRunAction, BrowseInteractiveAction, MessageAction
-from openhands.events.observation import BrowserOutputObservation
+from openhands.events.action import CmdRunAction, MessageAction
+from openhands.events.observation import CmdOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
+
+from browsing import pre_login
 
 
 def get_config(
@@ -29,9 +32,7 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
-        # TODO: make OpenHands support providing trajectories path as a filename,
-        # apart from a directory path
-        trajectories_path=outputs_path,
+        trajectories_path=os.path.join(outputs_path, f'traj_{base_container_image}.json'),
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -49,114 +50,20 @@ def get_config(
     return config
 
 
-def get_nextcloud_password():
+def load_dependencies(runtime: Runtime) -> List[str]:
     """
-    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
-
-    TODO: this is a temporary solution. Once #169 is solved,
-    we should be able to use a hard-coded password to avoid
-    this extra API call.
-    
-    Returns:
-        str: The NEXTCLOUD_PASSWORD value
-    
-    Raises:
-        requests.RequestException: If API call fails
-        KeyError: If NEXTCLOUD_PASSWORD is not in response
-        json.JSONDecodeError: If response is not valid JSON
+    Every task has a dependencies.yml file, which lists all the services that the
+    task depends on. This function loads the file and returns all dependent service names.
     """
-    url = "http://the-agent-company.com:2999/api/nextcloud-config"
-    
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an exception for bad status codes
-        
-        data = response.json()
-        return data["NEXTCLOUD_PASSWORD"]
-        
-    except requests.RequestException as e:
-        print(f"Error making API request: {e}")
-        raise
-    except (KeyError, json.JSONDecodeError) as e:
-        print(f"Error processing response: {e}")
-        raise
-
-
-
-def pre_login(runtime: Runtime, save_screenshots=True, screenshots_dir='screenshots'):
-    """
-    Logs in to all the websites that are needed for the evaluation.
-    Once logged in, the sessions would be cached in the browser, so OpenHands
-    agent doesn't need to log in to these websites again.
-
-    TODO: right now we assume all login actions succeed. We need to add some sanity
-    checks to ensure that login is successful.
-
-    TODO: we only need login actions for dependencies of the task.
-    """
-    nextcloud_password = get_nextcloud_password()
-
-    nextcloud_login_actions = [
-        'goto("https://ogma.lti.cs.cmu.edu")',
-        'fill("121", "admin")',
-        f'fill("126", "{nextcloud_password}")',
-        'click("134")'
-    ]
-
-    rocketchat_login_actions = [
-        'goto("http://the-agent-company.com:3000/")',
-        'fill("52", "theagentcompany")',
-        'fill("57", "theagentcompany")',
-        'click("60")',
-        # after login, a popup asking to change hostname appears. We need to click on cancel button.
-        # TODO: this sometimes fails, seems bid is not deterministic
-        'click("219")',
-    ]
-
-    gitlab_login_actions = [
-        'goto("http://the-agent-company.com:8929/users/sign_in")',
-        'fill("78", "root")',
-        'fill("84", "theagentcompany")',
-        'click("98")',
-    ]
-
-    # TODO: this sometimes fails, seems bid for plane login is not deterministic
-    # TODO (yufansong): plane reset is not stable, and sometimes it fails to launch
-    plane_login_actions = [
-        'goto("http://the-agent-company.com:8091")',
-        'noop(5000)', 
-        'fill("65", "agent@company.com")',
-        'click("66")',
-        'fill("85", "theagentcompany")',
-        'click("92")'
-    ]
-
-    all_login_actions = [
-        ('nextcloud', nextcloud_login_actions),
-        ('rocket_chat', rocketchat_login_actions),
-        ('gitlab', gitlab_login_actions),
-        ('plane', plane_login_actions),
-    ]
-
-    for (website_name, login_actions) in all_login_actions:
-        if save_screenshots:
-            directory = os.path.join(screenshots_dir, website_name)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            image_id = 0
-        for instruction in login_actions:
-            action = BrowseInteractiveAction(
-                browser_actions=instruction
-            )
-            action.timeout = 10000
-            logger.info(action, extra={'msg_type': 'ACTION'})
-            obs: BrowserOutputObservation = runtime.run_action(action)
-            logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-            if save_screenshots:
-                image_data = base64.b64decode(obs.screenshot)
-                with open(os.path.join(directory, f'{image_id}.png'), 'wb') as file:
-                    file.write(image_data)
-                    image_id += 1
+    command = (
+        "cat /utils/dependencies.yml"
+    )
+    action = CmdRunAction(command=command)
+    logger.info(action, extra={'msg_type': 'ACTION'})
+    obs: CmdOutputObservation = runtime.run_action(action)
+    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+    assert obs.exit_code == 0
+    return yaml.safe_load(obs.content)
 
 
 def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
@@ -165,6 +72,8 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
+        # TODO: remove this once ready for release
+        "RESET_ENV=true "
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
@@ -173,50 +82,53 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
     assert obs.exit_code == 0
 
-    # TODO (boxuanli): remove this once reset is called by init.sh
-    command = (
-        "bash /utils/reset.sh"
-    )
-    action = CmdRunAction(command=command)
-    action.timeout = 1000
-    logger.info(action, extra={'msg_type': 'ACTION'})
-    obs = runtime.run_action(action)
-    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-    assert obs.exit_code == 0
+
+def get_nextcloud_password():
+    """
+    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
+
+    TODO: this is a temporary solution. Once #169 is solved,
+    we should be able to use a hard-coded password to avoid
+    this extra API call.
+   
+    Returns:
+        str: The NEXTCLOUD_PASSWORD value
+  
+    Raises:
+        requests.RequestException: If API call fails
+        KeyError: If NEXTCLOUD_PASSWORD is not in response
+        json.JSONDecodeError: If response is not valid JSON
+    """
+    url = "http://the-agent-company.com:2999/api/nextcloud-config"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an exception for bad status codes
+ 
+        data = response.json()
+        logger.info(f"NEXTCLOUD_PASSWORD: {data['NEXTCLOUD_PASSWORD']}")
+        return data["NEXTCLOUD_PASSWORD"]
+ 
+    except requests.RequestException as e:
+        logger.error(f"Error making API request: {e}")
+        raise
+    except (KeyError, json.JSONDecodeError) as e:
+        logger.error(f"Error processing response: {e}")
+        raise
 
 
-def codeact_user_response(
-    state: State,
-    encapsulate_solution: bool = False,
-    try_parse: Callable[[Action], str] | None = None,
-) -> str:
-    encaps_str = (
-        (
-            'Please encapsulate your final answer (answer ONLY) within <solution> and </solution>.\n'
-            'For example: The answer to the question is <solution> 42 </solution>.\n'
-        )
-        if encapsulate_solution
-        else ''
-    )
+def codeact_user_response(state: State) -> str:
     msg = (
         'Please continue working on the task on whatever approach you think is suitable.\n'
-        'If you think you have solved the task, please first send your answer to user through message and then finish the interaction.\n'
-        f'{encaps_str}'
+        'If you think you have solved the task, please finish the interaction.\n'
         'IMPORTANT: YOU SHOULD NEVER ASK FOR HUMAN HELP.\n'
     )
 
     if state.history:
-        # check if the last action has an answer, if so, early exit
-        if try_parse is not None:
-            last_action = state.history.get_last_action()
-            ans = try_parse(last_action)
-            if ans is not None:
-                return '/exit'
-
         # check if the agent has tried to talk to the user 3 times, if so, let the agent know it can give up
         user_msgs = [
             event
-            for event in state.history.get_events()
+            for event in state.history
             if isinstance(event, MessageAction) and event.source == 'user'
         ]
         if len(user_msgs) >= 2:
@@ -229,7 +141,11 @@ def codeact_user_response(
 
 
 def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
-    instruction = "Complete the task in /instruction/task.md"
+    instruction = (
+        "Complete the task in /instruction/task.md.\n"
+        # TODO: remove this once #628 is fixed
+        "You may not need it, but in case you do, password for rocketchat is: theagentcompany\n"
+    )
 
     # TODO: OpenHands should optionally, save browser screenshots to a place
     state: State | None = asyncio.run(
@@ -245,8 +161,9 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
     return state
 
 
-def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str, result_path: str):
+def run_evaluator(runtime: Runtime, llm_config: LLMConfig, nextcloud_password: str, trajectory_path: str, result_path: str):
     command = (
+        f"NEXTCLOUD_PASSWORD={nextcloud_password} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
@@ -263,19 +180,19 @@ def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str,
 if __name__ == '__main__':
     parser = get_parser()
     parser.add_argument(
-        '--task_image_name',
+        '--task-image-name',
         type=str,
         default='example-exam-image',
         help='Task image name',
     )
     parser.add_argument(
-        '--outputs_path',
+        '--outputs-path',
         type=str,
         default='./outputs',
         help='Folder path to save trajectories and evaluation results'
     )
     parser.add_argument(
-        '--server_hostname',
+        '--server-hostname',
         type=str,
         default='ogma.lti.cs.cmu.edu',
         help='Server hostname, e.g. ogma.lti.cs.cmu.edu'
@@ -296,12 +213,17 @@ if __name__ == '__main__':
 
     init_task_env(runtime, args.server_hostname, llm_config)
 
-    pre_login(runtime)
+    dependencies = load_dependencies(runtime)
+    logger.info(f"Service dependencies: {dependencies}")
+
+    # TODO: #169 remove this once we are able to use a hard-coded password
+    nextcloud_password = get_nextcloud_password()
+    pre_login(runtime, dependencies, nextcloud_password)
 
     state = run_solver(runtime, args.task_image_name, config)
 
     # this path is the absolute path in the runtime container
-    trajectory_path = f'/outputs/{args.task_image_name}.json'
+    trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
-    run_evaluator(runtime, llm_config, trajectory_path, result_path)
+    run_evaluator(runtime, llm_config, nextcloud_password, trajectory_path, result_path)
