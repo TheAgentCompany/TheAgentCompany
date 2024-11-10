@@ -7,9 +7,6 @@ from odf.element import Node
 from common import llm_evaluate, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
-NEXTCLOUD_USERNAME = 'admin'
-NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
-
 rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
