@@ -63,7 +63,10 @@ def load_dependencies(runtime: Runtime) -> List[str]:
     obs: CmdOutputObservation = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
     assert obs.exit_code == 0
-    return yaml.safe_load(obs.content)
+    dependencies = yaml.safe_load(obs.content)
+    if dependencies is None:
+        dependencies = []
+    return dependencies
 
 
 def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
