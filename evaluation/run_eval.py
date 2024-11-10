@@ -216,7 +216,7 @@ if __name__ == '__main__':
     dependencies = load_dependencies(runtime)
     logger.info(f"Service dependencies: {dependencies}")
 
-    # TODO: #338 remove this once we are able to use a hard-coded password
+    # TODO: #169 remove this once we are able to use a hard-coded password
     nextcloud_password = get_nextcloud_password()
     pre_login(runtime, dependencies, nextcloud_password)
 
