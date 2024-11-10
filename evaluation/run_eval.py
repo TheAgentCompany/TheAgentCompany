@@ -63,7 +63,10 @@ def load_dependencies(runtime: Runtime) -> List[str]:
     obs: CmdOutputObservation = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
     assert obs.exit_code == 0
-    return yaml.safe_load(obs.content)
+    dependencies = yaml.safe_load(obs.content)
+    if dependencies is None:
+        dependencies = []
+    return dependencies
 
 
 def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
@@ -77,6 +80,7 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
+    action.timeout = 900
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -163,7 +167,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
 
 def run_evaluator(runtime: Runtime, llm_config: LLMConfig, nextcloud_password: str, trajectory_path: str, result_path: str):
     command = (
-        f"NEXTCLOUD_PASSWORD={nextcloud_password} "
+        f"NEXTCLOUD_ADMIN_PASSWORD={nextcloud_password} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
