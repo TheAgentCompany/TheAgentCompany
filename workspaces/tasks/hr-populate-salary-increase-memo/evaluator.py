@@ -12,10 +12,8 @@ from odf.opendocument import load
 from odf.text import P
 
 from scoring import Result, Checkpoint
+from config import NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD
 
-
-NEXTCLOUD_USERNAME = 'admin'
-NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
 def grade_checkpoint1(trajectory):
     urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
