@@ -5,16 +5,18 @@ import re
 import numpy as np
 from io import BytesIO
 
-from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud
+from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, checkpoint
 from scoring import Result, Checkpoint, bonus_for_completing_any
 from config import NEXTCLOUD_URL
 
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     urls = [f"/Documents/Financials/payments.xlsx&openfile=true", f"/Documents/Financials/invoices_pdfs"]
             
     return all(url in trajectory for url in urls)
 
+@checkpoint
 def grade_checkpoint2():
     file_name = "flagged_payments.xlsx"
     dir_name = "Documents/Financials"
@@ -50,6 +52,7 @@ def grade_checkpoint2():
     else:
         return 1
     
+@checkpoint
 def grade_checkpoint3():
     file_name = "flagged_payments.xlsx"
     dir_name = "Documents/Financials"
