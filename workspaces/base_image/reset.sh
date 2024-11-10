@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
 
-# TODO (boxuanli): eventually this script will be called by init.sh
-# At the early stage of development, we will call this script manually to avoid
-# potentially concurrent reset calls from multiple developers
-
 # Initialize variables to track total wait time and which services need resetting
 # TODO (yufansong): make this script more robust by making the api-server itself
 # wait until all resets are complete. A websocket solution might be needed.

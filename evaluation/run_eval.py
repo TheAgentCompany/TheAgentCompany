@@ -1,5 +1,8 @@
 import asyncio
 import os
+from typing import List
+import yaml
+
 from openhands.controller.state.state import State
 from openhands.core.config import (
     AppConfig,
@@ -11,6 +14,7 @@ from openhands.core.config import (
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, MessageAction
+from openhands.events.observation import CmdOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
 
@@ -44,26 +48,33 @@ def get_config(
     return config
 
 
+def load_dependencies(runtime: Runtime) -> List[str]:
+    """
+    Every task has a dependencies.yml file, which lists all the services that the
+    task depends on. This function loads the file and returns all dependent service names.
+    """
+    command = (
+        "cat /utils/dependencies.yml"
+    )
+    action = CmdRunAction(command=command)
+    logger.info(action, extra={'msg_type': 'ACTION'})
+    obs: CmdOutputObservation = runtime.run_action(action)
+    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+    assert obs.exit_code == 0
+    return yaml.safe_load(obs.content)
+
+
 def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     command = (
         f"SERVER_HOSTNAME={hostname} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
+        # TODO: remove this once ready for release
+        "RESET_ENV=true "
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
-    logger.info(action, extra={'msg_type': 'ACTION'})
-    obs = runtime.run_action(action)
-    logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-    assert obs.exit_code == 0
-
-    # TODO (boxuanli): remove this once reset is called by init.sh
-    command = (
-        "bash /utils/reset.sh"
-    )
-    action = CmdRunAction(command=command)
-    action.timeout = 1000
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -94,7 +105,11 @@ def codeact_user_response(state: State) -> str:
 
 
 def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
-    instruction = "Complete the task in /instruction/task.md"
+    instruction = (
+        "Complete the task in /instruction/task.md.\n"
+        # TODO: remove this once #628 is fixed
+        "You may not need it, but in case you do, password for rocketchat is: theagentcompany\n"
+    )
 
     # TODO: OpenHands should optionally, save browser screenshots to a place
     state: State | None = asyncio.run(
@@ -161,7 +176,10 @@ if __name__ == '__main__':
 
     init_task_env(runtime, args.server_hostname, llm_config)
 
-    pre_login(runtime)
+    dependencies = load_dependencies(runtime)
+    logger.info(f"Service dependencies: {dependencies}")
+
+    pre_login(runtime, dependencies)
 
     state = run_solver(runtime, args.task_image_name, config)
 

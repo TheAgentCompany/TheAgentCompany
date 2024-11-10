@@ -56,7 +56,7 @@ echo "Server hostname: $SERVER_HOSTNAME"
 # Navigate to base image directory and build
 echo "Building base image..."
 cd ../workspaces/base_image
-# make build
+make build
 
 # Navigate to tasks directory
 cd ../tasks
@@ -86,8 +86,12 @@ for task_dir in */; do
     cd ../../../evaluation
     poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
 
+    # Prune unused images and volumes
+    docker images "ghcr.io/all-hands-ai/runtime" -q | xargs -r docker rmi -f
+    docker system prune -f
+
     # Return to tasks directory for next iteration
-    cd ../tasks
+    cd ../workspaces/tasks
 done
 
 echo "All evaluation completed successfully!"
