@@ -167,7 +167,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
 
 def run_evaluator(runtime: Runtime, llm_config: LLMConfig, nextcloud_password: str, trajectory_path: str, result_path: str):
     command = (
-        f"NEXTCLOUD_PASSWORD={nextcloud_password} "
+        f"NEXTCLOUD_ADMIN_PASSWORD={nextcloud_password} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
