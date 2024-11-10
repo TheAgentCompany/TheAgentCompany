@@ -2,6 +2,7 @@ import os
 import logging
 import urllib
 import subprocess
+import functools
 import re
 import requests
 
@@ -25,6 +26,17 @@ class MockRocketChatClient:
         def method(*args, **kwargs):
             return self.JsonResponse()
         return method
+
+
+def checkpoint(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logging.error(f"Error in {func.__name__}: {str(e)}")
+            return False
+    return wrapper
     
 
 # messages: a list of message.
