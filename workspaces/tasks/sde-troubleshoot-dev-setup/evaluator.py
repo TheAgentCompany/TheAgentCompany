@@ -1,6 +1,4 @@
-import logging
 from typing import List
-import requests
 from scoring import Result, Checkpoint
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history
 
@@ -17,10 +15,9 @@ def grade_checkpoint1(trajectory="") -> bool:
     return required_url in trajectory
 
 
-
 def check_requirements_compatibility(base_file, target_file):
     """
-    Helper function if requirements match target requirements
+    Helper function to check if requirements match target requirements
     Returns: (is_compatible, list of incompatibilities)
     """
     def parse_requirements_file(file_path):
