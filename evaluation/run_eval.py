@@ -90,10 +90,10 @@ def get_nextcloud_password():
     TODO: this is a temporary solution. Once #169 is solved,
     we should be able to use a hard-coded password to avoid
     this extra API call.
-
+   
     Returns:
         str: The NEXTCLOUD_PASSWORD value
-
+  
     Raises:
         requests.RequestException: If API call fails
         KeyError: If NEXTCLOUD_PASSWORD is not in response
@@ -104,16 +104,16 @@ def get_nextcloud_password():
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raises an exception for bad status codes
-
+ 
         data = response.json()
         logger.info(f"NEXTCLOUD_PASSWORD: {data['NEXTCLOUD_PASSWORD']}")
         return data["NEXTCLOUD_PASSWORD"]
-
+ 
     except requests.RequestException as e:
-        print(f"Error making API request: {e}")
+        logger.error(f"Error making API request: {e}")
         raise
     except (KeyError, json.JSONDecodeError) as e:
-        print(f"Error processing response: {e}")
+        logger.error(f"Error processing response: {e}")
         raise
 
 
