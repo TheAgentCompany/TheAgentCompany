@@ -4,8 +4,6 @@ from typing import Optional, Dict, List, Union
 import re
 import base64
 import os
-import requests
-import json
 import sys
 
 from openhands.core.logger import openhands_logger as logger
@@ -163,8 +161,6 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
 
     TODO: right now we assume all login actions succeed. We need to add some sanity
     checks to ensure that login is successful.
-
-    TODO: we only need login actions for dependencies of the task.
     """
     nextcloud_login_actions = [
         GotoAction("https://ogma.lti.cs.cmu.edu"),
