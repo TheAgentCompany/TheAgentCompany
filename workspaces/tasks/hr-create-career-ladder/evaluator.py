@@ -2,6 +2,7 @@ from io import BytesIO
 from typing import List
 from odf.opendocument import load
 from odf.element import Node
+import logging
 
 from common import llm_complete, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history
 from scoring import Result, Checkpoint, bonus_for_completing_any
@@ -9,7 +10,7 @@ from scoring import Result, Checkpoint, bonus_for_completing_any
 rocket = create_rocketchat_client()
 
 def grade_checkpoint1(trajectory):
-    urls = [f"/Documents/Human%20Resources%20Team/Personell_File.odt"]
+    urls = [f"/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
@@ -35,16 +36,16 @@ def grade_checkpoint2():
         try: 
             llm_resonse = llm_complete(messages)
         except Exception as e:
-            print(f"Error: {e}")
+            logging.warning(f"Error: {e}")
             return 0
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-            print("Valid career ladder found.")
+            logging.info("Valid career ladder found.")
             score += 1            
 
         return score
     else:
-        print("Failed to retrieve file content.")
+        logging.warning("Failed to retrieve file content.")
         return 0
     
 def grade_checkpoint3():
@@ -61,10 +62,10 @@ def grade_checkpoint3():
         try:
             llm_resonse = llm_complete(messages)
         except Exception as e:
-            print(f"Error: {e}")
+            logging.warning(f"Error: {e}")
             return 0
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
-            print("Correct message found.")
+            logging.info("Correct message found.")
             score += 1
             break
     
@@ -96,7 +97,7 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints, bonus_for_completing_any)
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
 
     return result
