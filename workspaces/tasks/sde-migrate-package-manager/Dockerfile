@@ -1,0 +1,5 @@
+FROM base-image
+
+# Install both poetry and uv for migration
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh

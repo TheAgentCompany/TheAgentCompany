@@ -92,6 +92,8 @@ stop-gitlab:
 
 # rebuild destroys the gitlab image and start from scratch
 # useful when you have new data to bake into the image
+# Note: this will take at least 10 hours to build since we have quite a few
+# large repositories to bake into the image
 rebuild-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
@@ -103,7 +105,7 @@ rebuild-gitlab: init
 	else \
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
-	@echo "start gitlab from clean state..."
+	@echo "rebuild gitlab from clean state..."
 	docker compose build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again
@@ -113,7 +115,7 @@ reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
 	docker compose stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm gitlab
+	docker compose rm -f gitlab
 	@echo "start gitlab from clean state..."
 	docker compose up gitlab -d
 
@@ -159,14 +161,13 @@ download-plane:
 	sh ./plane/download.sh
 
 start-plane:
-	sh ./plane/download.sh
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH)  up -d --quiet-pull
+	cd plane && make start-plane
 
 stop-plane:
-	docker compose -f $(PLANE_DOCKER_FILE_PATH) --env-file $(PLANE_DOCKER_ENV_PATH) down
+	cd plane && make stop-plane
 
 backup-plane:
-	./plane/setup.sh backup
+	cd plane && make backup-plane
 
 rm-plane-volume:
 	docker volume rm plane-app_redisdata

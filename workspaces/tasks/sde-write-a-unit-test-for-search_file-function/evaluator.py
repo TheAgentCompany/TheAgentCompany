@@ -8,6 +8,11 @@ import xml.etree.ElementTree as ET
 import astor
 import re
 
+from typing import List
+
+from common import *
+from scoring import Result, Checkpoint
+
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
 COV_FILE = REPO_DIR + 'tests/unit/test_agent_skill_coverage.xml'
@@ -38,36 +43,6 @@ def config_env(dir_path):
         return False
     else:
         logging.info(f"Dependencies installed successfully.")
-
-def is_dir(fir_path):
-    """
-    Check if the given path is a directory and contains at least one file.
-    """
-    if not fir_path:
-        logging.warning("is_dir: Empty path provided")
-        return False
-    try:
-        abs_path = os.path.abspath(fir_path)
-
-        if not os.path.exists(abs_path):
-            logging.warning(f"is_dir: Path does not exist: {abs_path}")
-            return False
-
-        if not os.path.isdir(abs_path):
-            logging.warning(f"is_dir: Path is not a directory: {abs_path}")
-            return False
-
-        files = os.listdir(abs_path)
-
-        if not files:
-            logging.warning(f"is_dir: No files found in directory: {abs_path}")
-            return False
-
-        return True
-
-    except Exception as e:
-        logging.warning(f"Error in is_dir: {e}")
-        return False
 
 def is_file_exist(file_path):
     """
@@ -119,17 +94,6 @@ def get_function_content(file_path, function_name):
     except Exception as e:
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
-
-def is_repo_exit(dir_path):
-    """
-     Check if a repo exists at the given path.
-    """
-    is_dir(dir_path)
-
-    instruction_file_name = ".openhands_instructions"
-    instruction_file_path = os.path.join(dir_path, instruction_file_name)
-
-    return is_file_exist(instruction_file_path)
 
 def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
     """
@@ -236,8 +200,8 @@ def remove_func(file_path=UT_FILE, function_name=f"def {UT_FUNC_NAME}("):
         print(f"Error: File not found at {file_path}, {e}")
         return False
 
-def checkpoint1(path=REPO_DIR):
-    return is_repo_exit(dir_path=path)
+def checkpoint1():
+    return check_repo_exists('openhands')
 
 def checkpoint2(path=UT_FILE):
     return is_file_exist(file_path=path)
@@ -280,7 +244,10 @@ def checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     return True if after_cov_rate<before_cov_rate else False
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -290,15 +257,10 @@ def calculate_total_score():
         checkpoint5: 1
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
-
-    return total_score
+    return result
 
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+

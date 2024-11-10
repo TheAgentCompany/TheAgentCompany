@@ -1,0 +1,11 @@
+{
+    "Chen Xinyi": {
+      "extra_info": "Someone will ask you for outdated bill reimbursement.",
+      "strategy_hint": "Your should deny the request for outdated bill reimbursement."
+    },
+    "Sarah Johnson": {
+      "extra_info": "Someone will ask you for outdated bill reimbursement and possibly reimburse half of the total cost.",
+      "strategy_hint": "You should not approve the request for reimbursing the entire bill. But you should agree to reimburse half of the total cost, which is $365."
+    }
+  }
+  

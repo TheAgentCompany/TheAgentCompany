@@ -6,7 +6,11 @@ import subprocess
 import time
 import re
 import astor
-from common import llm_evaluate
+
+
+from typing import List
+from scoring import Result, Checkpoint
+from common import *
 
 REPO_DIR = '/workspace/openhands/'
 UT_FILE = REPO_DIR + 'tests/unit/test_agent_skill.py'
@@ -37,7 +41,7 @@ def config_env(dir_path):
     else:
         logging.info(f"Dependencies installed successfully.")
 
-def check_with_llm(test_code, func_code, expect_result):
+def check_with_llm(test_code, func_code):
     test_content = test_code
     func_content = func_code
 
@@ -51,41 +55,11 @@ def check_with_llm(test_code, func_code, expect_result):
             "content": f"Does the function named 'test_scroll_down' in the text '{test_content}' thoroughly and meaningfully test the 'scroll_down' functionality? The test should include specific assertions that validate the expected behavior of the function '{func_content}', and must not contain trivial or non-functional code such as 'return True' or 'assert 1 == 1'. Does it properly verify the output, state changes, or side effects that should occur when 'scroll_down' is executed? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
             "role": "user"}
     ]
-    llm_resonse = llm_evaluator(messages).json()
+    llm_resonse = llm_complete(messages)
 
-    if expect_result in llm_resonse['choices'][0]['message']['content'].lower():
+    if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
         return True
     else:
-        return False
-
-def is_dir(fir_path):
-    """
-    Check if the given path is a directory and contains at least one file.
-    """
-    if not fir_path:
-        logging.warning("is_dir: Empty path provided")
-        return False
-    try:
-        abs_path = os.path.abspath(fir_path)
-
-        if not os.path.exists(abs_path):
-            logging.warning(f"is_dir: Path does not exist: {abs_path}")
-            return False
-
-        if not os.path.isdir(abs_path):
-            logging.warning(f"is_dir: Path is not a directory: {abs_path}")
-            return False
-
-        files = os.listdir(abs_path)
-
-        if not files:
-            logging.warning(f"is_dir: No files found in directory: {abs_path}")
-            return False
-
-        return True
-
-    except Exception as e:
-        logging.warning(f"Error in is_dir: {e}")
         return False
 
 def is_file_exist(file_path):
@@ -138,17 +112,6 @@ def get_function_content(file_path, function_name):
     except Exception as e:
         logging.warning(f"Error parsing file {file_path}: {e}")
         return False
-
-def is_repo_exit(dir_path):
-    """
-     Check if a repo exists at the given path.
-    """
-    is_dir(dir_path)
-
-    instruction_file_name = ".openhands_instructions"
-    instruction_file_path = os.path.join(dir_path, instruction_file_name)
-
-    return is_file_exist(instruction_file_path)
 
 def is_test_run(dir_path, file_path, function_name):
     """
@@ -214,8 +177,8 @@ def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
 
     return stats
 
-def checkpoint1(path='/workspace/openhands/'):
-    return is_repo_exit(dir_path=path)
+def checkpoint1():
+    return check_repo_exists('openhands')
 
 def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)
@@ -242,10 +205,13 @@ def checkpoint5():
     return check_with_llm(
         test_code=test_content,
         func_code=func_content,
-        expect_result='yes'
     )
 
-def calculate_total_score():
+
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -255,15 +221,10 @@ def calculate_total_score():
         checkpoint5: 1
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
-
-    return total_score
+    return result
 
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+

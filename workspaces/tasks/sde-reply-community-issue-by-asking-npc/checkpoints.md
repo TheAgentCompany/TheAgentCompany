@@ -10,12 +10,12 @@ successful access the issue http://the-agent-company.com:8929/root/openhands/-/i
 
 ## Checkpoint 2 (1pt)
 
-confirm that the agent had a discussion with Mike Chen about this issue.
+confirm that the examinee had a discussion with Mike Chen about this issue.
 
 ## Checkpoint 3 (1pt)
 
-confirm that the agent replied the issue.
+confirm that the examinee replied the issue.
 
 ## Checkpoint 4 (2pt)
 
-Confirmed with consistency between agent's reply and Mike Chen's answer
+Confirmed with consistency between examinee's reply and Mike Chen's answer

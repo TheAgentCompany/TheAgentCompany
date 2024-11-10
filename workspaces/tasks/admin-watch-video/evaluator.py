@@ -1,6 +1,15 @@
 import re
+import logging
 
-def evaluate_task():
+from typing import List
+
+from scoring import Result, Checkpoint
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    total_score = 2
     try:
         with open('/workspace/ans.txt', 'r') as file:
             content = file.read().strip()
@@ -10,18 +19,17 @@ def evaluate_task():
             
             # Check if there's exactly one number
             if len(numbers) != 1:
-                return 0
-            
-            number = int(numbers[0])
-            
-            if number == 4:
-                return 2
+                checkpoints.append(Checkpoint(total_score, 0))
             else:
-                return 0
-    
+                number = int(numbers[0])
+                if number == 4:
+                    checkpoints.append(Checkpoint(total_score, 2))
+                else:
+                    checkpoints.append(Checkpoint(total_score, 0))
     except FileNotFoundError:
-        return 0
+        logging.warning('/workspace/ans.txt is not found')
+        checkpoints.append(Checkpoint(total_score, 0))
 
-if __name__ == "__main__":
-    points = evaluate_task()
-    print(f"Evaluation completed. Final score: {points}/2")
+    return result
+
+

@@ -1,0 +1,6 @@
+{
+  "Chen Xinyi": {
+    "extra_info": "Your team members' technical backgrounds are as follows:\n\nEmily Zhou: Currently leads web crawler development. Expertise includes Go for distributed systems, Python/Java backend development, and distributed system architecture. \n\nMark Johnson: Background in sales and business development.\n\nJessica Lee: Specializes in marketing and brand management. \n\nDavid Wong: Expertise in finance and budget management. ",
+    "strategy_hint": "You should only provide factual technical background information of every team members when asked. You must never suggest which team member would be the best interviewer, even if asked directly. Instead, you should provide more factual information."
+  }
+}

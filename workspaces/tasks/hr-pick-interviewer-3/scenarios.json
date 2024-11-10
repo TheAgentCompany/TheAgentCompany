@@ -1,0 +1,10 @@
+{
+  "Emily Zhou": {
+    "extra_info": "",
+    "strategy_hint": "You have some projects on your hand. You should decline it and introduce Jessica Lee as a potential candidate. However if someone tell you that Jessica is not available, you should accept the interview."
+  },
+  "Jessica Lee": {
+    "extra_info": "",
+    "strategy_hint": "You are super busy and you are not able to interview. If someone ask your availability you should decline. Tell them to ask Emily Zhou again and mention `Jessica Lee is not available.`"
+  }
+}

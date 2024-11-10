@@ -1,17 +1,10 @@
 import os
-from rocketchat_API.rocketchat import RocketChat
+import logging
 
-import datetime
+from typing import List
 
-from common import llm_evaluate
-
-# Set environment variables
-SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
-
-# Construct RocketChat URL
-ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
-
+from scoring import Result, Checkpoint
+from common import evaluate_with_llm
 from common import create_rocketchat_client
 
 # Create RocketChat instance
@@ -30,7 +23,7 @@ def get_history(username):
 
     return msgs
 
-def check_with_llm(msgs, pattern):
+def check_with_llm(msgs):
     content = ""
     for msg in msgs[::-1]:
         content += msg['msg']
@@ -38,37 +31,31 @@ def check_with_llm(msgs, pattern):
     if len(content)==0:
         return False
 
-    messages = [
-        {
-            "content": f"Does the text \"{content}\" include the plan to hold a kickoff meeting for the main Q4 project? Answer 'yes' if it does, or 'no' if it doesn't. Don't answer anything else.",
-            "role": "user"}
-    ]
-    llm_resonse = llm_evaluate(messages)
-   # print(llm_resonse)
+    predicate = 'there is a plan to hold a kickoff meeting for the main Q4 project'
+    return evaluate_with_llm(content, predicate)
 
-    if pattern in llm_resonse['choices'][0]['message']['content'].lower():
-        return True
-    else:
-        return False
 
 def checkpoint1(username='jessica_lee'):
     msgs = get_history(username=username)
-    return check_with_llm(msgs, pattern='yes')
+    return check_with_llm(msgs)
 
 def checkpoint2(username='david_wong'):
     msgs = get_history(username=username)
-    return check_with_llm(msgs, pattern='yes')
+    return check_with_llm(msgs)
 
 def checkpoint3(username='huang_jie'):
     msgs = get_history(username=username)
-    return check_with_llm(msgs, pattern='yes')
+    return check_with_llm(msgs)
 
 def checkpoint4(username='mark_johnson'):
     msgs = get_history(username=username)
-    return check_with_llm(msgs, pattern='yes')
+    return check_with_llm(msgs)
 
 
-def calculate_total_score():
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
     # Define the scores corresponding to when each function is True
     scores = {
         checkpoint1: 1,
@@ -78,15 +65,11 @@ def calculate_total_score():
 
     }
 
-    total_score = 0
+    for func, total_score in scores.items():
+        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
 
-    for func, score in scores.items():
-        if func():
-            total_score += score
+    return result
 
-    return total_score
 
-# compute the total point
-total = calculate_total_score()
-print(f"\ntotal point is: {total}")
+
 

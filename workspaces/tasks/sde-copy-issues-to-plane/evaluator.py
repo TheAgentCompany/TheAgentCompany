@@ -1,20 +1,14 @@
-import os
 import sys
 import logging
 import requests
+
+from typing import List
+
+from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
 
-############################# init variable #####################################
-HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
-PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
-PLANE_BASEURL = f"http://{HOSTNAME}:{PLANE_PORT}"
-PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
-PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
 
-headers = {
-    "x-api-key": PLANE_API_KEY,
-    "Content-Type": "application/json"
-}
+PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
 
 # Check if the title are in the trajectory
 def grade_checkpoint1(trajectory):
@@ -26,7 +20,7 @@ def grade_checkpoint2():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
     try:
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=PLANE_HEADERS)
 
         if response.status_code == 200:
             resp = response.json()
@@ -46,44 +40,15 @@ def grade_checkpoint2():
         logging.warning(f"Error getting issues: {e}")
         return False
 
-def grade_checkpoints(trajectory):
+def grade_checkpoints(trajectory="") -> Result:
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints, bonus_for_completing_final)
 
-    checkpoints = [
-        (grade_checkpoint1, "[FEAT]: Unify evaluation prompt and episode rendering for human readers and Roadmap to Sotopia v0.1 appear in the trajectory"),
-        (grade_checkpoint2, "[FEAT]: Unify evaluation prompt and episode rendering for human readers and Roadmap to Sotopia v0.1 appear on the issues webpage")
-    ]
-    
-    points = 0
-    for i, (grade_func, description) in enumerate(checkpoints):
-        try:
-            passed = grade_func(trajectory) if grade_func == grade_checkpoint1 else grade_func()
-            if passed:
-                if i == 1:
-                    points = 2
-                else:
-                    points += 1
-            print(f"{'✓' if passed else '✗'} {description}")
-        except Exception as e:
-            logging.warning(f"Error while grading checkpoint {description}: {e}")
-            break
-    
-    return points
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+   
+    return result
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        logging.warning("No trajectory file provided, assuming empty trajectory")
-        trajectory = ""
-    else:
-        trajectory = load_trajectory(sys.argv[1])
-    
-    points = grade_checkpoints(trajectory)
-    print(f"\nFinal points: {points}/2")
+
+
