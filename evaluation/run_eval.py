@@ -80,6 +80,7 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
+    action.timeout = 900
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
