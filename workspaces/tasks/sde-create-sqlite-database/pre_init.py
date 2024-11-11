@@ -31,7 +31,7 @@ def execute_command(command):
 
 # test access file document
 def test_file():
-    response = requests.get(f"{NEXCTCLOUD_URL}/apps/files/files/626?dir=/Documents/Financials")
+    response = requests.get(f"dir=/Documents/Financials")
     logger.debug(response.content)
     if "July-September 2024 Financials.ods" not in str(response.content):
         logger.Error("cannot get correct file")
