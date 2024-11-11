@@ -16,6 +16,10 @@ concurrency:
 
 jobs:
   check-task-structure:
+    strategy:
+      matrix:
+        task-type: [ sde, pm, other ]
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -34,7 +38,7 @@ jobs:
 
     - name: Check task structure
       run: |
-        bash .github/validate_task_structure.sh
+        bash .github/validate_task_structure.sh ${{ matrix.task-type }}
 
   test-evaluator-basic:
     runs-on: ubuntu-latest
