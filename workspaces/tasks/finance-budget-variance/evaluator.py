@@ -3,17 +3,17 @@ import logging
 from typing import List
 from io import BytesIO
 
-from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, checkpoint
+from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"/Documents/Financials"]
             
     return all(url in trajectory for url in urls)
     
-@checkpoint
+@grader
 def grade_checkpoint2():
     file_name = "flagged_variances.xlsx"
     dir_name = "Documents/Financials"
