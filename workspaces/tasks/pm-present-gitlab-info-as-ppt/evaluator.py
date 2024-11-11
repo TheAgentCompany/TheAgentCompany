@@ -3,7 +3,7 @@ from typing import List
 from config import *
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import pptx
-from common import get_all_texts_from_slide
+from common import get_all_texts_from_slide, checkpoint
 
 expected_repos = [
     {"name": "api-server", "description": "", "issues": 0, "merge_requests": 0},
@@ -29,10 +29,12 @@ def within_tolerance(actual, expected, tolerance):
     """Check if the actual count is within tolerance of the expected count."""
     return abs(actual - expected) <= tolerance
 
+@checkpoint
 def grade_checkpoint1():
     """Check if the presentation file exists."""
     return os.path.exists('/workspace/Engineering_Progress.pptx')
 
+@checkpoint
 def grade_checkpoint2():
     """Evaluate the correctness of names, descriptions, issue counts, and merge request counts."""
     slide_path = '/workspace/Engineering_Progress.pptx'

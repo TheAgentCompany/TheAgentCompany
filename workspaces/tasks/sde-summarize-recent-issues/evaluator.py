@@ -5,16 +5,18 @@ import sys
 
 from typing import List
 
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     return f"http://the-agent-company.com:8929/root/janusgraph/-/issues/?sort=created_date&state=opened" in trajectory
 
+@checkpoint
 def grade_checkpoint2():
     messages = get_message("project-graphdb")
     if not messages:

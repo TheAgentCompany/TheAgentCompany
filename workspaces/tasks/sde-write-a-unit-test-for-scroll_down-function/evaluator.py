@@ -177,23 +177,28 @@ def run_pytest_with_stats(cov_file_path, ut_file_path, function_name=''):
 
     return stats
 
-def checkpoint1():
+@checkpoint
+def grade_checkpoint1():
     return check_repo_exists('openhands')
 
-def checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
+@checkpoint
+def grade_checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'):
     return is_file_exist(file_path=path)
 
-def checkpoint3(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
+@checkpoint
+def grade_checkpoint3(path='/workspace/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down'):
     return is_function_exists(file_path=path, function_name=function_name)
 
-def checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
+@checkpoint
+def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
     status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
     if not status:
         return False
 
     return True if status['passed']==1 else False
 
-def checkpoint5():
+@checkpoint
+def grade_checkpoint5():
     test_content = get_function_content(file_path='/workspaces/openhands/tests/unit/test_agent_skill.py', function_name='test_scroll_down')
     func_content = get_function_content(file_path='/workspaces/openhands/openhands/runtime/plugins/agent_skills/file_ops/file_ops.py', function_name='scroll_down')
 
@@ -214,11 +219,11 @@ def grade_checkpoints(trajectory="") -> Result:
 
     # Define the scores corresponding to when each function is True
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 1,
-        checkpoint4: 2,
-        checkpoint5: 1
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 1,
+        grade_checkpoint3: 1,
+        grade_checkpoint4: 2,
+        grade_checkpoint5: 1
     }
 
     for func, total_score in scores.items():

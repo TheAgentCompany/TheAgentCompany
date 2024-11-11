@@ -5,7 +5,7 @@ import urllib
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import make_gitlab_request
+from common import make_gitlab_request, checkpoint
 
 
 ############################# Init Variables #####################################
@@ -34,7 +34,7 @@ def get_most_recent_release():
         return None
     return releases.json()[0]
 
-
+@checkpoint
 def check_release_title():
     most_recent_release = get_most_recent_release()
     if most_recent_release is None:
@@ -43,6 +43,7 @@ def check_release_title():
         return True
     return False
 
+@checkpoint
 def check_release_content():
     most_recent_release = get_most_recent_release()
     if most_recent_release is None:

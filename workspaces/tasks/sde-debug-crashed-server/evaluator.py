@@ -9,7 +9,7 @@ import requests
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -31,20 +31,24 @@ def get_history(username):
         content += f"{username}'s chat: {msg['msg']}\n"
     return content
 
-def checkpoint1(content: list[str]):
+@checkpoint
+def grade_checkpoint1(content: list[str]):
     return len(content) > 0
 
-def checkpoint2(content: list[str]):
+@checkpoint
+def grade_checkpoint2(content: list[str]):
     return '2039fome' in content
 
-def checkpoint3(content: list[str]):
+@checkpoint
+def grade_checkpoint3(content: list[str]):
     return len(content) > 0
 
-def checkpoint4(content: list[str]):
+@checkpoint
+def grade_checkpoint4(content: list[str]):
     return 'cat123' in content
-    
 
-def checkpoint5():
+@checkpoint
+def grade_checkpoint5():
     try:
         response = requests.get('http://localhost:5000/events')
         return "Enterprise-wide user-facing open architecture" in response.text
@@ -56,11 +60,11 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints)
 
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 1,
-        checkpoint4: 1,
-        checkpoint5: 4,
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 1,
+        grade_checkpoint3: 1,
+        grade_checkpoint4: 1,
+        grade_checkpoint5: 4,
     }
 
     # Check RocketChat messages
@@ -71,11 +75,11 @@ def grade_checkpoints(trajectory="") -> Result:
     logging.info(zhang_msgs)
 
     for func, score in scores.items():
-        if func == checkpoint5:
+        if func == grade_checkpoint5:
             checkpoints.append(Checkpoint(score, score * int(func())))
-        elif func == checkpoint1 or func == checkpoint2:
+        elif func == grade_checkpoint1 or func == grade_checkpoint2:
             checkpoints.append(Checkpoint(score, score * int(func(emily_msgs))))
-        elif func == checkpoint3 or func == checkpoint4:
+        elif func == grade_checkpoint3 or func == grade_checkpoint4:
             checkpoints.append(Checkpoint(score, score * int(func(zhang_msgs))))
         else:
             raise ValueError(f"Unknown checkpoint: {func}")

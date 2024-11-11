@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_any_of_given_checkpoints
-from common import get_plane_project_id, make_gitlab_request
+from common import get_plane_project_id, make_gitlab_request, checkpoint
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1
@@ -28,16 +28,20 @@ def check_issue_exists_in_gitlab(issue_name):
             return True
     return False
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     url = "tac/projects/f04e5c07-8fa2-4eaf-a35b-5cacf3f1d025/issues"
     return url in trajectory
 
+@checkpoint
 def grade_checkpoint2():
     return not check_issue_exists_in_gitlab(TODO_ISSUE_1) and not check_issue_exists_in_gitlab(TODO_ISSUE_2)
 
+@checkpoint
 def grade_checkpoint3():
     return check_issue_exists_in_gitlab(NEW_ISSUE_1)
 
+@checkpoint
 def grade_checkpoint4():
     return check_issue_exists_in_gitlab(NEW_ISSUE_2)
 

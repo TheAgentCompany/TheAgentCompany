@@ -5,7 +5,7 @@ from typing import List
 import pandas as pd
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, num_rocketchat_users_contacted
+from common import create_rocketchat_client, num_rocketchat_users_contacted, checkpoint
 
 rocket_client = create_rocketchat_client()
 
@@ -22,10 +22,12 @@ def load_employees_csv():
         return None
 
 
+@checkpoint
 def grade_checkpoint_1() -> bool:
     return num_rocketchat_users_contacted(rocket_client, ['priya_sharma', 'sophia_rodriguez', 'zhang_wei']) == 3
 
 
+@checkpoint
 def grade_checkpoint_2() -> bool:
     csv = load_employees_csv()
     if csv is None:
@@ -38,6 +40,7 @@ def grade_checkpoint_2() -> bool:
         return False
 
 
+@checkpoint
 def grade_checkpoint_3() -> bool:
     csv = load_employees_csv()
     if csv is None:
@@ -53,6 +56,7 @@ def grade_checkpoint_3() -> bool:
         return False
 
 
+@checkpoint
 def grade_checkpoint_4() -> bool:
     csv = load_employees_csv()
     if csv is None:
@@ -67,6 +71,7 @@ def grade_checkpoint_4() -> bool:
         return False
 
 
+@checkpoint
 def grade_checkpoint_5() -> bool:
     csv = load_employees_csv()
     if csv is None:

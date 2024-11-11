@@ -9,6 +9,7 @@ from common import *
 project_path = "root/raft"
 
 # Check if the repository returns a 404 status via the API.
+@checkpoint
 def check_repository_deleted():
     
     try:

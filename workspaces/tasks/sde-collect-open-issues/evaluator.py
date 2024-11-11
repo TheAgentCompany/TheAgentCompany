@@ -6,8 +6,10 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import checkpoint
 
 # Check http://the-agent-company.com:8929/root/sotopia/-/issues is in the trajectory
+@checkpoint
 def grade_checkpoint1(trajectory):
     target_url = "http://the-agent-company.com:8929/root/sotopia/-/issues"
     
@@ -18,6 +20,7 @@ def grade_checkpoint1(trajectory):
         return False
 
 # Check /workspace/issues.csv has 12 lines and is a valid csv file
+@checkpoint
 def grade_checkpoint2():
     try:
         file_path = '/workspace/issues.csv'
@@ -36,6 +39,7 @@ def grade_checkpoint2():
         return False
 
 # Check /workspace/issues.csv contains line “215,[FEAT]: Custom model docs”
+@checkpoint
 def grade_checkpoint3():
     try:
         file_path = '/workspace/issues.csv'

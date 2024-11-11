@@ -2,7 +2,7 @@ import logging
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, evaluate_chat_history_with_llm
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, checkpoint
 
 
 LEADER_NAME = "Chen Xinyi"
@@ -12,6 +12,7 @@ TARGET_INTERVIEWER = "Emily Zhou"
 rocket = create_rocketchat_client()
 
 
+@checkpoint
 def grade_checkpoint1():
     # [2pts] Check the chat history with the leader Chen Xinyi
     try:
@@ -30,6 +31,7 @@ def grade_checkpoint1():
         return False
 
 
+@checkpoint
 def grade_checkpoint2():
     # [2pts] Check whether examinee chat with Emily Zhou (the right person).
     try:
@@ -52,6 +54,7 @@ def grade_checkpoint2():
     return True
 
 
+@checkpoint
 def grade_checkpoint3():
     # [2pts] Check whether examinee does not chat with others (Mike Chen, Wang Fang, David Wong, Huang Jie)
 

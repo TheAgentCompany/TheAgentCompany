@@ -52,9 +52,11 @@ def get_merge_request_file_changes(project_id, merge_request):
 
 ############################# grade checkpoints #####################################
 
+@checkpoint
 def grade_checkpoint1():
     return check_repo_exists(PROJECT_NAME)
 
+@checkpoint
 def grade_checkpoint2():
     old_line = "pub vnode_count: i64,"
     file_path = os.path.join('/workspace', PROJECT_NAME, TARGET_FILE)
@@ -69,6 +71,7 @@ def grade_checkpoint2():
                 return False
     return True
 
+@checkpoint
 def grade_checkpoint3():
     new_line = "pub vnode_count: i32,"
     file_path = os.path.join('/workspace', PROJECT_NAME, TARGET_FILE)
@@ -84,9 +87,11 @@ def grade_checkpoint3():
     return False
 
 
+@checkpoint
 def grade_checkpoint4(project_id):
     return open_merge_request_exists(project_id, "fix(meta): fix vnode count data type when querying system table rw_fragments")
 
+@checkpoint
 def grade_checkpoint5(project_id):
     merge_request = get_gitlab_merge_request_by_title(project_id,"fix(meta): fix vnode count data type when querying system table rw_fragments") if project_id else None
     file_changes = get_merge_request_file_changes(project_id, merge_request)

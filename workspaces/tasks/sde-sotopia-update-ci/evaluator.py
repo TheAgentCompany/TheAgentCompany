@@ -6,6 +6,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import *
 
+@checkpoint
 def grade_checkpoint1():
     try:
         result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/update-ci'], capture_output=True, text=True)
@@ -19,6 +20,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking the local repository: {e}")
         return False
 
+@checkpoint
 def grade_checkpoint2():
     try:
         with open('/workspace/sotopia/.github/workflows/cli_tests.yml', 'r') as file:
@@ -36,6 +38,7 @@ def grade_checkpoint2():
         logging.error(f"Error occurred while checking cli_tests.yml: {e}")
         return False
 
+@checkpoint
 def grade_checkpoint3():
     try:
         with open('/workspace/sotopia/.github/workflows/cli_tests.yml', 'r') as file:

@@ -7,6 +7,7 @@ from datetime import datetime
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
+from common import checkpoint
 
 
 def check_excel_file_exists(file_path):
@@ -79,11 +80,13 @@ def analyze_csv(filename):
         return None
 
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     urls = [f"/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance"]
     return any(url in trajectory for url in urls)
 
 
+@checkpoint
 def grade_checkpoint2():
     if not check_excel_file_exists("/workspace/april-attendance.xlsx"):
         return False
@@ -102,6 +105,7 @@ def standardize_df(df):
     return df
 
 
+@checkpoint
 def grade_checkpoint3():
     output = standardize_df(read_excel("/workspace/april-attendance.xlsx"))
     expected_answer = standardize_df(analyze_csv('/utils/april-attendance-data.csv'))

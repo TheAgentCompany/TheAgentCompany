@@ -5,8 +5,10 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import checkpoint
 
 # Check if go is installed (go version returns "go version xxx")
+@checkpoint
 def grade_checkpoint1():
     try:
         output = run_command(["go", "version"])
@@ -15,6 +17,7 @@ def grade_checkpoint1():
             logging.error(f"Fail to grade checkpoint 1: {e}")
 
 # Check if go 1.17 is installed (1.17 keyword is in it)
+@checkpoint
 def grade_checkpoint2():
     try:
         output = run_command(["go", "version"])

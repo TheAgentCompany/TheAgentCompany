@@ -5,18 +5,22 @@ from typing import List
 
 rocket=create_rocketchat_client()
 
-def checkpoint1(trajectory):
+@checkpoint
+def grade_checkpoint1(trajectory):
     return "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/8eba9853-4178-42a6-b113-e66002e8e0ab" in trajectory and "http://the-agent-company.com:8091/tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues/5d1c8695-acfd-44c2-8d2d-e41c67cdd8c0" in trajectory
 
-def checkpoint2(trajectory):
+@checkpoint
+def grade_checkpoint2(trajectory):
     return "http://the-agent-company.com:3000/home" in trajectory
 
-def checkpoint3():
+@checkpoint
+def grade_checkpoint3():
     msgs_1 = get_rocketchat_personal_chat_history(rocket, username='mike_chen')
     msgs_2 = get_rocketchat_personal_chat_history(rocket, username='wang_fang')
     return bool(msgs_1) and bool(msgs_2)
 
-def checkpoint4():
+@checkpoint
+def grade_checkpoint4():
     project_name = "OpenHands"
     issue_name_1 = "Model: recall rate is 0"
     issue_name_2 = "Model: security problem"
@@ -51,16 +55,16 @@ def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    passed1 = checkpoint1(trajectory)
+    passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(1, int(passed1)))
 
-    passed2 = checkpoint2(trajectory)
+    passed2 = grade_checkpoint2(trajectory)
     checkpoints.append(Checkpoint(1, int(passed2)))
 
-    passed3 = checkpoint3()
+    passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
-    passed4 = checkpoint4()
+    passed4 = grade_checkpoint4()
     checkpoints.append(Checkpoint(2, 2 * int(passed4)))
     return result
 

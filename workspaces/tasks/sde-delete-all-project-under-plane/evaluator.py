@@ -8,6 +8,7 @@ from common import *
 
 
 # all project get deleted.
+@checkpoint
 def grade_checkpoint1():
     try:
         # get all projects

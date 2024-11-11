@@ -3,9 +3,10 @@ import json
 from typing import List
 from scoring import Result, Checkpoint
 
-from common import evaluate_with_llm
+from common import evaluate_with_llm, checkpoint
 
 
+@checkpoint
 def grade_checkpoint1():
     # [2pts] Read `/workspace/url_for_issues.txt`, check if the agent find the correct url `http://the-agent-company:8091/api/workspaces/{workspace_name}/issues/` (in our case `workspace_name` is `tac`)
     try:
@@ -25,6 +26,7 @@ def grade_checkpoint1():
         return False
 
 
+@checkpoint
 def grade_checkpoint2():
     # [2pts] Check whether examinee get the correct parameter `order_by=-target_date, per_page=10, cursor=10:0:0`
 

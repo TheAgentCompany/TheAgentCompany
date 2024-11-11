@@ -20,7 +20,8 @@ def get_gitlab_pipeline():
         return {}
 
 
-def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/editor?branch_name=main'):
+@checkpoint
+def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/editor?branch_name=main'):
     if len(sys.argv) < 2:
         trajectory = ""
     else:
@@ -33,7 +34,8 @@ def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/edito
     return url in trajectory
 
 
-def checkpoint2():
+@checkpoint
+def grade_checkpoint2():
     msgs = get_gitlab_pipeline()
     return bool(msgs)
 
@@ -44,8 +46,8 @@ def grade_checkpoints(trajectory="") -> Result:
 
     # Define the scores corresponding to when each function is True
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 2
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 2
     }
 
     for func, total_score in scores.items():

@@ -1,7 +1,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, get_plane_project_id, get_plane_issue_details, get_plane_state_details
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, get_plane_project_id, get_plane_issue_details, get_plane_state_details, checkpoint
 
 CHECKPOINT_1_POINTS = 2
 CHECKPOINT_2_POINTS = 1
@@ -13,10 +13,12 @@ PROJECT_ID = get_plane_project_id(PROJECT_NAME)
 ISSUE_NAME = 'Evaluate data throughput'
 ASSIGNEE_USERNAME = 'zhang_wei'
 
+@checkpoint
 def grade_checkpoint1():
     chat_history = get_rocketchat_personal_chat_history(rocket, ASSIGNEE_USERNAME)
     return chat_history is not None and len(chat_history) > 0
 
+@checkpoint
 def grade_checkpoint2():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_NAME)
     if issue is None:

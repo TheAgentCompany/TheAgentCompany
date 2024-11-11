@@ -6,12 +6,15 @@ import sys
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
+from common import checkpoint
 
 
+@checkpoint
 def grade_checkpoint1():
     return os.path.exists("/workspace/copilot-arena-server")
 
 
+@checkpoint
 def grade_checkpoint2(trajectory):
     return "requirements.txt" in trajectory
 

@@ -7,7 +7,7 @@ import urllib
 
 
 from scoring import Result, Checkpoint
-from common import make_gitlab_request, llm_complete
+from common import make_gitlab_request, llm_complete, checkpoint
 from config import GITLAB_BASEURL, GITLAB_USER
 from prompts import wiki_evaluation_prompt
 
@@ -41,13 +41,16 @@ def get_readme():
         logging.error(f"Error fetching README: {e}")
         return None
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     url = f"{GITLAB_BASEURL}/{PROJECT_PATH}"
     return url in trajectory
 
+@checkpoint
 def grade_checkpoint2(wiki_page):
     return wiki_page is not None
 
+@checkpoint
 def grade_checkpoint3(wiki_page):
     wiki = f"{json.dumps(wiki_page)}"
     readme = get_readme()

@@ -4,11 +4,13 @@ import logging
 
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_any
+from common import checkpoint
 
-
+@checkpoint
 def check_trajectory(trajectory):
     return f"bustub/-/issues/759" in trajectory
 
+@checkpoint
 def test_wiki():
     try:
         response = requests.get(f"doc/-/wikis/HyperLogLog_project") 
@@ -22,6 +24,7 @@ def test_wiki():
     print("wiki page successfully created")
     return True
 
+@checkpoint
 def check_key_contents():
     key_words = ["HyperLogLog", "algorithm", "hash", "A great database is a great life", "MSB", "Task #1", "Task #2", "Instructions", "Important Information", "Setting Up Your Development Environment", "Testing"]
     key_image_links = ["https://15445.courses.cs.cmu.edu/fall2024/project0/img/cardinality.png", "https://15445.courses.cs.cmu.edu/fall2024/project0/img/hll-example.png"]
@@ -37,6 +40,7 @@ def check_key_contents():
             all(item in response for item in key_image_links) and  \
             all(item in response for item in key_links)
 
+@checkpoint
 def check_url_file_exist():
     filename = "/workspace/wiki_url.txt"
     try:

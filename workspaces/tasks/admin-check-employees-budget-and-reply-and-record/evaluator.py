@@ -7,18 +7,21 @@ from typing import List
 rocket = create_rocketchat_client()
 
 
-def checkpoint1():
+@checkpoint
+def grade_checkpoint1():
     passed = True
     for name in ['li_ming', 'zhang_wei', 'huang_jie', 'sophia_rodriguez']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
 
-def checkpoint2(trajectory):
+@checkpoint
+def grade_checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist" in trajectory
 
 
-def checkpoint3():
+@checkpoint
+def grade_checkpoint3():
     """
     Database:
         Li Ming:
@@ -46,7 +49,8 @@ def checkpoint3():
     return True
 
 
-def checkpoint4(file_path):
+@checkpoint
+def grade_checkpoint4(file_path):
     """
     Database:
     total cost 1195*5+649*5+899*3=11917
@@ -79,16 +83,16 @@ def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    passed1 = checkpoint1()
+    passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
 
-    passed2 = checkpoint2(trajectory)
+    passed2 = grade_heckpoint2(trajectory)
     checkpoints.append(Checkpoint(1, 1 * int(passed2)))
 
-    passed3 = checkpoint3()
+    passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
-    passed4 = checkpoint4(file_path='result.txt')
+    passed4 = grade_checkpoint4(file_path='result.txt')
     checkpoints.append(Checkpoint(2, 2 * int(passed4)))
 
     return result

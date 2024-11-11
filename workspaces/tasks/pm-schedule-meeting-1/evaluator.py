@@ -5,7 +5,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 from common import evaluate_with_llm
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -46,13 +46,16 @@ def check_final_result(file_path):
     return evaluate_with_llm(content, predicate)
 
 
-def checkpoint1(username='emily_zhou'):
+@checkpoint
+def grade_checkpoint1(username='emily_zhou'):
     return get_history(username=username)
 
-def checkpoint2(username='liu_qiang'):
+@checkpoint
+def grade_checkpoint2(username='liu_qiang'):
     return get_history(username=username)
 
-def checkpoint3(file_path = '/workspace/conclusion.txt'):
+@checkpoint
+def grade_checkpoint3(file_path = '/workspace/conclusion.txt'):
     return check_final_result(file_path=file_path)
 
 
@@ -62,9 +65,9 @@ def grade_checkpoints(trajectory=""):
 
     # Define the scores corresponding to when each function is True
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 2,
-        checkpoint3: 3
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 2,
+        grade_checkpoint3: 3
     }
 
     for func, total_score in scores.items():

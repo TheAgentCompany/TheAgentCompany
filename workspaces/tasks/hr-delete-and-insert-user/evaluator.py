@@ -2,7 +2,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -22,13 +22,16 @@ def check_user_exist(username):
     is_exist = response_user.get('success', False)
     return is_exist
 
-def checkpoint1(username='li_ming'):
+@checkpoint
+def grade_checkpoint1(username='li_ming'):
     return check_user_removed(username=username)
 
-def checkpoint2(username='dandan_liu'):
+@checkpoint
+def grade_checkpoint2(username='dandan_liu'):
     return check_user_exist(username=username)
 
-def checkpoint3(channel_name='product', username='dandan_liu'):
+@checkpoint
+def grade_checkpoint3(channel_name='product', username='dandan_liu'):
     return check_user_added(channel_name=channel_name,username=username)
 
 def grade_checkpoints(trajectory=""):
@@ -37,9 +40,9 @@ def grade_checkpoints(trajectory=""):
 
     # Define the scores corresponding to when each function is True
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 1
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 1,
+        grade_checkpoint3: 1
     }
 
     for func, total_score in scores.items():

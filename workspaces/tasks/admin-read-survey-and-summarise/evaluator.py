@@ -2,7 +2,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -19,15 +19,18 @@ def get_history(username):
 
     return msgs
 
-def checkpoint1(content: str):
+@checkpoint
+def grade_checkpoint1(content: str):
     return content is not None and len(content) > 0
 
-def checkpoint2(content: str):
+@checkpoint
+def grade_checkpoint2(content: str):
     if content is None or len(content) == 0:
         return False
     return 'coke' in content and 'dew' in content
 
-def checkpoint3(content: str):
+@checkpoint
+def grade_checkpoint3(content: str):
     if content is None or len(content) == 0:
         return False
     return 'apple' in content and 'sprite' in content
@@ -36,9 +39,9 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 1,
+        grade_checkpoint1: 1,
+        grade_checkpoint2: 1,
+        grade_checkpoint3: 1,
     }
 
     msgs = get_history(username='chen_xinyi')

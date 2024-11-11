@@ -1,7 +1,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, get_plane_issue_details, get_plane_project_id, get_plane_cycle_details, get_plane_issues_by_project_cycle, create_plane_issue, add_plane_issue_to_cycle
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, get_plane_issue_details, get_plane_project_id, get_plane_cycle_details, get_plane_issues_by_project_cycle, create_plane_issue, add_plane_issue_to_cycle, checkpoint
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 1
@@ -19,21 +19,25 @@ CYCLE_NAME = "Sprint 2"
 
 issue = None
 
+@checkpoint
 def grade_checkpoint1():
     chat_history = get_rocketchat_personal_chat_history(rocket, ROCKETCHAT_USERNAME)
     return chat_history is not None and len(chat_history) > 0
 
+@checkpoint
 def grade_checkpoint2():
     global issue
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_NAME)
     return issue is not None
 
+@checkpoint
 def grade_checkpoint3():
     global issue
     if issue is None:
         return False
     return PLANE_USER_UUID in issue["assignees"]
 
+@checkpoint
 def grade_checkpoint4():
     global issue
     if issue is None:

@@ -7,10 +7,12 @@ from scoring import Result, Checkpoint
 from common import *
 
 # Check if OpenHands repo is cloned
+@checkpoint
 def grade_checkpoint1():
     return check_repo_exists('openhands')
 
 # Check if at least one unit test is collected
+@checkpoint
 def grade_checkpoint2(trajectory):
     try:
         match = re.search(r'collected (\d+) item(s)?', trajectory)
@@ -23,6 +25,7 @@ def grade_checkpoint2(trajectory):
         return False
 
 # Check if at least one unit test passes
+@checkpoint
 def grade_checkpoint3(trajectory):
     try:
         passed_match = re.search(r'(\d+) passed', trajectory)
@@ -35,6 +38,7 @@ def grade_checkpoint3(trajectory):
         return False
 
 # Check if all unit tests pass
+@checkpoint
 def grade_checkpoint4(trajectory):
     try:
         if 'failed' in trajectory.lower():

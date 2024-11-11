@@ -19,13 +19,14 @@ GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
+@checkpoint
 def check_trajectory(trajectory):
     return f"{GITLAB_URL}/bustub/-/issues/759" in trajectory
 
@@ -40,7 +41,7 @@ def get_database_members(channel_name=["project-graphdb", "project-streamdb"]):
 
     return members
 
-
+@checkpoint
 def check_project_distributed():
     members = get_database_members()
 

@@ -1,7 +1,7 @@
 from typing import List
 from scoring import Result, Checkpoint
 import subprocess
-from common import check_repo_exists
+from common import check_repo_exists, checkpoint
 
 PYPROJECT_TOML_TREE_SITTER_VERSION = """tree-sitter = "0.23.2\""""
 PYPROJECT_TOML_ZOPE_INTERFACE_VERSION = """zope-interface = "7.1.1\""""
@@ -33,12 +33,15 @@ def get_package_version(package_name):
         print(f"Error executing command: {e}")
         return ""
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     return "root/doc/-/wikis" in trajectory
 
+@checkpoint
 def grade_checkpoint2():
     return check_repo_exists("openhands")
 
+@checkpoint
 def grade_checkpoint3():
     with open("/workspace/openhands/pyproject.toml") as f:
         code_content = f.read()
@@ -49,6 +52,7 @@ def grade_checkpoint3():
             return True
     return False
 
+@checkpoint
 def grade_checkpoint4():
     with open("/workspace/openhands/poetry.lock") as f:
         code_content = f.read()
@@ -59,6 +63,7 @@ def grade_checkpoint4():
             return True
     return False
 
+@checkpoint
 def grade_checkpoint5():
     return get_package_version("tree-sitter") == "0.23.2" and get_package_version("zope-interface") == "7.1.1"
 

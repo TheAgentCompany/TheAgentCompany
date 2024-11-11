@@ -5,6 +5,7 @@ from scoring import Result, Checkpoint
 from common import *
 
 
+@checkpoint
 def grade_checkpoint1():
     try:
         # Get all projects

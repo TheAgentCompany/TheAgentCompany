@@ -2,13 +2,14 @@ import logging
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, evaluate_chat_history_with_llm
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, checkpoint
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 
+@checkpoint
 def grade_checkpoint1():
     # [2pts] Check if the examinee chat with the correct person (Mike Chen)
     try:
@@ -29,6 +30,7 @@ def grade_checkpoint1():
         return False
 
 
+@checkpoint
 def grade_checkpoint2():
     # [3pts] Check if the correct pr (#8676) exist in the `/workspace/solution.txt`.
 

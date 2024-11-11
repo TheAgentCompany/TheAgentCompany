@@ -4,7 +4,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import get_rocketchat_channel_room_id, check_rocketchat_message_posted,create_rocketchat_client
+from common import get_rocketchat_channel_room_id, check_rocketchat_message_posted,create_rocketchat_client, checkpoint
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -26,21 +26,27 @@ def check_user_added(rocket_client, channel_name, username):
     return any(user['username'] == username for user in users_list)
 
 
+@checkpoint
 def grade_checkpoint1():
     return check_channel_exists("literaturereview")
 
+@checkpoint
 def grade_checkpoint4():
     return check_channel_exists("benchmarking")
 
+@checkpoint
 def grade_checkpoint2():
     return check_user_added(rocket, "literaturereview", "emma_lewis") and check_user_added(rocket, "literaturereview", "wang_fang") and check_user_added(rocket, "benchmarking", "emma_lewis")
 
+@checkpoint
 def grade_checkpoint5():
     return check_user_added(rocket, "benchmarking", "emma_lewis") and check_user_added(rocket, "benchmarking", "alex_turner") and check_user_added(rocket, "benchmarking", "david_wong")
 
+@checkpoint
 def grade_checkpoint3():
     return check_rocketchat_message_posted(rocket, "literaturereview", ['Welcome to the literature review channel!'])
 
+@checkpoint
 def grade_checkpoint6():
     return check_rocketchat_message_posted(rocket, "benchmarking", ['This will be for all our benchmarking projects.'])
 

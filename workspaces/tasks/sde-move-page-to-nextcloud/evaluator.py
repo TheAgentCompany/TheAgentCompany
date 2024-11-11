@@ -8,15 +8,18 @@ from common import *
 GITLAB_ISSUE_URL = "http://the-agent-company.com:8929/root/bustub/-/issues/759"
 
 # Check if gitlab issue was accessed
-def checkpoint1(trajectory):
+@checkpoint
+def grade_checkpoint1(trajectory):
     return GITLAB_ISSUE_URL in trajectory
 
 # Check if shared page exists
-def checkpoint2():
+@checkpoint
+def grade_checkpoint2():
     return get_nextcloud_url_in_file('/workspace/sharelink.txt')
 
 # Check if content in nextcloud has the same keyword as the original one
-def checkpoint3():
+@checkpoint
+def grade_checkpoint3():
     try:
         url_content = get_nextcloud_url_in_file('/workspace/sharelink.txt')
         if not url_content:
@@ -46,9 +49,9 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    checkpoints.append(Checkpoint(1, checkpoint1(trajectory)))
-    checkpoints.append(Checkpoint(1, checkpoint2()))
-    checkpoints.append(Checkpoint(1, checkpoint3()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
 
     return result
 

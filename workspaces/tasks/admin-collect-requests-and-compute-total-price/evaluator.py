@@ -8,16 +8,19 @@ from typing import List
 rocket = create_rocketchat_client()
  
 
-def checkpoint1():
+@checkpoint
+def grade_checkpoint1():
     passed = True
     for name in ['huang_jie', 'sophia_rodriguez', 'mike_chen', 'sarah_johnson']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
-def checkpoint2(trajectory):
+@checkpoint
+def grade_checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
 
-def checkpoint3(filepath):
+@checkpoint
+def grade_checkpoint3(filepath):
     """
     Huang Jie one Monitor (27” Dell UltraSharp 4K cost $1799 and two External Hard Drive (2TB) cost $129 each, total cost $1799 + 2*$129 = $2057
     Sophia Rodriguez five Printer Paper (5000 sheets) cost $45 and four Notebooks (Pack of 5) cost $25 each, total cost $45*5 + $25*4 = $325
@@ -38,13 +41,13 @@ def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    passed1 = checkpoint1()
+    passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
 
-    passed2 = checkpoint2(trajectory)
+    passed2 = grade_checkpoint2(trajectory)
     checkpoints.append(Checkpoint(1, 1 * int(passed2)))
 
-    passed3 = checkpoint3(filepath='result.txt')
+    passed3 = grade_checkpoint3(filepath='result.txt')
     checkpoints.append(Checkpoint(1, 1 * int(passed3)))
 
     return result

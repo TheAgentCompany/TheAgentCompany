@@ -16,10 +16,13 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
+from common import checkpoint
 
+@checkpoint
 def grade_checkpoint1(trajectory):
     return "8929/root/api-server" in trajectory
 
+@checkpoint
 def grade_checkpoint2():
     if os.path.exists('/workspace/api-server/server.py'):
         with open('/workspace/api-server/server.py') as f:

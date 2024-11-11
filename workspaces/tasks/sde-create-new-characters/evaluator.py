@@ -8,6 +8,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import *
 
+@checkpoint
 def grade_checkpoint1():
     try:
         result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/add-new-characters'], capture_output=True, text=True)
@@ -21,6 +22,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking the local repository: {e}")
         return False
 
+@checkpoint
 def grade_checkpoint2():
     try:
         if os.path.exists('/workspace/sotopia/data/medical_characters.jsonl'):
@@ -33,6 +35,7 @@ def grade_checkpoint2():
         logging.error(f"Error occurred while checking the data folder: {e}")
         return False
 
+@checkpoint
 def grade_checkpoint3():
     try:
         import json
