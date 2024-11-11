@@ -5,7 +5,7 @@ from common import (
     create_rocketchat_client,
     get_rocketchat_personal_chat_history,
     get_all_texts_from_slide,
-    checkpoint
+    grader
 )
 from scoring import Result, Checkpoint, bonus_for_completing_any
 import pandas as pd
