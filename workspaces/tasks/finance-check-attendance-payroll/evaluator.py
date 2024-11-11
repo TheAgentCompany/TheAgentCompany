@@ -7,6 +7,7 @@ import pandas as pd
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 import math
+from common import grader
 
 def check_excel_file_exists(file_path):
     abs_path = os.path.abspath(file_path)
@@ -94,11 +95,13 @@ def final_earnings_df(hourly_rate, employee_df):
     z= df[['Name', 'Total Earnings']]
     return z
 
+@grader
 def grade_checkpoint1(trajectory):
     urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "/apps/files/files/1263?dir=/Documents/Human%20Resources%20Team/Attendance"]
     return all(url in trajectory for url in urls)
 
 
+@grader
 def grade_checkpoint2():
     if not check_excel_file_exists("/workspace/april-payroll.xlsx"):
         return False
@@ -117,6 +120,7 @@ def standardize_df(df):
     return df
 
 
+@grader
 def grade_checkpoint3():
     output = standardize_df(read_excel("/workspace/april-payroll.xlsx"))
 

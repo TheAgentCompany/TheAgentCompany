@@ -1,7 +1,7 @@
 import logging
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_rocketchat_channel_history
+from common import create_rocketchat_client, get_rocketchat_channel_history, grader
 from config import *
 
 ############################# Init Variables #####################################
@@ -10,6 +10,7 @@ rocket = create_rocketchat_client()
 
 
 
+@grader
 def grade_checkpoint1(trajectory):
     required_url_parts = [
         "/root/openhands/-/issues/",
@@ -18,6 +19,7 @@ def grade_checkpoint1(trajectory):
     ]
     return all(part in trajectory for part in required_url_parts)
 
+@grader
 def grade_checkpoint2():
     messages = get_rocketchat_channel_history(rocket, "project-ai")
     if not messages:

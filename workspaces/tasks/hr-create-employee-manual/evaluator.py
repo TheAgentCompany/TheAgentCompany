@@ -8,17 +8,19 @@ from odf.element import Node
 import json
 from typing import List
 
-from common import llm_complete, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud
+from common import llm_complete, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 from config import NEXTCLOUD_URL
 
 
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"{NEXTCLOUD_URL}/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
 
+@grader
 def grade_checkpoint2():
     file_name = "Employee_Manual.odt"
     dir_name = "Documents/Human%20Resources%20Team"
@@ -48,6 +50,7 @@ def grade_checkpoint2():
         print("Failed to retrieve file content.")
         return 0
     
+@grader
 def grade_checkpoint3():
     file_name = "Employee_Manual.odt"
     dir_name = "Documents/Human%20Resources%20Team"

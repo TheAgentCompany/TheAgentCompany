@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from common import get_nextcloud_url_in_file, download_nextcloud_content
+from common import get_nextcloud_url_in_file, download_nextcloud_content, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
@@ -59,20 +59,25 @@ def read_sheet(sheet_index: int):
         return None
     return df
 
+@grader
 def grade_checkpoint1(link):
     if not link:
         return False
     return True
 
+@grader
 def grade_checkpoint2():
     return found_matching_row(read_sheet(0), sheet1)
 
+@grader
 def grade_checkpoint3():
     return found_matching_row(read_sheet(1), sheet2)
 
+@grader
 def grade_checkpoint4():
     return found_matching_row(read_sheet(2), sheet3)
 
+@grader
 def grade_checkpoint5():
     return found_matching_row(read_sheet(3), sheet4)
 

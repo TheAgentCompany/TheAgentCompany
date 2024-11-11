@@ -3,14 +3,16 @@ import logging
 import pptx
 from typing import List
 
-from common import get_all_texts_from_slide, evaluate_with_llm
+from common import get_all_texts_from_slide, evaluate_with_llm, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 SLIDES_PATH = "/workspace/pitch.pptx"
 
+@grader
 def grade_checkpoint1():
     return os.path.exists(SLIDES_PATH)
 
+@grader
 def grade_checkpoint2(slides):
     """1st slide should contain the title <Idea: Integrate Sotopia into Openhands>"""
     if slides is None or len(slides.slides) < 1:
@@ -24,6 +26,7 @@ def grade_checkpoint2(slides):
 
     return all(k in text for k in ["idea", "integrate", "sotopia", "into", "openhands"])
 
+@grader
 def grade_checkpoint3(slides):
     """2nd slide should contain a short introduction to Sotopia"""
     if slides is None or len(slides.slides) < 2:
@@ -41,6 +44,7 @@ def grade_checkpoint3(slides):
         The environment is designed to be open-ended, meaning that the environment can be easily extended to include new environments and new agents. \
         The environment is also designed to be scalable, meaning that the environment can be easily scaled to include a large number of agents and environments.")
 
+@grader
 def grade_checkpoint4(slides):
     """3nd slide has the title <Social Tasks>"""
     if slides is None or len(slides.slides) < 3:
@@ -54,6 +58,7 @@ def grade_checkpoint4(slides):
 
     return all(k in text for k in ["social", "task"])
 
+@grader
 def grade_checkpoint5(slides):
     """4th slide should be Q&A"""
     if slides is None or len(slides.slides) < 4:

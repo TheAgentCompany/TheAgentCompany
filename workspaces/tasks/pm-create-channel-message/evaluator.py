@@ -3,7 +3,7 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client
+from common import create_rocketchat_client, grader
 
 # Rocket.Chat server URL and admin credentials
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'the-agent-company.com'
@@ -14,7 +14,8 @@ ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-def checkpoint1(trajectory):
+@grader
+def grade_checkpoint1(trajectory):
     return f"{ROCKETCHAT_URL}/home" in trajectory
 
 
@@ -25,7 +26,7 @@ def get_channel_room_id(channel_name):
         return response['channel']['_id']
     return None
 
-
+@grader
 def check_user_added(channel_name, username):
     room_id = get_channel_room_id(channel_name)
     if not room_id:
@@ -35,7 +36,7 @@ def check_user_added(channel_name, username):
     users_list = members.get("members", [])
     return any(user['username'] == username for user in users_list)
 
-
+@grader
 def check_message_sent(channel_name, message, username):
     room_id = get_channel_room_id(channel_name)
     if not room_id:
@@ -58,7 +59,7 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    checkpoints.append(Checkpoint(1, int(checkpoint1(trajectory))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
 
     checkpoints.append(Checkpoint(1, int(check_user_added("finance-talk", "david_wong"))))
 

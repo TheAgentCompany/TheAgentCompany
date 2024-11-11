@@ -2,13 +2,14 @@ import logging
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 
+@grader
 def grade_checkpoint1():
     # [3pts] Check if the correct PR number (#9711) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the chat with Chen Xinyi.
 

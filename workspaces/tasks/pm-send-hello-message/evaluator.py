@@ -4,11 +4,12 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
+@grader
 def check_url(trajectory):
     return f"channel/general" in trajectory
 
@@ -20,6 +21,7 @@ def get_channel_room_id(channel_name):
         return response['channel']['_id']
     return None
 
+@grader
 def check_message_sent(channel_name, message, username):
     room_id = get_channel_room_id(channel_name)
     if not room_id:
