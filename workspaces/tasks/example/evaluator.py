@@ -18,6 +18,10 @@ from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from common import checkpoint
 
+# devnote: @checkpoint is required for each checkpoint function
+#         it would capture runtime errors, log them, and return False
+#         this is a safe guard to prevent any unexpected errors that causes
+#         the evaluator to fail the entire task
 @checkpoint
 def grade_checkpoint1(trajectory):
     return "8929/root/api-server" in trajectory
@@ -31,6 +35,7 @@ def grade_checkpoint2():
                 return True
     return False
 
+@checkpoint
 def grade_final_checkpoint():
     try:
         response = requests.get("http://localhost:5432/welcome")
