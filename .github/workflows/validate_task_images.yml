@@ -41,6 +41,10 @@ jobs:
         bash .github/validate_task_structure.sh ${{ matrix.task-type }}
 
   test-evaluator-basic:
+    strategy:
+      matrix:
+        task-type: [ sde, pm, other ]
+        
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
