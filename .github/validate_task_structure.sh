@@ -2,11 +2,27 @@
 set -e
 
 cd workspaces/tasks
+
+task_type=$1
+task_types=("pm" "sde")
+
 for task_dir in *; do
   # Check if folder name is lowercase
   if [ "$task_dir" != "$(echo $task_dir | tr '[:upper:]' '[:lower:]')" ]; then
     echo "Error: Folder name '$task_dir' is not in lowercase"
     exit 1
+  fi
+
+  if [ "$task_type" != "other" ]; then
+      if [[ "$task_dir" != "$task_type"* ]]; then
+          continue
+      fi
+  else
+      # Extract the part of task_dir before the first "-"
+      task_prefix="${task_dir%%-*}"
+      if [[ " ${task_types[@]} " =~ " ${task_prefix} " ]]; then
+          continue
+      fi
   fi
 
   echo "Checking task: $task_dir"
