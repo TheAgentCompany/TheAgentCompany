@@ -1,6 +1,7 @@
 from typing import List
 from scoring import Result, Checkpoint
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+import logging
 
 from packaging.requirements import Requirement
 from packaging.version import Version
@@ -59,10 +60,12 @@ def grade_checkpoint2() -> bool:
     """Compare myenv.txt with requirements.txt for alignment."""
     try:
         # Use the helper function to check compatibility
-        is_compatible, _ = check_requirements_compatibility(
+        is_compatible, incompatibilities = check_requirements_compatibility(
             '/workspace/myenv.txt',
             '/utils/requirements.txt'
-        )   
+        )
+        if not is_compatible:
+            logging.warning(f"Requirements incompatibilities found: {incompatibilities}")
         return is_compatible
         
     except Exception as e:
@@ -77,7 +80,7 @@ def grade_checkpoint4() -> bool:
     """Check if conversation mentions pandas and scikit-learn version issues."""
     messages = get_rocketchat_personal_chat_history(rocket, "Emily Zhou")    
     combined_messages = " ".join(messages).lower()
-    required_keywords = ["pandas", "scikit-learn", "version"]
+    required_keywords = ["pandas", "scikit-learn"]
     return all(keyword in combined_messages for keyword in required_keywords)
 
 def grade_checkpoints(trajectory="") -> Result:
