@@ -5,7 +5,7 @@ import base64
 from typing import List
 import json
 
-from common import make_gitlab_request, evaluate_with_llm, checkpoint
+from common import make_gitlab_request, evaluate_with_llm, grader
 from scoring import Result, Checkpoint
 
 project_path = "root/api-server"

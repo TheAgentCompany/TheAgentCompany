@@ -3,7 +3,7 @@ import json
 from typing import List
 from scoring import Result, Checkpoint
 
-from common import evaluate_with_llm, checkpoint
+from common import evaluate_with_llm, grader
 
 
 @grader

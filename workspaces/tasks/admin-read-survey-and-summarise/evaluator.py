@@ -2,7 +2,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()

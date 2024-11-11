@@ -2,7 +2,7 @@ import logging
 import json
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, evaluate_chat_history_with_llm, checkpoint
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, grader
 
 
 # Create RocketChat instance

@@ -8,7 +8,7 @@ from datetime import datetime
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, checkpoint
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()

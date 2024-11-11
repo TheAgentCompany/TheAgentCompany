@@ -3,7 +3,7 @@ from typing import List
 import os
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, checkpoint
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 1

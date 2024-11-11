@@ -2,7 +2,7 @@ import os
 import pptx
 from typing import List
 from common import create_rocketchat_client, get_all_texts_from_slide
-from common import get_rocketchat_personal_chat_history, checkpoint
+from common import get_rocketchat_personal_chat_history, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 # Initialize RocketChat client

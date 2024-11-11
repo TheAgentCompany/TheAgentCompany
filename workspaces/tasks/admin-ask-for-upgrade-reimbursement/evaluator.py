@@ -2,7 +2,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 from common import get_rocketchat_personal_chat_history, evaluate_with_llm
 
 # Initialize RocketChat client

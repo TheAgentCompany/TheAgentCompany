@@ -6,7 +6,7 @@ from scoring import Result, Checkpoint
 
 from common import create_rocketchat_client
 from common import evaluate_chat_history_with_llm
-from common import get_rocketchat_personal_chat_history, checkpoint
+from common import get_rocketchat_personal_chat_history, grader
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()

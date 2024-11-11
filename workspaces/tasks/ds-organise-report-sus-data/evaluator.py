@@ -1,7 +1,7 @@
 import re
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, checkpoint
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()

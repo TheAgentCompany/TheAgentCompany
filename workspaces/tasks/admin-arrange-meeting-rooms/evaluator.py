@@ -3,7 +3,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, checkpoint
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 
 REFERENCE_ANSWER = 3

@@ -5,7 +5,7 @@ from typing import List
 import pandas as pd
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, num_rocketchat_users_contacted, checkpoint
+from common import create_rocketchat_client, num_rocketchat_users_contacted, grader
 
 rocket_client = create_rocketchat_client()
 

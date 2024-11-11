@@ -3,7 +3,7 @@ import logging
 import pptx
 from typing import List
 
-from common import get_all_texts_from_slide, evaluate_with_llm, checkpoint
+from common import get_all_texts_from_slide, evaluate_with_llm, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 SLIDES_PATH = "/workspace/pitch.pptx"
