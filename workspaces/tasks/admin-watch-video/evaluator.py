@@ -4,12 +4,11 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import checkpoint
 
-def grade_checkpoints(trajectory=""):
-    checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
 
-    total_score = 2
+@checkpoint
+def grade_checkpoint1():
     try:
         with open('/workspace/ans.txt', 'r') as file:
             content = file.read().strip()
@@ -19,16 +18,24 @@ def grade_checkpoints(trajectory=""):
             
             # Check if there's exactly one number
             if len(numbers) != 1:
-                checkpoints.append(Checkpoint(total_score, 0))
+                return 0
             else:
                 number = int(numbers[0])
                 if number == 4:
-                    checkpoints.append(Checkpoint(total_score, 2))
+                    return 2
                 else:
-                    checkpoints.append(Checkpoint(total_score, 0))
+                    return 0
     except FileNotFoundError:
         logging.warning('/workspace/ans.txt is not found')
-        checkpoints.append(Checkpoint(total_score, 0))
+        return 0
+
+
+def grade_checkpoints(trajectory=""):
+    checkpoints: List[Checkpoint] = []
+    result = Result(checkpoints)
+
+    total_score = 2
+    checkpoints.append(Checkpoint(total_score, int(grade_checkpoint1())))
 
     return result
 

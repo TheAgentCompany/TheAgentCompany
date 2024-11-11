@@ -6,16 +6,18 @@ from typing import List
 
 rocket = create_rocketchat_client()
  
-
+@checkpoint
 def checkpoint1():
     passed = True
     for name in ['mike_chen', 'huang_jie', 'chen_xinyi', 'sophia_rodriguez']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
+@checkpoint
 def checkpoint2(trajectory):
     return "dir=/Documents/Administrative%20Specialist" in trajectory
 
+@checkpoint
 def checkpoint3():
     """
     Sophia Rodriguez: $69+$99
