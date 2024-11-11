@@ -2,18 +2,23 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client
+from common import create_rocketchat_client, checkpoint
 from common import get_rocketchat_personal_chat_history, evaluate_with_llm
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
 
+@checkpoint
+def grade_checkpoint1():
+    chat_history = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
+    return len(chat_history) > 0
+
+
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    chat_history = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
-    checkpoints.append(Checkpoint(1, int(len(chat_history) > 0)))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
 
     chat_history = get_rocketchat_personal_chat_history(rocket, "Sarah Johnson")
     checkpoints.append(Checkpoint(1, int(len(chat_history) > 0)))
