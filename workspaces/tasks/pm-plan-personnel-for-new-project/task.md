@@ -11,3 +11,5 @@ Please choose the appropriate personnel based on our current plans so that we ca
 Once you are done, please tell Sarah that you have finished, and also include the expected ending month of the project as well as the total amount the project will cost in salary+benefits.
 
 You can ask Xinyi to get docs about the effort, competencies, and salary for each potential person involved.
+
+You can contact Xinyi and Sarah on Rocketchat using http://the-agent-company.com:3000/
