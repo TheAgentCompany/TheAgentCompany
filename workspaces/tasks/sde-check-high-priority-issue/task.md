@@ -1,1 +1,2 @@
 Find open and high-priority issues on this gitlab repo http://the-agent-company.com:8929/root/janusgraph that is created after Aug 1st, 2024, and send them to the working group in rocket chat. Ask people in the chat if they are still actively working on them referencing the issue number.
+You could find the RocketChat website at http://the-agent-company.com:3000/

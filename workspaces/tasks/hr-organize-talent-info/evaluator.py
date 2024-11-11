@@ -11,7 +11,7 @@ def get_summary_file_content(name: str = None):
     if not os.path.exists("/workspace/summary.csv"):
         return []
     rows = []
-    with open("summary.csv") as csvfile:
+    with open("/workspace/summary.csv") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             if name is not None and row[0] != name:
