@@ -6,7 +6,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import checkpoint
+from common import grader
 
 def run_command(command):
     try:
@@ -48,7 +48,7 @@ def run_test(test_command):
         return False
 
 # Check pass all 2A tests
-@checkpoint
+@grader
 def grade_checkpoint1():
     if not copy_test_file():
         logging.error("Failed to copy test file in checkpoint1")
@@ -57,7 +57,7 @@ def grade_checkpoint1():
     return run_test(["go", "test", "-run", "2A"])
 
 # Check pass all tests
-@checkpoint
+@grader
 def grade_checkpoint2():
     if not copy_test_file():
         logging.error("Failed to copy test file in checkpoint2")

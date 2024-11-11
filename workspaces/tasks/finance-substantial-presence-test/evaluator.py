@@ -7,11 +7,11 @@ from typing import List
 rocket = create_rocketchat_client()
  
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     return bool(get_rocketchat_personal_chat_history(rocket, 'huang_jie'))
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     msgs = get_rocketchat_personal_chat_history(rocket, 'huang_jie')
     for msg in msgs:

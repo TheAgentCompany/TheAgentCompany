@@ -5,7 +5,7 @@ from typing import List
 from scoring import Result, Checkpoint
 
 from common import evaluate_with_llm
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -18,7 +18,7 @@ def get_channel_room_id(channel_name):
         return response['channel']['_id']
     return None
 
-@checkpoint
+@grader
 def check_if_user_in_channel(channel_name: str, username: str):
     room_id = get_channel_room_id(channel_name)
     if not room_id:
@@ -28,7 +28,7 @@ def check_if_user_in_channel(channel_name: str, username: str):
     users_list = members.get("members")
     return any(user['name'] == username for user in users_list)
 
-@checkpoint
+@grader
 def check_job_description(username: str):
 
     user_info = rocket.users_info(username=username).json().get('user', {})

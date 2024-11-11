@@ -9,7 +9,7 @@ from common import create_rocketchat_client, evaluate_chat_history_with_llm, che
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     # [2pts] Check if the examinee chat with the correct person (Mike Chen)
     try:
@@ -30,7 +30,7 @@ def grade_checkpoint1():
         return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     # [3pts] Check if the correct pr (#8676) exist in the `/workspace/solution.txt`.
 

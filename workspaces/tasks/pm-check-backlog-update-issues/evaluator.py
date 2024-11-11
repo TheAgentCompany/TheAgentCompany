@@ -4,21 +4,21 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_plane_project_id, get_plane_state_id_dict, get_plane_project_all_issues, check_rocketchat_message_posted, checkpoint
+from common import create_rocketchat_client, get_plane_project_id, get_plane_state_id_dict, get_plane_project_all_issues, check_rocketchat_message_posted, grader
 from config import *
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     """Check if part of the project URL is accessed in the trajectory."""
     target_substring = "/tac/projects/a063d05f-37cf-4f97-b10c-486acf13b138/issues/"
     return target_substring in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     """Check if a message was posted in Rocket.Chat identifying the specific issue 'NODER-3' with correct details."""
 
@@ -27,7 +27,7 @@ def grade_checkpoint2():
     # Reuse check_message_posted with the defined keywords
     return check_rocketchat_message_posted(rocket, "project-lowcode", keywords)
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """Check if a follow-up message confirming updates to Plane was already posted in Rocket.Chat."""
     follow_up_message = ["Okay I will update Plane to reflect this"]

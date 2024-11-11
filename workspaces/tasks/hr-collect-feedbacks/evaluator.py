@@ -5,12 +5,12 @@ from scoring import Result, Checkpoint
 from common import create_rocketchat_client
 from common import get_rocketchat_personal_chat_history
 from common import evaluate_chat_history_with_llm
-from common import checkpoint
+from common import grader
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     performance_evaluatee = "Liu Qiang"
     return evaluate_chat_history_with_llm(rocket, performance_evaluatee, "the person receiving the feedback had an average job performance")

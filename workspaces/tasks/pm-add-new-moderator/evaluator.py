@@ -4,21 +4,21 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return f"home" in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2(trajectory):
     return f"channel/help-desk" in trajectory
 
-@checkpoint
+@grader
 def check_user_role(username, role):
     try:
         roles = rocket.roles_get_users_in_role(role).json()

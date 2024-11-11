@@ -4,10 +4,10 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         with open('/workspace/ans.txt', 'r') as file:

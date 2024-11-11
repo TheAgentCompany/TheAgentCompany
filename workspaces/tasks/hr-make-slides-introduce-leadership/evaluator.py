@@ -6,7 +6,7 @@ import pptx
 
 from common import create_rocketchat_client
 from common import get_rocketchat_personal_chat_history
-from common import get_all_texts_from_slide, checkpoint
+from common import get_all_texts_from_slide, grader
 from scoring import Result, Checkpoint
 
 # Initialize RocketChat client
@@ -17,17 +17,17 @@ LEADERSHIP_POSITIONS = ["CTO", "Sales Director", "Marketing Manager", "Finance D
 SLIDES_PATH = '/workspace/leadership_intro.pptx'
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     return os.path.exists(SLIDES_PATH)
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     return bool(get_rocketchat_personal_chat_history(rocket, "Chen Xinyi"))
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     if not os.path.exists(SLIDES_PATH):
         return False
@@ -40,7 +40,7 @@ def grade_checkpoint3():
         return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     if not os.path.exists(SLIDES_PATH):
         return False
@@ -58,7 +58,7 @@ def grade_checkpoint4():
     return True
 
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     if not os.path.exists(SLIDES_PATH):
         return False

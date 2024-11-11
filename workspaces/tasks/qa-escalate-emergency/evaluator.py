@@ -13,17 +13,17 @@ CTO_NAME = "Sarah Johnson"
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     return bool(get_rocketchat_personal_chat_history(rocket, SDE_NAME))
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     return bool(get_rocketchat_personal_chat_history(rocket, CTO_NAME))
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     chat_with_sde = get_rocketchat_personal_chat_history(rocket, SDE_NAME, content_only=False)
     chat_with_cto = get_rocketchat_personal_chat_history(rocket, CTO_NAME, content_only=False)

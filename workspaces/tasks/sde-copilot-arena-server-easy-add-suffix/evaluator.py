@@ -6,15 +6,15 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     return os.path.exists("/workspace/copilot-arena-server")
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         response = requests.get("http://localhost:5000/list_models")

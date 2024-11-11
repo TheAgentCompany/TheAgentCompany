@@ -2,7 +2,7 @@ import os
 import logging
 from typing import List
 
-from common import get_gitlab_project_id, get_gitlab_merge_request_by_title, get_gitlab_file_in_mr, checkpoint
+from common import get_gitlab_project_id, get_gitlab_merge_request_by_title, get_gitlab_file_in_mr, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
@@ -17,7 +17,7 @@ def validate_doc(doc: str):
             return False
     return True
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     # check if local doc file passes the validation
     if not os.path.exists(os.path.join(PROJECT_NAME, DOC_PATH)):
@@ -26,7 +26,7 @@ def grade_checkpoint1():
         doc = f.read()
         return validate_doc(doc)
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     # check if MR is posted and the doc passes the validation
     project_id = get_gitlab_project_id(PROJECT_NAME)

@@ -16,17 +16,17 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import checkpoint
+from common import grader
 
-# devnote: @checkpoint is required for each checkpoint function
+# devnote: @grader is required for each checkpoint function
 #         it would capture runtime errors, log them, and return False
 #         this is a safe guard to prevent any unexpected errors that causes
 #         the evaluator to fail the entire task
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return "8929/root/api-server" in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     if os.path.exists('/workspace/api-server/server.py'):
         with open('/workspace/api-server/server.py') as f:
@@ -35,7 +35,7 @@ def grade_checkpoint2():
                 return True
     return False
 
-@checkpoint
+@grader
 def grade_final_checkpoint():
     try:
         response = requests.get("http://localhost:5432/welcome")

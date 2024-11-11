@@ -1,13 +1,13 @@
 import logging
 
-from common import make_gitlab_request, get_gitlab_project_id, checkpoint
+from common import make_gitlab_request, get_gitlab_project_id, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 PROJECT_NAME = "sotopia"
 BUG_ISSUE_IID = 200
 NON_BUG_ISSUE_IID = 140  # This issue doesn't have `bug` in its title but has a `bug` label
 
-@checkpoint
+@grader
 def check_issue(issue_iid: int):
     project_id = get_gitlab_project_id(PROJECT_NAME)
     if project_id is None:

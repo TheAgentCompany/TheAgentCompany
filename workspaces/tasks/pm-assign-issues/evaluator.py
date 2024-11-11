@@ -4,7 +4,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import get_plane_project_id, get_plane_project_all_issues, checkpoint
+from common import get_plane_project_id, get_plane_project_all_issues, grader
 from config import *
 
 
@@ -20,7 +20,7 @@ ISSUES = {
     "c8c76e66-f8b2-4b58-9a9c-d779b60b8d15": "Write unit tests for authentication service"
 }
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     """Verify the project creation."""
     return get_plane_project_id(PROJECT_NAME) is not None
@@ -51,13 +51,13 @@ def check_issue_assigned(project_id, issue_text, assignee):
     logging.warning(f"Issue '{issue_text}' not found in project.")
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint2(trajectory):
     """Check if part of the project URL is accessed in the trajectory."""
     target_substring = "/settings/members"
     return target_substring in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """Verify all issues with correct titles are present in the project."""
     project_id = get_plane_project_id(PROJECT_NAME)
@@ -70,7 +70,7 @@ def grade_checkpoint3():
         return all(issue_presence_checks)
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint_final():
     """Verify all issues are assigned correctly to the specified users."""
     project_id = get_plane_project_id(PROJECT_NAME)

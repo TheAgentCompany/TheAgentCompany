@@ -12,7 +12,7 @@ TARGET_INTERVIEWER = "Emily Zhou"
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     # [2pts] Check the chat history with the leader Chen Xinyi
     try:
@@ -31,7 +31,7 @@ def grade_checkpoint1():
         return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     # [2pts] Check whether examinee chat with Emily Zhou (the right person).
     try:
@@ -54,7 +54,7 @@ def grade_checkpoint2():
     return True
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     # [2pts] Check whether examinee does not chat with others (Mike Chen, Wang Fang, David Wong, Huang Jie)
 

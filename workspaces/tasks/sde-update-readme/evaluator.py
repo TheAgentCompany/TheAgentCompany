@@ -36,7 +36,7 @@ def extract_readme_content():
 
 
 # check if the README.md contains the expected title
-@checkpoint
+@grader
 def check_readme_title():
     content = extract_readme_content()
     if content is None:
@@ -51,7 +51,7 @@ def check_readme_title():
 
 
 # check if the README.md contains the expected content
-@checkpoint
+@grader
 def check_readme_content():
     content = extract_readme_content()
     if content is None:

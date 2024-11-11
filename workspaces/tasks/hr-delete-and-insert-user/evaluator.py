@@ -2,7 +2,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -22,15 +22,15 @@ def check_user_exist(username):
     is_exist = response_user.get('success', False)
     return is_exist
 
-@checkpoint
+@grader
 def grade_checkpoint1(username='li_ming'):
     return check_user_removed(username=username)
 
-@checkpoint
+@grader
 def grade_checkpoint2(username='dandan_liu'):
     return check_user_exist(username=username)
 
-@checkpoint
+@grader
 def grade_checkpoint3(channel_name='product', username='dandan_liu'):
     return check_user_added(channel_name=channel_name,username=username)
 

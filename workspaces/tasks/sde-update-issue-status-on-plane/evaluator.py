@@ -49,7 +49,7 @@ def get_issue_by_name(issues, name):
 
 ############################# grade checkpoints #####################################
 
-@checkpoint
+@grader
 def grade_checkpoint1(project_id, active_cycle_issues):
     target_issue = get_issue_by_name(active_cycle_issues, 'Evaluate data throughput')
     if target_issue is None:
@@ -63,7 +63,7 @@ def grade_checkpoint1(project_id, active_cycle_issues):
     logging.info(f"State of issue 'Evaluate data throughput' is {state_details['name']}, expected 'Done'")
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint2(project_id, all_issues):
     target_issue = get_issue_by_name(all_issues, 'Decrease database latency')
     if target_issue is None:
@@ -77,7 +77,7 @@ def grade_checkpoint2(project_id, all_issues):
     logging.info(f"State of issue 'Decrease database latency' is {state_details['name']}, expected 'In Progress'")
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint3(next_cycle_issues):
     target_issue = get_issue_by_name(next_cycle_issues, 'Decrease database latency')
     if target_issue is None:

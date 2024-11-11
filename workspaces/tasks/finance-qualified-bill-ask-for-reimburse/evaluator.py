@@ -5,16 +5,16 @@ from common import get_rocketchat_personal_chat_history
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 # Initialize RocketChat client
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return "apps/files/files/1423?dir=/Documents/Financials" in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2(trajectory):
     return "apps/files/files/1363?dir=/Documents/Administrative%20Specialist" in trajectory
 

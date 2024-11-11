@@ -7,7 +7,7 @@ from typing import List
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     passed = True
     for name in ['li_ming', 'zhang_wei', 'huang_jie', 'sophia_rodriguez']:
@@ -15,12 +15,12 @@ def grade_checkpoint1():
     return passed
 
 
-@checkpoint
+@grader
 def grade_checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist" in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """
     Database:
@@ -49,7 +49,7 @@ def grade_checkpoint3():
     return True
 
 
-@checkpoint
+@grader
 def grade_checkpoint4(file_path):
     """
     Database:

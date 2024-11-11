@@ -10,18 +10,18 @@ from common import evaluate_chat_history_with_llm, checkpoint
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory=""):
     return trajectory is not None and "/Documents/Human%20Resources%20Team/Immigration" in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     history = get_rocketchat_personal_chat_history(rocket, "Priya Sharma")
     return history is not None and "niw" in str(history).lower()
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     return evaluate_chat_history_with_llm(rocket, "Priya Sharma", "the current date of filing is 01AUG23 (August 1st, 2023)")
 

@@ -7,17 +7,17 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from common import checkpoint
+from common import grader
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return "https://ogma.lti.cs.cmu.edu/apps/files/files/626?dir=/Documents/Financials" in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     return os.path.exists('/workspace/July-September 2024 Financials.ods')
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     # Check if sqlite3 is installed
     try:
@@ -26,7 +26,7 @@ def grade_checkpoint3():
     except ImportError:
         return False 
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     try:
         import sqlite3
@@ -39,7 +39,7 @@ def grade_checkpoint4():
     except sqlite3.Error:
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     try:
         import sqlite3
@@ -52,7 +52,7 @@ def grade_checkpoint5():
     except sqlite3.Error:
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint6():
     try:
         import sqlite3
@@ -65,7 +65,7 @@ def grade_checkpoint6():
     except sqlite3.Error:
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint7():
     try:
         import sqlite3
@@ -85,7 +85,7 @@ def grade_checkpoint7():
     except sqlite3.Error:
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint8():
     try:
         import sqlite3

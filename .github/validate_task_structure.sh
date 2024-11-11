@@ -23,9 +23,9 @@ for task_dir in *; do
     echo "Error: evaluator.py is missing in $task_dir"
     exit 1
   fi
-  # Check for at least one @checkpoint annotator
-  if ! grep -q "@checkpoint" evaluator.py; then
-      echo "Error: evaluator.py must contain at least one @checkpoint annotator, see example task for reference"
+  # Check for at least one @grader annotator
+  if ! grep -q "@grader" evaluator.py; then
+      echo "Error: evaluator.py must contain at least one @grader annotator, see example task for reference"
       exit 1
   fi
 

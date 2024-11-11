@@ -9,7 +9,7 @@ import requests
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -31,23 +31,23 @@ def get_history(username):
         content += f"{username}'s chat: {msg['msg']}\n"
     return content
 
-@checkpoint
+@grader
 def grade_checkpoint1(content: list[str]):
     return len(content) > 0
 
-@checkpoint
+@grader
 def grade_checkpoint2(content: list[str]):
     return '2039fome' in content
 
-@checkpoint
+@grader
 def grade_checkpoint3(content: list[str]):
     return len(content) > 0
 
-@checkpoint
+@grader
 def grade_checkpoint4(content: list[str]):
     return 'cat123' in content
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     try:
         response = requests.get('http://localhost:5000/events')

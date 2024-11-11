@@ -9,7 +9,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import *
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/dev-container'], capture_output=True, text=True)
@@ -23,7 +23,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking the local repository: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         devcontainer_path = '/workspace/sotopia/.devcontainer/devcontainer.json'
@@ -37,7 +37,7 @@ def grade_checkpoint2():
         logging.error(f"Error occurred while checking the .devcontainer folder: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     try:
         # Check for Redis and Ollama support setup
@@ -55,7 +55,7 @@ def grade_checkpoint3():
         logging.error(f"Error occurred while checking Redis and Ollama support: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     try:
         # Check for poetry, sotopia, and Llama 3.2 1b setup using LLM
@@ -73,7 +73,7 @@ def grade_checkpoint4():
         logging.error(f"Error occurred while checking poetry, sotopia installation, or Llama serving: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     try:
         response = make_gitlab_request(project_identifier="root/sotopia", additional_path="merge_requests?state=opened")

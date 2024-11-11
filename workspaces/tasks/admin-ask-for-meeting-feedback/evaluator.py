@@ -9,18 +9,18 @@ from common import create_rocketchat_client, get_rocketchat_personal_chat_histor
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     chat = get_rocketchat_personal_chat_history(rocket, "Huang Jie")
     return len(chat) > 0
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     return os.path.exists('/workspace/meeting_feedback.xlsx')
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     if not os.path.exists("/workspace/meeting_feedback.xlsx"):
         return False
@@ -28,7 +28,7 @@ def grade_checkpoint3():
     return sorted(df["Name"].tolist()) == ['Chen Xinyi', 'Emily Zhou', 'Huang Jie', 'Liu Qiang', 'Mike Chen']
 
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     if not os.path.exists("/workspace/meeting_feedback.xlsx"):
         return False
@@ -40,7 +40,7 @@ def grade_checkpoint4():
         logging.warning(f"Error parsing Excel file: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     if not os.path.exists("/workspace/meeting_feedback.xlsx"):
         return False

@@ -1,6 +1,6 @@
 from typing import List
 import pandas as pd
-from common import get_rocketchat_personal_chat_history, create_rocketchat_client, checkpoint
+from common import get_rocketchat_personal_chat_history, create_rocketchat_client, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 
@@ -79,13 +79,13 @@ def evaluate_classifications(df):
     return 0  # No points if accuracy is below 50%
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     """Check if the 'Customer.xlsx' file on Nextcloud was accessed."""
     required_url_part = "/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
     return required_url_part in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     """Check if all orders are classified correctly as domestic or international."""
     df = load_customer_data('/utils/Customer.xlsx')
@@ -95,7 +95,7 @@ def grade_checkpoint2():
     return evaluate_classifications(df)
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """Check if the agent has a conversation with Sarah Johnson on Rocket.Chat about customer orders."""
     # Required keywords that should all be present in a message

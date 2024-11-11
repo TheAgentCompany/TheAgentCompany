@@ -9,7 +9,7 @@ from common import *
 project_path = "root/sotopia"
 
 # check the `allowed to merge` is only for `maintainers`
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         response = make_gitlab_request(project_path, "protected_branches")
@@ -32,7 +32,7 @@ def grade_checkpoint1():
         return False
 
 # check `allowed to merge and push` is changed to `maintainers and developers`
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         response = make_gitlab_request(project_path, "protected_branches")

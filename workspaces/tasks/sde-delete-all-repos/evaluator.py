@@ -2,9 +2,9 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import make_gitlab_request, checkpoint
+from common import make_gitlab_request, grader
 
-@checkpoint
+@grader
 def check_all_repositories_deleted():
     try:
         # Get all projects

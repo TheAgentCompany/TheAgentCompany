@@ -6,19 +6,19 @@ from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
-from common import checkpoint
+from common import grader
 
 
 PLANE_PROJECT_ID = "2bc631a1-8515-4bca-858e-129337c83c8d"
 
 # Check if the title are in the trajectory
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return ("[FEAT]: Unify evaluation prompt and episode rendering for human readers" in trajectory
             and "Roadmap to Sotopia v0.1" in trajectory)
 
 # Check if the required issues exist on the project page
-@checkpoint
+@grader
 def grade_checkpoint2():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     

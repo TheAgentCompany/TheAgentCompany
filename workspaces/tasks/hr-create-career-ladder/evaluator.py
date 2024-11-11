@@ -4,18 +4,18 @@ from odf.opendocument import load
 from odf.element import Node
 import logging
 
-from common import llm_complete, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history, checkpoint
+from common import llm_complete, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 rocket = create_rocketchat_client()
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     file_name = "Career_Ladder.odt"
     dir_name = "Documents/Human%20Resources%20Team"
@@ -50,7 +50,7 @@ def grade_checkpoint2():
         logging.warning("Failed to retrieve file content.")
         return 0
     
-@checkpoint
+@grader
 def grade_checkpoint3():
     messages = get_rocketchat_channel_history(rocket, "hr-announcements")
     if not messages:

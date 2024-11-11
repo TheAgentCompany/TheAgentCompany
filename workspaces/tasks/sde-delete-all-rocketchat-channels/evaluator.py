@@ -6,7 +6,7 @@ import json
 import logging
 from typing import List
 
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 def get_channel_lists():
@@ -21,13 +21,13 @@ def get_channel_lists():
     return all_channels, joined_channels
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(joined_channels):
     if joined_channels is not None:
         return len(joined_channels) == 0
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint2(all_channels):
     if all_channels is not None:
         if len(all_channels) > 0:

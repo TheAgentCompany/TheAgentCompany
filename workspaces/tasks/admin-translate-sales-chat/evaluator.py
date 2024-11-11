@@ -4,10 +4,10 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     # reference answer's detailed computation is documented in README.md
     REFERENCE_ANSWER = 145095

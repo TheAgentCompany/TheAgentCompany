@@ -8,18 +8,18 @@ from typing import List
 rocket = create_rocketchat_client()
  
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     passed = True
     for name in ['huang_jie', 'sophia_rodriguez', 'mike_chen', 'sarah_johnson']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
-@checkpoint
+@grader
 def grade_checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint3(filepath):
     """
     Huang Jie one Monitor (27” Dell UltraSharp 4K cost $1799 and two External Hard Drive (2TB) cost $129 each, total cost $1799 + 2*$129 = $2057

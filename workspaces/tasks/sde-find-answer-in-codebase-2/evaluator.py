@@ -9,7 +9,7 @@ from common import create_rocketchat_client, get_rocketchat_personal_chat_histor
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     # [3pts] Check if the correct PR number (#9711) in `llama.cpp` (http://the-agent-company.com:8929/root/llama.cpp) exists in the chat with Chen Xinyi.
 

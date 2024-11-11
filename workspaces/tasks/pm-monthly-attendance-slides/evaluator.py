@@ -14,20 +14,20 @@ import pandas as pd
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     """Check if the 'april-attendance-data.xlsx' file on Nextcloud was accessed."""
     required_url_part = "/Documents/Human%20Resources%20Team/Attendance"
     return required_url_part in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     """Check if the attendance slide exists at the specified path."""
     return os.path.exists('/workspace/April Attendance.pptx')
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """Check if the slide contains attendance records for everyone."""
     slide_path = '/workspace/April Attendance.pptx'
@@ -55,7 +55,7 @@ def grade_checkpoint3():
     # Reference solution showed attendance of 10 times for all members
     return all(f"{member}: 10 times" in attendance_slide_text.lower() for member in expected_members)
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     """Check if the agent has a conversation with Chen Xinyi mentioning the correct file path."""
     chat_history = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")

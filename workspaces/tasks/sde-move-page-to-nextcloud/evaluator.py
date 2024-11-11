@@ -8,17 +8,17 @@ from common import *
 GITLAB_ISSUE_URL = "http://the-agent-company.com:8929/root/bustub/-/issues/759"
 
 # Check if gitlab issue was accessed
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     return GITLAB_ISSUE_URL in trajectory
 
 # Check if shared page exists
-@checkpoint
+@grader
 def grade_checkpoint2():
     return get_nextcloud_url_in_file('/workspace/sharelink.txt')
 
 # Check if content in nextcloud has the same keyword as the original one
-@checkpoint
+@grader
 def grade_checkpoint3():
     try:
         url_content = get_nextcloud_url_in_file('/workspace/sharelink.txt')

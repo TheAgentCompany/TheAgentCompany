@@ -19,17 +19,17 @@ def get_history(username):
 
     return msgs
 
-@checkpoint
+@grader
 def grade_checkpoint1(content: str):
     return content is not None and len(content) > 0
 
-@checkpoint
+@grader
 def grade_checkpoint2(content: str):
     if content is None or len(content) == 0:
         return False
     return 'coke' in content and 'dew' in content
 
-@checkpoint
+@grader
 def grade_checkpoint3(content: str):
     if content is None or len(content) == 0:
         return False

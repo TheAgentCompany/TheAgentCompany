@@ -11,7 +11,7 @@ rocket = create_rocketchat_client()
 EXPECTED_AVG_ROWS = round(26.266666, 2)
 EXPECTED_AVG_COLS = round(8.8, 2)
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     """Check if '/workspace/data_stats.py' exists."""
     return os.path.exists("/workspace/data_stats.py")
@@ -27,7 +27,7 @@ def extract_reported_stats(message: str):
         return reported_rows, reported_columns
     return None, None
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     """Check if the reported average row and column counts are correct in RocketChat message."""
     chat_history = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -38,7 +38,7 @@ def grade_checkpoint2():
             return True
     return False
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     """Check if the agent informs Jessica Li with correct script path in RocketChat."""
     chat_history = get_rocketchat_personal_chat_history(rocket, "jessica_lee")

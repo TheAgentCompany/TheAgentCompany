@@ -200,19 +200,19 @@ def remove_func(file_path=UT_FILE, function_name=f"def {UT_FUNC_NAME}("):
         print(f"Error: File not found at {file_path}, {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     return check_repo_exists('openhands')
 
-@checkpoint
+@grader
 def grade_checkpoint2(path=UT_FILE):
     return is_file_exist(file_path=path)
 
-@checkpoint
+@grader
 def grade_checkpoint3(path=UT_FILE, function_name=UT_FUNC_NAME):
     return is_function_exists(file_path=path, function_name=function_name)
 
-@checkpoint
+@grader
 def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name=UT_FUNC_NAME):
     status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
     if not status:
@@ -220,7 +220,7 @@ def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_nam
 
     return True if status['passed']==1 else False
 
-@checkpoint
+@grader
 def grade_checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     before_stats = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path)
     if not before_stats:

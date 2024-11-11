@@ -1,6 +1,6 @@
 import logging
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_rocketchat_channel_history, checkpoint
+from common import create_rocketchat_client, get_rocketchat_channel_history, grader
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
@@ -17,12 +17,12 @@ EXPECTED_METRICS = {
     "pending issues": 24
 }
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory: str) -> bool:
     """Check if the agent accessed the Plane Analytics section."""
     return PLANE_ANALYTICS_URL in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2() -> bool:
     """
     Check if any message was sent to the #kudos channel on Rocket.Chat.
@@ -30,7 +30,7 @@ def grade_checkpoint2() -> bool:
     messages = get_rocketchat_channel_history(rocket, "kudos")
     return bool(messages)  # True if there is at least one message, False otherwise
 
-@checkpoint
+@grader
 def grade_checkpoint3() -> int:
     """
     Check if the summary messages in Rocket.Chat contain the specific metrics.

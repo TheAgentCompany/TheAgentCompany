@@ -9,7 +9,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import *
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         if os.path.isdir('/workspace/sotopia'):
@@ -22,7 +22,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking the repository: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         result = subprocess.run(['git', '-C', '/workspace/sotopia', 'branch', '--list', 'feature/actionAgent'], capture_output=True, text=True)
@@ -36,7 +36,7 @@ def grade_checkpoint2():
         logging.error(f"Error occurred while checking the local repository: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     try:
         with open('/workspace/sotopia/sotopia/agents/llm_agent.py', 'r') as file:
@@ -59,7 +59,7 @@ def grade_checkpoint3():
         logging.error(f"Error occurred while checking llm_agent.py: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint4():
     try:
         # Run mypy check
@@ -75,7 +75,7 @@ def grade_checkpoint4():
         return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint5():
     try:
         response = make_gitlab_request(project_identifier="root/sotopia", additional_path="merge_requests?state=opened")

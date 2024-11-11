@@ -9,18 +9,18 @@ from scoring import Result, Checkpoint, bonus_for_completing_any
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     """Check if the agent visits the openhands evaluation page with all supported tasks."""
     return "root/openhands/-/tree/main/evaluation" in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     return os.path.exists('/workspace/openhands_intro.pptx')
 
 
-@checkpoint
+@grader
 def grade_checkpoint3(text: str):
     keywords = [
         "software engineer",
@@ -30,7 +30,7 @@ def grade_checkpoint3(text: str):
     ]
     return all([k in text for k in keywords])
 
-@checkpoint
+@grader
 def grade_checkpoint4(text: str):
     keywords = [
         "web browsing",
@@ -38,7 +38,7 @@ def grade_checkpoint4(text: str):
     ]
     return all([k in text for k in keywords])
 
-@checkpoint
+@grader
 def grade_checkpoint5(text: str):
     keywords = [
         "misc", "assistance",
@@ -68,7 +68,7 @@ def grade_content():
     passed5 = grade_checkpoint5(misc)
     return passed3, passed4, passed5
         
-@checkpoint
+@grader
 def grade_checkpoint6():
     chat_history = get_rocketchat_personal_chat_history(rocket, "Huang Jie")
     return 'openhands_intro.pptx' in ' '.join(chat_history)

@@ -4,15 +4,15 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     policy_file_path = "apps/files/files/1363?dir=/Documents/Administrative%20Specialist"
     return policy_file_path in trajectory
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     path = "/workspace/reimburse.txt"
     if not os.path.exists(path):

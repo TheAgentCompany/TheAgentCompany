@@ -7,7 +7,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import evaluate_with_llm
 from common import make_gitlab_request
-from common import create_rocketchat_client, checkpoint
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -50,7 +50,7 @@ def check_with_llm(msgs, predicate):
     return evaluate_with_llm(content, predicate)
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
     if len(sys.argv) < 2:
         trajectory = ""
@@ -64,13 +64,13 @@ def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/is
     return url in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2(username='mike_chen'):
     msgs = get_history(username=username)
     return bool(msgs)
 
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     issue_notes = get_gitlab_issue_notes()
     if issue_notes:
@@ -78,7 +78,7 @@ def grade_checkpoint3():
     else:
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint4(username='mike_chen'):
     msgs = get_history(username=username)
 

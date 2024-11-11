@@ -15,20 +15,20 @@ EXPECTED_UNUSUAL_CHAR_NAMES = ["Under~Reporters.xlsx", "wrgbn i53b;6.xlsx"]
 DATA_ANALYSIS_FOLDER_URL = "/Documents/Data%20Analysis"
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory: str) -> bool:
     """Check if the agent visits the "Data Analysis" folder."""
     return DATA_ANALYSIS_FOLDER_URL in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2() -> bool:
     """Check if the agent reports to Jessica Lee on RocketChat."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
     return bool(messages)  # True if there is at least one message
 
 
-@checkpoint
+@grader
 def grade_checkpoint3() -> bool:
     """Check if the agent identifies files without meaningful names correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -47,7 +47,7 @@ def grade_checkpoint3() -> bool:
     return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint4() -> bool:
     """Check if the agent identifies files with all numeric names correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -66,7 +66,7 @@ def grade_checkpoint4() -> bool:
     return False
 
 
-@checkpoint
+@grader
 def grade_checkpoint5() -> bool:
     """Check if the agent identifies files with unusual characters correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")

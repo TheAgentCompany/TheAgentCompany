@@ -5,10 +5,10 @@ from typing import List
 
 
 from scoring import Result, Checkpoint
-from common import checkpoint
+from common import grader
 
 # OpenJDK is installed
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         output = run_command(["java", "--version"])
@@ -18,7 +18,7 @@ def grade_checkpoint1():
         return False
 
 # OpenJDK 17 is installed
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         output = run_command(["java", "--version"])

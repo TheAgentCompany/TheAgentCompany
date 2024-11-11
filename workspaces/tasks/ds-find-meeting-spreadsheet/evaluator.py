@@ -6,7 +6,7 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import *
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     try:
         with open('/workspace/link.txt', 'r') as file:
@@ -24,7 +24,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking link.txt: {e}")
         return False
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     try:
         if os.path.isfile('/workspace/Seed Area Estimates.xlsx'):

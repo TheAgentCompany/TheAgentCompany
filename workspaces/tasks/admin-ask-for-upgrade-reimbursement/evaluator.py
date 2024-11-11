@@ -8,7 +8,7 @@ from common import get_rocketchat_personal_chat_history, evaluate_with_llm
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     chat_history = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
     return len(chat_history) > 0

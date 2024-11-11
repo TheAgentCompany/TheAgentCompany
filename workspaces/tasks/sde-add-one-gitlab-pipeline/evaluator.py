@@ -20,7 +20,7 @@ def get_gitlab_pipeline():
         return {}
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/editor?branch_name=main'):
     if len(sys.argv) < 2:
         trajectory = ""
@@ -34,7 +34,7 @@ def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci
     return url in trajectory
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     msgs = get_gitlab_pipeline()
     return bool(msgs)

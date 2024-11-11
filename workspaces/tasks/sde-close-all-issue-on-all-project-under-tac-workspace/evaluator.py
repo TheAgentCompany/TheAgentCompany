@@ -40,7 +40,7 @@ def get_plane_all_issue_state(projects):
         logging.warning(f"Get all issues state failed: {e}")
         return {}
 
-@checkpoint
+@grader
 def grade_checkpoint1():
     projects = get_all_plane_projects()
     state_count = get_plane_all_issue_state(projects)
@@ -56,7 +56,7 @@ def grade_checkpoint1():
         result += active_count
     return not bool(result)
 
-@checkpoint
+@grader
 def grade_checkpoint2(filepath):
     projects = get_all_plane_projects()
     new_state = get_plane_all_issue_state(projects)

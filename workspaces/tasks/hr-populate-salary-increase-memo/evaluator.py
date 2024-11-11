@@ -13,17 +13,17 @@ from odf.text import P
 
 from scoring import Result, Checkpoint
 from config import NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
             
     return any(url in trajectory for url in urls)
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     file_name = "Salary_Increase_MEMO.odt"
     dir_name = "Documents/Human%20Resources%20Team"
@@ -61,7 +61,7 @@ def grade_checkpoint2():
         return 0
     
 
-@checkpoint
+@grader
 def grade_checkpoint3():
     dir_name = "Documents/Human%20Resources%20Team/salary_increase_notice"
     score = 0

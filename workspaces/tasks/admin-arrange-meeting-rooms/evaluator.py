@@ -10,7 +10,7 @@ REFERENCE_ANSWER = 3
 
 rocket_client = create_rocketchat_client()
 
-@checkpoint
+@grader
 def grade_checkpoint_1() -> bool:
     with open('/workspace/ans.txt', 'r') as file:
         content = file.read().strip()
@@ -26,7 +26,7 @@ def grade_checkpoint_1() -> bool:
             return number == REFERENCE_ANSWER
 
 
-@checkpoint
+@grader
 def grade_checkpoint_2() -> bool:
     history = get_rocketchat_personal_chat_history(rocket_client, 'Chen Xinyi')
     for msg in history:

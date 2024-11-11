@@ -5,10 +5,10 @@ from collections import defaultdict
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import checkpoint
+from common import grader
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(unique_drinks):
     if len(unique_drinks) == 9:
         logging.info("Checkpoint 1: Correct! There are 9 unique drinks. (2 points)")
@@ -20,7 +20,7 @@ def grade_checkpoint1(unique_drinks):
         logging.warning(f"Checkpoint 1: Incorrect. You found {len(unique_drinks)} unique drinks. Check for 'diet coke' and other variations. (0 points)")
         return 0
 
-@checkpoint
+@grader
 def grade_checkpoint2(drinks_count):
     apple_juice_count = drinks_count['apple juice']
     if apple_juice_count == 4:
@@ -30,7 +30,7 @@ def grade_checkpoint2(drinks_count):
         logging.warning(f"Checkpoint 2: Incorrect. You counted {apple_juice_count} Apple Juice entries, but there should be 4. (0 points)")
         return 0
 
-@checkpoint
+@grader
 def grade_checkpoint3(unique_drinks):
     required_drinks = {'vita coco', 'talking rain', 'milk'}
     if required_drinks.issubset(unique_drinks):
@@ -41,7 +41,7 @@ def grade_checkpoint3(unique_drinks):
         logging.warning(f"Checkpoint 3: Incorrect. Missing drinks: {', '.join(missing)}. (0 points)")
         return 0
 
-@checkpoint
+@grader
 def grade_checkpoint4(drinks_count):
     vita_coco_count = drinks_count['vita coco']
     if vita_coco_count == 2:

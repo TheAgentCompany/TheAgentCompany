@@ -7,9 +7,9 @@ import numpy as np
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
-from common import checkpoint
+from common import grader
 
-@checkpoint
+@grader
 def check_code_clone():
     # check path exists
     if os.path.exists("/workspace/janusgraph"):
@@ -24,7 +24,7 @@ def check_code_clone():
                 return True
     return False
 
-@checkpoint
+@grader
 def check_download():
     if os.path.exists("/workspace/janusgraph/new_logo.jpg"):
         image1 = "/workspace/janusgraph/new_logo.jpg"
@@ -35,7 +35,7 @@ def check_download():
     else:
         return False
 
-@checkpoint
+@grader
 def check_readme_update():
     # check path exists
     if os.path.exists("/workspace/janusgraph"):

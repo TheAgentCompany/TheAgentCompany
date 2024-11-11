@@ -6,7 +6,7 @@ from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import PLANE_BASEURL,PLANE_WORKSPACE_SLUG,PLANE_HEADERS
-from common import create_rocketchat_client, get_plane_project_id, get_plane_issues_by_project_cycle, checkpoint
+from common import create_rocketchat_client, get_plane_project_id, get_plane_issues_by_project_cycle, grader
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
@@ -45,7 +45,7 @@ def check_rocketchat_message_posted_keyword_set(rocket_client, channel_name, key
     return True  # All keyword sets were found in some message
 
 
-@checkpoint
+@grader
 def grade_checkpoint1(trajectory):
     """Check if the evaluator accessed 'RisingWave' project and navigated to 'Cycles'."""
     # This check can be simulated by a keyword in the trajectory, e.g., accessing "Cycles" section
@@ -72,7 +72,7 @@ def get_cycle_id_by_name(project_id, cycle_name="Sprint 1"):
     return None
 
 
-@checkpoint
+@grader
 def grade_checkpoint2():
     """Check if specific issues are present in the 'Sprint 2' cycle."""
     
@@ -105,7 +105,7 @@ def grade_checkpoint2():
     return required_issue_names.issubset(issue_names_in_sprint_2)
 
 
-@checkpoint
+@grader
 def grade_checkpoint_final():
     """Confirm that notification messages were posted to Rocket.Chat with the specified issue names and assignee name variations."""
     
