@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 
 from typing import List
-from scoring import Result, Checkpoint, bonus_for_completing_final
+from scoring import Result, Checkpoint
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history, checkpoint
 
 rocket = create_rocketchat_client()
@@ -47,6 +47,8 @@ def grade_checkpoint5():
     try:
         df = pd.read_excel("/workspace/meeting_feedback.xlsx")
         others_df = df[df["Name"] != "Chen Xinyi"]
+        if len(others_df) != 4:
+            return False
         others_feedback = others_df["Feedback"].tolist()
         if not all(["helpful" in feedback for feedback in others_feedback]):
             return False
@@ -61,7 +63,7 @@ def grade_checkpoint5():
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_final)
+    result = Result(checkpoints)
 
     passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
