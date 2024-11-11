@@ -2,11 +2,14 @@ import os
 import logging
 import urllib
 import subprocess
+import functools
 import re
 import requests
 
 import litellm
 from rocketchat_API.rocketchat import RocketChat
+from requests.auth import HTTPBasicAuth
+import xml.etree.ElementTree as ET
 
 from config import *
 
@@ -23,6 +26,17 @@ class MockRocketChatClient:
         def method(*args, **kwargs):
             return self.JsonResponse()
         return method
+
+
+def grader(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logging.error(f"Error in {func.__name__}: {str(e)}")
+            return False
+    return wrapper
     
 
 # messages: a list of message.
@@ -87,6 +101,25 @@ def get_rocketchat_personal_chat_history(rocket_client, username: str, content_o
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+def num_rocketchat_users_contacted(rocket_client, users):
+    """
+    returns the number of users contacted in the users list
+
+    Args:
+        rocket_client: RocketChat client instance
+        users: List of usernames to check
+
+    Returns:
+        int: Number of users contacted
+    """
+    contacted_users = 0
+    user_list = rocket_client.users_list().json()
+    for item in user_list['users']:
+        if item.get('username') in users:
+            id = item["_id"]
+            msgs = rocket_client.im_history(room_id=id).json()['messages']
+            contacted_users += msgs is not None and len(msgs) > 0
+    return contacted_users
 
 def get_rocketchat_channel_history(rocket_client, channel):
     """
@@ -369,6 +402,48 @@ def download_nextcloud_content(link: str, output_file_path: str):
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
 
+def check_file_in_nextcloud_directory(file_name, dir_name):
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
+    headers = {
+        'OCS-APIRequest': 'true',
+        'Content-Type': 'application/xml',
+        'Depth': '1',  # Depth of 1 to list the immediate contents of the directory
+    }
+
+    # Send PROPFIND request
+    response = requests.request(
+        method="PROPFIND",
+        url=server_url,
+        headers=headers,
+        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
+    )
+
+    if response.status_code == 207:
+        root = ET.fromstring(response.text)
+        for response in root.findall(".//{DAV:}response"):
+            href = response.find("{DAV:}href").text
+            if file_name in href:
+                logging.info(f"File '{file_name}' found.")
+                return True
+
+        # If loop completes and file is not found
+        logging.warning(f"File '{file_name}' not found.")
+        return False
+    else:
+        logging.error(f"Error: {response.status_code}, {response.text}")
+        return None
+
+def get_binary_file_content_nextcloud(file_name, dir_name):
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
+    file_url = f"{server_url}/{file_name}"
+
+    response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
+
+    if response.status_code == 200:
+        return response.content
+    else:
+        logging.error(f"Error: {response.status_code}, {response.text}")
+        return None
 
 # Use the unique file name to check if the repository is cloned correctly.
 PROJECT_FILES = {
@@ -585,3 +660,18 @@ def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
     except requests.RequestException as e:
         logging.warning(f"Add issue to cycle failed: {e}")
         return None
+
+
+def get_all_texts_from_slide(slide):
+    """Obtain all text content from the slide."""
+    if slide is None:
+        return ""
+
+    texts = []
+
+    for shape in slide.shapes:
+        if shape.has_text_frame:
+            text = shape.text_frame.text
+            texts.append(text.lower())
+
+    return ' '.join(texts)

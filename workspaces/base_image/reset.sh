@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
 
-# TODO (boxuanli): eventually this script will be called by init.sh
-# At the early stage of development, we will call this script manually to avoid
-# potentially concurrent reset calls from multiple developers
-
 # Initialize variables to track total wait time and which services need resetting
 # TODO (yufansong): make this script more robust by making the api-server itself
 # wait until all resets are complete. A websocket solution might be needed.
@@ -26,8 +22,8 @@ if grep -q "plane" /utils/dependencies.yml; then
     echo "Resetting plane..."
     curl -X POST "http://the-agent-company.com:2999/api/reset-plane"
     reset_services+=("plane")
-    if [ $total_wait -lt 1=360 ]; then
-        total_wait=360
+    if [ $total_wait -lt 600 ]; then
+        total_wait=600
     fi
 fi
 

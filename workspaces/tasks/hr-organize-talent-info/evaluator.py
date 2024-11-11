@@ -2,8 +2,9 @@ import os
 import csv
 from typing import List
 from scoring import Result, Checkpoint
+from common import grader
 
-
+@grader
 def check_exists_file():
     return os.path.exists("/workspace/summary.csv")
 
@@ -11,7 +12,7 @@ def get_summary_file_content(name: str = None):
     if not os.path.exists("/workspace/summary.csv"):
         return []
     rows = []
-    with open("summary.csv") as csvfile:
+    with open("/workspace/summary.csv") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             if name is not None and row[0] != name:
@@ -19,7 +20,7 @@ def get_summary_file_content(name: str = None):
             rows.append(row)
     return rows
 
-
+@grader
 def check_emily_info():
     rows = get_summary_file_content(name="Emily Johnson")
     if len(rows) != 1:
@@ -34,7 +35,7 @@ def check_emily_info():
     ]]): return 0
     return 1
 
-
+@grader
 def check_michael_info():
     rows = get_summary_file_content(name="Michael Davis")
     if len(rows) != 1:
@@ -50,7 +51,7 @@ def check_michael_info():
     ]]): return 0
     return 1
 
-
+@grader
 def check_sarah_info():
     rows = get_summary_file_content(name="Sarah Thompson")
     if len(rows) != 1:

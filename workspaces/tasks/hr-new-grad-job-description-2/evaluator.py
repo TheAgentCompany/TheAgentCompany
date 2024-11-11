@@ -3,14 +3,14 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_nextcloud_url_in_file, download_nextcloud_content
+from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_nextcloud_url_in_file, download_nextcloud_content, grader
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-############################# Helper Functions #####################################
 
+@grader
 def check_job_description_content():
 
     with open("/workspace/job_description.md", "r") as f:
@@ -29,8 +29,6 @@ def check_job_description_content():
     predicate = f'a successful combination of the markdown template \"\"{template_content}\"\" and the requirement file \"\"{requirement_content}'
     additional_prompt = 'Pay special consideration to all of the numerical details. '
     return evaluate_with_llm(final_content, predicate, additional_prompt)
-
-############################# Evaluator #####################################
 
 
 def grade_checkpoints(trajectory=""):

@@ -7,16 +7,18 @@ from typing import List
 
 rocket = create_rocketchat_client()
  
-
+@grader
 def checkpoint1():
     passed = True
     for name in ['jessica_lee', 'huang_jie', 'chen_xinyi']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
+@grader
 def checkpoint2(trajectory):
     return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist" in trajectory
 
+@grader
 def checkpoint3():
     """
     Jessica Lee: five Ergonomic Office Chair (Herman Miller) cost $1,195 each, five Standing Desk (Electric Adjustable) cost $649 each, three Meeting Table cost $899 each, total cost 1195*5+649*5+899*3=11917

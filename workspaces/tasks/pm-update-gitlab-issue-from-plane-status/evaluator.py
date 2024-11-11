@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import get_plane_project_id, make_gitlab_request
+from common import get_plane_project_id, make_gitlab_request, grader
 from config import GITLAB_USER
 from scoring import bonus_for_completing_final
 
@@ -16,10 +16,12 @@ PROJECT_ID = get_plane_project_id(PROJECT_NAME)
 ISSUE_1 = "Model: recall rate is 0"
 ISSUE_2 = "Model: security problem"
 
+@grader
 def grade_checkpoint1(trajectory):
     url = "tac/projects/73cb74f7-a7ac-4292-a915-e2f59a09a703/issues"
     return url in trajectory
 
+@grader
 def grade_checkpoint2():
     point_1 = False
     point_2 = False

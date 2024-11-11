@@ -27,6 +27,7 @@ def check_branch_deleted():
         logging.error(f"Error occurred while checking the branch: {e}")
         return False
 
+@grader
 def grade_checkpoint1(trajectory):
     target_context = "permanently delete the branch"
     
@@ -36,6 +37,7 @@ def grade_checkpoint1(trajectory):
         logging.warning(f"Error in grade_checkpoint1: {e}")
         return False
 
+@grader
 def grade_checkpoint2():
     repo_exists = check_repository_exists()
     branch_deleted = check_branch_deleted()
