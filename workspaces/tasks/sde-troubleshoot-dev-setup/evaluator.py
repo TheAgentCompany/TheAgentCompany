@@ -1,6 +1,6 @@
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 import logging
 
 from packaging.requirements import Requirement
@@ -9,7 +9,7 @@ import re
 
 rocket = create_rocketchat_client()
 
-
+@grader
 def grade_checkpoint1(trajectory="") -> bool:
     """Check if agent visited the requirements.txt file in copilot-arena-server."""
     required_url = "/copilot-arena-server/-/blob/main/requirements.txt"
@@ -55,7 +55,8 @@ def check_requirements_compatibility(base_file, target_file):
                     )
                     
     return len(incompatibilities) == 0, incompatibilities
-    
+
+@grader
 def grade_checkpoint2() -> bool:
     """Compare myenv.txt with requirements.txt for alignment."""
     try:
@@ -71,11 +72,14 @@ def grade_checkpoint2() -> bool:
     except Exception as e:
         return False
 
+
+@grader
 def grade_checkpoint3() -> bool:
     """Check if agent had a conversation with Emily Zhou."""
     messages = get_rocketchat_personal_chat_history(rocket, "Emily Zhou")
     return len(messages) > 0
 
+@grader
 def grade_checkpoint4() -> bool:
     """Check if conversation mentions pandas and scikit-learn version issues."""
     messages = get_rocketchat_personal_chat_history(rocket, "Emily Zhou")    
