@@ -1,7 +1,23 @@
 #!/bin/bash
 set -e
 
+task_type=$1
+task_types=("pm" "sde")
+
 for task_dir in workspaces/tasks/*/; do
+  task_name=$(basename $task_dir)
+  if [ "$task_type" != "other" ]; then
+      if [[ "$task_name" != "$task_type"* ]]; then
+          continue
+      fi
+  else
+      # Extract the part of task_dir before the first "-"
+      task_prefix="${task_name%%-*}"
+      if [[ " ${task_types[@]} " =~ " ${task_prefix} " ]]; then
+          continue
+      fi
+  fi
+  
   echo "Testing in $task_dir"
   cd "$task_dir"
 
