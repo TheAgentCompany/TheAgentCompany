@@ -1,7 +1,7 @@
 import re
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -15,17 +15,20 @@ EXPECTED_UNUSUAL_CHAR_NAMES = ["Under~Reporters.xlsx", "wrgbn i53b;6.xlsx"]
 DATA_ANALYSIS_FOLDER_URL = "/Documents/Data%20Analysis"
 
 
+@grader
 def grade_checkpoint1(trajectory: str) -> bool:
     """Check if the agent visits the "Data Analysis" folder."""
     return DATA_ANALYSIS_FOLDER_URL in trajectory
 
 
+@grader
 def grade_checkpoint2() -> bool:
     """Check if the agent reports to Jessica Lee on RocketChat."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
     return bool(messages)  # True if there is at least one message
 
 
+@grader
 def grade_checkpoint3() -> bool:
     """Check if the agent identifies files without meaningful names correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -44,6 +47,7 @@ def grade_checkpoint3() -> bool:
     return False
 
 
+@grader
 def grade_checkpoint4() -> bool:
     """Check if the agent identifies files with all numeric names correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -62,6 +66,7 @@ def grade_checkpoint4() -> bool:
     return False
 
 
+@grader
 def grade_checkpoint5() -> bool:
     """Check if the agent identifies files with unusual characters correctly in the report to Jessica Lee."""
     messages = get_rocketchat_personal_chat_history(rocket, "jessica_lee")

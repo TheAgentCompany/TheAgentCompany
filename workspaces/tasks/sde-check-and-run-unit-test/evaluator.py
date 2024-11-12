@@ -7,10 +7,12 @@ from scoring import Result, Checkpoint
 from common import *
 
 # Check the repo has been cloned
+@grader
 def grade_checkpoint1():
     return check_repo_exists('openhands')
     
 # Check all the test passed
+@grader
 def grade_checkpoint2(trajectory):
     try:
         if 'test_open_file' not in trajectory:

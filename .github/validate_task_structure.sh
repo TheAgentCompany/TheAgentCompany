@@ -34,13 +34,18 @@ for task_dir in *; do
     exit 1
   fi
 
-  # 2. Check if evaluator.py exists
+  # 2. Check evaluator.py
   if [ ! -f "evaluator.py" ]; then
     echo "Error: evaluator.py is missing in $task_dir"
     exit 1
   fi
+  # Check for at least one @grader annotator
+  if ! grep -q "@grader" evaluator.py; then
+      echo "Error: evaluator.py must contain at least one @grader annotator, see example task for reference"
+      exit 1
+  fi
 
-  # 3. Check if Dockerfile exists and contains "FROM base-image"
+  # 3. Check Dockerfile
   if [ ! -f "Dockerfile" ]; then
     echo "Error: Dockerfile is missing in $task_dir"
     exit 1
