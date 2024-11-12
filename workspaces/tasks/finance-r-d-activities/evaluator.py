@@ -28,7 +28,7 @@ def grade_checkpoint1():
 
 @grader
 def grade_checkpoint2():
-    file_name = "R&D_Time_Tracking_Records.xlsx"
+    file_name = "Research_Time_Tracking_Records.csv"
     dir_name = "Documents/Financials"
     if not check_file_in_nextcloud_directory(file_name, dir_name):
         return 0
@@ -40,9 +40,9 @@ def grade_checkpoint2():
 
     # read content as df
     try:
-        collected_df = pd.read_excel(BytesIO(content))
+        collected_df = pd.read_csv(BytesIO(content))
     except Exception as e:
-        logging.warning(f"Failed to read flagged_payments.xlsx: {e}")
+        logging.warning(f"Failed to read Research_Time_Tracking_Records.csv: {e}")
         return 0
 
     required_columns = ["Employee", "Hours_spent", "Qualified_R&D_activities", "R&D_wage"]
@@ -50,14 +50,16 @@ def grade_checkpoint2():
         return 0
     
     score = 0
-    solutions_df = pd.read_excel("/utils/utils.xlsx")
+    solutions_df = pd.read_csv("/utils/utils.csv")
     # create a employee - hour dictionary
     employee_hours = defaultdict(float)
     for index, row in solutions_df.iterrows():
-        employee_hours[row["Employee"]] = row["Hours_spent"]
+        if not row["Employee"] == "TOTAL":
+            employee_hours[row["Employee"]] = row["Hours_spent"]
     employee_wage = defaultdict(float)
     for index, row in solutions_df.iterrows():
-        employee_wage[row["Employee"]] = row["R&D_wage"]
+        if not row["Employee"] == "TOTAL":
+            employee_wage[row["Employee"]] = row["R&D_wage"]
 
     # Check if the individual hours are correct, grant partial score if more than 50% of the hours are correct
     correct_hours = 0
@@ -71,16 +73,17 @@ def grade_checkpoint2():
 
     # Check if the last row is the total wages, if not grant partial score if more than 50% of the wages are correct
     total_wages = collected_df["R&D_wage"].iloc[-1]
-    if float(total_wages) == sum(employee_wage.values()):
+    if float(total_wages) == solutions_df["R&D_wage"].iloc[-1]:
         score += 2
-    correct_wages = 0
-    for index, row in collected_df.iterrows():
-        if float(row["R&D_wage"]) == employee_wage[row["Employee"]]:
-            correct_wages += 1
-    if correct_wages == 10:
-        score += 2
-    elif correct_wages >= 5:
-        score += 1
+    else:
+        correct_wages = 0
+        for index, row in collected_df.iterrows():
+            if float(row["R&D_wage"]) == employee_wage[row["Employee"]]:
+                correct_wages += 1
+        if correct_wages == 10:
+            score += 2
+        elif correct_wages >= 5:
+            score += 1
     
     return score
 

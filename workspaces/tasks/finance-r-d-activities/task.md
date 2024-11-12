@@ -2,10 +2,10 @@ Navigate to Nextcloud at https://ogma.lti.cs.cmu.edu/apps/dashboard.
 
 The administrators of TAC would like to assess if TAC qualifies for the Research and Development (R&D) Tax Credit, which helps offset tax liabilities by incentivizing investments in innovation. To support this application, complete the following documentation:
 
-- According to /Documents/Human Resources Team/Personell_File.odt, reach out to relevant personell via RocketChat, asking about the time spent on research activities and the nature of the work.
+- According to /Documents/Human Resources Team/Personell_File.odt, reach out to relevant personell via RocketChat, asking about the time spent on R&D related activities and the nature of the work.
 - Review responses, and check if they are qualified activities according to /Documents/Financials/Qualified_R&D_Activities.md.
 - For activities that qualify for the R&D tax credit, record the following columns in /Documents/Financials/R&D_Time_Tracking_Records.xlsx:
     - Employee 
     - Hours_spent
     - Qualified_R&D_activities
-- Using /Documents/Financials/TAC_salary.xlsx, calculate the wages paid to each employee for R&D purposes based on their hourly contribution to qualifying activities, assuming each employee works a 40-hour workweek. Add a column named "R&D_wage" in /Documents/Financials/R&D_Time_Tracking_Records.xlsx to record that, and recording the total wages paid for R&D activities in the final row.
+- Using /Documents/Financials/TAC_salary.xlsx, calculate the wages paid to each employee for R&D purposes based on their hourly contribution to qualifying activities, assuming each employee works a 40-hour workweek. Add a column named "R&D_wage" in /Documents/Financials/R&D_Time_Tracking_Records.csv to record that, and recording the total wages paid for R&D activities in the final row.
