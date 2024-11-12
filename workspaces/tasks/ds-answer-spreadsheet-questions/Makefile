@@ -1,5 +1,5 @@
-IMAGE_NAME=ds-answer-spredsheet-questions-image
-CONTAINER_NAME=ds-answer-spredsheet-questions
+IMAGE_NAME=ds-answer-spreadsheet-questions-image
+CONTAINER_NAME=ds-answer-spreadsheet-questions
 
 .PHONY: build run stop
 
