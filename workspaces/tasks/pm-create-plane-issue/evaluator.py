@@ -1,7 +1,7 @@
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
 from config import *
-from common import get_plane_project_id, get_plane_project_all_issues
+from common import get_plane_project_id, get_plane_project_all_issues, grader
 
 # Constants
 PROJECT_NAME = "Frontend Development"
@@ -9,6 +9,7 @@ ISSUE_TITLE = "Improve Page Loading Speed"
 EXPECTED_PROJECT_TRAJECTORY = "http://the-agent-company.com:8091/tac/projects/39ccbb74-8f1d-4259-8f75-df9ffbc9a962/issues/"
 
 
+@grader
 def grade_checkpoint1(trajectory: str):
     """
     Check if the agent accessed the correct project page by verifying the project ID and trajectory.
@@ -16,6 +17,7 @@ def grade_checkpoint1(trajectory: str):
     # Check if the trajectory contains the expected project URL
     return EXPECTED_PROJECT_TRAJECTORY in trajectory
 
+@grader
 def grade_checkpoint2():
     """
     Check if the issue "Improve Page Loading Speed" is created in the correct project.

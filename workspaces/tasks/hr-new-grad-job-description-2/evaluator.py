@@ -3,14 +3,14 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_nextcloud_url_in_file, download_nextcloud_content, checkpoint
+from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_nextcloud_url_in_file, download_nextcloud_content, grader
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 
-@checkpoint
+@grader
 def check_job_description_content():
 
     with open("/workspace/job_description.md", "r") as f:

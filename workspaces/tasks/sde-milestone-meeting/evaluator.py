@@ -4,18 +4,20 @@ from bs4 import BeautifulSoup
 from typing import List
 
 
-from common import create_rocketchat_client
+from common import create_rocketchat_client, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"http://the-agent-company.com:8929/root/janusgraph/-/milestones/27#tab-merge-requests",
             f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests?milestone_title=Release+v1.1.0"]
     return any(url in trajectory for url in urls)
 
+@grader
 def grade_checkpoint2():
     url = f"http://the-agent-company.com:8929/root/janusgraph/-/merge_requests/4657"
 

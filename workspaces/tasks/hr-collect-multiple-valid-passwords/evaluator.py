@@ -4,7 +4,7 @@ import os
 import time
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, num_rocketchat_users_contacted
+from common import create_rocketchat_client, num_rocketchat_users_contacted, grader
 
 CHECKPOINT_1_POINTS = 2
 CHECKPOINT_2_POINTS = 2
@@ -24,9 +24,11 @@ NUM_USERS = 5
 def is_valid_password(user, password):
     return user in VALID_PASSWORDS and password == VALID_PASSWORDS[user]
 
+@grader
 def grade_checkpoint1():
     return num_rocketchat_users_contacted(rocket, TEAM) == NUM_USERS
 
+@grader
 def grade_checkpoint2():
     num_valid_passwords = 0
     if not os.path.exists("/workspace/passwords.txt"):

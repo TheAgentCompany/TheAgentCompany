@@ -45,6 +45,7 @@ def parse_task3_content(content):
         return []
 
 # Check if the total number of products matches
+@grader
 def grade_checkpoint1():
     content = read_file_content(1)
     try:
@@ -56,6 +57,7 @@ def grade_checkpoint1():
         return False
 
 # Check if the number of categories matches
+@grader
 def grade_checkpoint2():
     content = read_file_content(2)
     try:
@@ -67,6 +69,7 @@ def grade_checkpoint2():
         return False
 
 # Check if the top 3 expensive electronics match
+@grader
 def grade_checkpoint3():
     content = read_file_content(3)
     try:
