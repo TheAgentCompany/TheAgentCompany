@@ -2,6 +2,7 @@ from typing import List
 from scoring import Result, Checkpoint
 import subprocess
 import os
+from common import grader
 
 def check_workflow_files() -> bool:
     """Check if specific GitHub workflow files have been updated to use UV."""
@@ -61,14 +62,17 @@ def check_pyproject_toml() -> bool:
     except Exception:
         return False
 
+@grader
 def grade_checkpoint1() -> bool:
     """Grade GitHub workflow updates."""
     return check_workflow_files()
 
+@grader
 def grade_checkpoint2() -> bool:
     """Grade documentation updates."""
     return check_documentation_files()
 
+@grader
 def grade_checkpoint3() -> bool:
     """Grade pyproject.toml updates."""
     return check_pyproject_toml()

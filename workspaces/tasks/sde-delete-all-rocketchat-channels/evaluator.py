@@ -6,7 +6,7 @@ import json
 import logging
 from typing import List
 
-from common import create_rocketchat_client
+from common import create_rocketchat_client, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 def get_channel_lists():
@@ -20,18 +20,25 @@ def get_channel_lists():
 
     return all_channels, joined_channels
 
-def grade_checkpoints(trajectory="") -> Result:
-    all_channels, joined_channels = get_channel_lists()
-    checkpoint1_score = 0
-    if joined_channels is not None:
-        checkpoint1_score = int(len(joined_channels) == 0)
-    checkpoint1 = Checkpoint(1, checkpoint1_score)
 
-    checkpoint2_score = 0
+@grader
+def grade_checkpoint1(joined_channels):
+    if joined_channels is not None:
+        return len(joined_channels) == 0
+    return False
+
+@grader
+def grade_checkpoint2(all_channels):
     if all_channels is not None:
         if len(all_channels) > 0:
             logging.info(f"found undeleted channels {str([c['name'] for c in all_channels])}")
-        checkpoint2_score = int(len(all_channels) == 0)
-    checkpoint2 = Checkpoint(1, checkpoint2_score)
+        return len(all_channels) == 0
+    return False
+
+def grade_checkpoints(trajectory="") -> Result:
+    all_channels, joined_channels = get_channel_lists()
+    checkpoint1 = Checkpoint(1, int(grade_checkpoint1(joined_channels)))
+
+    checkpoint2 = Checkpoint(1, int(grade_checkpoint2(all_channels)))
 
     return Result([checkpoint1, checkpoint2], bonus_for_completing_final)

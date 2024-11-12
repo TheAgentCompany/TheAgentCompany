@@ -5,7 +5,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 from common import evaluate_with_llm
-from common import make_gitlab_request
+from common import make_gitlab_request, grader
 
 # Configuration for gitlab
 project_path = "root/openhands"
@@ -20,20 +20,13 @@ def get_gitlab_issue_notes():
         logging.error(f"Error occurred while checking the repository: {e}")
         return []
 
-def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
-    if len(sys.argv) < 2:
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
-    return url in trajectory
+@grader
+def grade_checkpoint1(trajectory: str):
+    return 'root/openhands/-/issues/4158' in trajectory
 
 
-def checkpoint2():
+@grader
+def grade_checkpoint2():
     issue_notes = get_gitlab_issue_notes()
     if issue_notes:
         return any(issue_note.get('id') not in [127283, 127284, 127285] for issue_note in issue_notes)
@@ -41,7 +34,8 @@ def checkpoint2():
         return False
 
 
-def checkpoint3():
+@grader
+def grade_checkpoint3():
     issue_notes = get_gitlab_issue_notes()
     target = None
     if issue_notes:
@@ -64,15 +58,9 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    # Define the scores corresponding to when each function is True
-    scores = {
-        checkpoint1: 1,
-        checkpoint2: 1,
-        checkpoint3: 1
-    }
-
-    for func, total_score in scores.items():
-        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
 
     return result
 

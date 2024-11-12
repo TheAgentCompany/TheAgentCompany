@@ -1,0 +1,93 @@
+name: Run Benchmark for a Task
+on:
+  issue_comment:
+    types: [created]
+
+# This ensures only one evaluation runs at a time across all repos
+# New evaluations will wait in queue rather than cancelling running ones
+concurrency:
+  group: cmu-lti-ogma-evaluation
+  cancel-in-progress: false
+
+jobs:
+  process-comment:
+    if: startsWith(github.event.comment.body, '/run-eval')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Extract task name
+        id: extract-task
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          TASK_NAME=$(echo "$COMMENT" | sed -n 's/^\/run-eval \(.*\)/\1/p')
+          echo "task_name=$TASK_NAME" >> $GITHUB_OUTPUT
+          
+      - name: Add reaction to comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+
+      - name: Post start comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Started evaluation! You can monitor the progress [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Build base image
+        working-directory: /workspaces/base_image
+        run: make build
+        
+      - name: Build task image
+        working-directory: /workspaces/tasks/${{ steps.extract-task.outputs.task_name }}
+        run: make build
+        
+      - name: Create config file
+        working-directory: /evaluation
+        run: |
+          cat > config.toml << EOF
+          [core]
+          run_as_openhands=false
+          [llm.eval]
+          model="${{ secrets.LLM_MODEL }}"
+          base_url="${{ secrets.LLM_BASE_URL }}"
+          api_key="${{ secrets.LLM_API_KEY }}"
+          EOF
+        
+      - name: Run evaluation
+        working-directory: /evaluation
+        run: |
+          poetry install
+          poetry run python run_eval.py \
+            --llm-config eval \
+            --server-hostname ogma.lti.cs.cmu.edu \
+            --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
+            
+      - name: Comment on results
+        uses: peter-evans/create-or-update-comment@v4
+        if: always()
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Evaluation completed for task: ${{ steps.extract-task.outputs.task_name }}
+            
+            Check the detailed results [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})

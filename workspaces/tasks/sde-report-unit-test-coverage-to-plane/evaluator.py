@@ -12,15 +12,18 @@ from common import *
 PLANE_PROJECT_ID = "73cb74f7-a7ac-4292-a915-e2f59a09a703"
 
 # Check if OpenHands repo is cloned
+@grader
 def grade_checkpoint1():
     return check_repo_exists('openhands')
 
 # Check if run unit test coverage command exists in trajectory
+@grader
 def grade_checkpoint2(trajectory):
     required_commands = ["poetry run pytest", "--cov=openhands"]
     return all(cmd in trajectory for cmd in required_commands)
 
 # Check if coverage issue exists on Plane
+@grader
 def grade_checkpoint3():
     url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{PLANE_PROJECT_ID}/issues/"
     
@@ -37,6 +40,7 @@ def grade_checkpoint3():
         return False
 
 # Check if coverage number in issue is correct
+@grader
 def grade_checkpoint4():
     EXPECTED_COVERAGE = 55.65 
     

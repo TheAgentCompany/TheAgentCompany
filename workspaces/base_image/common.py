@@ -28,7 +28,7 @@ class MockRocketChatClient:
         return method
 
 
-def checkpoint(func):
+def grader(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:

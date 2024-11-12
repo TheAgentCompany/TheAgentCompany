@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import get_plane_issue_details, get_plane_state_details, get_plane_issues_by_project_cycle, get_plane_cycle_details, get_plane_project_id, make_gitlab_request
+from common import get_plane_issue_details, get_plane_state_details, get_plane_issues_by_project_cycle, get_plane_cycle_details, get_plane_project_id, make_gitlab_request, grader
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1
@@ -27,18 +27,22 @@ def get_issue_url(issue_name):
         if issue["title"] == issue_name:
             return issue["web_url"]
 
+@grader
 def grade_checkpoint1(trajectory):
     url = get_issue_url(ISSUE_1)
     return url is not None and url in trajectory
 
+@grader
 def grade_checkpoint2(trajectory):
     url = get_issue_url(ISSUE_2)
     return url is not None and url in trajectory
 
+@grader
 def grade_checkpoint3(trajectory):
     url = "tac/projects/f04e5c07-8fa2-4eaf-a35b-5cacf3f1d025/issues"
     return url in trajectory
 
+@grader
 def grade_checkpoint4():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_1)
     if issue is None:
@@ -55,6 +59,7 @@ def grade_checkpoint4():
             return True
     return False
 
+@grader
 def grade_checkpoint5():
     issue = get_plane_issue_details(PROJECT_ID, ISSUE_2)
     if issue is None:

@@ -4,7 +4,6 @@ from typing import Optional, Dict, List, Union
 import re
 import base64
 import os
-import sys
 
 from openhands.core.logger import openhands_logger as logger
 from openhands.events.action import BrowseInteractiveAction
@@ -257,7 +256,7 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
 
             if not action:
                 logger.error(f"FAILED TO RESOLVE ACTION, {action}")
-                sys.exit(1)
+                raise Exception(f"FAILED TO RESOLVE ACTION, maybe the service is not available")
 
             # Convert the action to an instruction string
             instruction = action.to_instruction()

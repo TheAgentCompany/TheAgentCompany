@@ -3,10 +3,11 @@ from typing import List
 
 from scoring import Result, Checkpoint
 
-from common import evaluate_with_llm, get_nextcloud_url_in_file, download_nextcloud_content
+from common import evaluate_with_llm, get_nextcloud_url_in_file, download_nextcloud_content, grader
 
 ############################# Helper Functions #####################################
 
+@grader
 def check_job_description_content():
 
     with open("/workspace/job_description.md", "r") as f:
