@@ -2,11 +2,14 @@ import os
 import logging
 import urllib
 import subprocess
+import functools
 import re
 import requests
 
 import litellm
 from rocketchat_API.rocketchat import RocketChat
+from requests.auth import HTTPBasicAuth
+import xml.etree.ElementTree as ET
 
 from config import *
 
@@ -23,6 +26,17 @@ class MockRocketChatClient:
         def method(*args, **kwargs):
             return self.JsonResponse()
         return method
+
+
+def grader(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logging.error(f"Error in {func.__name__}: {str(e)}")
+            return False
+    return wrapper
     
 
 # messages: a list of message.
@@ -57,11 +71,14 @@ def create_rocketchat_client(username='theagentcompany', password='theagentcompa
             raise
 
 
-def get_chat_history(rocket_client, username: str):
+def get_rocketchat_personal_chat_history(rocket_client, username: str, content_only: bool = True):
     """
     Get chat history from RocketChat server, between:
     1) param username,
     2) and the account used to create rocket client instance
+
+    If content_only is True, only return the content of the messages, otherwise return all attributes,
+    including but not limited to message content, timestamp, etc.
 
     Returns the messages as a list. If no history, returns an empty list.
     """
@@ -76,11 +93,100 @@ def get_chat_history(rocket_client, username: str):
         return []
 
     msgs = rocket_client.im_history(room_id=id).json()['messages']
-    reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    if content_only:
+        reversed_history = [] if msgs is None else [msg['msg'] for msg in msgs]
+    else:
+        reversed_history = [] if msgs is None else msgs
     history = reversed_history[::-1]
     logging.info(f'Chat history with {username} is: {history}')
     return history
 
+def num_rocketchat_users_contacted(rocket_client, users):
+    """
+    returns the number of users contacted in the users list
+
+    Args:
+        rocket_client: RocketChat client instance
+        users: List of usernames to check
+
+    Returns:
+        int: Number of users contacted
+    """
+    contacted_users = 0
+    user_list = rocket_client.users_list().json()
+    for item in user_list['users']:
+        if item.get('username') in users:
+            id = item["_id"]
+            msgs = rocket_client.im_history(room_id=id).json()['messages']
+            contacted_users += msgs is not None and len(msgs) > 0
+    return contacted_users
+
+def get_rocketchat_channel_history(rocket_client, channel):
+    """
+    Retrieve the message history of a specific public channel from the RocketChat server.
+
+    Parameters:
+        rocket_client: The RocketChat client instance, authenticated and connected to the server.
+        channel (str): The name of the channel to retrieve messages from.
+
+    Returns:
+        list: A list of messages from the specified channel. If no messages are found, returns empty list.
+              If an error occurs in retrieving the channel info or message history, also returns empty list.
+
+    Example:
+        >>> messages = get_rocketchat_channel_history(rocket_client, "general")
+        >>> for message in messages:
+        >>>     print(message["msg"])
+    """
+    response = rocket_client.channels_info(channel=channel).json()
+    if not response.get('success'):
+        logging.warning(f"Failed to retrieve {channel} channel info.")
+        return []
+
+    room_id = response['channel']['_id']
+
+    response = rocket_client.channels_history(room_id=room_id).json()
+    if not response.get('success'):
+        logging.warning("Failed to retrieve message history.")
+        return []
+
+    messages = response.get('messages', [])
+
+    if not messages:
+        logging.warning("No messages found.")
+        return []
+
+    return messages
+
+def get_rocketchat_channel_room_id(rocket_client, channel_name):
+    """Get the room_id for a specific channel."""
+    response = rocket_client.channels_info(channel=channel_name).json()
+    if response.get('success'):
+        return response['channel']['_id']
+    return None
+
+def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
+    """
+    Check if a message containing specific keywords was posted in the specified channel.
+
+    Args:
+        channel_name (str): Name of the Rocket.Chat channel.
+        keywords (list): List of keywords to check in the message content.
+
+    Returns:
+        bool: True if a message containing all keywords is found, False otherwise.
+    """
+    room_id = get_rocketchat_channel_room_id(rocket_client, channel_name)
+    if not room_id:
+        return False
+    
+    messages = rocket_client.channels_history(room_id=room_id, count=10).json().get('messages', [])
+    for message in messages:
+        message_text = message.get("msg", "").lower()
+        # Check if all keywords are present in the message text
+        if all(keyword.lower() in message_text for keyword in keywords):
+            return True
+    return False
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = ''):
     """
@@ -144,7 +250,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     """
     try:
         # Retrieve chat history
-        messages = get_chat_history(rocket_client, username)
+        messages = get_rocketchat_personal_chat_history(rocket_client, username)
         if not messages:
             logging.warning(f"No chat history found for user: {username}")
             return False
@@ -155,7 +261,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
 
-def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET'):
+def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
 
     if project_identifier:
@@ -167,12 +273,78 @@ def make_gitlab_request(project_identifier: str = None, additional_path: str = N
         url = f"{url}/{additional_path}"
     
     try:
-        response = requests.request(method, url, headers=GITLAB_HEADERS)
+        response = requests.request(method, url, headers=GITLAB_HEADERS, params=params)
         return response
     except Exception as e:
         logging.error(f"GitLab API request failed: {e}")
         return None
 
+def get_gitlab_project_id(project_name:str):
+    """
+    Get project ID for gitlab project
+
+    Args:
+        project_name: The name of the project
+
+    Returns:
+        str: The ID of the project
+
+    """
+    projects = make_gitlab_request(None,"projects")
+    if not projects:
+        logging.warning(f"No gitlab projects found")
+        return None
+    else:
+        projects = projects.json()
+    target_projects = [project['id'] for project in projects if project['name']==project_name]
+    if len(target_projects) == 0:
+        logging.warning(f"No gitlab projects found for project name {project_name}")
+        return None
+    else:
+        return str(target_projects[0])
+
+def get_gitlab_merge_request_by_title(project_id:str, merge_request_title:str):
+    """
+    Get merge request by title
+
+    Args:
+        project_id: The ID of the project
+        merge_request_title: The title of the merge request
+
+    Returns:
+        dict: The merge request object
+    """
+    merge_requests = make_gitlab_request(project_id,"merge_requests")
+    if not merge_requests:
+        logging.warning(f"No gitlab merge requests found")
+        return None
+    else:
+        merge_requests = merge_requests.json()
+    target_merge_requests = [merge_request for merge_request in merge_requests if merge_request['title'].strip().lower()==merge_request_title.strip().lower()]
+    if len(target_merge_requests) == 0:
+        logging.warning(f"No gitlab merge requests found for title {merge_request_title}")
+        return None
+    else:
+        return target_merge_requests[0]
+
+def get_gitlab_file_in_mr(mr: dict, file_path: str) -> str:
+    """
+    Get the content of a file in a merge request.
+
+    Args:
+        mr: The merge request object
+        file_path: The path to the file 
+
+    Returns:
+        str: The content of the file
+    """
+    mr_sha = mr['sha']
+    file_path_in_url = urllib.parse.quote(file_path, safe='')
+    path = f"repository/files/{file_path_in_url}/raw?ref={mr_sha}"
+    resp = make_gitlab_request(str(mr['project_id']), path)
+    if not resp:
+        return None
+    return resp.text
 
 def get_nextcloud_url_in_file(filename: str):
     try:
@@ -230,9 +402,56 @@ def download_nextcloud_content(link: str, output_file_path: str):
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
 
+def check_file_in_nextcloud_directory(file_name, dir_name):
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
+    headers = {
+        'OCS-APIRequest': 'true',
+        'Content-Type': 'application/xml',
+        'Depth': '1',  # Depth of 1 to list the immediate contents of the directory
+    }
 
+    # Send PROPFIND request
+    response = requests.request(
+        method="PROPFIND",
+        url=server_url,
+        headers=headers,
+        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
+    )
+
+    if response.status_code == 207:
+        root = ET.fromstring(response.text)
+        for response in root.findall(".//{DAV:}response"):
+            href = response.find("{DAV:}href").text
+            if file_name in href:
+                logging.info(f"File '{file_name}' found.")
+                return True
+
+        # If loop completes and file is not found
+        logging.warning(f"File '{file_name}' not found.")
+        return False
+    else:
+        logging.error(f"Error: {response.status_code}, {response.text}")
+        return None
+
+def get_binary_file_content_nextcloud(file_name, dir_name):
+    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
+    file_url = f"{server_url}/{file_name}"
+
+    response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
+
+    if response.status_code == 200:
+        return response.content
+    else:
+        logging.error(f"Error: {response.status_code}, {response.text}")
+        return None
+
+# Use the unique file name to check if the repository is cloned correctly.
 PROJECT_FILES = {
     'openhands': '.openhands_instructions',
+    'janusgraph': '.backportrc.json',
+    'colly': 'xmlelement_test.go',
+    'streamlit': '.ruff.toml',
+    'risingwave': 'risedev.yml'
 }
 
 def check_repo_exists(project_name: str):
@@ -345,6 +564,21 @@ def get_plane_issue_details(project_id, issue_name):
     except requests.RequestException as e:
         logging.warning(f"Get issue detail failed: {e}")
         return None
+    
+def get_plane_cycle_details(project_id, cycle_name):
+    """Get details of a specific cycle in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/"
+    try:
+        response = requests.get(url, headers=PLANE_HEADERS)
+        response.raise_for_status()
+        cycles = response.json().get('results', [])
+        for cycle in cycles:
+            if cycle.get('name') == cycle_name:
+                return cycle
+        logging.info(f"Cycle with name '{cycle_name}' not found.")
+    except requests.RequestException as e:
+        logging.warning(f"Get cycle detail failed: {e}")
+        return None
 
 def get_plane_issues_by_project_cycle(project_id: str, cycle_id:str):
     """
@@ -404,3 +638,40 @@ def get_plane_state_details(project_id, state_id):
     except requests.RequestException as e:
         logging.error(f"Error: {e}")
     return dict()
+
+def create_plane_issue(project_id, issue_name):
+    """ Create an issue in a project."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"name": issue_name})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Create issue failed: {e}")
+        return None
+    
+def add_plane_issue_to_cycle(project_id, cycle_id, issue_id):
+    """ Add an issue to a cycle."""
+    url = f"{PLANE_BASEURL}/api/v1/workspaces/{PLANE_WORKSPACE_SLUG}/projects/{project_id}/cycles/{cycle_id}/cycle-issues/"
+    try:
+        response = requests.post(url, headers=PLANE_HEADERS, json={"issues": [issue_id]})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.warning(f"Add issue to cycle failed: {e}")
+        return None
+
+
+def get_all_texts_from_slide(slide):
+    """Obtain all text content from the slide."""
+    if slide is None:
+        return ""
+
+    texts = []
+
+    for shape in slide.shapes:
+        if shape.has_text_frame:
+            text = shape.text_frame.text
+            texts.append(text.lower())
+
+    return ' '.join(texts)

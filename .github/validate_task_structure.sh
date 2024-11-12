@@ -2,6 +2,7 @@
 set -e
 
 cd workspaces/tasks
+
 for task_dir in *; do
   # Check if folder name is lowercase
   if [ "$task_dir" != "$(echo $task_dir | tr '[:upper:]' '[:lower:]')" ]; then
@@ -18,19 +19,35 @@ for task_dir in *; do
     exit 1
   fi
 
-  # 2. Check if evaluator.py exists
+  # 2. Check evaluator.py
   if [ ! -f "evaluator.py" ]; then
     echo "Error: evaluator.py is missing in $task_dir"
     exit 1
   fi
+  # Check for at least one @grader annotator
+  if ! grep -q "@grader" evaluator.py; then
+      echo "Error: evaluator.py must contain at least one @grader annotator, see example task for reference"
+      exit 1
+  fi
 
-  # 3. Check if Dockerfile exists and contains "FROM base-image"
+  # 3. Check Dockerfile
   if [ ! -f "Dockerfile" ]; then
     echo "Error: Dockerfile is missing in $task_dir"
     exit 1
   fi
   if ! grep -q "FROM base-image" "Dockerfile"; then
     echo "Error: Dockerfile in $task_dir does not contain 'FROM base-image'"
+    exit 1
+  fi
+  # we don't allow CMD or ENTRYPOINT in task Dockerfiles, because OpenHands, or any other
+  # agent might need to build their custom images on top of the task image, and override
+  # the default CMD or ENTRYPOINT
+  if grep -q "^[[:space:]]*CMD" "Dockerfile"; then
+    echo "Error: Dockerfile in $task_dir contains CMD instruction which is not allowed"
+    exit 1
+  fi
+  if grep -q "^[[:space:]]*ENTRYPOINT" "Dockerfile"; then
+    echo "Error: Dockerfile in $task_dir contains ENTRYPOINT instruction which is not allowed"
     exit 1
   fi
 

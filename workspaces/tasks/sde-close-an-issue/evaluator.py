@@ -11,6 +11,7 @@ issue_iid = "3797"
 target_comment = "Closing due to inactivity"
 
 
+@grader
 def grade_checkpoint1():
     try:
         comments_response = make_gitlab_request(project_path, f"issues/{issue_iid}/notes")
@@ -24,6 +25,7 @@ def grade_checkpoint1():
         return False
 
 
+@grader
 def grade_checkpoint2():
     try: 
         issue_response = make_gitlab_request(project_path, f"issues/{issue_iid}")

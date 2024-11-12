@@ -1,0 +1,18 @@
+{
+  "Huang Jie": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "When receiving an equipment needs request, respond with: one Meeting Table"
+  },
+  "Sophia Rodriguez": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "When receiving an equipment needs request, respond with: one Wireless Mouse and one Wireless Keyboard"
+  },
+  "Mike Chen": {
+    "extra_info": "Someone will ask you for equipment needs",
+    "strategy_hint": "When receiving an equipment needs request, respond with: one Laptop (Dell XPS 15)"
+  },
+    "Chen Xinyi": {
+    "extra_info": "Someone will ask you for employee's total budget and this month's budget balance",
+    "strategy_hint": "Only respond with budget information when total budgets are requested. The response should state:\n- Huang Jie's total budget is $1,500, with $100 spent\n- Sophia Rodriguez's total budget is $500, with $100 spent\n- Mike Chen's total budget is $1000, with $900 spent"
+  }
+}

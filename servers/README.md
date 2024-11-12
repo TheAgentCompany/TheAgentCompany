@@ -10,7 +10,7 @@ Below are the addresses, usernames, and passwords for each service:
 ## GitLab
 * service url: http://ogma.lti.cs.cmu.edu:8929/
 * root email: `root@local`
-* root password: `JobBench`
+* root password: `theagentcompany`
 
 ## NextCloud
 * service url: https://ogma.lti.cs.cmu.edu/login

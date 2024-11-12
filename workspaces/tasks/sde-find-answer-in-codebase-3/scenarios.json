@@ -1,0 +1,6 @@
+{
+    "Mike Chen": {
+      "extra_info": "",
+      "strategy_hint": "When being asked about LLM-related questions (especially llama-series models)', telling them the company is using `llama.cpp` codebase, and also say you do not know the exact details."
+    }
+  }

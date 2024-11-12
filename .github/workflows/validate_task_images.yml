@@ -2,18 +2,21 @@
 # it acts as a sanity checker without verifying correctness of tasks' contents
 name: Validate all task images
 
+# * Always run on "main"
+# * Always run on PRs
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
+  pull_request:
 
+# If triggered by a PR, it will be in the same group. However, each commit on main will be in its own unique group
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ (github.head_ref && github.ref) || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   check-task-structure:
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -35,6 +38,10 @@ jobs:
         bash .github/validate_task_structure.sh
 
   test-evaluator-basic:
+    strategy:
+      matrix:
+        task-type: [ sde, pm, other ]
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -50,4 +57,4 @@ jobs:
 
     - name: Run evaluator in each task container
       run: |
-        bash .github/validate_evaluators.sh
+        bash .github/validate_evaluators.sh ${{ matrix.task-type }}
