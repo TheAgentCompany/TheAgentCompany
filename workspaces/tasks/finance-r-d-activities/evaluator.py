@@ -1,143 +1,95 @@
-import os
-
-from typing import List
-
 import pandas as pd
-
-from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
-import math
-from common import grader
+from typing import List
+from collections import defaultdict
+import numpy as np
+from io import BytesIO
 
-def check_excel_file_exists(file_path):
-    abs_path = os.path.abspath(file_path)
-    try:
-        return os.path.isfile(abs_path)
-    except Exception as e:
-        logging.warning(f"Error in is_file_exist: {e}")
-        return False
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
+from scoring import Result, Checkpoint
 
+employees_involved = ["Sarah Johnson","Li Ming","Zhang Wei","Wang Fang",
+    "Mike Chen","Emily Zhou","Liu Qiang","Sophia Rodriguez","Alex Turner","Emma Lewis"]
 
-def read_excel(filename):
-    try:
-        df = pd.read_excel(filename)
-        return df
-    except Exception:
-        return None
-
-
-def parse_rates_data(filename):
-    data = {
-        "Rate": [],
-        "Name": []
-    }
-
-    with open(filename, "r") as f:
-        for line in f.readlines():
-            line = line.strip().strip('\n')
-            name, rate = line.split(':')
-            name = name.strip()
-            rate = float(rate.strip())
-            data["Rate"].append(rate)
-            data["Name"].append(name)
-    return pd.DataFrame(data)
-
-
-def compare_row_by_row(output_df, correct_df):
-    expected_cols_name = ["totalearnings"]
-    for name in output_df["name"].to_list():
-        answer_row = output_df[output_df['name'] == name]
-        expected_row = correct_df[correct_df['name'] == name]
-        for col in expected_cols_name:
-            if not (abs(answer_row[col] - expected_row[col]) < 1e-2).item():
-                return False
-    return True
-
-
-def analyze_csv(filename):
-    try:
-        df = pd.read_csv(filename)
-
-        # Strip out the spaces if there are any
-        df.columns = df.columns.str.strip()
-        df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
-
-        df['Clock-in'] = pd.to_datetime(df['Clock-in'], format='%H:%M').dt.time
-        df['Clock-out'] = pd.to_datetime(df['Clock-out'], format='%H:%M').dt.time
-
-        # Calculate work length in hours
-        def work_length(row):
-            clock_in = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-in'])
-            clock_out = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-out'])
-            return (clock_out - clock_in).seconds / 3600
-
-        df['Work Length'] = df.apply(work_length, axis=1)
-
-        results = df.groupby('Name').agg(
-            total_work_length=('Work Length', 'sum'),
-        ).reset_index()
-
-        # Round up the final hours. There could be some significant discrepency in final
-        # earnings calculation depending on how the intermediate work hours are rounded, especially since 
-        # the hourly rate can be a large number. Rounding up the final hours should eliminate this issue. 
-        results['total_work_length'] = results['total_work_length'].apply(math.ceil)
-
-        results.columns = ['Name', 'Total Work Length']
-        return results
-    except Exception:
-        return None
-
-
-def final_earnings_df(hourly_rate, employee_df):
-    df = pd.merge(employee_df, hourly_rate, on="Name", how="left")
-    df['Total Earnings'] = df['Total Work Length'] * df['Rate']
-    df['Total Earnings'] = df['Total Earnings'].round(2)
-    z= df[['Name', 'Total Earnings']]
-    return z
+rocket = create_rocketchat_client()
 
 @grader
-def grade_checkpoint1(trajectory):
-    urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "/apps/files/files/1263?dir=/Documents/Human%20Resources%20Team/Attendance"]
-    return all(url in trajectory for url in urls)
+def grade_checkpoint1():
+    # check if the all employees in employees_involved are contacted in rocketchat
+    res = 0
+    for employee in employees_involved:
+        ans = evaluate_chat_history_with_llm(rocket, employee, "This person has been asked about their weekly hours on R&D related activities")
+        res += int(ans)
 
+    if res == 10:
+        return 2
+    else:
+        return 1
 
 @grader
 def grade_checkpoint2():
-    if not check_excel_file_exists("/workspace/april-payroll.xlsx"):
-        return False
+    file_name = "R&D_Time_Tracking_Records.xlsx"
+    dir_name = "Documents/Financials"
+    if not check_file_in_nextcloud_directory(file_name, dir_name):
+        return 0
+
+    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    if not content:
+        logging.warning("Failed to download content")
+        return 0
+
+    # read content as df
     try:
-        df = standardize_df(pd.read_excel("/workspace/april-payroll.xlsx"))
-        return set(df.columns).issuperset(set(["name", "totalearnings"]))
-    except Exception:
-        return False
+        collected_df = pd.read_excel(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read flagged_payments.xlsx: {e}")
+        return 0
 
+    required_columns = ["Employee", "Hours_spent", "Qualified_R&D_activities", "R&D_wage"]
+    if not all(column in collected_df.columns for column in required_columns):
+        return 0
+    
+    score = 0
+    solutions_df = pd.read_excel("/utils/utils.xlsx")
+    # create a employee - hour dictionary
+    employee_hours = defaultdict(float)
+    for index, row in solutions_df.iterrows():
+        employee_hours[row["Employee"]] = row["Hours_spent"]
+    employee_wage = defaultdict(float)
+    for index, row in solutions_df.iterrows():
+        employee_wage[row["Employee"]] = row["R&D_wage"]
 
-def standardize_df(df):
-    if df is None:
-        return None
-    df.columns = df.columns.str.replace(' ', '').str.lower()
-    df = df.sort_values(by="name").reset_index(drop=True)
-    return df
+    # Check if the individual hours are correct, grant partial score if more than 50% of the hours are correct
+    correct_hours = 0
+    for index, row in collected_df.iterrows():
+        if float(row["Hours_spent"]) == employee_hours[row["Employee"]]:
+            correct_hours += 1
+    if correct_hours == 10:
+        score += 2
+    elif correct_hours >= 5:
+        score += 1
 
+    # Check if the last row is the total wages, if not grant partial score if more than 50% of the wages are correct
+    total_wages = collected_df["R&D_wage"].iloc[-1]
+    if float(total_wages) == sum(employee_wage.values()):
+        score += 2
+    correct_wages = 0
+    for index, row in collected_df.iterrows():
+        if float(row["R&D_wage"]) == employee_wage[row["Employee"]]:
+            correct_wages += 1
+    if correct_wages == 10:
+        score += 2
+    elif correct_wages >= 5:
+        score += 1
+    
+    return score
 
-@grader
-def grade_checkpoint3():
-    output = standardize_df(read_excel("/workspace/april-payroll.xlsx"))
-
-    rates_df = parse_rates_data('/utils/rates_info.txt')
-    employee_df = analyze_csv('/utils/april-attendance-data.csv')
-    expected_earnings = standardize_df(final_earnings_df(hourly_rate=rates_df, employee_df=employee_df))
-    if output is None or expected_earnings is None:
-        return False
-    if set(output["name"].to_list()) != set(expected_earnings["name"].to_list()):
-        return False
-    return compare_row_by_row(output, expected_earnings)
-
-
-def grade_checkpoints(trajectory=""):
+def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_final)
-    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
-    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
-    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    result = Result(checkpoints)
+
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint1())))
+    checkpoints.append(Checkpoint(4, int(grade_checkpoint2())))
+
     return result
+
