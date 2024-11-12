@@ -7,6 +7,7 @@ from typing import List
 
 
 from scoring import Result, Checkpoint
+from common import grader
 
 def run_command(command):
     if not shutil.which(command[0]):
@@ -27,6 +28,7 @@ def run_command(command):
         return None
 
 
+@grader
 def grade_checkpoint1():
     try:
         output = run_command(["/workspace/risingwave"])
@@ -36,6 +38,7 @@ def grade_checkpoint1():
         return False
 
 
+@grader
 def grade_checkpoint2():
     try:
         p = subprocess.Popen(["/workspace/risingwave"], stdout=DEVNULL)

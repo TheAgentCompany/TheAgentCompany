@@ -2,7 +2,7 @@ import os
 import re
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
@@ -11,6 +11,7 @@ rocket = create_rocketchat_client()
 EXPECTED_AVG_ROWS = round(26.266666, 2)
 EXPECTED_AVG_COLS = round(8.8, 2)
 
+@grader
 def grade_checkpoint1():
     """Check if '/workspace/data_stats.py' exists."""
     return os.path.exists("/workspace/data_stats.py")
@@ -26,6 +27,7 @@ def extract_reported_stats(message: str):
         return reported_rows, reported_columns
     return None, None
 
+@grader
 def grade_checkpoint2():
     """Check if the reported average row and column counts are correct in RocketChat message."""
     chat_history = get_rocketchat_personal_chat_history(rocket, "jessica_lee")
@@ -36,6 +38,7 @@ def grade_checkpoint2():
             return True
     return False
 
+@grader
 def grade_checkpoint3():
     """Check if the agent informs Jessica Li with correct script path in RocketChat."""
     chat_history = get_rocketchat_personal_chat_history(rocket, "jessica_lee")

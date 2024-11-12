@@ -222,7 +222,16 @@ if __name__ == '__main__':
 
     # TODO: #169 remove this once we are able to use a hard-coded password
     nextcloud_password = get_nextcloud_password()
-    pre_login(runtime, dependencies, nextcloud_password)
+
+    try:
+        pre_login(runtime, dependencies, nextcloud_password)
+    except Exception as e:
+        logger.error(f"Failed to pre-login: {e}")
+
+        # before giving up, let's try to init and login again
+        init_task_env(runtime, args.server_hostname, llm_config)
+        nextcloud_password = get_nextcloud_password()
+        pre_login(runtime, dependencies, nextcloud_password)
 
     state = run_solver(runtime, args.task_image_name, config)
 

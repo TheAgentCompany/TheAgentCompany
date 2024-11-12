@@ -1,7 +1,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_any_of_given_checkpoints
-from common import make_gitlab_request
+from common import make_gitlab_request, grader
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1  
@@ -19,10 +19,12 @@ ISSUE_2_TITLE = 'Integrate with Kafka'
 MILESTONE_1 = 'Alpha Release'
 MILESTONE_2 = 'Beta Release'
 
+@grader
 def grade_checkpoint1(trajectory):
     # Check if the agent visited the milestones page
     return MILESTONES_URL in trajectory
 
+@grader
 def grade_checkpoint2():
     # Check if "Alpha Release" milestone is closed
     response = make_gitlab_request(PROJECT_PATH, 'milestones', params={'search': MILESTONE_1})
@@ -34,6 +36,7 @@ def grade_checkpoint2():
             return True
     return False
 
+@grader
 def grade_checkpoint3():
     # Check if "Beta Release" milestone is created
     response = make_gitlab_request(PROJECT_PATH, 'milestones', params={'search': MILESTONE_2})
@@ -46,6 +49,7 @@ def grade_checkpoint3():
             return True
     return False
 
+@grader
 def grade_checkpoint4():
     # Check if "Implement stream processing engine" is assigned to "Beta Release" milestone
     response = make_gitlab_request(PROJECT_PATH, 'issues', params={'search': ISSUE_1_TITLE})
@@ -59,6 +63,7 @@ def grade_checkpoint4():
                 return True
     return False
 
+@grader
 def grade_checkpoint5():
     # Check if "Integrate with Kafka" is assigned to "Beta Release" milestone
     response = make_gitlab_request(PROJECT_PATH, 'issues', params={'search': ISSUE_2_TITLE})

@@ -1,7 +1,7 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, make_gitlab_request
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, make_gitlab_request, grader
 from config import GITLAB_USER
 
 CHECKPOINT_1_POINTS = 1
@@ -18,10 +18,12 @@ MILESTONE_NAME = "release-1.9"
 
 issue = None
 
+@grader
 def grade_checkpoint1():
     chat_history = get_rocketchat_personal_chat_history(rocket, ROCKETCHAT_USERNAME)
     return chat_history is not None and len(chat_history) > 0
 
+@grader
 def grade_checkpoint2():
     response = make_gitlab_request(PROJECT_PATH, 'issues', params={'search': ISSUE_NAME})
     if response is None or response.status_code != 200:
@@ -34,6 +36,7 @@ def grade_checkpoint2():
             return True
     return False
 
+@grader
 def grade_checkpoint3():
     global issue
     if issue is None:

@@ -8,10 +8,12 @@ from common import *
 from scoring import Result, Checkpoint
 
 # Check if OpenHands repo is cloned
+@grader
 def grade_checkpoint1():
     return check_repo_exists('openhands')
 
 # Check L20 is fixed to be Thursday instead of Saturday
+@grader
 def grade_checkpoint2():
     yaml_path = '/workspace/openhands/agenthub/micro/math_agent/agent.yaml'
     try:
@@ -30,6 +32,7 @@ def grade_checkpoint2():
         return False
 
 # Check L24 is fixed to be close to 0.620537 instead of 0.603848
+@grader
 def grade_checkpoint3():
     yaml_path = '/workspace/openhands/agenthub/micro/math_agent/agent.yaml'
     try:

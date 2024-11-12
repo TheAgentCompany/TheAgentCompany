@@ -1,13 +1,14 @@
 import logging
 from typing import List
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, evaluate_chat_history_with_llm
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, grader
 
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 
+@grader
 def grade_checkpoint1():
     # [2pts] Check whether Emily Zhou finally agrees to interview.
     try:
@@ -26,6 +27,7 @@ def grade_checkpoint1():
         return False
 
 
+@grader
 def grade_checkpoint2():
     # [1pt] Check whether examinee chat with Jessica Lee.
     try:
@@ -48,6 +50,7 @@ def grade_checkpoint2():
     return True
 
 
+@grader
 def grade_checkpoint3():
     # [1pt] Check whether examinee write Yes in `/workspace/accept.txt`.
     try:

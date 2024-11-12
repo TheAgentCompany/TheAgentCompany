@@ -40,7 +40,8 @@ def get_plane_all_issue_state(projects):
         logging.warning(f"Get all issues state failed: {e}")
         return {}
 
-def checkpoint1():
+@grader
+def grade_checkpoint1():
     projects = get_all_plane_projects()
     state_count = get_plane_all_issue_state(projects)
     active_counts = {}
@@ -55,7 +56,8 @@ def checkpoint1():
         result += active_count
     return not bool(result)
 
-def checkpoint2(filepath):
+@grader
+def grade_checkpoint2(filepath):
     projects = get_all_plane_projects()
     new_state = get_plane_all_issue_state(projects)
     if not new_state:
@@ -79,11 +81,11 @@ def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    passed1 = checkpoint1()
+    passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
 
     # NOTE: The result.json is generated in pre_init.py
-    passed2 = checkpoint2(filepath='result.json')
+    passed2 = grade_checkpoint2(filepath='result.json')
     checkpoints.append(Checkpoint(2, 2 * int(passed2)))
 
     return result
