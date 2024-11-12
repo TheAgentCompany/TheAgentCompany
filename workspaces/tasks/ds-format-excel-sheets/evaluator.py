@@ -12,6 +12,7 @@ import openpyxl
 import pandas as pd
 from openpyxl.styles import PatternFill
 
+@grader
 def grade_checkpoint1():
     try:
         result = subprocess.run(['curl', '-I', 'https://ogma.lti.cs.cmu.edu/apps/files/files/1555?dir=/Documents/Data%20Analysis&openfile=true'], capture_output=True, text=True)
@@ -25,6 +26,7 @@ def grade_checkpoint1():
         logging.error(f"Error occurred while checking the file link on NextCloud: {e}")
         return False
 
+@grader
 def grade_checkpoint2():
     try:
         file_url = 'https://ogma.lti.cs.cmu.edu/s/7gGd5AQ5M7WDsL8/download/respondent_counts.xlsx'
@@ -54,6 +56,7 @@ def grade_checkpoint2():
         logging.error(f"Error occurred while checking the 'unformatted' sheet: {e}")
         return False
 
+@grader
 def grade_checkpoint3():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
@@ -85,6 +88,7 @@ def grade_checkpoint3():
         logging.error(f"Error occurred while checking the 'formatted' sheet: {e}")
         return False
 
+@grader
 def grade_checkpoint4():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
@@ -144,6 +148,7 @@ def grade_checkpoint4():
         logging.error(f"Error occurred while checking the background color: {e}")
         return False
     
+@grader
 def grade_checkpoint5():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
