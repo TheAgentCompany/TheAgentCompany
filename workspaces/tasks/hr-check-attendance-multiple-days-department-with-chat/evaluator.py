@@ -8,7 +8,7 @@ from datetime import datetime
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history
+from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -128,11 +128,13 @@ def standardize_df(df):
     return df
 
 
+@grader
 def grade_checkpoint1(trajectory):
     urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance"]
     return all(url in trajectory for url in urls)
 
 
+@grader
 def grade_checkpoint2():
     chat_history1 = get_rocketchat_personal_chat_history(rocket, "Chen Xinyi")
     chat_history2 = get_rocketchat_personal_chat_history(rocket, "David Wong")
@@ -140,6 +142,7 @@ def grade_checkpoint2():
     return len(chat_history1) > 0 and len(chat_history2) > 0 and len(chat_history3) > 0
 
 
+@grader
 def grade_checkpoint3():
     if not check_excel_file_exists("/workspace/department-april-attendance.xlsx"):
         return False
@@ -150,6 +153,7 @@ def grade_checkpoint3():
         return False
 
 
+@grader
 def grade_checkpoint4():
     agent_output = standardize_df(read_excel("/workspace/department-april-attendance.xlsx"))
 

@@ -1,16 +1,19 @@
 import logging
-from common import check_repo_exists
+from common import check_repo_exists, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
+@grader
 def grade_checkpoint1(trajectory):
     return (
         "/root/janusgraph" and "/root/janusgraph/-/blob/main/LICENSE"
         in trajectory
     )
 
+@grader
 def grade_checkpoint2():
     return check_repo_exists("janusgraph")
 
+@grader
 def grade_checkpoint3():
     try:
         with open("/workspace/janusgraph/LICENSE.txt") as f:

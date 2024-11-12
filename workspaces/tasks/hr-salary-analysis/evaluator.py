@@ -12,8 +12,10 @@ import pandas as pd
 
 from scoring import Result, Checkpoint, bonus_for_completing_any
 from config import NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD
+from common import grader
 
 
+@grader
 def grade_checkpoint1(trajectory):
     urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
     return any(url in trajectory for url in urls)
@@ -29,6 +31,7 @@ def calculate_salary_statistics(file_path):
     return [average_salary, highest_salary, lowest_salary, median_salary]
 
 
+@grader
 def grade_checkpoint2():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
@@ -41,6 +44,7 @@ def grade_checkpoint2():
         print(f"Error: {e}")
         return 0
     
+@grader
 def grade_checkpoint3():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
