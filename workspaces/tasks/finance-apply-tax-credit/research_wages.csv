@@ -1,0 +1,12 @@
+Employee,Hours_spent,Qualified_R&D_activities,R&D_wage
+Sarah Johnson,5,Assessing new technologies,480.7692308
+Li Ming,4,Assessing improvements in distributed systems for JanusGraph,288.4615385
+Zhang Wei,30,Developing core functionalities and optimizing database performance for RisingWave,2019.230769
+Wang Fang,25,"Designing machine learning models, testing, and tuning performance",1622.596154
+Mike Chen,15,Developing and optimizing LLM inference engines,1045.673077
+Emily Zhou,15,Implementing distributed web crawler functionality,865.3846154
+Liu Qiang,5,Developing new test strategies,264.4230769
+Sophia Rodriguez,5,Improving user experience through design experimentation,252.4038462
+Alex Turner,15,Developing low-code platform functionalities in Node-RED,829.3269231
+Emma Lewis,15,API development and optimization,901.4423077
+TOTAL,,,8569.711538
