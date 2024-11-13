@@ -87,13 +87,16 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     assert obs.exit_code == 0
 
 
-def get_nextcloud_password():
+def get_nextcloud_password(hostname: str):
     """
     Retrieves NEXTCLOUD_PASSWORD from the API endpoint
 
     TODO: this is a temporary solution. Once #169 is solved,
     we should be able to use a hard-coded password to avoid
     this extra API call.
+
+    Args:
+        hostname (str): The hostname of the server
    
     Returns:
         str: The NEXTCLOUD_PASSWORD value
@@ -103,7 +106,7 @@ def get_nextcloud_password():
         KeyError: If NEXTCLOUD_PASSWORD is not in response
         json.JSONDecodeError: If response is not valid JSON
     """
-    url = "http://the-agent-company.com:2999/api/nextcloud-config"
+    url = f"http://{hostname}:2999/api/nextcloud-config"
 
     try:
         response = requests.get(url)
@@ -210,6 +213,9 @@ if __name__ == '__main__':
     if llm_config is None:
         raise ValueError(f'Could not find LLM config: --llm_config {args.llm_config}')
 
+    if llm_config.api_key is None:
+        raise ValueError(f'LLM API key is not set')
+
     logger.info(f"Task image name is {args.task_image_name}")
     config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.outputs_path), llm_config)
     runtime: Runtime = create_runtime(config)
@@ -221,7 +227,7 @@ if __name__ == '__main__':
     logger.info(f"Service dependencies: {dependencies}")
 
     # TODO: #169 remove this once we are able to use a hard-coded password
-    nextcloud_password = get_nextcloud_password()
+    nextcloud_password = get_nextcloud_password(args.server_hostname)
 
     try:
         pre_login(runtime, dependencies, nextcloud_password)
@@ -230,7 +236,7 @@ if __name__ == '__main__':
 
         # before giving up, let's try to init and login again
         init_task_env(runtime, args.server_hostname, llm_config)
-        nextcloud_password = get_nextcloud_password()
+        nextcloud_password = get_nextcloud_password(args.server_hostname)
         pre_login(runtime, dependencies, nextcloud_password)
 
     state = run_solver(runtime, args.task_image_name, config)
