@@ -1,16 +1,15 @@
 # Checkpoints
 
-This task has 6 points in total. If the last check passes, then full credits are
-granted. Otherwise, partial credits might be granted if only some checkpoints are completed.
+This task has 6 points in total. Partial credits might be granted if only some checkpoints are completed.
 
 ## Checkpoint 1 (1pt)
 
 Check if JanusGraph repo is cloned
 
-## Checkpoint 2 (2pt)
+## Checkpoint 2 (3pt)
 
-Check if binary file is built
+Check if binary file is built (Here needs to add skip the docker in pom.xml so give more points on it)
 
-## Checkpoint 3 (3pt)
+## Checkpoint 3 (2pt)
 
 Check the JanusGraph Server as an HTTP endpoint
