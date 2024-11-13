@@ -88,7 +88,7 @@ def grade_checkpoints(trajectory=''):
     passed3 = checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
-    passed4 = checkpoint4(file_path='result.txt')
+    passed4 = checkpoint4(file_path='/workspace/result.txt')
     checkpoints.append(Checkpoint(2, 2 * int(passed4)))
 
     return result
