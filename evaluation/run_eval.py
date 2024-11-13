@@ -189,7 +189,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--task-image-name',
         type=str,
-        default='example-exam-image',
+        default='example-image',
         help='Task image name',
     )
     parser.add_argument(
