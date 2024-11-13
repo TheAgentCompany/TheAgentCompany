@@ -55,9 +55,9 @@ def grade_checkpoint1():
         correct_rows += 1
     
     if correct_rows == res:
-        return 6
+        return 5
     else:
-        return round((correct_rows / res) * 6)
+        return round((correct_rows / res) * 5)
 
 
 @grader
@@ -74,7 +74,7 @@ def grade_checkpoint2():
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = [
-        Checkpoint(6, int(grade_checkpoint1())),
+        Checkpoint(5, int(grade_checkpoint1())),
         Checkpoint(2, int(grade_checkpoint2())),
     ]
     result = Result(checkpoints)

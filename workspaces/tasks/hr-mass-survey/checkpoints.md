@@ -1,8 +1,8 @@
 # Checkpoints
 
-8 points in total.
+7 points in total.
 
-## Checkpoint 1 (6 point)
+## Checkpoint 1 (5 point)
 
 Check for the correctness of 7 columns and 17 rows. Check for correctness of last row. Partial credits granted to partial answers.
 
