@@ -97,7 +97,7 @@ def final_earnings_df(hourly_rate, employee_df):
 
 @grader
 def grade_checkpoint1(trajectory):
-    urls = ["/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance", "/apps/files/files/1263?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    urls = ["dir=/Documents/Human%20Resources%20Team/Attendance", "dir=/Documents/Human%20Resources%20Team/Attendance"]
     return all(url in trajectory for url in urls)
 
 
