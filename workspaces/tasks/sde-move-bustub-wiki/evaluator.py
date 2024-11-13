@@ -57,30 +57,21 @@ def check_url_file_exist():
         return False
 
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_any)
 
     passed_checkpoint1 = check_trajectory(trajectory)
-    checkpoints.append(Checkpoint(1, passed_checkpoint1))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
 
     passed_checkpoint2 = test_wiki()
-    checkpoints.append(Checkpoint(1, passed_checkpoint2))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     passed_checkpoint3 = check_key_contents()
-    checkpoints.append(Checkpoint(1, passed_checkpoint3))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint3)))
 
     passed_checkpoint4 = check_url_file_exist()
-    checkpoints.append(Checkpoint(1, passed_checkpoint4))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint4)))
 
     return result
 

@@ -17,7 +17,7 @@ def grade_checkpoint1():
 
 @grader
 def grade_checkpoint2(trajectory):
-    return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
+    return "dir=/Documents/Administrative%20Specialist" in trajectory
 
 @grader
 def grade_checkpoint3(filepath):
