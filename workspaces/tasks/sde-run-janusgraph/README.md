@@ -66,7 +66,7 @@ Start the JanusGraph server:
 bin/janusgraph-server.sh console ./conf/gremlin-server/http-gremlin-server.yaml
 ```
 
-### Step 7: Verify HTTP Server with 200 status code and 
+### Step 7: Verify HTTP Server with 200 status code 
 Test the HTTP endpoint:
 ```bash
 curl -XPOST -Hcontent-type:application/json -d '{"gremlin":"g.V().count()"}' http://127.0.0.1:8182
