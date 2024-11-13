@@ -1,5 +1,11 @@
 [
     {
+        "first_name": "X",
+        "last_name": "AI",
+        "age" : 27,
+        "occupation": "AI Assistant"
+    },
+    {
         "first_name": "Sarah",
         "last_name": "Johnson",
         "age": 42,
