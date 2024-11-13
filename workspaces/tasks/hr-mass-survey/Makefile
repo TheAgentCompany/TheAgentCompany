@@ -1,5 +1,5 @@
-IMAGE_NAME=finance-qualified-bill-ask-for-reimburse-image
-CONTAINER_NAME=finance-qualified-bill-ask-for-reimburse
+IMAGE_NAME=hr-mass-survey-image
+CONTAINER_NAME=hr-mass-survey
 
 .PHONY: build run stop
 
