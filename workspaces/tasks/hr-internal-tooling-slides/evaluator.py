@@ -46,7 +46,7 @@ def check_nextcloud(slide, folder_structure, url):
 
 def check_plane(slide, url):
     content = get_content(slide)
-    analytics_intro = evaluate_with_llm(content, "the content includes introduction to functionalities of plane analytics page, including following functions: {" ".join(plane_keywords)}")
+    analytics_intro = evaluate_with_llm(content, f"introduction to functionalities of plane analytics page, including following functions: {" ".join(plane_keywords)}")
     return get_title(slide) == "Plane" and analytics_intro and url in content
 
 def check_content_margins(slides):
