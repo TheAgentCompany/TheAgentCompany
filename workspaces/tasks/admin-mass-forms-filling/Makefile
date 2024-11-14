@@ -1,5 +1,5 @@
-IMAGE_NAME=hr-massive-resume-screening-image
-CONTAINER_NAME=hr-massive-resume-screening
+IMAGE_NAME=admin-mass-forms-filling-image
+CONTAINER_NAME=admin-mass-forms-filling
 
 .PHONY: build run stop
 
