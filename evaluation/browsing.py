@@ -193,7 +193,8 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
         ClickAction("button 'Login', clickable"),
         NoopAction(1000),
         # after login, a popup asking to change hostname appears. We need to click on cancel button.
-        ClickAction("button 'Cancel', clickable")
+        # FIXME: this seems useless. Plus, it interferes with developers' activities.
+        # ClickAction("button 'Cancel', clickable")
     ]
 
     gitlab_login_actions = [
