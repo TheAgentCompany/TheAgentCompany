@@ -49,7 +49,7 @@ def filter_name(filename):
 
 @grader
 def grade_checkpoint1(trajectory):
-    urls = [f"/apps/files/files/1225?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    urls = [f"dir=/Documents/Human%20Resources%20Team/Attendance"]
     return any(url in trajectory for url in urls)
 
 

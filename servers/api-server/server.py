@@ -8,6 +8,7 @@ import requests
 
 app = Flask(__name__)
 
+# TODO (yufansong): using git to find root is hacky and wrong
 def get_git_root():
     try:
         git_root = subprocess.check_output(
@@ -88,7 +89,8 @@ def healthcheck_gitlab():
 
 @app.route('/api/healthcheck/nextcloud', methods=['GET'])
 def healthcheck_nextcloud():
-    code, msg = check_url("http://localhost:8090")
+    # TODO (yufansong): either fix SSL issue, or pass this address from outside
+    code, msg = check_url("https://ogma.lti.cs.cmu.edu")
     return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
