@@ -5,7 +5,7 @@ either checkpoint 1 or checkpoint 2 passes.
 
 ## Checkpoint 1 (1pt)
 
-Navigated to the page https://ogma.lti.cs.cmu.edu/apps/files/files/626?dir=/Documents/Financials
+Navigated to the file on NextCloud.
 
 ## Checkpoint 2 (1pts)
 
