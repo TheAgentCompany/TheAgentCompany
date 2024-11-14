@@ -59,7 +59,8 @@ def run_checkpoint_1(trajectory: str):
             'CB_3': '/On' if row['Citizenship/Immigration Status'] == "A lawful permanent resident" else "/Off",
             'CB_4': '/On' if row['Citizenship/Immigration Status'] == "A noncitizen authorized to work" else "/Off",
         }
-        num_fields += len(golden_values)
+        # add non-nan or non-empty or non-off fields to num_fields
+        num_fields += len([field for field in golden_values if golden_values[field] and golden_values[field] != "/Off"])
         for field, expected_value in golden_values.items():
             pdf_value = pdf_data.get(field, "")
             if expected_value == "/Off":
