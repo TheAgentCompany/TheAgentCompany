@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pt)
 
-check had conversation with Huang Jie, Sophia Rodriguez, John Smith, Sarah Johnson
+check had conversation with Huang Jie, Sophia Rodriguez, Mike Chen, Sarah Johnson
 
 ## Checkpoint 2 (1pt)
 
