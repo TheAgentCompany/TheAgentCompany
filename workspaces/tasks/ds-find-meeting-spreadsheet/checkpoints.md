@@ -4,7 +4,7 @@ This task has 2 points in total.
 
 ## Checkpoint 1 (1pts)
 
-The agent includes a `link.txt` file under `/workspace/` with the correct file link. (i.e., https://ogma.lti.cs.cmu.edu/apps/files/files/1447?dir=/Documents/Data%20Analysis&openfile=true)
+The agent includes a `link.txt` file under `/workspace/` with the correct file link.
 
 ## Checkpoint 2 (1pts)
 

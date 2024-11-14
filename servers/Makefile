@@ -159,8 +159,9 @@ attach-sotopia-redis:
 # Plane
 download-plane:
 	sh ./plane/download.sh
+	cd plane && make download-setup
 
-start-plane:
+start-plane: download-plane
 	cd plane && make start-plane
 
 stop-plane:
