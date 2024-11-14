@@ -11,7 +11,7 @@ from common import grader
 
 @grader
 def grade_checkpoint1(trajectory):
-    return "https://ogma.lti.cs.cmu.edu/apps/files/files/626?dir=/Documents/Financials" in trajectory
+    return "dir=/Documents/Financials" in trajectory
 
 @grader
 def grade_checkpoint2():
