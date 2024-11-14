@@ -16,7 +16,11 @@ README_FILE_PATH = 'README.md'
 EMAIL = "mike.chen@agentcompany.com"
 
 def get_projects():
-    projects = make_gitlab_request(None, 'projects').json()
+    response = make_gitlab_request(None, 'projects')
+    if response is None or response.status_code != 200:
+        logging.error('Failed to fetch projects from GitLab')
+        return []
+    projects = response.json()
     if projects is None:
         logging.error('Failed to fetch projects from GitLab')
         return []
