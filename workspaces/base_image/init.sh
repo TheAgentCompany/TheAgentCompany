@@ -5,8 +5,7 @@ set -e
 
 # Use synthetic service hostname, the-agent-company.com in tasks and point it
 # to the real service host
-SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu} | grep PING | awk -F'[()]' '{print $2}')
-echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
+SERVER_HOSTNAME=${SERVER_HOSTNAME:-ogma.lti.cs.cmu.edu} bash /utils/setup_proxy.sh
 
 # Reset services if declared as a dependency
 # TODO: always reset once ready for release

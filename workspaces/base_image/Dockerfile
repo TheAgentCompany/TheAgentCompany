@@ -1,6 +1,6 @@
 FROM python:3.12
 
-RUN apt-get update && apt-get install -y iputils-ping vim
+RUN apt-get update && apt-get install -y iputils-ping vim nginx
 
 ################## Basic SETUP ################################
 # create utils directory (examinee MUST not access this directory)
@@ -9,6 +9,8 @@ COPY init.sh /utils/
 RUN chmod +x /utils/init.sh
 COPY reset.sh /utils/
 RUN chmod +x /utils/reset.sh
+COPY setup_proxy.sh /utils/
+RUN chmod +x /utils/setup_proxy.sh
 COPY common.py /utils
 COPY config.py /utils
 COPY scoring.py /utils
@@ -34,11 +36,11 @@ RUN pip install requests
 # don't require NPCs
 
 # Install Python libraries needed to launch NPCs
-RUN pip install rocketchat_API==1.32.0
-RUN pip install sotopia==0.1.2
+# RUN pip install rocketchat_API==1.32.0
+# RUN pip install sotopia==0.1.2
 # sotopia requires a specific hiredis version
-RUN pip install hiredis==3.0.0
-RUN pip install litellm==1.23.16
+# RUN pip install hiredis==3.0.0
+# RUN pip install litellm==1.23.16
 
 # create npc directory (TODO: examinee MUST not access this directory)
 RUN mkdir -p /npc
