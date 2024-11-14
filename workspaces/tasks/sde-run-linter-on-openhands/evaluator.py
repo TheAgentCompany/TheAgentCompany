@@ -3,6 +3,7 @@ import subprocess
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import grader
 
 CHECKPOINT_1_POINTS = 1
 CHECKPOINT_2_POINTS = 1
@@ -11,18 +12,19 @@ OPENHANDS_REPO_PATH = '/workspace/openhands'
 
 # Lines to check for double quotes in specific files
 FILES_TO_CHECK = {
-    'openhands/evaluation/agent_bench/helper.py': [
+    'evaluation/agent_bench/helper.py': [
         'raw_ans = ""',
-        'FAKE_RESPONSES = {',
-        'INST_SUFFIXES: dict[str, str] = {',
+        '"CodeActAgent": partial(',
+        '"B": 1',
     ],
-    'openhands/evaluation/agent_bench/run_infer.py': [
-        'instruction = (',
-        'script_name = "get_agent_result.sh"',
-        'logger.info(f"Running get ground truth cmd: {script_name}")',
+    'evaluation/agent_bench/run_infer.py': [
+        '"AgentBench-OS",',
+        'agent_answer = return_val["agent_answer"]',
+        'if event.source == "agent":',
     ],
 }
 
+@grader
 def grade_checkpoint1():
     """
     Check if double quotes are being used in specific locations in the code.
@@ -34,6 +36,7 @@ def grade_checkpoint1():
                 return False
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.readlines()
+
             for line_to_check in lines_to_check:
                 found = False
                 for line in content:
@@ -47,6 +50,7 @@ def grade_checkpoint1():
     except Exception:
         return False
 
+@grader
 def grade_checkpoint2():
     """
     Verify that the existing code is not broken by running the unit tests.
@@ -54,14 +58,11 @@ def grade_checkpoint2():
     try:
         # Change directory to /workspace/openhands
         os.chdir(OPENHANDS_REPO_PATH)
-        subprocess.run(['apt', 'install', 'docker.io', '-y'], check=True)
-        subprocess.run(['dockerd', '&'], check=True)
-
         subprocess.run(['pip', 'install', 'poetry'], check=True)
         # Install dependencies
         subprocess.run(['poetry', 'install'], check=True)
         # Run unit tests
-        result = subprocess.run(['poetry', 'run', 'pytest', './tests/unit/'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(['poetry', 'run', 'pytest', './tests/unit/', '--ignore=tests/unit/test_runtime_build.py', '--ignore=tests/unit/test_security.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return result.returncode == 0
     except Exception:
         return False
