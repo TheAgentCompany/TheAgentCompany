@@ -7,8 +7,8 @@ import PyPDF2
 from common import download_nextcloud_content, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
-QR_FILE_PATH = "qrcode_image.png"
-JD_FILE_PATH = "jd.pdf"
+QR_FILE_PATH = "/workspace/qrcode_image.png"
+JD_FILE_PATH = "/workspace/jd.pdf"
 
 @grader
 def grade_checkpoint1():
