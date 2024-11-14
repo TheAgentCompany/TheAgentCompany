@@ -2,6 +2,7 @@ import logging
 from typing import List
 from io import BytesIO
 import pandas as pd
+from collections import defaultdict
 
 from common import create_rocketchat_client, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, evaluate_with_llm, evaluate_chat_history_with_llm, grader
 from scoring import Result, Checkpoint
@@ -38,26 +39,29 @@ def grade_checkpoint1():
     
     solution = pd.read_excel("/utils/solution.xlsx")
     expected_data = solution.iloc[:-1].set_index("Name").T.to_dict()
+    expected_data = {key.lower(): value for key, value in expected_data.items()}
 
-    correct_rows = 0
+    correct_rows = defaultdict(int)
     res = len(expected_data) + 1
-    # exclude last row
+
     for _, row in survey_results.iterrows():
-        name = row["Name"]
-        # if name is not none
+        name = row["Name"].lower()
         if name in expected_data:
             expected_row = expected_data[name]
             row_correct = all(row[col] == expected_row[col] for col in expected_row)
             
-            correct_rows += row_correct
+            correct_rows[name] = row_correct
     
+    score = sum(correct_rows.values())
+
+    # check for total budget correctness
     if solution["Expected_Travel_Budget"].iloc[-1] == survey_results["Expected_Travel_Budget"].iloc[-1]:
-        correct_rows += 1
+        score += 1
     
-    if correct_rows == res:
+    if score == res:
         return 5
     else:
-        return round((correct_rows / res) * 5)
+        return round((score / res) * 5)
 
 
 @grader
