@@ -19,11 +19,7 @@ ENGINEERS = [
 ]
 
 @grader
-def grade_checkpoint1():
-    return os.path.exists(SLIDES_PATH)
-
-@grader
-def grade_checkpoint2(slides):
+def grade_checkpoint1(slides):
     """Slides should contain information about all engineers"""
     if slides is None or len(slides.slides) < 1:
         return False
@@ -36,26 +32,24 @@ def grade_checkpoint2(slides):
             return False
     for engineer in ENGINEERS:
         if not all(k.lower() in text for k in engineer):
+            logging.error("Engineer %s not found in slides", engineer)
             return False
     return True
 
 @grader
-def grade_checkpoint3():
+def grade_checkpoint2():
     rocket_client = create_rocketchat_client()
     return evaluate_chat_history_with_llm(rocket_client, NPC_NAME, "introductory slides are finished")
 
 
 def grade_checkpoints(trajectory="") -> Result:
-    checkpoint1 = Checkpoint(1, 1*int(grade_checkpoint1()))
     try:
         slides = pptx.Presentation(SLIDES_PATH)
     except Exception as e:
         logging.error("Error reading slides: %s", e)
         slides = None
-    checkpoint2 = Checkpoint(2, 2*int(grade_checkpoint2(slides)))
-    checkpoint3 = Checkpoint(1, 1*int(grade_checkpoint3()))
+    pass_checkpoint1 = grade_checkpoint1(slides)
+    checkpoint1 = Checkpoint(2, 2*int(pass_checkpoint1))
+    checkpoint2 = Checkpoint(1, 1*int(pass_checkpoint1 and grade_checkpoint2()))
 
-    return Result([checkpoint1, checkpoint2, checkpoint3])
-
-if __name__ == "__main__":
-    print(grade_checkpoints().to_dict())
+    return Result([checkpoint1, checkpoint2])
