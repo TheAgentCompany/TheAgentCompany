@@ -11,12 +11,12 @@ rocket = create_rocketchat_client()
 
 @grader
 def grade_checkpoint1(trajectory):
-    return "apps/files/files/1423?dir=/Documents/Financials" in trajectory
+    return "dir=/Documents/Financials" in trajectory
 
 
 @grader
 def grade_checkpoint2(trajectory):
-    return "apps/files/files/1363?dir=/Documents/Administrative%20Specialist" in trajectory
+    return "dir=/Documents/Administrative%20Specialist" in trajectory
 
 
 

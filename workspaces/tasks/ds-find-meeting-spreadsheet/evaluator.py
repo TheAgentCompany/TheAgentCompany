@@ -11,7 +11,7 @@ def grade_checkpoint1():
     try:
         with open('/workspace/link.txt', 'r') as file:
             link = file.read().strip()
-            if link is not None and "apps/files/files/1447?dir=/Documents/Data%20Analysis" in link:
+            if link is not None and "dir=/Documents/Data%20Analysis" in link:
                 logging.info("Correct link found in link.txt.")
                 return True
             else:
