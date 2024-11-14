@@ -1,0 +1,2 @@
+Build a machine learning pipeline in scikit-learn to predict the daily closing price of stock. Display the model's R² score in the format "R^2 score: {score}". The model will be evaluated on Mean Squared Error (MSE), Mean Absolute Error (MAE), and R² score, with a focus on maximizing the R² score.
+[DIS_stock_price.csv](https://github.com/user-attachments/files/17707321/DIS_stock_price.csv)
