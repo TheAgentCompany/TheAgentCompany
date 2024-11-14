@@ -67,7 +67,7 @@ def grade_checkpoint2():
         ans = evaluate_chat_history_with_llm(rocket, employee, "This person has been asked about their year-end vacation plans")
         res += int(ans)
 
-    if res == 17:
+    if res == len(employees_involved):
         return 2
     else:
         return 1
