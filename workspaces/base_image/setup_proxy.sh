@@ -54,14 +54,16 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
-    proxy_ssl_protocols TLSv1.2 TLSv1.3;
-    proxy_ssl_ciphers HIGH:!aNULL:!MD5;
-    proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
-    proxy_ssl_verify off;
-    proxy_ssl_server_name on;
-
     location / {
         proxy_pass https://${SERVER_HOSTNAME};
+        proxy_ssl_verify off;
+        proxy_ssl_server_name on;
+        
+        # Fix redirects
+        proxy_redirect https://${SERVER_HOSTNAME} https://\$host;
+        proxy_redirect http://${SERVER_HOSTNAME} https://\$host;
+        
+        # Headers
         proxy_set_header Host ${SERVER_HOSTNAME};
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
@@ -81,14 +83,9 @@ server {
         proxy_buffer_size 128k;
         proxy_buffers 4 256k;
         proxy_busy_buffers_size 256k;
-    }
-
-    # Custom error page for debugging
-    error_page 502 = @fallback;
-
-    location @fallback {
-        return 502 'Bad Gateway Error. Remote host: ${SERVER_HOSTNAME}\n';
-        add_header Content-Type text/plain always;
+        
+        # Following redirects
+        proxy_intercept_errors off;
     }
 }
 
@@ -169,6 +166,7 @@ proxy_set_header X-Real-IP \$remote_addr;
 proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
 proxy_set_header X-Forwarded-Proto \$scheme;
 
+proxy_redirect off;
 proxy_http_version 1.1;
 proxy_set_header Upgrade \$http_upgrade;
 proxy_set_header Connection "upgrade";
