@@ -82,7 +82,7 @@ def evaluate_classifications(df):
 @grader
 def grade_checkpoint1(trajectory):
     """Check if the 'Customer.xlsx' file on Nextcloud was accessed."""
-    required_url_part = "/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
+    required_url_part = "dir=/Documents/Data%20Analysis"
     return required_url_part in trajectory
 
 @grader

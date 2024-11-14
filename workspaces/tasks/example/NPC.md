@@ -46,7 +46,7 @@ Here are the existing NPCs and their channels:
 | Alex Turner        | alex_turner       | Software Engineer (Low-Code Platform Team)  | Responsibilities: Developing low-code platform features; Project: Node-RED (Low-Code Platform); Skills: N/A | #project-lowcode, #engineering, #tech-talk         |
 | Emma Lewis         | emma_lewis        | Software Engineer (API Team)                | Responsibilities: Developing API functionalities using Python; Project: API-server; Skills: N/A | #engineering, #tech-talk                            |
 | Jessica Chen       | jessica_chen      | Frontend Software Engineer                  | Responsibilities: Developing user interfaces, implementing responsive designs, optimizing web performance; Project: E-commerce Website Redesign; Skills: N/A | #project-ecommerce, #frontend, #tech-talk          |
-|John Doe | John.Doe | Fake NPC for dev and test | | |
+
 ## How to create new NPCs
 If necessary, you can create new NPCs.
 
