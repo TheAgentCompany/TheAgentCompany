@@ -81,7 +81,7 @@ def run_checkpoint_1(trajectory: str):
         return 5
     else:
         logging.warning(f"Total incorrect fields: {total_incorrect_fields} out of {num_fields} fields, total incorrect forms: {num_forms - total_correct_forms} out of {num_forms} forms.")
-        return min(round(5 * total_incorrect_fields / num_fields), round(5 * (num_forms - total_correct_forms) / num_forms))   
+        return min(round(5 * (num_fields - total_incorrect_fields) / num_fields), round(5 * total_correct_forms / num_forms))   
 
 
 def grade_checkpoints(trajectory=""):
