@@ -4,7 +4,7 @@ from typing import List
 import re
 
 from scoring import Result, Checkpoint
-from common import make_gitlab_request
+from common import make_gitlab_request, grader
 from config import GITLAB_USER, GITLAB_BASEURL
 
 CHECKPOINT_1_POINTS = 2
@@ -14,6 +14,13 @@ PROJECT_NAME = 'Documentation'
 PROJECT_PATH = f"{GITLAB_USER}/doc"
 README_FILE_PATH = 'README.md'
 EMAIL = "mike.chen@agentcompany.com"
+
+def get_projects():
+    projects = make_gitlab_request(None, 'projects').json()
+    if projects is None:
+        logging.error('Failed to fetch projects from GitLab')
+        return []
+    return projects
 
 def get_readme_content():
     # Get README.md content from 'doc' repository
@@ -28,7 +35,11 @@ def get_readme_content():
         return ''
     return response.text
 
+@grader
 def grade_checkpoint1(readme_content, projects):
+    if projects is None or len(projects) == 0:
+        logging.error('No projects found')
+        return False
     for project in projects:
         project_name = project.get('name')
         project_url = GITLAB_BASEURL + '/root/' + project_name
@@ -38,6 +49,7 @@ def grade_checkpoint1(readme_content, projects):
                 return False
     return True
 
+@grader
 def grade_checkpoint2(readme_content):
     # Check if the contact section with Mike Chen's information is included at the bottom
     return EMAIL in readme_content
@@ -46,7 +58,7 @@ def grade_checkpoints(trajectory='') -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    projects = make_gitlab_request(None, 'projects').json()
+    projects = get_projects()
     readme_content = get_readme_content()
 
     # Remove the 'doc' repository itself from the list
