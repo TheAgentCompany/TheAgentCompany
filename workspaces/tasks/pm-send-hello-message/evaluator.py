@@ -21,8 +21,8 @@ def get_channel_room_id(channel_name):
         return response['channel']['_id']
     return None
 
-@grader
-def check_message_sent(channel_name, message, username):
+
+def get_message(channel_name, username):
     room_id = get_channel_room_id(channel_name)
     if not room_id:
         print(f"Failed to find room ID for channel #{channel_name}.")
@@ -30,21 +30,39 @@ def check_message_sent(channel_name, message, username):
 
     # Fetch message history for the channel using room_id (channel_id)
     response = rocket.channels_history(room_id=room_id).json()
-
+    
     if response.get('success'):
         messages = response.get('messages', [])
-        # Check if the message 'Hi' is in the most recent messages from a specific user
         for msg in messages:
-            if msg.get('msg') == message and msg.get('u', {}).get('username') == username:
-                return True
-    return False
+            if msg.get('u', {}).get('username') == username:
+                return msg.get('msg')
+            
+    return None
 
+
+@grader
+def check_message_contains(message, info):
+    return info in message
+    
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     checkpoints.append(Checkpoint(1, check_url(trajectory)))
-    checkpoints.append(Checkpoint(1, check_message_sent("general", "Hi", "theagentcompany")))
+    
+    # checkpoint 2: message exists
+    message = get_message("general", "theagentcompany")
+    checkpoints.append(Checkpoint(1, message is not None))
+    
+    # checkpoint 3~5: check content in the message
+    if message is None:
+        for i in range(3):
+            checkpoints.append(Checkpoint(1,False))
+    else:
+        checkpoints.append(Checkpoint(1, check_message_contains(message, "Hi")))
+        checkpoints.append(Checkpoint(1, check_message_contains(message, ":kissing_smiling_eyes:")))
+        checkpoints.append(Checkpoint(1, check_message_contains(message, "@here")))
+    
     return result
 
 
