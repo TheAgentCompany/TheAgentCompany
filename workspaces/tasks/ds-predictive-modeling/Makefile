@@ -1,6 +1,5 @@
-IMAGE_NAME=ds-organise-report-sus-data-image
-CONTAINER_NAME=ds-organise-report-sus-data
-
+IMAGE_NAME=ds-predictive-modeling-image
+CONTAINER_NAME=ds-predictive-modeling
 .PHONY: build run stop attach
 
 build:
