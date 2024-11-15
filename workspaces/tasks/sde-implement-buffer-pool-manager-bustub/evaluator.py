@@ -48,20 +48,21 @@ def single_test_case_passed(test_name):
         logging.error(result.stderr)
         return False
     failed = result.stdout.count("FAILED")
+    logging.info(result.stdout)
     if failed > 0:
         logging.warning(f"{failed} tests failed in {test_name}")
         return False
     return True
 def score_multiple_test_cases(test_name, test_cases_number):
     result = run_command_subprocess(test_command(test_name))
-    if result.returncode != 0:
-        logging.error(result.stderr)
-        return 0
     logging.info(result.stdout)
-    match = re.search(r'(\d+) FAILED TESTS', result.stdout)
+    match = re.search(r'\s*(\d+)\s+FAILED\s+TEST', result.stdout)
     if match:
         logging.warning(f"{match.group(1)} tests failed in {test_name}")
         return test_cases_number - int(match.group(1))
+    if result.returncode != 0:
+        logging.error(result.stderr)
+        return 0
     return test_cases_number
 
 ############################# grade checkpoints #####################################
