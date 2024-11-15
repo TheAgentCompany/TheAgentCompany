@@ -16,7 +16,7 @@ rocket = create_rocketchat_client()
 
 REFERENCE_MONTH = 'february'
 
-REFERENCE_COST = '65,059.68'
+REFERENCE_COST = '65,069.68'
 
 
 ############################# Helper Functions #####################################
