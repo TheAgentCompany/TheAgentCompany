@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scoring import Result, Checkpoint
 from common import grader
-
+import logging
 
 @grader
 def grade_checkpoint1():
@@ -14,6 +14,8 @@ def grade_checkpoint1():
     mse = mean_squared_error(actual, pred)
     mae = mean_absolute_error(actual, pred)
     r2 = r2_score(actual, pred)
+
+    logging.info(f'On private test dataset, MSE: {mse}, MAE: {mae}, R^2: {r2}')
     
     # 3 credit granted if MSE < 500, MAE < 10, R^2 score > 0.8
     if mse < 500 and mae < 10 and r2 > 0.8:
