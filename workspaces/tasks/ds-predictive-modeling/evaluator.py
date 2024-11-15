@@ -1,16 +1,16 @@
 from typing import List
 import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from scoring import Result, Checkpoint, bonus_for_completing_any
+from scoring import Result, Checkpoint
 from common import grader
 
 
 @grader
-def grade_checkpoint1(trajectory: str) -> bool:
-    stock_test_answer = pd.read_csv('./splitted before/stock_test_answer_golden.csv')
-    golden_answer = pd.read_csv('./splitted before/stock_test_answer.csv')
+def grade_checkpoint1():
+    golden_answer = pd.read_csv('/utils/golden_answer.csv')
+    stock_test_answer = pd.read_csv('/workspace/stock_test_answer.csv')
 
-    actual, pred = stock_test_answer['Close Price'], golden_answer['Close Price']
+    actual, pred = golden_answer['Close Price'], stock_test_answer['Close Price']
     mse = mean_squared_error(actual, pred)
     mae = mean_absolute_error(actual, pred)
     r2 = r2_score(actual, pred)
@@ -28,9 +28,7 @@ def grade_checkpoint1(trajectory: str) -> bool:
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_any)
-
-    passed1 = grade_checkpoint1(trajectory)
-    checkpoints.append(Checkpoint(1, int(passed1)))
+    result = Result(checkpoints)
+    checkpoints.append(Checkpoint(3, int(grade_checkpoint1())))
 
     return result

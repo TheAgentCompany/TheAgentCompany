@@ -1,7 +1,7 @@
 FROM base-image
 
-RUN pip install pandas==1.0.3
-RUN pip install sklearn==1.5.2
+RUN pip install pandas==2.2.3
+RUN pip install scikit-learn==1.5.2
 RUN pip install numpy==2.1.2
 
 COPY stock_train_raw.csv /workspace
