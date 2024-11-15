@@ -1,0 +1,10 @@
+{
+  "Sarah Johnson": {
+    "extra_info": "Someone will ask you for the new server requirements",
+    "strategy_hint": "You should respond with the following requirements:\nThe Must have at least 28 CPU cores\nMust have at least 512GB RAM\nMust have at least 6x 1.92TB NVMe SSDs\nMust have 4 or more years warranty"
+  },
+  "Emma Lewis": {
+    "extra_info": "Someone will ask you for company quotes for the new server",
+    "strategy_hint": "You should respond with the following files from the NextCloud server (https://ogma.lti.cs.cmu.edu/apps/files/files/6624?dir=/Documents/Administrative%20Specialist):\n cloudtech_industries_quote.pdf\ndatacore_enterprise_quote.pdf\nnetsys_corporation_quote.pdf\nservermaster_systems_quote.pdf\ntechpro_solutions_quote.pdf"
+  }
+}
