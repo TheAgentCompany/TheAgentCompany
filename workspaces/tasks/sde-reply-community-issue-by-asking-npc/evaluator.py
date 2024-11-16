@@ -51,17 +51,8 @@ def check_with_llm(msgs, predicate):
 
 
 @grader
-def grade_checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/issues/4158'):
-    if len(sys.argv) < 2:
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
-    return url in trajectory
+def grade_checkpoint1(trajectory: str):
+    return 'root/openhands/-/issues/4158' in trajectory
 
 
 @grader
@@ -101,17 +92,10 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    # Define the scores corresponding to when each function is True
-    scores = {
-        grade_checkpoint1: 1,
-        grade_checkpoint2: 1,
-        grade_checkpoint3: 1,
-        grade_checkpoint4: 2,
-
-    }
-
-    for func, total_score in scores.items():
-        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint4())))
 
     return result
 

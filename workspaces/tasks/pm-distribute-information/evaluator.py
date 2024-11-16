@@ -58,23 +58,11 @@ def check_project_distributed():
     return True
 
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-
-############################# Evaluator #####################################
-
-
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
     checkpoints.append(Checkpoint(1, int(check_trajectory(trajectory))))
-    checkpoints.append(Checkpoint(1, check_project_distributed()))
+    checkpoints.append(Checkpoint(1, int(check_project_distributed())))
     return result
 
 

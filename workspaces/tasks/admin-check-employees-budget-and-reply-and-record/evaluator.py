@@ -17,7 +17,7 @@ def grade_checkpoint1():
 
 @grader
 def grade_checkpoint2(trajectory):
-    return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist" in trajectory
+    return "dir=/Documents/Administrative%20Specialist" in trajectory
 
 
 @grader
@@ -92,7 +92,7 @@ def grade_checkpoints(trajectory=''):
     passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
-    passed4 = grade_checkpoint4(file_path='result.txt')
+    passed4 = grade_checkpoint4(file_path='/workspace/result.txt')
     checkpoints.append(Checkpoint(2, 2 * int(passed4)))
 
     return result
