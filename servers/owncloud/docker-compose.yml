@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  collabora:
+    image: collabora/code
+    container_name: collabora
+    restart: always
+    ports:
+      - "9980:9980"
+    environment:
+      - extra_params=--o:ssl.enable=false
+    networks:
+      - owncloud_network
+
   owncloud:
     image: owncloud:latest
     container_name: owncloud
@@ -12,23 +23,11 @@ services:
       - OWNCLOUD_TRUSTED_DOMAINS=localhost
       - OWNCLOUD_ADMIN_USERNAME=theagentcompany
       - OWNCLOUD_ADMIN_PASSWORD=theagentcompany
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - owncloud_data:/var/www/html/data
       - owncloud_config:/var/www/html/config
-    networks:
-      - owncloud_network
-
-  collabora:
-    image: collabora/code:latest
-    container_name: collabora
-    restart: always
-    ports:
-      - "8092:9980"
-    environment:
-      - domain=localhost:8091
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=false --o:net.frame_ancestors=localhost:8091 --o:allowed_languages=zh_CN,en
-    cap_add:
-      - MKNOD
     networks:
       - owncloud_network
 
