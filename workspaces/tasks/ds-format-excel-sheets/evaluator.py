@@ -12,22 +12,9 @@ import openpyxl
 import pandas as pd
 from openpyxl.styles import PatternFill
 
-@grader
-def grade_checkpoint1():
-    try:
-        result = subprocess.run(['curl', '-I', 'https://ogma.lti.cs.cmu.edu/apps/files/files/1555?dir=/Documents/Data%20Analysis&openfile=true'], capture_output=True, text=True)
-        if result.returncode == 0:
-            logging.info("Agent visited the file link on NextCloud.")
-            return True
-        else:
-            logging.warning("Agent did not visit the file link on NextCloud.")
-            return False
-    except Exception as e:
-        logging.error(f"Error occurred while checking the file link on NextCloud: {e}")
-        return False
 
 @grader
-def grade_checkpoint2():
+def grade_checkpoint1():
     try:
         file_url = 'https://ogma.lti.cs.cmu.edu/s/7gGd5AQ5M7WDsL8/download/respondent_counts.xlsx'
         file_path = '/workspace/respondent_counts.xlsx'
@@ -57,7 +44,7 @@ def grade_checkpoint2():
         return False
 
 @grader
-def grade_checkpoint3():
+def grade_checkpoint2():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
         if not os.path.exists(file_path):
@@ -89,7 +76,7 @@ def grade_checkpoint3():
         return False
 
 @grader
-def grade_checkpoint4():
+def grade_checkpoint3():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
         if not os.path.exists(file_path):
@@ -149,7 +136,7 @@ def grade_checkpoint4():
         return False
     
 @grader
-def grade_checkpoint5():
+def grade_checkpoint4():
     try:
         file_path = '/workspace/respondent_counts.xlsx'
         if not os.path.exists(file_path):
@@ -184,24 +171,20 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    # Checkpoint 1: Agent visited the file link on NextCloud
-    passed_checkpoint1 = grade_checkpoint1()
-    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
-
-    # Checkpoint 2: The 'unformatted' sheet remains unchanged
-    passed_checkpoint2 = grade_checkpoint2()
+    # Checkpoint 1: The 'unformatted' sheet remains unchanged
+    passed_checkpoint1 = grade_checkpoint2()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
-    # Checkpoint 3: The 'formatted' sheet is created and the content is the same as 'unformatted'
-    passed_checkpoint3 = grade_checkpoint3()
+    # Checkpoint 2: The 'formatted' sheet is created and the content is the same as 'unformatted'
+    passed_checkpoint2 = grade_checkpoint3()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint3)))
 
-    # Checkpoint 4: The required background colors are applied
-    passed_checkpoint4 = passed_checkpoint3 and grade_checkpoint4()
+    # Checkpoint 3: The required background colors are applied
+    passed_checkpoint3 = passed_checkpoint3 and grade_checkpoint4()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint4)))
     
-    # Checkpoint 5: The cells are horizontally centered
-    passed_checkpoint5 = passed_checkpoint3 and grade_checkpoint5()
+    # Checkpoint 4: The cells are horizontally centered
+    passed_checkpoint4 = passed_checkpoint3 and grade_checkpoint5()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint5)))
 
     return result
