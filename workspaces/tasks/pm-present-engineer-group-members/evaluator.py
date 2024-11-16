@@ -30,6 +30,7 @@ def grade_checkpoint1(slides):
         except Exception as e:
             logging.error("Error reading slide 2: %s", e)
             return False
+        logging.info("Full texts extracted from slides: %s", text)
     for engineer in ENGINEERS:
         if not all(k.lower() in text for k in engineer):
             logging.error("Engineer %s not found in slides", engineer)
