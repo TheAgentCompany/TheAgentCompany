@@ -52,7 +52,7 @@ def grade_checkpoints(trajectory=""):
     
     # checkpoint 2: message exists
     message = get_message("general", "theagentcompany")
-    checkpoints.append(Checkpoint(1, message is not None))
+    checkpoints.append(Checkpoint(1, int(message is not None)))
     
     # checkpoint 3~5: check content in the message
     if message is None:
