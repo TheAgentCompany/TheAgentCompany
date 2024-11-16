@@ -25,10 +25,8 @@ services:
     ports:
       - "8092:9980"
     environment:
-      - domain=localhost
-      - username=admin
-      - password=admin
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=false
+      - domain=localhost:8091
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=false --o:net.frame_ancestors=localhost:8091 --o:allowed_languages=zh_CN,en
     cap_add:
       - MKNOD
     networks:

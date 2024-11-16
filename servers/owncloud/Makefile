@@ -8,3 +8,4 @@ rm:
 	docker volume rm owncloud_onlyoffice_data
 	docker volume rm owncloud_onlyoffice_logs
 	docker volume rm owncloud_owncloud_data
+	docker volume rm owncloud_owncloud_config
