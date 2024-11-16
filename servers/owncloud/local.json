@@ -1,0 +1,9 @@
+{
+  "services": {
+    "CoAuthoring": {
+      "requestDefaults": {
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  owncloud:
+    image: owncloud:latest
+    container_name: owncloud
+    restart: always
+    ports:
+      - "8091:80"
+    volumes:
+      - owncloud_data:/var/www/html
+    environment:
+      - OWNCLOUD_DOMAIN=localhost:8091
+      - OWNCLOUD_DB_TYPE=sqlite
+      - OWNCLOUD_ADMIN_USERNAME=theagentcompany
+      - OWNCLOUD_ADMIN_PASSWORD=theagentcompany
+      - ONLYOFFICE_DOCUMENTSERVER_URL=http://onlyoffice:80/
+      - ONLYOFFICE_DOCUMENTSERVER_INTERNAL_URL=http://onlyoffice:80/
+      - ONLYOFFICE_VERIFY_PEER_OFF=true
+      - TRUSTED_DOMAINS=localhost:8091 onlyoffice
+      - TRUSTED_PROXIES=onlyoffice
+      - ONLYOFFICE_JWT_ENABLED=false
+    networks:
+      - owncloud_network
+    depends_on:
+      - onlyoffice
+
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    container_name: onlyoffice
+    restart: always
+    ports:
+      - "8092:80"
+    environment:
+      - JWT_ENABLED=false
+    volumes:
+      - onlyoffice_data:/var/www/onlyoffice/Data
+      - onlyoffice_logs:/var/log/onlyoffice
+      # - ./local.json:/etc/onlyoffice/documentserver/local.json
+
+    networks:
+      - owncloud_network
+
+networks:
+  owncloud_network:
+    driver: bridge
+
+volumes:
+  owncloud_data:
+  onlyoffice_data:
+  onlyoffice_logs:
