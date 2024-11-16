@@ -1,15 +1,14 @@
 # Checkpoints
 
-This task has 3 points in total.
+This task has 5 points in total.
 
-## Checkpoint 1 (1pt)
+## Checkpoint 1 (2pt)
 
-Contacted Li Ming on RocketChat
+Contacted Li Ming, Mike Chen, Mark Johnson
 
 ## Checkpoint 2 (1pt)
 
 Created "Improve Logging for Bulk Request Failures" issue in GitLab
 
-## Checkpoint 3 (1pt)
-
-Assigned "Improve Logging for Bulk Request Failures" issue to release-1.9
+## Checkpoint 3 (2pts)
+Wrote correct description, assigned to milestone 'release-1.9', and set due date to 2024-11-15
