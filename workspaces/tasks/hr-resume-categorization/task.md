@@ -11,3 +11,4 @@ A few tips:
 
 * Do your best judgement based on the resume itself. Don't try to look up the candidates' LinkedIn profiles.
 * If you are not sure about the YOE, put the resume in the unsure folder.
+# For simplicity, assume today is 12/01/2024.
