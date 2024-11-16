@@ -173,7 +173,7 @@ def grade_checkpoints(trajectory="") -> Result:
 
     # Checkpoint 1: The 'unformatted' sheet remains unchanged
     passed_checkpoint1 = grade_checkpoint1()
-    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
 
     # Checkpoint 2: The 'formatted' sheet is created and the content is the same as 'unformatted'
     passed_checkpoint2 = grade_checkpoint2()
