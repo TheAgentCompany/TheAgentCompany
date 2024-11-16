@@ -26,6 +26,9 @@ init:
 
 start-all: init
 	docker compose up -d
+	make start-plane
+	make start-rocketchat
+	make start-sotopia-redis
 
 stop-all: init rm-nextcloud-volume
 	docker compose down
@@ -159,8 +162,9 @@ attach-sotopia-redis:
 # Plane
 download-plane:
 	sh ./plane/download.sh
+	cd plane && make download-setup
 
-start-plane:
+start-plane: download-plane
 	cd plane && make start-plane
 
 stop-plane:
