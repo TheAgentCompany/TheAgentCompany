@@ -17,9 +17,8 @@ services:
       - ONLYOFFICE_DOCUMENTSERVER_URL=http://onlyoffice:80/
       - ONLYOFFICE_DOCUMENTSERVER_INTERNAL_URL=http://onlyoffice:80/
       - ONLYOFFICE_VERIFY_PEER_OFF=true
-      - TRUSTED_DOMAINS=localhost:8091
+      - TRUSTED_DOMAINS=localhost:8091 onlyoffice
       - TRUSTED_PROXIES=onlyoffice
-      # ban JWT
       - ONLYOFFICE_JWT_ENABLED=false
     networks:
       - owncloud_network
@@ -37,6 +36,8 @@ services:
     volumes:
       - onlyoffice_data:/var/www/onlyoffice/Data
       - onlyoffice_logs:/var/log/onlyoffice
+      # - ./local.json:/etc/onlyoffice/documentserver/local.json
+
     networks:
       - owncloud_network
 
