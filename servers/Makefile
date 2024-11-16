@@ -26,6 +26,9 @@ init:
 
 start-all: init
 	docker compose up -d
+	make start-plane
+	make start-rocketchat
+	make start-sotopia-redis
 
 stop-all: init rm-nextcloud-volume
 	docker compose down
