@@ -12,8 +12,17 @@ services:
     environment:
       - OWNCLOUD_DOMAIN=localhost:8091
       - OWNCLOUD_DB_TYPE=sqlite
-      - OWNCLOUD_ADMIN_USERNAME=admin
-      - OWNCLOUD_ADMIN_PASSWORD=admin_password
+      - OWNCLOUD_ADMIN_USERNAME=theagentcompany
+      - OWNCLOUD_ADMIN_PASSWORD=theagentcompany
+      - ONLYOFFICE_DOCUMENTSERVER_URL=http://onlyoffice:80/
+      - ONLYOFFICE_DOCUMENTSERVER_INTERNAL_URL=http://onlyoffice:80/
+      - ONLYOFFICE_VERIFY_PEER_OFF=true
+      - TRUSTED_DOMAINS=localhost:8091
+      - TRUSTED_PROXIES=onlyoffice
+      # ban JWT
+      - ONLYOFFICE_JWT_ENABLED=false
+    networks:
+      - owncloud_network
     depends_on:
       - onlyoffice
 
@@ -23,16 +32,19 @@ services:
     restart: always
     ports:
       - "8092:80"
+    environment:
+      - JWT_ENABLED=false
     volumes:
       - onlyoffice_data:/var/www/onlyoffice/Data
       - onlyoffice_logs:/var/log/onlyoffice
+    networks:
+      - owncloud_network
+
+networks:
+  owncloud_network:
+    driver: bridge
 
 volumes:
   owncloud_data:
   onlyoffice_data:
   onlyoffice_logs:
-
-
-  # docker volume rm owncloud_onlyoffice_logs
-  # docker volume rm owncloud_onlyoffice_data
-  # docker volume rm owncloud_owncloud_data
