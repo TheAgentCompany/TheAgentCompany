@@ -55,13 +55,9 @@ def grade_checkpoints(trajectory=""):
     checkpoints.append(Checkpoint(1, int(message is not None)))
     
     # checkpoint 3~5: check content in the message
-    if message is None:
-        for i in range(3):
-            checkpoints.append(Checkpoint(1,False))
-    else:
-        checkpoints.append(Checkpoint(1, check_message_contains(message, "Hi")))
-        checkpoints.append(Checkpoint(1, check_message_contains(message, ":kissing_smiling_eyes:")))
-        checkpoints.append(Checkpoint(1, check_message_contains(message, "@here")))
+    checkpoints.append(Checkpoint(1, int(check_message_contains(message, "Hi"))))
+    checkpoints.append(Checkpoint(1, int(check_message_contains(message, ":kissing_smiling_eyes:"))))
+    checkpoints.append(Checkpoint(1, int(check_message_contains(message, "@here"))))
     
     return result
 
