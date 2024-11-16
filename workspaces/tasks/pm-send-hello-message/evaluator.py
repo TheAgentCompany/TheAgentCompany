@@ -42,7 +42,7 @@ def get_message(channel_name, username):
 
 @grader
 def check_message_contains(message, info):
-    return info in message
+    return message is not None and info in message
     
 
 def grade_checkpoints(trajectory=""):
