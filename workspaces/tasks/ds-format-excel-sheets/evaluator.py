@@ -172,20 +172,20 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints)
 
     # Checkpoint 1: The 'unformatted' sheet remains unchanged
-    passed_checkpoint1 = grade_checkpoint2()
+    passed_checkpoint1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     # Checkpoint 2: The 'formatted' sheet is created and the content is the same as 'unformatted'
-    passed_checkpoint2 = grade_checkpoint3()
-    checkpoints.append(Checkpoint(1, int(passed_checkpoint3)))
+    passed_checkpoint2 = grade_checkpoint2()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     # Checkpoint 3: The required background colors are applied
-    passed_checkpoint3 = passed_checkpoint3 and grade_checkpoint4()
-    checkpoints.append(Checkpoint(1, int(passed_checkpoint4)))
+    passed_checkpoint3 = passed_checkpoint2 and grade_checkpoint3()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint3)))
     
     # Checkpoint 4: The cells are horizontally centered
-    passed_checkpoint4 = passed_checkpoint3 and grade_checkpoint5()
-    checkpoints.append(Checkpoint(1, int(passed_checkpoint5)))
+    passed_checkpoint4 = passed_checkpoint2 and grade_checkpoint4()
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint4)))
 
     return result
 
