@@ -2,7 +2,7 @@
 
 This task has 5 points in total.
 
-## Checkpoint 1 (2pt)
+## Checkpoint 1 (2pts)
 
 Contacted Li Ming, Mike Chen, Mark Johnson
 
