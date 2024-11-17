@@ -89,7 +89,7 @@ def grade_checkpoint4() -> bool:
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_any)
 
     # Checkpoint 1: Visit requirements.txt
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
