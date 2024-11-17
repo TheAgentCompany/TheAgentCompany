@@ -22,6 +22,8 @@ http://18.219.239.190:8091/index.php/apps/market/#/app/richdocuments
 security cors:
 http://18.219.239.190:8091	
 
+http://host.docker.internal:9980
+
 docker exec -it 4616b8eaa768 bash
 docker restart 4616b8eaa768
 cd /var/www/html/config
