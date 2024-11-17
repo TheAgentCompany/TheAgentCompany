@@ -3,3 +3,4 @@ You can check the `LLMAgent` in `sotopia/agents/llm_agent.py` for the inspiratio
 
 Push the change to the gitlab and make a pull request
 
+You could find the GitLab website at http://the-agent-company.com:8929/

@@ -7,6 +7,7 @@ from datetime import datetime
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
+from common import grader
 
 
 def check_excel_file_exists(file_path):
@@ -50,8 +51,8 @@ def analyze_csv(filename):
 
         # Calculate work length in hours
         def work_length(row):
-            clock_in = pd.Timestamp.combine(pd.Timestamp.today(), row['Clock-in'])
-            clock_out = pd.Timestamp.combine(pd.Timestamp.today(), row['Clock-out'])
+            clock_in = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-in'])
+            clock_out = pd.Timestamp.combine(pd.Timestamp(row['Date']), row['Clock-out'])
             return (clock_out - clock_in).seconds / 3600
 
         start_time = datetime.strptime("17:30", "%H:%M").time()
@@ -79,11 +80,13 @@ def analyze_csv(filename):
         return None
 
 
+@grader
 def grade_checkpoint1(trajectory):
-    urls = [f"/apps/files/files/1233?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    urls = [f"dir=/Documents/Human%20Resources%20Team/Attendance"]
     return any(url in trajectory for url in urls)
 
 
+@grader
 def grade_checkpoint2():
     if not check_excel_file_exists("/workspace/april-attendance.xlsx"):
         return False
@@ -102,6 +105,7 @@ def standardize_df(df):
     return df
 
 
+@grader
 def grade_checkpoint3():
     output = standardize_df(read_excel("/workspace/april-attendance.xlsx"))
     expected_answer = standardize_df(analyze_csv('/utils/april-attendance-data.csv'))

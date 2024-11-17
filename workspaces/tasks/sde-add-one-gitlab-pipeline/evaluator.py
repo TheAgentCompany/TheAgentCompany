@@ -20,20 +20,13 @@ def get_gitlab_pipeline():
         return {}
 
 
-def checkpoint1(url='http://the-agent-company.com:8929/root/openhands/-/ci/editor?branch_name=main'):
-    if len(sys.argv) < 2:
-        trajectory = ""
-    else:
-        try:
-            with open(sys.argv[1], 'r') as file:
-                trajectory = file.read()
-        except Exception as e:
-            print(f"Error reading trajectory file: {e}")
-            exit(1)
-    return url in trajectory
+@grader
+def grade_checkpoint1(trajectory):
+    return 'root/openhands/-/ci/editor' in trajectory
 
 
-def checkpoint2():
+@grader
+def grade_checkpoint2():
     msgs = get_gitlab_pipeline()
     return bool(msgs)
 
@@ -42,14 +35,8 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    # Define the scores corresponding to when each function is True
-    scores = {
-        checkpoint1: 1,
-        checkpoint2: 2
-    }
-
-    for func, total_score in scores.items():
-        checkpoints.append(Checkpoint(total_score, total_score * int(func())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint2())))
 
     return result
 

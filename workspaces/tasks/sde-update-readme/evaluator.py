@@ -5,7 +5,7 @@ import base64
 from typing import List
 import json
 
-from common import make_gitlab_request, evaluate_with_llm
+from common import make_gitlab_request, evaluate_with_llm, grader
 from scoring import Result, Checkpoint
 
 project_path = "root/api-server"
@@ -36,6 +36,7 @@ def extract_readme_content():
 
 
 # check if the README.md contains the expected title
+@grader
 def check_readme_title():
     content = extract_readme_content()
     if content is None:
@@ -50,6 +51,7 @@ def check_readme_title():
 
 
 # check if the README.md contains the expected content
+@grader
 def check_readme_content():
     content = extract_readme_content()
     if content is None:

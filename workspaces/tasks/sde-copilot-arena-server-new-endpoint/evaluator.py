@@ -6,8 +6,10 @@ import os
 from typing import List
 
 from scoring import Result, Checkpoint
+from common import grader
 
 
+@grader
 def grade_checkpoint1():
     try:
         response = requests.get("http://localhost:5000/list_models")
@@ -25,6 +27,7 @@ def grade_checkpoint1():
         return False
 
 
+@grader
 def grade_checkpoint2():
     try:
         json_input = {
@@ -50,6 +53,7 @@ def grade_checkpoint2():
         return False
 
 
+@grader
 def grade_checkpoint3():
     try:
         json_input = {

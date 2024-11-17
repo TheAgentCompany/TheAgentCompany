@@ -4,11 +4,13 @@ import logging
 
 from typing import List
 from scoring import Result, Checkpoint, bonus_for_completing_any
+from common import grader
 
-
+@grader
 def check_trajectory(trajectory):
     return f"bustub/-/issues/759" in trajectory
 
+@grader
 def test_wiki():
     try:
         response = requests.get(f"doc/-/wikis/HyperLogLog_project") 
@@ -22,6 +24,7 @@ def test_wiki():
     print("wiki page successfully created")
     return True
 
+@grader
 def check_key_contents():
     key_words = ["HyperLogLog", "algorithm", "hash", "A great database is a great life", "MSB", "Task #1", "Task #2", "Instructions", "Important Information", "Setting Up Your Development Environment", "Testing"]
     key_image_links = ["https://15445.courses.cs.cmu.edu/fall2024/project0/img/cardinality.png", "https://15445.courses.cs.cmu.edu/fall2024/project0/img/hll-example.png"]
@@ -37,6 +40,7 @@ def check_key_contents():
             all(item in response for item in key_image_links) and  \
             all(item in response for item in key_links)
 
+@grader
 def check_url_file_exist():
     filename = "/workspace/wiki_url.txt"
     try:
@@ -53,30 +57,21 @@ def check_url_file_exist():
         return False
 
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_any)
 
     passed_checkpoint1 = check_trajectory(trajectory)
-    checkpoints.append(Checkpoint(1, passed_checkpoint1))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint1)))
 
     passed_checkpoint2 = test_wiki()
-    checkpoints.append(Checkpoint(1, passed_checkpoint2))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint2)))
 
     passed_checkpoint3 = check_key_contents()
-    checkpoints.append(Checkpoint(1, passed_checkpoint3))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint3)))
 
     passed_checkpoint4 = check_url_file_exist()
-    checkpoints.append(Checkpoint(1, passed_checkpoint4))
+    checkpoints.append(Checkpoint(1, int(passed_checkpoint4)))
 
     return result
 

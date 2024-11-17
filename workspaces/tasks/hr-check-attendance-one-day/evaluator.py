@@ -7,6 +7,7 @@ from datetime import datetime
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
+from common import grader
 
 
 def check_excel_file_exists(file_path):
@@ -46,11 +47,13 @@ def filter_name(filename):
         return None
 
 
+@grader
 def grade_checkpoint1(trajectory):
-    urls = [f"/apps/files/files/1225?dir=/Documents/Human%20Resources%20Team/Attendance"]
+    urls = [f"dir=/Documents/Human%20Resources%20Team/Attendance"]
     return any(url in trajectory for url in urls)
 
 
+@grader
 def grade_checkpoint2():
     if not check_excel_file_exists("/workspace/2024-03-attendance-summary.xlsx"):
         return False
@@ -61,6 +64,7 @@ def grade_checkpoint2():
         return False
 
 
+@grader
 def grade_checkpoint3():
     name = read_excel("/workspace/2024-03-attendance-summary.xlsx")
     correct_answer = filter_name('/utils/attendance-2024-03-01.csv')

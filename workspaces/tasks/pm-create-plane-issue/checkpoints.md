@@ -1,13 +1,12 @@
 # Checkpoints
 
 This task has 2 points in total. If the last check passes, then full credits are
-granted. Otherwise, partial credits might be granted if only some checkpoints are
-completed.
+granted. 
 
 ## Checkpoint 1 (1pts)
 
-Found the correct project page ("Web Dashboard")
+Accessed the correct project page ("Frontend Developement")
 
 ## Checkpoint 2 (1pt)
 
-Issue "Improve page loading speed" is created
+Issue "Improve Page Loading Speed" is created

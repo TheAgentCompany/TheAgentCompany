@@ -19,13 +19,14 @@ GITLAB_PORT = os.getenv('GITLAB_PORT') or '8929'
 GITLAB_USER = "root"
 GITLAB_URL = f"http://{SERVER_HOSTNAME}:{GITLAB_PORT}/{GITLAB_USER}"
 
-from common import create_rocketchat_client
+from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
 ############################# Helper Functions #####################################
 
+@grader
 def check_trajectory(trajectory):
     return f"{GITLAB_URL}/bustub/-/issues/759" in trajectory
 
@@ -40,7 +41,7 @@ def get_database_members(channel_name=["project-graphdb", "project-streamdb"]):
 
     return members
 
-
+@grader
 def check_project_distributed():
     members = get_database_members()
 
@@ -57,23 +58,11 @@ def check_project_distributed():
     return True
 
 
-def load_trajectory(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return content
-    except Exception as e:
-        logging.warning(f"Error reading trajectory file: {e}")
-        return ""
-
-############################# Evaluator #####################################
-
-
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
     checkpoints.append(Checkpoint(1, int(check_trajectory(trajectory))))
-    checkpoints.append(Checkpoint(1, check_project_distributed()))
+    checkpoints.append(Checkpoint(1, int(check_project_distributed())))
     return result
 
 

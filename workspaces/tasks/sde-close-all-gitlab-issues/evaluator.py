@@ -5,9 +5,10 @@ Evaluator for the task <Delete all Rocket.Chat channels>
 import logging
 from typing import List
 
-from common import make_gitlab_request
+from common import make_gitlab_request, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
+@grader
 def grade_checkpoint1():
     page_index = 1
     while True:

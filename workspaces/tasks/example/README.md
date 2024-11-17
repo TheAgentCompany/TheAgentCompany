@@ -53,6 +53,12 @@ the final checkpoint, it means they completed the entire task. Those strategies
 are commonly used in tasks where there's more than one approach to complete the
 task, OR when some checkpoints use trajectory file for validation.
 
+Note that `common.py` contains a decorator, `@grader`, which can be used to
+annotate each individual `grade_checkpoint[X]` function. This is required as it
+would capture runtime errors and make the evaluator not fail the entire task.
+Annotated checkpoint functions would return `False` if any runtime error occurs,
+and is not already captured by the checkpoint function itself.  CI would fail if
+there's no grader annotator in the entire `evaluator.py`.
 
 ### Trajectory file
 

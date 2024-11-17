@@ -1,7 +1,8 @@
 # Evaluation-related
 evaluation/screenshots/
 evaluation/config.toml
-evaluation/trajectories/
+traj_*.json
+eval_*.json
 
 *.tar.gz
 *db.dump

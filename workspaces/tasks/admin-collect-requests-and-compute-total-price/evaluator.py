@@ -8,20 +8,23 @@ from typing import List
 rocket = create_rocketchat_client()
  
 
-def checkpoint1():
+@grader
+def grade_checkpoint1():
     passed = True
     for name in ['huang_jie', 'sophia_rodriguez', 'mike_chen', 'sarah_johnson']:
         passed = passed and bool(get_rocketchat_personal_chat_history(rocket, name))
     return passed
 
-def checkpoint2(trajectory):
-    return "apps/files/files/1351?dir=/Documents/Administrative%20Specialist&openfile=true" in trajectory
+@grader
+def grade_checkpoint2(trajectory):
+    return "dir=/Documents/Administrative%20Specialist" in trajectory
 
-def checkpoint3(filepath):
+@grader
+def grade_checkpoint3(filepath):
     """
     Huang Jie one Monitor (27” Dell UltraSharp 4K cost $1799 and two External Hard Drive (2TB) cost $129 each, total cost $1799 + 2*$129 = $2057
     Sophia Rodriguez five Printer Paper (5000 sheets) cost $45 and four Notebooks (Pack of 5) cost $25 each, total cost $45*5 + $25*4 = $325
-    Mike Chen apply one Ergonomic Office Chai cost $1195 and one Desk Lamp cost $49, total cost $1195 + $49 = $1244
+    Mike Chen apply one Ergonomic Office Chair cost $1195 and one Desk Lamp cost $49, total cost $1195 + $49 = $1244
     Sarah Johnson one Coffee Machine cost $299, one Microwave cost $129, one Mini Fridge cost $199 and one Water Dispenser cost $249, total cost $299 + $129 + $199 + $249 = $876
 
     four people's total cost = $2057 + $325 + $1244 + $876 = $4502
@@ -38,13 +41,13 @@ def grade_checkpoints(trajectory=''):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
 
-    passed1 = checkpoint1()
+    passed1 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, int(passed1)))
 
-    passed2 = checkpoint2(trajectory)
+    passed2 = grade_checkpoint2(trajectory)
     checkpoints.append(Checkpoint(1, 1 * int(passed2)))
 
-    passed3 = checkpoint3(filepath='result.txt')
+    passed3 = grade_checkpoint3(filepath='/workspace/result.txt')
     checkpoints.append(Checkpoint(1, 1 * int(passed3)))
 
     return result

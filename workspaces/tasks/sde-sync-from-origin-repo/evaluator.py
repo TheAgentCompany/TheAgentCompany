@@ -26,6 +26,7 @@ def get_file_content():
         return ""
 
 # Check if the docker.build.skip keyword exists in the pom.xml file.
+@grader
 def grade_checkpoint1():
     try:
         content = get_file_content()
