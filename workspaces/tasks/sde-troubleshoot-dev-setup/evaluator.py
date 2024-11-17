@@ -18,34 +18,60 @@ def grade_checkpoint1(trajectory="") -> bool:
 
 def check_requirements_compatibility(base_file, target_file):
     """
-    Helper function to check if requirements match target requirements
-    Returns: (is_compatible, list of incompatibilities)
+    Checks if the requirements in the base_file align with or satisfy the
+    constraints in the target_file, and ensures specific versions for pandas
+    and scikit-learn.
+    Returns: tuple: (is_compatible, list of incompatibilities)
+    - is_compatible (bool): True if all requirements in target_file are satisfied by base_file.
+    - list of incompatibilities (list): List of string descriptions of incompatibilities.
     """
+    KNOWN_MINIMUM_VERSIONS = {
+        'pandas': '2.0.0',
+        'scikit-learn': '1.5.2'
+    }
+
     def parse_requirements_file(file_path):
+        """
+        Parse the requirements file and return a dictionary mapping package names
+        to their version specifiers.
+        """
         requirements = {}
         with open(file_path, 'r') as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    # Convert == to >= for parsing
-                    req_str = re.sub(r'==', '>=', line)
-                    req = Requirement(req_str)
-                    requirements[req.name] = req.specifier
+                    try:
+                        req = Requirement(line)
+                        requirements[req.name] = req.specifier
+                    except Exception as e:
+                        logging.warning(f"Failed to parse requirement '{line}': {e}")
         return requirements
 
     base_reqs = parse_requirements_file(base_file)
     target_reqs = parse_requirements_file(target_file)
-    
+
     incompatibilities = []
-    
+
+    # Enforce specific versions for pandas and scikit-learn
+    for pkg_name, min_version in KNOWN_MINIMUM_VERSIONS.items():
+        if pkg_name in base_reqs:
+            specifier = base_reqs[pkg_name]
+            if not specifier.contains(Version(min_version)):
+                incompatibilities.append(
+                    f"{pkg_name}: Version {min_version} is required, but found {specifier}"
+                )
+        else:
+            incompatibilities.append(f"{pkg_name} is missing from {base_file}")
+
+    # Check general compatibility with target requirements
     for pkg_name, target_spec in target_reqs.items():
         if pkg_name not in base_reqs:
             incompatibilities.append(f"Missing package: {pkg_name}")
             continue
-            
+
         base_spec = base_reqs[pkg_name]
-        
-        # For each == specification in base, check if it satisfies target
+
+        # Check if the base specifier satisfies the target specifier
         for spec in base_spec:
             if spec.operator == '>=':
                 version = Version(spec.version)
@@ -53,7 +79,7 @@ def check_requirements_compatibility(base_file, target_file):
                     incompatibilities.append(
                         f"{pkg_name}: Version {version} does not satisfy {target_spec}"
                     )
-                    
+
     return len(incompatibilities) == 0, incompatibilities
 
 @grader
