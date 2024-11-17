@@ -32,7 +32,7 @@ def check_url(url):
             print("Web service is up!")
             return 200, "Web service is up!"
         else:
-            return response.status_code
+            return response.status_code, "Web service is not available yet"
     except requests.ConnectionError:
         print("Web service is not available yet. Retrying...")
         return 500, "Web service is not available yet"
@@ -76,7 +76,11 @@ def reset_plane():
 
 @app.route('/api/reset-gitlab', methods=['POST'])
 def reset_gitlab():
-    async_execute_command('make reset-gitlab')
+    # gitlab reset is essentially a restart
+    # since it takes a while to stop, we need to make sure this is synchronous
+    # devnote: health check + polling on client side is still needed because
+    # gitlab service takes a while to fully function after the container starts
+    execute_command('make reset-gitlab')
     return jsonify({"message": "Reset GitLab command initiated"}), 202
 
 @app.route('/api/reset-nextcloud', methods=['POST'])
