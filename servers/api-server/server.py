@@ -76,7 +76,11 @@ def reset_plane():
 
 @app.route('/api/reset-gitlab', methods=['POST'])
 def reset_gitlab():
-    async_execute_command('make reset-gitlab')
+    # gitlab reset is essentially a restart
+    # since it takes a while to stop, we need to make sure this is synchronous
+    # devnote: health check + polling on client side is still needed because
+    # gitlab service takes a while to fully function after the container starts
+    execute_command('make reset-gitlab')
     return jsonify({"message": "Reset GitLab command initiated"}), 202
 
 @app.route('/api/reset-nextcloud', methods=['POST'])
