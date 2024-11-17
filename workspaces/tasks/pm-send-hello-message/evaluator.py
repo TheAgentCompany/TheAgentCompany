@@ -3,7 +3,7 @@ import logging
 
 from typing import List
 
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_any
 from common import create_rocketchat_client, grader
 
 # Create RocketChat instance
@@ -47,7 +47,7 @@ def check_message_contains(message, info):
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_any)
     checkpoints.append(Checkpoint(1, int(check_url(trajectory))))
     
     # checkpoint 2: message exists
