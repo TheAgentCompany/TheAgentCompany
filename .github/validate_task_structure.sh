@@ -2,6 +2,7 @@
 set -e
 
 cd workspaces/tasks
+
 for task_dir in *; do
   # Check if folder name is lowercase
   if [ "$task_dir" != "$(echo $task_dir | tr '[:upper:]' '[:lower:]')" ]; then

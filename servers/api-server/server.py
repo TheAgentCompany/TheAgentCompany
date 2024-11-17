@@ -8,6 +8,9 @@ import requests
 
 app = Flask(__name__)
 
+HOSTNAME= os.getenv('HOSTNAME', "ogma.lti.cs.cmu.edu")
+
+# TODO (yufansong): using git to find root is hacky and wrong
 def get_git_root():
     try:
         git_root = subprocess.check_output(
@@ -83,12 +86,14 @@ def reset_nextcloud():
 
 @app.route('/api/healthcheck/gitlab', methods=['GET'])
 def healthcheck_gitlab():
+    # TODO (yufansong): this check cannot cover all case
     code, msg = check_url("http://localhost:8929")
     return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/nextcloud', methods=['GET'])
 def healthcheck_nextcloud():
-    code, msg = check_url("http://localhost:8090")
+    # TODO (yufansong): either fix SSL issue, or pass this address from outside
+    code, msg = check_url(f"https://{HOSTNAME}")
     return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])

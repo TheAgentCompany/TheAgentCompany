@@ -1,56 +1,63 @@
 #!/bin/sh
 set -e
 
-# Initialize variables to track total wait time and which services need resetting
-# TODO (yufansong): make this script more robust by making the api-server itself
-# wait until all resets are complete. A websocket solution might be needed.
-# Alternatively, a more robust healthcheck endpoint might be needed.
-total_wait=0
+# Initialize array to track which services need resetting
 reset_services=()
 
-# Check for each service using grep
-if grep -q "rocketchat" /utils/dependencies.yml; then
-    echo "Resetting rocketchat..."
-    curl -X POST "http://the-agent-company.com:2999/api/reset-rocketchat"
-    reset_services+=("rocketchat")
-    if [ $total_wait -lt 120 ]; then
-        total_wait=120
-    fi
-fi
+# Function to check if a service is healthy
+check_service_health() {
+    local service=$1
+    local http_status
+    http_status=$(curl -s -o /dev/null -w "%{http_code}" -I "http://the-agent-company.com:2999/api/healthcheck/${service}")
+    [ "$http_status" = "200" ]
+}
 
-if grep -q "plane" /utils/dependencies.yml; then
-    echo "Resetting plane..."
-    curl -X POST "http://the-agent-company.com:2999/api/reset-plane"
-    reset_services+=("plane")
-    if [ $total_wait -lt 600 ]; then
-        total_wait=600
-    fi
-fi
+# Function to wait for services to be ready
+wait_for_services() {
+    local max_attempts=180  # 15 minutes maximum wait time (180 * 5 seconds)
+    local attempt=1
+    local all_services_ready
 
-if grep -q "gitlab" /utils/dependencies.yml; then
-    echo "Resetting gitlab..."
-    curl -X POST "http://the-agent-company.com:2999/api/reset-gitlab"
-    reset_services+=("gitlab")
-    if [ $total_wait -lt 600 ]; then
-        total_wait=600
-    fi
-fi
+    echo "Waiting for services to be ready..."
+    
+    while [ $attempt -le $max_attempts ]; do
+        all_services_ready=true
+        
+        for service in "${reset_services[@]}"; do
+            if ! check_service_health "$service"; then
+                echo "Service $service not ready yet (attempt $attempt)..."
+                all_services_ready=false
+                break
+            fi
+        done
+        
+        if [ "$all_services_ready" = true ]; then
+            echo "All services are ready!"
+            return 0
+        fi
+        
+        echo "Waiting 5 seconds before next check..."
+        sleep 5
+        attempt=$((attempt + 1))
+    done
+    
+    echo "Error: Timeout waiting for services to be ready"
+    return 1
+}
 
-if grep -q "nextcloud" /utils/dependencies.yml; then
-    echo "Resetting nextcloud..."
-    curl -X POST "http://the-agent-company.com:2999/api/reset-nextcloud"
-    reset_services+=("nextcloud")
-    if [ $total_wait -lt 120 ]; then
-        total_wait=120
+# Check and reset each service
+for service in rocketchat plane gitlab nextcloud; do
+    if grep -q "$service" /utils/dependencies.yml; then
+        echo "Resetting $service..."
+        curl -X POST "http://the-agent-company.com:2999/api/reset-${service}"
+        reset_services+=("$service")
     fi
-fi
+done
 
-# If any services were reset, wait the required time
+# If any services were reset, wait for them to be ready
 if [ ${#reset_services[@]} -gt 0 ]; then
     echo "Reset initiated for services: ${reset_services[*]}"
-    echo "Waiting for $total_wait seconds..."
-    sleep $total_wait
-    echo "All resets completed"
+    wait_for_services
 else
     echo "No matching services found in dependencies.yml"
 fi

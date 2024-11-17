@@ -206,7 +206,7 @@ def download_image_from_url(image_url, output_file_path):
 
 def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None):
     """
-    Evaluates if a predicate can be inferred from the content, judged by LLM
+    Evaluates if a predicate can be inferred from the content/image, judged by LLM
     """
     if not content and not image_path:
         logging.warning(f"Both content and image are empty, cannot evaluate")
