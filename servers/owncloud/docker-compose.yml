@@ -1,38 +1,42 @@
-version: '3'
+version: '1'
 
 services:
+  collabora:
+    image: collabora/code:24.04.9.2.1
+    container_name: collabora
+    restart: always
+    ports:
+      - "9980:9980"
+    environment:
+      - extra_params=--o:ssl.enable=false
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
+    networks:
+      - owncloud_network
+
   owncloud:
-    image: owncloud:latest
+    image: owncloud:10.0.10
     container_name: owncloud
     restart: always
     ports:
       - "8091:80"
-    volumes:
-      - owncloud_data:/var/www/html
     environment:
-      - OWNCLOUD_DOMAIN=localhost:8091
-      - OWNCLOUD_DB_TYPE=sqlite
-      - OWNCLOUD_ADMIN_USERNAME=admin
-      - OWNCLOUD_ADMIN_PASSWORD=admin_password
-    depends_on:
-      - onlyoffice
-
-  onlyoffice:
-    image: onlyoffice/documentserver:latest
-    container_name: onlyoffice
-    restart: always
-    ports:
-      - "8092:80"
+      - OWNCLOUD_DOMAIN=the-agent-company.com:8091
+      - OWNCLOUD_TRUSTED_DOMAINS=localhost,the-agent-company.com:8091
+      - OWNCLOUD_ADMIN_USERNAME=theagentcompany
+      - OWNCLOUD_ADMIN_PASSWORD=theagentcompany
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
     volumes:
-      - onlyoffice_data:/var/www/onlyoffice/Data
-      - onlyoffice_logs:/var/log/onlyoffice
+      - owncloud_data:/var/www/html/data
+      - owncloud_config:/var/www/html/config
+    networks:
+      - owncloud_network
+
+networks:
+  owncloud_network:
+    driver: bridge
 
 volumes:
   owncloud_data:
-  onlyoffice_data:
-  onlyoffice_logs:
-
-
-  # docker volume rm owncloud_onlyoffice_logs
-  # docker volume rm owncloud_onlyoffice_data
-  # docker volume rm owncloud_owncloud_data
+  owncloud_config:
