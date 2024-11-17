@@ -76,3 +76,31 @@ Starting scan for user 1 out of 1 (theagentcompany)
 | 5       | 5     | 00:00:00     | 167              |
 +---------+-------+--------------+------------------+
 ```
+
+
+============================ change collabora url
+cd /var/www/html
+su -s /bin/bash www-data -c "php occ config:app:set richdocuments wopi_url --value=http://192.168.0.161:9980"
+
+```
+Config value wopi_url for app richdocuments set to http://192.168.0.161:9980
+```
+
+========================== backup and reset file
+docker cp owncloud:/var/www/html/data ./owncloud_data && docker cp owncloud:/var/www/html/apps ./owncloud_apps && tar -czf owncloud_backup.tar.gz owncloud_data owncloud_apps && rm -rf owncloud_data owncloud_apps
+
+
+
+# Extract the archive first (if you're restoring from the tar file)
+tar -xzf owncloud_backup.tar.gz && docker cp ./owncloud_data/. owncloud:/var/www/html/data && docker cp ./owncloud_apps/. owncloud:/var/www/html/apps && rm -rf owncloud_data owncloud_apps
+
+
+========================
+data 
+docker cp owncloud:/var/www/html/data/theagentcompany ./owncloud_data && tar -czf owncloud_data.tar.gz owncloud_data && rm -rf owncloud_data
+
+docker exec owncloud sh -c 'rm -rf /var/www/html/data/theagentcompany/*'
+tar -xzf owncloud_data.tar.gz && docker cp ./owncloud_data/. owncloud:/var/www/html/data/theagentcompany && rm -rf owncloud_data
+docker exec owncloud sh -c 'chmod -R 777 /var/www/html/data/theagentcompany'
+
+
