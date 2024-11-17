@@ -24,8 +24,12 @@ http://18.219.239.190:8091
 
 http://host.docker.internal:9980
 
-docker exec -it 4616b8eaa768 bash
-docker restart 4616b8eaa768
+- OWNCLOUD_TRUSTED_DOMAINS=localhost the-agent-company.com
+extra_hosts:
+  - "host.docker.internal:host-gateway"
+  - "the-agent-company.com:172.17.0.1"
+
+docker exec -it owncloud bash
 cd /var/www/html/config
 
 
@@ -51,3 +55,7 @@ $CONFIG = array (
 );
 EOL
 
+exit
+
+docker restart owncloud
+docker exec -it owncloud bash
