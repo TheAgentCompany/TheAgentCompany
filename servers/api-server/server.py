@@ -32,7 +32,7 @@ def check_url(url):
             print("Web service is up!")
             return 200, "Web service is up!"
         else:
-            return response.status_code
+            return response.status_code, "Web service is not available yet"
     except requests.ConnectionError:
         print("Web service is not available yet. Retrying...")
         return 500, "Web service is not available yet"
