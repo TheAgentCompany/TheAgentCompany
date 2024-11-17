@@ -32,7 +32,7 @@ extra_hosts:
 docker exec -it owncloud bash
 cd /var/www/html/config
 
-
+============= pay attention, the following new added addres not include port
 
 cat > config.php << 'EOL'
 <?php
@@ -59,3 +59,20 @@ exit
 
 docker restart owncloud
 docker exec -it owncloud bash
+
+
+========================= How to update the file
+in the contianer: 
+cd /var/www/html
+su -s /bin/bash www-data -c "php occ files:scan --all"
+
+```
+Scanning files for 1 users
+Starting scan for user 1 out of 1 (theagentcompany)
+
++---------+-------+--------------+------------------+
+| Folders | Files | Elapsed time | Items per second |
++---------+-------+--------------+------------------+
+| 5       | 5     | 00:00:00     | 167              |
++---------+-------+--------------+------------------+
+```
