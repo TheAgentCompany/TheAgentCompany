@@ -48,7 +48,7 @@ def check_message_contains(message, info):
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-    checkpoints.append(Checkpoint(1, check_url(trajectory)))
+    checkpoints.append(Checkpoint(1, int(check_url(trajectory))))
     
     # checkpoint 2: message exists
     message = get_message("general", "theagentcompany")
