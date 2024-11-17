@@ -54,7 +54,7 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoint3_passed = grade_checkpoint3()
 
     checkpoints.append(Checkpoint(1, int(checkpoint1_passed)))
-    checkpoints.append(Checkpoint(2, int(checkpoint2_passed) * 3))
-    checkpoints.append(Checkpoint(3, int(checkpoint3_passed) * 2))
+    checkpoints.append(Checkpoint(3, int(checkpoint2_passed) * 3))
+    checkpoints.append(Checkpoint(2, int(checkpoint3_passed) * 2))
     
     return result

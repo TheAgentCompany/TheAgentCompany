@@ -1,6 +1,7 @@
 # JanusGraph Setup Guide
 
 This guide will walk you through setting up JanusGraph with HTTP endpoint support.
+This file is only for developers' reference and is not accessible to the examinee.
 
 ## Prerequisites Installation
 ### Step 1: Install Java 11 and Maven
