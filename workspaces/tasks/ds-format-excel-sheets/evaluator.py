@@ -16,6 +16,14 @@ FILE_PATH = '/workspace/respondent_counts.xlsx'
 INIT_FILE_PATH = '/utils/respondent_counts.xlsx'
 
 
+def save_excel():
+    binary_content = get_binary_file_content_nextcloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
+    try:
+        open(FILE_PATH, 'wb').write(binary_content)
+    except:
+        logging.warning("Cannot Download file from NextCloud")
+        
+
 def load_spreadsheet(file_path, sheet_name, return_type="workbook"):
     if not os.path.exists(file_path):
         logging.warning("Excel file not found in the data folder.")
@@ -122,7 +130,7 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints)
     
     # Download updated file from NextCloud
-    get_binary_file_content_nextcloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
+    save_excel()
 
     # Checkpoint 1: The 'unformatted' sheet remains unchanged
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
