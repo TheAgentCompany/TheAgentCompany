@@ -2,7 +2,7 @@ version: '1'
 
 services:
   collabora:
-    image: collabora/code
+    image: collabora/code:24.04.9.2.1
     container_name: collabora
     restart: always
     ports:
@@ -13,7 +13,7 @@ services:
       - owncloud_network
 
   owncloud:
-    image: owncloud:latest
+    image: owncloud:10.0.10
     container_name: owncloud
     restart: always
     ports:
