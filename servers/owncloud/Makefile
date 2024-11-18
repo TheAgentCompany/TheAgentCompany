@@ -16,5 +16,5 @@ build:
 	docker rmi owncloud:test || true && BUILDKIT_PROGRESS=plain docker build --no-cache --progress=plain -t owncloud:test .
 
 push:
-	docker tag owncloud:test ghcr.io/theagentcompany/servers-owncloud:0.0.2
-	docker push ghcr.io/theagentcompany/servers-owncloud:0.0.2
+	docker tag owncloud:test ghcr.io/theagentcompany/servers-owncloud:latest
+	docker push ghcr.io/theagentcompany/servers-owncloud:latest
