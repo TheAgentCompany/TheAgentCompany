@@ -1,6 +1,7 @@
 import os
 import subprocess
 from typing import List
+import logging
 
 from scoring import Result, Checkpoint
 from common import grader
@@ -47,7 +48,8 @@ def grade_checkpoint1():
                 if not found:
                     return False
         return True
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error occurred while checking for double quotes: {e}")
         return False
 
 @grader
@@ -55,16 +57,19 @@ def grade_checkpoint2():
     """
     Verify that the existing code is not broken by running the unit tests.
     """
-    try:
+    try: 
         # Change directory to /workspace/openhands
         os.chdir(OPENHANDS_REPO_PATH)
         subprocess.run(['pip', 'install', 'poetry'], check=True)
         # Install dependencies
         subprocess.run(['poetry', 'install'], check=True)
+        # checkout to the main branch for tests in case any tests were deleted
+        subprocess.run(['git', 'checkout', 'main', '--', 'tests'], check=True)
         # Run unit tests
         result = subprocess.run(['poetry', 'run', 'pytest', './tests/unit/', '--ignore=tests/unit/test_runtime_build.py', '--ignore=tests/unit/test_security.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return result.returncode == 0
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error occurred while running unit tests: {e}")
         return False
 
 def grade_checkpoints(trajectory="") -> Result:
