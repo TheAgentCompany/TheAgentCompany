@@ -12,7 +12,7 @@ rocket = create_rocketchat_client()
 # Reference solution
 REFERENCE_DIRECTORY = "/workspace/signatories.csv"
 REFERENCE_NEXTCLOUD_PATH = "/Documents/Data%20Analysis/Annual%20Reports"
-REFERENCE_SIGNATORIES_COUNT = 50 
+REFERENCE_SIGNATORIES_COUNT = 27
 
 def check_file_exists(file_path):
     abs_path = os.path.abspath(file_path)
@@ -45,7 +45,7 @@ def grade_checkpoint4():
     df.columns = df.columns.str.lower()
 
     # Required columns
-    required_columns = ["name", "role", "date", "company"]
+    required_columns = ["name", "title", "date", "company"]
     if not all(col in df.columns for col in required_columns):
         logging.error(f"Missing required columns. Expected: {required_columns}")
         return False
@@ -58,9 +58,9 @@ def grade_checkpoint4():
         logging.error("Invalid company names found.")
         return False
 
-    # Validate the 'signature_date' format (YYYY-MM-DD)
+    # Validate the 'date' format (YYYY-MM-DD)
     try:
-        pd.to_datetime(df['signature_date'], format='%Y-%m-%d', errors='raise')
+        pd.to_datetime(df['date'], format='%Y-%m-%d', errors='raise')
     except Exception as e:
         logging.error(f"Invalid date format in 'signature_date'. Expected YYYY-MM-DD. Error: {e}")
         return False
