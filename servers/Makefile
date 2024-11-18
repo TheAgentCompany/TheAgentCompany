@@ -12,6 +12,7 @@ PLANE_DOCKER_FILE_PATH=./plane/plane-app/docker-compose.yaml
 PLANE_DOCKER_ENV_PATH=./plane/plane-app/plane.env
 
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
+		start-owncloud stop-owncloud reset-owncloud \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
 		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume reset-rocketchat backup-rocketchat
@@ -186,4 +187,18 @@ reset-plane:
 	make stop-plane
 	./plane/restore.sh ./plane/
 	make start-plane
+
+start-owncloud:
+	docker compose up owncloud owncloud-collabora -d
+
+stop-owncloud:
+	docker compose stop owncloud owncloud-collabora
+
+reset-owncloud: init
+	@echo "stopping existing owncloud instance..."
+	docker compose stop owncloud owncloud-collabora
+	@echo "remove owncloud container..."
+	docker compose rm -f owncloud owncloud-collabora
+	@echo "start owncloud from clean state..."
+	docker compose up owncloud owncloud-collabora -d
 
