@@ -5,6 +5,6 @@
   },
   "Emma Lewis": {
     "extra_info": "Someone will ask you for company quotes for the new server",
-    "strategy_hint": "You should respond with the following files from the NextCloud server (https://ogma.lti.cs.cmu.edu/apps/files/files/6624?dir=/Documents/Administrative%20Specialist):\n cloudtech_industries_quote.pdf\ndatacore_enterprise_quote.pdf\nnetsys_corporation_quote.pdf\nservermaster_systems_quote.pdf\ntechpro_solutions_quote.pdf"
+    "strategy_hint": "You should respond with the following files from the NextCloud server under Documents/Administrative%20Specialist :\n cloudtech_industries_quote.pdf\ndatacore_enterprise_quote.pdf\nnetsys_corporation_quote.pdf\nservermaster_systems_quote.pdf\ntechpro_solutions_quote.pdf"
   }
 }

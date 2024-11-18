@@ -33,12 +33,14 @@ def checkpoint3():
             logging.warning(f'{filename} not downloaded')
             return False
     return True
+
 @grader
 def checkpoint4():
     file_check = check_file_in_nextcloud_directory('valid-quotes.csv','Documents/Administrative%20Specialist')
     if file_check is None:
         return False
     return file_check
+
 @grader
 def checkpoint5():
     sarah_chat = get_rocketchat_personal_chat_history(rocket, 'Sarah Johnson')
@@ -51,6 +53,7 @@ def checkpoint5():
         logging.warning("Valid quotes link not found in Sarah Johnson's chat")
         return False
     return True
+
 @grader
 def checkpoint6():
     sarah_chat = get_rocketchat_personal_chat_history(rocket, 'Sarah Johnson')

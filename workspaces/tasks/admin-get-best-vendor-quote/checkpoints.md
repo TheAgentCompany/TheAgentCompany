@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 5 points in total.
+This task has 6 points in total.
 
 ## Checkpoint 1 (1pt)
 Chat history exists between the agent and Emma Lewis
@@ -17,9 +17,12 @@ The agent has downloaded the quotes to the workspace directory:
 - techpro_solutions_quote.pdf
 
 ## Checkpoint 4 (1pt)
-The agent has shared a valid-quotes.csv file with Sarah Johnson
+The agent has uploaded a valid-quotes.csv file to NextCloud under the Documents/Administrative%20Specialist directory.
 
 ## Checkpoint 5 (1pt)
+The agent has shared a valid-quotes.csv file link with Sarah Johnson
+
+## Checkpoint 6 (1pt)
 valid-quotes.csv matches the following format:
 name,price
 ```csv
