@@ -4,7 +4,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, create_rocketchat_client, grader, get_rocketchat_chat_history
+from common import evaluate_with_llm, create_rocketchat_client, grader, get_rocketchat_personal_chat_history
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -31,12 +31,12 @@ def check_final_result(file_path):
 
 @grader
 def grade_checkpoint1(username='Emily Zhou'):
-    msgs = get_rocketchat_chat_history(rocket, username)
+    msgs = get_rocketchat_personal_chat_history(rocket, username)
     return len(msgs)>0
 
 @grader
 def grade_checkpoint2(username='Liu Qiang'):
-    msgs = get_rocketchat_chat_history(rocket, username)
+    msgs = get_rocketchat_personal_chat_history(rocket, username)
     return len(msgs)>0
 
 @grader
