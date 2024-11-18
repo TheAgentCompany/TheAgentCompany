@@ -1,3 +1,4 @@
+# This readme is for developer's reference only, not for the examinees
 ## Prerequisites Installation
 ### Step 1: Install Java 11 and Maven
 ```bash
