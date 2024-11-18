@@ -18,20 +18,14 @@ su -s /bin/bash www-data -c "php occ config:app:set richdocuments wopi_url --val
 rm -rf /var/www/html/data/theagentcompany/*
 rm -rf /var/www/html/apps
 
-tar -xzf owncloud_apps.tar.gz 
-tar -xzf owncloud_data.tar.gz 
-
 cp -r /var/www/html/owncloud_data/. /var/www/html/data/theagentcompany
 mv /var/www/html/owncloud_apps /var/www/html/apps
 
 chmod -R 777 /var/www/html/data/theagentcompany
 chmod -R 777 /var/www/html/apps
 
-rm -rf /var/www/htmlowncloud_data
-rm -rf /var/www/htmlowncloud_apps
-
-rm /var/www/owncloud_data.tar.gz
-rm /var/www/owncloud_apps.tar.gz
+rm -rf /var/www/html/owncloud_data
+rm -rf /var/www/html/owncloud_apps
 
 su -s /bin/bash www-data -c "php occ app:enable richdocuments"
 su -s /bin/bash www-data -c "php occ app:enable gallery"

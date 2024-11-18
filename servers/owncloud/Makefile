@@ -13,4 +13,8 @@ restart:
 	-docker exec -it owncloud bash
 
 build:
-	docker rmi owncloud:test || true && docker build -t owncloud:test .
+	docker rmi owncloud:test || true && BUILDKIT_PROGRESS=plain docker build --no-cache --progress=plain -t owncloud:test .
+
+push:
+	docker tag owncloud:test ghcr.io/theagentcompany/servers-owncloud:latest
+	docker push ghcr.io/theagentcompany/servers-owncloud:latest
