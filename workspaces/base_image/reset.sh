@@ -9,6 +9,7 @@ check_service_health() {
     local service=$1
     local http_status
     http_status=$(curl -s -o /dev/null -w "%{http_code}" -I "http://the-agent-company.com:2999/api/healthcheck/${service}")
+    echo "Service $service healthcheck status: $http_status"
     [ "$http_status" = "200" ]
 }
 
