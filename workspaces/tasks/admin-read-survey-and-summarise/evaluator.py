@@ -2,22 +2,10 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, grader
+from common import create_rocketchat_client, grader, get_rocketchat_personal_chat_history
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
-
-def get_history(username):
-    id = ""
-    for item in rocket.users_list().json()['users']:
-        if item['username'] == username:
-            id = item["_id"]
-            break
-    msgs = rocket.im_history(room_id=id).json()['messages']
-    for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-
-    return msgs
 
 @grader
 def grade_checkpoint1(content: str):
@@ -44,10 +32,10 @@ def grade_checkpoints(trajectory=""):
         grade_checkpoint3: 1,
     }
 
-    msgs = get_history(username='chen_xinyi')
+    msgs = get_rocketchat_personal_chat_history(rocket, username='Chen Xinyi', content_only=True)
     content = ""
     for msg in msgs[::-1]:
-        content += msg['msg'].lower()
+        content += msg.lower() 
 
     for func, total_score in scores.items():
         checkpoints.append(Checkpoint(total_score, total_score * int(func(content))))
