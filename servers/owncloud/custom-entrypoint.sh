@@ -31,3 +31,21 @@ su -s /bin/bash www-data -c  'php occ maintenance:install \
         
 su -s /bin/bash www-data -c  "php occ config:system:set trusted_domains 1 --value=the-agent-company.com"
 docker restart owncloud
+
+
+curl -X POST "http://the-agent-company.com:8091/index.php/index.php" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "install=true" \
+  -d "adminlogin=theagentcompany" \
+  -d "adminpass=theagentcompany" \
+  -d "adminpass-clone=theagentcompany" \
+  -d "directory=/var/www/html/data" \
+  -d "dbtype=sqlite" \
+  -d "dbhost=localhost"
+
+
+docker rmi owncloud:test || true && docker build -t owncloud:test .
+
+docker run -d --name owncloud -p 8080:80 owncloud:test
+docker build -t owncloud:test .
+BUILDKIT_PROGRESS=plain docker build --no-cache --progress=plain -t owncloud:test .
