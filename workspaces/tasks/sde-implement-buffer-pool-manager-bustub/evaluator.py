@@ -42,28 +42,20 @@ compilation_command  = f"""
 def test_command(test_name):
     return f"{TEST_REPO_PATH}/build/test/{test_name} --gtest_also_run_disabled_tests"
 
-def single_test_case_passed(test_name):
-    result = run_command_subprocess(test_command(test_name))
-    if result.returncode != 0:
-        logging.error(result.stderr)
-        return False
-    failed = result.stdout.count("FAILED")
-    logging.info(result.stdout)
-    if failed > 0:
-        logging.warning(f"{failed} tests failed in {test_name}")
-        return False
-    return True
-def score_multiple_test_cases(test_name, test_cases_number):
+def score_test_cases(test_name, max_test_cases):
     result = run_command_subprocess(test_command(test_name))
     logging.info(result.stdout)
-    match = re.search(r'\s*(\d+)\s+FAILED\s+TEST', result.stdout)
-    if match:
-        logging.warning(f"{match.group(1)} tests failed in {test_name}")
-        return test_cases_number - int(match.group(1))
-    if result.returncode != 0:
-        logging.error(result.stderr)
+
+    pass_match = re.search(r'\[\s*PASSED\s*\]\s*(\d+)\s+test', result.stdout)
+
+    if pass_match:
+        passed_cases = int(pass_match.group(1))
+        if passed_cases>max_test_cases:
+            logging.warning(f'The number of passed cases is {passed_cases} which more than the maximum {max_test_cases}.')
+            return 0
+        return passed_cases
+    else:
         return 0
-    return test_cases_number
 
 ############################# grade checkpoints #####################################
 
@@ -73,19 +65,19 @@ def grade_checkpoint1():
 
 @grader
 def grade_checkpoint2():
-    return single_test_case_passed("lru_k_replacer_test")
+    return score_test_cases("lru_k_replacer_test",1)
 
 @grader
 def grade_checkpoint3():
-    return single_test_case_passed("disk_scheduler_test")
+    return score_test_cases("disk_scheduler_test",1)
 
 @grader
 def grade_checkpoint4():
-    return score_multiple_test_cases("page_guard_test",2)
+    return score_test_cases("page_guard_test",2)
 
 @grader
 def grade_checkpoint5():
-    return score_multiple_test_cases("buffer_pool_manager_test", 7)
+    return score_test_cases("buffer_pool_manager_test", 7)
 
 
 def grade_checkpoints(trajectory="") -> Result:

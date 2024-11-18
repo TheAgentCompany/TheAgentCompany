@@ -452,7 +452,7 @@ PROJECT_FILES = {
     'colly': 'xmlelement_test.go',
     'streamlit': '.ruff.toml',
     'risingwave': 'risedev.yml',
-    'bustub': 'gradescope_sign.py'
+    'bustub': 'CMakeLists.txt'
 }
 
 def check_repo_exists(project_name: str):
