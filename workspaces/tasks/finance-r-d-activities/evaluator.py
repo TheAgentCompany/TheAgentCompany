@@ -23,7 +23,7 @@ def grade_checkpoint1():
 
     if res == 10:
         return 2
-    else:
+    elif res > 0:
         return 1
 
 @grader
