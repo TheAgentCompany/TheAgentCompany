@@ -1,0 +1,1 @@
+Open source distributed and RESTful search engine.
