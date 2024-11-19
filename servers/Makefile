@@ -162,10 +162,9 @@ attach-sotopia-redis:
 
 # Plane
 download-plane:
-	sh ./plane/download.sh
 	cd plane && make download-setup
 
-start-plane: download-plane
+start-plane:
 	cd plane && make start-plane
 
 stop-plane:
@@ -184,9 +183,7 @@ rm-plane-volume:
 	docker volume rm plane-app_pgdata
 
 reset-plane:
-	make stop-plane
-	./plane/restore.sh ./plane/
-	make start-plane
+	cd plane && make reset-plane
 
 start-owncloud:
 	docker compose up owncloud owncloud-collabora -d
