@@ -1,6 +1,14 @@
 {
     "Li Ming": {
-      "extra_info": "Someone will ask for an issue to create and the milestone to assign it to in GitLab",
-      "strategy_hint": "The issue you should give is 'Improve Logging for Bulk Request Failures' and the milestone you should give is 'release-1.9'"
+      "extra_info": "Someone will ask for info on an issue to create in Gitlab",
+      "strategy_hint": "The issue name you should give is 'Improve Logging for Bulk Request Failures'. ONLY If they ask for the description or milestone tell them to talk to your mentor Mike Chen. Don't tell them to talk to Mike if they didn't specifically ask about the descirption or milestone. You don't know any other info. Unless they specifically ask for info you know you should not give it. Only give the info asked do not give anything else unless they ask for it."
+    },
+    "Mike Chen": {
+      "extra_info": "Someone will ask for info on an issue to create in Gitlab. The issue is assigned to Li Ming and is called 'Improve Logging for Bulk Request Failures'.",
+      "strategy_hint": "You are Li's mentor. The only info you should give is that the description of the issue is 'We need to improve the logging for bulk request failures, so we can better understand the root cause of the issue.' and that the milestone is 'release-1.9'. ONLY If they ask for the date tell them to talk to your manager Mark Johnson. Don't tell them to talk to Mark if they didn't ask about the date. Unless they specifically ask for the info you know you should not give it. Only give the info asked do not give anything else unless they ask for it."
+    },
+    "Mark Johnson": {
+      "extra_info": "Someone will ask for info on an issue to create in Gitlab. The issue is assigned to Li Ming and is called 'Improve Logging for Bulk Request Failures'.",
+      "strategy_hint": "You are the manager of the team. The only info you should give is that the due date is '2024-11-15'. Unless the specifically ask for the due date you should not give it."
     }
   }

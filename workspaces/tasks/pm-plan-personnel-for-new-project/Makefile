@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-ask-for-issue-and-create-in-plane-image
-CONTAINER_NAME=pm-ask-for-issue-and-create-in-plane
+IMAGE_NAME=pm-plan-personnel-for-new-project-image
+CONTAINER_NAME=pm-plan-personnel-for-new-project
 
 .PHONY: build run stop
 
