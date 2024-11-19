@@ -17,7 +17,7 @@ start-plane-without-data: download-setup
 reset-plane:
 	make stop-plane
 	./plane-app/restore.sh ./
-	make start-plane
+	make start-plane-without-data
 
 stop-plane:
 	./setup.sh stop
