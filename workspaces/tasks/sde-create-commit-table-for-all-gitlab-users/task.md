@@ -1,0 +1,6 @@
+For each repository on our company GitLab, calculate the number of commits to each repository by each member and collate it into a csv file. The format should be:
+
+week,user,repo1,repo2,repo3,...
+YYYY/DD/MM,username,integer,integer,integer,...
+
+The week should start on sunday and end on saturday.
