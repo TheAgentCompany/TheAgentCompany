@@ -161,7 +161,7 @@ services:
       - rocketchat-redis-net
 
   redis-stack-npc-data-population:
-    build: ./rocketchat/npc
+    image: ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
     container_name: redis-stack-npc-data-population
     depends_on:
       - redis-stack
