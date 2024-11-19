@@ -32,7 +32,7 @@ def grade_checkpoints(trajectory=""):
         grade_checkpoint3: 1,
     }
 
-    msgs = get_rocketchat_personal_chat_history(rocket, username='Chen Xinyi', content_only=True)
+    msgs = get_rocketchat_personal_chat_history(rocket, username='Chen Xinyi')
     content = ""
     for msg in msgs[::-1]:
         content += msg.lower() 
