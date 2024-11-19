@@ -3,6 +3,9 @@ evaluation/screenshots/
 evaluation/config.toml
 traj_*.json
 eval_*.json
+*download*
+*owncloud_data*
+*owncloud_apps*
 
 *.tar.gz
 *db.dump

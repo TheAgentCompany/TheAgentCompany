@@ -15,6 +15,39 @@ services:
       - '8930:443' 
       - '2424:22'
     shm_size: '256m'
+
+  owncloud:
+    image: ghcr.io/theagentcompany/servers-owncloud:latest
+    container_name: owncloud
+    pull_policy: always
+    restart: always
+    depends_on:
+      - owncloud-collabora
+    ports:
+      - "8092:80"
+    environment:
+      - OWNCLOUD_DOMAIN=the-agent-company.com:8092
+      - OWNCLOUD_TRUSTED_DOMAINS=localhost,the-agent-company.com:8092
+      - OWNCLOUD_ADMIN_USERNAME=theagentcompany
+      - OWNCLOUD_ADMIN_PASSWORD=theagentcompany
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
+    networks:
+      - owncloud_network
+
+  owncloud-collabora:
+    image: collabora/code:24.04.9.2.1
+    container_name: owncloud-collabora
+    restart: always
+    ports:
+      - "9980:9980"
+    environment:
+      - extra_params=--o:ssl.enable=false
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
+    networks:
+      - owncloud_network
+
   nextcloud:
     image: nextcloud/all-in-one:$NEXTCLOUD_IMAGE_TAG
     init: true
@@ -137,3 +170,6 @@ volumes: # If you want to store the data on a different drive, see https://githu
 networks:
   rocketchat-redis-net:
     driver: bridge
+  owncloud_network:
+    driver: bridge
+
