@@ -1,7 +1,13 @@
 services:
   gitlab:
-    build:
-      context: ./gitlab
+    ############################################################
+    # Uncomment build lines, and comment the image lines to
+    # build the gitlab image from scratch
+    # build:
+    #   context: ./gitlab
+    image: ghcr.io/theagentcompany/servers-gitlab:latest
+    pull_policy: always
+    ############################################################
     container_name: gitlab
     restart: always
     hostname: the-agent-company.com
