@@ -1,6 +1,6 @@
 Your task is to implement a company's organizational chart using JanusGraph graph database.
 
-1. Clone JanusGraph repository under /workspace folder
+1. Clone JanusGraph repository (http://the-agent-company.com:8929/root/janusgraph) under /workspace folder
 
 2. Launch JanusGraph server and ensure it's running on port 8182 with websocket mode
 

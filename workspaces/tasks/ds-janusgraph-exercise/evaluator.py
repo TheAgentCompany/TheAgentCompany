@@ -33,21 +33,25 @@ def grade_checkpoint3():
     # Verify Sarah Johnson as CTO
     sarah = g.V().has('person', 'name', 'Sarah Johnson').has('title', 'CTO').count().next()
     if sarah != 1:
+        logging.error("Error checking Sarah Johnson's role")
         return False
         
     # Verify direct reports to Sarah
     direct_reports = g.V().has('name', 'Sarah Johnson').in_('reports_to').count().next()
     if direct_reports != 4: 
+        logging.error("Error checking Sarah Johnson's direct reports count")
         return False
         
     # Check Mike Chen's team
     mike_reports = g.V().has('name', 'Mike Chen').in_('reports_to').count().next()
     if mike_reports != 2:  
+        logging.error("Error checking Mike Chen's team")
         return False
         
     # Check Zhang Wei's team
     zhang_reports = g.V().has('name', 'Zhang Wei').in_('reports_to').count().next()
     if zhang_reports != 1:  
+        logging.error("Error checking Zhang Wei's team")
         return False
         
     # Verify titles
@@ -64,6 +68,7 @@ def grade_checkpoint3():
     for name, title in titles.items():
         count = g.V().has('name', name).has('title', title).count().next()
         if count != 1:
+            logging.error(f"Error checking {name}'s title")
             return False
     
     conn.close()
