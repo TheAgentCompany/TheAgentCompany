@@ -34,14 +34,5 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "male"))))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "married"))))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "french"))))
-    
-    # checkpoint 6
-    passed6 = 0
-    for msg in chat_history:
-        segs = msg.lower().split("\n")
-        if len(segs) >= 3:
-            passed6 = grade_checkpoint_345(segs[0], "male") and grade_checkpoint_345(segs[1], "married") and grade_checkpoint_345(segs[2], "french")
-
-    checkpoints.append(Checkpoint(1, int(passed6)))
 
     return result
