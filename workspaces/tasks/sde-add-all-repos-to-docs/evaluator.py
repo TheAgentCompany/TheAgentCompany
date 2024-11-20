@@ -107,6 +107,6 @@ def grade_checkpoints(trajectory='') -> Result:
 
     # Checkpoint 3: Check if the readme contains a contact section with Mike Chen's information
     passed_checkpoint3 = grade_checkpoint3(readme_content)
-    checkpoints.append(Checkpoint(CHECKPOINT_2_POINTS, CHECKPOINT_2_POINTS * int(passed_checkpoint3)))
+    checkpoints.append(Checkpoint(CHECKPOINT_3_POINTS, CHECKPOINT_3_POINTS * int(passed_checkpoint3)))
 
     return result
