@@ -6,4 +6,4 @@ In 2011,which sector of workers were more likely to be in a common-law relations
 
 Answer each question with a short phrase and separate answers by lines.
 
-Send the answers to Li Ming on Rocket.Chat for check.
+Go to the Rocket.Chat web at http://the-agent-company.com:3000/home and send the answers to Li Ming for check.
