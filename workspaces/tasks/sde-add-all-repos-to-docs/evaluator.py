@@ -18,8 +18,8 @@ README_FILE_PATH = 'README.md'
 EMAIL = "mike.chen@agentcompany.com"
 
 DESCRIPTIONS = {
-    "api-server": "A server providing API capabilities.",
-    "bustub": "The BusTub Relational Database Management System (Educational).",
+    "api-server": "REST APIs for internal use.",
+    "bustub": "The BusTub Relational Database Management System.",
     "colly": "Elegant Scraper and Crawler Framework for Golang.",
     "copilot-arena-server": "Support server for Copilot Arena.",
     "janusgraph": "JanusGraph: An open-source, distributed graph database.",

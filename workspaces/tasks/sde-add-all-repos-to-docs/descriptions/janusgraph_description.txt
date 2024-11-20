@@ -1,1 +1,0 @@
-JanusGraph: An open-source, distributed graph database.

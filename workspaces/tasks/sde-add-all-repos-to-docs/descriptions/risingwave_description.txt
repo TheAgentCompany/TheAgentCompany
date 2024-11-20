@@ -1,1 +1,0 @@
-Unified streaming and batch. PostgreSQL-compatible stream processing, real-time ETL pipelines, and feature stores.
