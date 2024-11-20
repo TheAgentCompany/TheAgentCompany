@@ -19,7 +19,7 @@ def grade_checkpoint1():
 def grade_checkpoint2() -> int:
     """Run 10 tests. Each test is worth 0.5 points. Returns the closest integer to the total score."""
     shutil.copy(TEST_FILE_BACKUP_PATH, TEST_FILE_PATH)
-    print("Copied test file")
+    logging.info("Copied test file")
 
     command = f"""
         cd {REPO_PATH} && \
