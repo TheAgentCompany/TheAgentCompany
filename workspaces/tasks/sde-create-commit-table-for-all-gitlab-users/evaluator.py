@@ -55,8 +55,9 @@ def grade_checkpoint3():
     if df is None:
         return False
     expected_format="%Y/%m/%d"
-    invalid_dates = df[~df['week'].apply(lambda x: pd.to_datetime(x, format=expected_format, errors='coerce').notnull())]
+    invalid_dates = df[~df['week'].apply(lambda x: pd.to_datetime(x, format=expected_format, errors='coerce')).notna()]
     return invalid_dates.empty, invalid_dates['week'].tolist()
+
 
 #check if the final file matches the expected format exactly
 @grader
