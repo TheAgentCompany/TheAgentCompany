@@ -1,8 +1,4 @@
-FROM base-image
-
-# Install Python requests library
-RUN pip install sotopia==0.1.2
-RUN pip install hiredis==3.0.0
+FROM ghcr.io/theagentcompany/task-base-image:latest
 
 COPY *.py /workspace
 COPY *.json /workspace

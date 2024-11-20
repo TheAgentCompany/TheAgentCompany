@@ -1,5 +1,5 @@
-IMAGE_NAME=rocketchat-npc-populate-data-image
-CONTAINER_NAME=rocketchat-npc-populate-data
+IMAGE_NAME=servers-rocketchat-npc-data-population-image
+CONTAINER_NAME=servers-rocketchat-npc-data-population
 
 .PHONY: build run
 
