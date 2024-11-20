@@ -8,15 +8,8 @@ from scoring import Result, Checkpoint
 
 REPO_PATH = "/workspace/bustub"
 BUSTUB_GIT_LINK = "http://the-agent-company.com:8929/root/bustub.git"
-TEST_REPO_PATH = "/workspace/bustub-the-agent-company-evaluation"
-TEST_FILE_PATH = TEST_REPO_PATH + "/test/primer/hyperloglog_test.cpp"
-HASH_HEAD_PATH = TEST_REPO_PATH + "/src/include/common/util/hash_util.h"
-SOURCE_FILES = [
-    "/src/include/primer/hyperloglog.h",
-    "/src/include/primer/hyperloglog_presto.h",
-    "/src/primer/hyperloglog.cpp",
-    "/src/primer/hyperloglog_presto.cpp",
-]
+TEST_FILE_PATH = REPO_PATH + "/test/primer/hyperloglog_test.cpp"
+TEST_FILE_BACKUP_PATH = "/utils/hyperloglog_test.cpp"
 
 @grader
 def grade_checkpoint1():
@@ -25,36 +18,11 @@ def grade_checkpoint1():
 @grader
 def grade_checkpoint2() -> int:
     """Run 10 tests. Each test is worth 0.5 points. Returns the closest integer to the total score."""
-    clone_git_repo_process = subprocess.run(f"git clone {BUSTUB_GIT_LINK} {TEST_REPO_PATH}", shell=True, capture_output=True, text=True)
-
-    print(clone_git_repo_process.stdout)
-    if clone_git_repo_process.stderr:
-        print(clone_git_repo_process.stderr)
-
-    # Fix os compatibility issue in hash_util.h
-    with open(HASH_HEAD_PATH, "r") as file:
-        content = file.read()
-    content = content.replace("hash = ((hash << 5) ^ (hash >> 27)) ^ bytes[i];", "hash = ((hash << 5) ^ (hash >> 27)) ^ static_cast<signed char>(bytes[i]);")
-    with open(HASH_HEAD_PATH, "w") as file:
-        file.write(content)
-
-    # Enable all tests
-    with open(TEST_FILE_PATH, "r") as file:
-        content = file.read()
-    modified_content = content.replace("DISABLED_", "")
-    with open(TEST_FILE_PATH, "w") as file:
-        file.write(modified_content)
-    print("Enabled all tests")
-
-    # Copy source files to the test directory
-    for source_file in SOURCE_FILES:
-        shutil.copy(REPO_PATH + source_file, TEST_REPO_PATH + source_file)
-    print("Copied source files")
-
+    shutil.copy(TEST_FILE_BACKUP_PATH, TEST_FILE_PATH)
+    print("Copied test file")
 
     command = f"""
-        cd {TEST_REPO_PATH} && \
-        build_support/packages.sh && \
+        cd {REPO_PATH} && \
         rm -rf build && \
         mkdir -p build && \
         cd build && \
