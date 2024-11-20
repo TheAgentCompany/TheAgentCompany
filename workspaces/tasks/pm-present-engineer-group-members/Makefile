@@ -1,5 +1,5 @@
-IMAGE_NAME=pm-ask-for-issue-and-create-in-plane-image
-CONTAINER_NAME=pm-ask-for-issue-and-create-in-plane
+IMAGE_NAME=pm-present-engineer-group-members-image
+CONTAINER_NAME=pm-present-engineer-group-members
 
 .PHONY: build run stop
 
@@ -12,6 +12,3 @@ run:
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
-
-attach:
-	docker exec -it $(CONTAINER_NAME) /bin/bash

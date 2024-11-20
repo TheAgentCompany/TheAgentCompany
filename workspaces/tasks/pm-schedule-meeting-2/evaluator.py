@@ -4,28 +4,11 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm
-from common import create_rocketchat_client, grader
+from common import evaluate_with_llm, create_rocketchat_client, grader, get_rocketchat_personal_chat_history
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
 
-
-def get_history(username):
-    id = ""
-    tmp = rocket.users_list().json()['users']
-    for item in rocket.users_list().json()['users']:
-        if item['username'] == username:
-            id = item["_id"]
-            break
-    msgs = rocket.im_history(room_id=id).json()['messages']
-    for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-
-    if len(msgs)>0:
-        return True
-    else:
-        return False
 
 def check_final_result(file_path):
     # Check if the file exists
@@ -47,12 +30,14 @@ def check_final_result(file_path):
 
 
 @grader
-def grade_checkpoint1(username='emily_zhou'):
-    return get_history(username=username)
+def grade_checkpoint1(username='Emily Zhou'):
+    msgs = get_rocketchat_personal_chat_history(rocket, username)
+    return len(msgs)>0
 
 @grader
-def grade_checkpoint2(username='liu_qiang'):
-    return get_history(username=username)
+def grade_checkpoint2(username='Liu Qiang'):
+    msgs = get_rocketchat_personal_chat_history(rocket, username)
+    return len(msgs)>0
 
 @grader
 def grade_checkpoint3(file_path = '/workspace/conclusion.txt'):
