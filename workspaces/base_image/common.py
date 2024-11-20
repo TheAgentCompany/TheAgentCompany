@@ -514,9 +514,8 @@ def download_owncloud_content(link: str, output_file_path: str):
     if "download" not in link:
         command = ["curl", "--output", "/tmp/.tmp_download_link", link.rstrip("\n")]
         try:
-            subprocess.run(command)
+            res = subprocess.run(command, capture_output=True, text=True, check=True)
         except Exception as e:
-            print(f"Unable to download from link: {link} due to {e}")
             logging.warning(f"Unable to download from link: {link} due to {e}")
             return False
 
@@ -528,8 +527,7 @@ def download_owncloud_content(link: str, output_file_path: str):
             matches = re.findall(pattern, content, re.MULTILINE)
             if matches:
                download_link = matches[0]
-               print(download_link)
-        
+
         if download_link is None:
             logging.warning(f"Did not find proper download link")
             return False
