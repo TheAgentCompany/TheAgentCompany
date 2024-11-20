@@ -20,6 +20,13 @@ Below are the addresses, usernames, and passwords for each service:
     * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`. This only works if you have admin access to the server where nextcloud is hosted.
     * If you cannot find it, try the following command to get a correct one
     `curl http://ogma.lti.cs.cmu.edu:2999/api/nextcloud-config`
+    * use http://ogma.lti.cs.cmu.edu:8090 for server setup
+
+## OwnCloud
+* http://ogma.lti.cs.cmu.edu:8092
+* username/email: theagentcompany
+* password: theagentcompany
+
 ## Plane
 * http://ogma.lti.cs.cmu.edu:8091
 * email:`agent@company.com`

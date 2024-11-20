@@ -110,6 +110,7 @@ rebuild-gitlab: init
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
 	@echo "rebuild gitlab from clean state..."
+	@echo "Before building, please make sure you have modified docker-compose.yml according to the instructions in the comments."
 	docker compose build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again
@@ -162,10 +163,9 @@ attach-sotopia-redis:
 
 # Plane
 download-plane:
-	sh ./plane/download.sh
 	cd plane && make download-setup
 
-start-plane: download-plane
+start-plane:
 	cd plane && make start-plane
 
 stop-plane:
@@ -184,9 +184,7 @@ rm-plane-volume:
 	docker volume rm plane-app_pgdata
 
 reset-plane:
-	make stop-plane
-	./plane/restore.sh ./plane/
-	make start-plane
+	cd plane && make reset-plane
 
 start-owncloud:
 	docker compose up owncloud owncloud-collabora -d
