@@ -3,7 +3,7 @@ import requests
 from typing import List
 from common import get_rocketchat_personal_chat_history
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, grader
+from common import create_rocketchat_client, grader, evaluate_with_llm
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
@@ -12,6 +12,9 @@ rocket = create_rocketchat_client()
 def grade_checkpoint1(trajectory):
     return "apps/files/files/1447?dir=/Documents/Data%20Analysis" in trajectory
 
+@grader
+def grade_checkpoint_345(msg, keyword):
+    return msg is not None and evaluate_with_llm(content=msg, predicate=f"the content contains `{keyword}`")
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
@@ -28,20 +31,16 @@ def grade_checkpoints(trajectory="") -> Result:
     
     # checkpoint 3-5
     msg = "\n".join(chat_history).lower()
-    passed3 = "male" in msg
-    checkpoints.append(Checkpoint(1, int(passed3)))
-    passed4 = "married" in msg
-    checkpoints.append(Checkpoint(1, int(passed4)))
-    passed5 = "french" in msg
-    checkpoints.append(Checkpoint(1, int(passed5)))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "male"))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "married"))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "french"))))
     
     # checkpoint 6
     passed6 = 0
     for msg in chat_history:
         segs = msg.lower().split("\n")
         if len(segs) >= 3:
-            if "male" in segs[0] and "married" in segs[1] and "french" in segs[2]:
-                passed6 = 1
+            passed6 = grade_checkpoint_345(segs[0], "male") and grade_checkpoint_345(segs[1], "married") and grade_checkpoint_345(segs[2], "french")
 
     checkpoints.append(Checkpoint(1, int(passed6)))
 
