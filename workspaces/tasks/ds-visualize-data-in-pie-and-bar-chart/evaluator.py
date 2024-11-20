@@ -1,8 +1,8 @@
 from common import evaluate_with_llm, grader
 from scoring import Result, Checkpoint
 
-PIE_CHART_FILE = "2011_pie.png"
-BAR_CHART_FILE = "2016_bar.png"
+PIE_CHART_FILE = "/workspace/2011_pie.png"
+BAR_CHART_FILE = "/workspace/2016_bar.png"
 
 @grader
 def grade_checkpoint1():
