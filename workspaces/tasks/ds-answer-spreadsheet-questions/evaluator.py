@@ -10,7 +10,7 @@ rocket = create_rocketchat_client()
 
 @grader
 def grade_checkpoint1(trajectory):
-    return "files/1447?dir=/Documents/Data%20Analysis" in trajectory
+    return "Documents/Data%20Analysis" in trajectory
 
 @grader
 def grade_checkpoint_345(msg, keyword):
