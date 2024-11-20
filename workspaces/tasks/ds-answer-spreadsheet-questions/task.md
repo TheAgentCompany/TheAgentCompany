@@ -1,4 +1,4 @@
-Our clients required us to perform some data analysis and deliver the results. Find the 'agriculture.xlsx' at https://ogma.lti.cs.cmu.edu/apps/files/files/1447?dir=/Documents/Data%20Analysis&openfile=true, and answer the following questions:
+Our clients required us to perform some data analysis and deliver the results. Find the 'agriculture.xlsx' file under `Documents/Data Analysis` at https://ogma.lti.cs.cmu.edu, and answer the following questions:
 
 Which group of people has more workers in the agricultural sector in 2011, regardless of the region or language? Male or female?
 What is the marital status for the majority of New Brunswick's agricultural workers, both English-language and French-language workers in 2011?
@@ -6,4 +6,4 @@ In 2011,which sector of workers were more likely to be in a common-law relations
 
 Answer each question with a short phrase and separate answers by lines.
 
-Send the answers to Li Ming for check.
+Send the answers to Li Ming on Rocket.Chat for check.
