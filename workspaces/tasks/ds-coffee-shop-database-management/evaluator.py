@@ -39,6 +39,10 @@ def view_exists(view_name, conn):
         return False
 
 def dataframes_are_equal(df1,df2):
+    #Column order invariant
+    df1.sort_index(axis=1)
+    df2.sort_index(axis=1)
+
     # Compare column names (case-insensitive)
     df1_cols = set(col.lower() for col in df1.columns)
     df2_cols = set(col.lower() for col in df2.columns)

@@ -15,7 +15,6 @@ COPY eval_data/orders.csv /data
 COPY eval_data/products.csv /data
 COPY eval_data/average_sales.csv /utils
 COPY eval_data/short_stock.csv /utils
-COPY analysis.txt /workspace
 
 
 RUN pip install pandas

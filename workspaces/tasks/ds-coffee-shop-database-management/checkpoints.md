@@ -20,5 +20,5 @@ A view named 'v_sales' with columns 'product_id', 'average_sales', 'revenue_gene
 
 ## Checkpoint 5 (3pt)
 
-Agent correctly filled the analysis.txt sheet in the workspace directory.
+Agent correctly downloaded and filled the analysis.txt sheet in the workspace directory.
 
