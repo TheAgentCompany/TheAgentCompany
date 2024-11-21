@@ -1,4 +1,4 @@
-Analyze the stock trend in /workspace/stock_raw.csv, create an informative, business-style presentation of stock price data for the company board members.
+Analyze the stock trend in /workspace/stock_data_raw.csv, create an informative, business-style presentation of stock price data for the company board members.
 
 * Data Preparation: Use the provided stock data, ensuring it is clean and suitable for analysis. Handle any missing or inconsistent values appropriately. Save the cleaned data as /workspace/stock_cleaned.csv
 
