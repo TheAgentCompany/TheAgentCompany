@@ -86,8 +86,10 @@ def grade_checkpoint1():
 
     TAC_content = get_binary_file_content_nextcloud("TAC_overview.md", "Documents").decode("utf-8")
 
+    if len(slides) != 7:
+        return 0
+
     results = {
-        "Slide Count": len(slides) == 7,
         "Title Check": any(keyword in get_title(slides[0]).lower() for keyword in theme_keywords),
         "TAC Overview": get_title(slides[1]) == "TAC Overview" and evaluate_with_llm(get_content(slides[1]), "the contents include introduction to " + TAC_content),
         "RocketChat": check_rocketchat(slides[2], rocketchat_channels, ROCKETCHAT_URL),
@@ -96,6 +98,10 @@ def grade_checkpoint1():
         "Nextcloud Folders": check_nextcloud(slides[5], folder_structure, NEXTCLOUD_URL),
         "Plane Overview": check_plane(slides[6], PLANE_BASEURL),
     }
+
+    for key, value in results.items():
+        if not value:
+            logging.warning(f"{key} check failed")
 
     return sum(results.values())
 
