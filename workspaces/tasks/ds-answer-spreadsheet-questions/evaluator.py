@@ -31,8 +31,9 @@ def grade_checkpoints(trajectory="") -> Result:
     
     # checkpoint 3-5
     msg = "\n".join(chat_history).lower()
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "male"))))
+    # checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "male"))))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "married"))))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "french"))))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_345(msg, "37.67"))))
 
     return result
