@@ -1,0 +1,3 @@
+IDs of Products that need to be reordered within the next 7 days based on current sales trends: <ANSWER HERE>
+What are the IDs of top 3 products based on profit: <ANSWER HERE>
+What are the names of the customers who have pending payments: <ANSWER>
