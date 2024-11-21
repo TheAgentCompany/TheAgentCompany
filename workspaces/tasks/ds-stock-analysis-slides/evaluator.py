@@ -1,5 +1,7 @@
 import os
 from typing import List
+from PIL import Image
+import io
 from scoring import Result, Checkpoint
 from common import evaluate_with_llm, grader
 from pptx import Presentation
@@ -43,9 +45,10 @@ def grade_checkpoint2():
                 image_found += 1
                 image = shape.image
                 image_bytes = image.blob
+                image_stream = io.BytesIO(image_bytes)
+                image = Image.open(image_stream)
                 image_path = os.path.join(output_dir, f"slide_{idx}_{image_found}.png")
-                with open(image_path, "wb") as f:
-                    f.write(image_bytes)
+                image.save(image_path, format="PNG")
         if image_found >= 1:
             predicate = predicates[idx - 1]
             for img in range(1, image_found + 1):
