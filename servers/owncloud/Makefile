@@ -1,3 +1,6 @@
+IMAGE_NAME=owncloud
+IMAGE_TAG=test
+
 run:
 	docker compose up -d
 start:
@@ -10,11 +13,11 @@ restart:
 	-make stop
 	-make rm
 	-make start
-	-docker exec -it owncloud bash
+	-docker exec -it ${IMAGE_NAME} bash
 
 build:
-	docker rmi owncloud:test || true && BUILDKIT_PROGRESS=plain docker build --no-cache --progress=plain -t owncloud:test .
+	docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true && BUILDKIT_PROGRESS=plain docker build --no-cache --progress=plain -t ${IMAGE_NAME}:${IMAGE_TAG} .
 
 push:
-	docker tag owncloud:test ghcr.io/theagentcompany/servers-owncloud:latest
+	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ghcr.io/theagentcompany/servers-owncloud:latest
 	docker push ghcr.io/theagentcompany/servers-owncloud:latest

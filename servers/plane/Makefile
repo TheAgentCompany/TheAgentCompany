@@ -5,6 +5,8 @@ download-setup:
 	chmod 777 setup.sh
 
 rm-plane-volume:
+	rm -rf plane-app
+	rm -rf setup.sh
 	docker volume ls -q --filter "name=plane-app" | xargs -r docker volume rm
 
 start-plane: download-setup

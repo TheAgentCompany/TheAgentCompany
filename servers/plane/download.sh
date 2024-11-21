@@ -25,10 +25,3 @@ curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh 
 chmod 777 $PLANE_INSTALL_DIR/docker-compose.yaml
 chmod 777 $PLANE_INSTALL_DIR/plane.env
 chmod 777 $PLANE_INSTALL_DIR/restore.sh
-
-sed -i 's/NGINX_PORT=80/NGINX_PORT=8091/' $PLANE_INSTALL_DIR/plane.env
-sed -i 's|${DOCKERHUB_USER:-makeplane}/plane-admin:${APP_RELEASE:-stable}|ghcr.io/theagentcompany/servers-plane-admin:0.0.1|g' $PLANE_INSTALL_DIR/docker-compose.yaml
-sed -i 's|${DOCKERHUB_USER:-makeplane}/plane-backend:${APP_RELEASE:-stable}|ghcr.io/theagentcompany/servers-plane-backend:0.0.1|g' $PLANE_INSTALL_DIR/docker-compose.yaml
-sed -i 's|${DOCKERHUB_USER:-makeplane}/plane-frontend:${APP_RELEASE:-stable}|ghcr.io/theagentcompany/servers-plane-frontend:0.0.1|g' $PLANE_INSTALL_DIR/docker-compose.yaml
-sed -i 's|${DOCKERHUB_USER:-makeplane}/plane-space:${APP_RELEASE:-stable}|ghcr.io/theagentcompany/servers-plane-space:0.0.1|g' $PLANE_INSTALL_DIR/docker-compose.yaml
-sed -i 's|${DOCKERHUB_USER:-makeplane}/plane-proxy:${APP_RELEASE:-stable}|ghcr.io/theagentcompany/servers-plane-proxy:0.0.1|g' $PLANE_INSTALL_DIR/docker-compose.yaml
