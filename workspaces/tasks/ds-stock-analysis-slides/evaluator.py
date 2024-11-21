@@ -40,24 +40,26 @@ def grade_checkpoint2():
         image_found = 0
         for shape in slide.shapes:
             if shape.shape_type == 13:  # Picture type
-                image_found = 1
+                image_found += 1
                 image = shape.image
                 image_bytes = image.blob
-                image_path = os.path.join(output_dir, f"slide_{idx}.png")
+                image_path = os.path.join(output_dir, f"slide_{idx}_{image_found}.png")
                 with open(image_path, "wb") as f:
                     f.write(image_bytes)
-        if image_found:
+        if image_found >= 1:
             predicate = predicates[idx - 1]
-            evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path)
-
-            # if there are more than one images on the slide, as long as one image is true, the slide is considered as pass
-            if evaluation_result:
-                result[predicate] = 1
+            for img in range(1, image_found + 1):
+                image_path = os.path.join(output_dir, f"slide_{idx}_{img}.png")
+                evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path)
+                # if there are more than one images on the slide, as long as one image is true, the slide is considered as pass
+                if evaluation_result:
+                    results[predicate] = 1
+                    break
 
     idx = 0
     for predicate, result in results:
         if result == 0:
-            logging.warning(f"Slide {idx} failed, Predicate: {predicate}")
+            logging.warning(f"Predicate {idx} failed, Predicate: {predicate}")
         idx += 1
     
     return sum([results[pred] for pred in results.keys()])
