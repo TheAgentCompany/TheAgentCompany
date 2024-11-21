@@ -492,7 +492,6 @@ def get_owncloud_url_in_file(filename: str):
     try:
         with open(filename, 'r') as file:
             content = file.read()
-            # Update this URL to match your ownCloud instance
             if f"{OWNCLOUD_URL}" in content:
                 return content
             return False
@@ -514,7 +513,7 @@ def download_owncloud_content(link: str, output_file_path: str):
     if "download" not in link:
         command = ["curl", "--output", "/tmp/.tmp_download_link", link.rstrip("\n")]
         try:
-            res = subprocess.run(command, capture_output=True, text=True, check=True)
+            subprocess.run(command, capture_output=True, text=True, check=True)
         except Exception as e:
             logging.warning(f"Unable to download from link: {link} due to {e}")
             return False
@@ -544,14 +543,10 @@ def download_owncloud_content(link: str, output_file_path: str):
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
 
-
-
-# This one works
 def check_file_in_owncloud_directory(file_name, dir_name):
     """
     Check if a file exists in an ownCloud directory using WebDAV
     """
-    # Main correction: ownCloud uses 'remote.php/webdav' instead of 'remote.php/dav/files/admin'
     server_url = f"{OWNCLOUD_URL}/remote.php/webdav/{dir_name}"
     headers = {
         'Depth': '1',
@@ -576,9 +571,7 @@ def check_file_in_owncloud_directory(file_name, dir_name):
         logging.error(f"Error: {response.status_code}, {response.text}")
         return None
 
-# This one works
 def get_binary_file_content_owncloud(file_name, dir_name):
-    # Main correction: ownCloud uses 'remote.php/webdav' instead of 'remote.php/dav/files/admin'
     server_url = f"{OWNCLOUD_URL}/remote.php/webdav/{dir_name}/{file_name}"
 
     response = requests.get(
