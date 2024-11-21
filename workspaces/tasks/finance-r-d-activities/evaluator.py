@@ -25,7 +25,7 @@ def grade_checkpoint1():
         return 2
     elif res > 0:
         return 1
-
+    return 0
 @grader
 def grade_checkpoint2():
     file_name = "Research_Time_Tracking_Records.csv"
