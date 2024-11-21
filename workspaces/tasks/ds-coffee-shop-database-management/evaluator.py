@@ -14,9 +14,9 @@ import pandas as pd
 
 DB_PATH = '/data/coffee_shop.db'
 CSV_DIRECTORY = '/data'
-SHORT_STOCK_VIEW_CSV = '/data/short_stock.csv'
-AVERAGE_SALES_VIEW = '/data/average_sales.csv'
-ANALYSIS_SHEET = 'workspace/analysis.txt'
+SHORT_STOCK_VIEW_CSV = '/utils/short_stock.csv'
+AVERAGE_SALES_VIEW = '/utils/average_sales.csv'
+ANALYSIS_SHEET = 'analysis.txt'
 
 ############################# helper functions #####################################
 
@@ -51,11 +51,12 @@ def dataframes_are_equal(df1,df2):
         logging.warning(f'Number of rows do not match')
         return False
 
-    df1_sorted = df1.sort_values(by=list(df1.columns)).reset_index(drop=True)
-    df2_sorted = df2.sort_values(by=list(df2.columns)).reset_index(drop=True)
+    df1_sorted = df1.sort_values(by=list(df1.columns)).reset_index(drop=True).round(2)
+    df2_sorted = df2.sort_values(by=list(df2.columns)).reset_index(drop=True).round(2)
 
     # Compare content
     if not df1_sorted.equals(df2_sorted):
+        logging.warning(f'Content does not match')
         return False
     return True
 
@@ -123,6 +124,7 @@ def grade_checkpoint2(conn):
 def grade_checkpoint3(conn):
 
     if not view_exists('v_short_stock',conn):
+        logging.warning('View v_short_stock does not exist')
         return False
 
     csv_path = os.path.join('/utils', SHORT_STOCK_VIEW_CSV)
@@ -134,20 +136,21 @@ def grade_checkpoint3(conn):
 
 @grader
 def grade_checkpoint4(conn):
-    if not view_exists('v_average_sales', conn):
+    if not view_exists('v_sales', conn):
+        logging.warning('View v_sales does not exist')
         return False
 
     csv_path = os.path.join('/utils', AVERAGE_SALES_VIEW)
     df_csv = pd.read_csv(csv_path)
 
-    df_db = pd.read_sql_query(f"SELECT * FROM v_average_sales", conn)
+    df_db = pd.read_sql_query(f"SELECT * FROM v_sales", conn)
 
     return dataframes_are_equal(df_csv, df_db)
 
 @grader
 def grade_checkpoint5():
     
-    ref_answers = [['P001','P003','P005'],['P001','P002','P004'],['Sarah Johnson','Emma Brown']]
+    ref_answers = [['p001','p003','p005'],['p001','p002','p004'],['sarah johnson','emma brown']]
     score = 0
     
     if not os.path.exists(os.path.join('/workspace',ANALYSIS_SHEET)):
@@ -161,7 +164,7 @@ def grade_checkpoint5():
                 logging.warning('Analysis sheet corrupted')
                 return 0
             answers = qa_pair[1].strip().split(',')
-            answers = set(answer.strip().lower() for answer in answers)
+            answers = set(answer.strip().lower().replace("'","").replace('"',"") for answer in answers)
             score+= 1 if answers == set(ref_answers[i]) else 0
             logging.info(f'Question {qa_pair[0]}, Expected Answer: {ref_answers[i]}, Agent Answer: {answers}')
 
