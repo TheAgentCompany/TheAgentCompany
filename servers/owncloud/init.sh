@@ -30,3 +30,4 @@ rm -rf /var/www/html/owncloud_apps
 su -s /bin/bash www-data -c "php occ app:enable richdocuments"
 su -s /bin/bash www-data -c "php occ app:enable gallery"
 su -s /bin/bash www-data -c "php occ app:enable files_pdfviewer"
+su -s /bin/bash www-data -c "php occ files:scan --all"
