@@ -11,4 +11,4 @@ Analyze the stock trend in /workspace/stock_data_raw.csv, create an informative,
 
 * Presentation Preparation:
     * Create clean, professional slides with pptx. Each plot should be on a separate slide, clearly labeled, and accompanied by brief explanations. Save as /workspace/stock_analysis.pptx.
-    * Write a script for the presenter to guide the audience through the trends observed in each visualization. Each slide is described and analyzed. Save as /workspace/stock_analysis.md.
+    * Write a script for the presenter to guide the audience through the trends observed in each visualization. Each slide is described and analyzed. Save as /workspace/stock_analysis_script.md.
