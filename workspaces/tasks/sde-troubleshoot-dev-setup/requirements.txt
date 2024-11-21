@@ -1,0 +1,17 @@
+fastapi>=0.111.0
+uvicorn>=0.30.5
+slowapi>=0.1.9
+groq>=0.9.0
+cachetools>=5.3.3
+firebase-admin>=6.5.0
+together>=1.2.1
+mistralai>=1.0.0
+openai>=1.35.10
+PyYAML>=6.0.1
+anthropic>=0.31.2
+google-generativeai>=0.7.2
+pandas>=1.5.3
+scikit-learn>=1.5.1
+tiktoken>=0.7.0
+amplitude-analytics>=1.1.4
+apscheduler~=3.10.4

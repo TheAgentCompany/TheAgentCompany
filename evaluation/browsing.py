@@ -161,6 +161,23 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
     TODO: right now we assume all login actions succeed. We need to add some sanity
     checks to ensure that login is successful.
     """
+    owncloud_login_actions = [
+        GotoAction("http://the-agent-company.com:8092"),
+        NoopAction(1000),
+        InputAction(
+            "textbox '', clickable, focused, required",
+            "theagentcompany"
+        ),
+        NoopAction(1000),
+        InputAction(
+            "textbox '', clickable, required",
+            "theagentcompany"
+        ),
+        NoopAction(1000),
+        ClickAction("button '', clickable"),
+        NoopAction(1000)
+    ]
+
     nextcloud_login_actions = [
         GotoAction("https://ogma.lti.cs.cmu.edu"),
         NoopAction(1000),
@@ -190,11 +207,7 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
             "theagentcompany"
         ),
         NoopAction(1000),
-        ClickAction("button 'Login', clickable"),
-        NoopAction(1000),
-        # after login, a popup asking to change hostname appears. We need to click on cancel button.
-        # FIXME: this seems useless. Plus, it interferes with developers' activities.
-        # ClickAction("button 'Cancel', clickable")
+        ClickAction("button 'Login', clickable")
     ]
 
     gitlab_login_actions = [
@@ -234,6 +247,7 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
 
     all_login_actions = [
         ('nextcloud', nextcloud_login_actions),
+        ('owncloud', owncloud_login_actions),
         ('rocketchat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
         ('plane', plane_login_actions),

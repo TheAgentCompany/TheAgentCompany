@@ -148,11 +148,7 @@ def codeact_user_response(state: State) -> str:
 
 
 def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
-    instruction = (
-        "Complete the task in /instruction/task.md.\n"
-        # TODO: remove this once #628 is fixed
-        "You may not need it, but in case you do, password for rocketchat is: theagentcompany\n"
-    )
+    instruction = "Complete the task in /instruction/task.md"
 
     # TODO: OpenHands should optionally, save browser screenshots to a place
     state: State | None = asyncio.run(
