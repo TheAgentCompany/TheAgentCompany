@@ -12,6 +12,7 @@ PLANE_DOCKER_FILE_PATH=./plane/plane-app/docker-compose.yaml
 PLANE_DOCKER_ENV_PATH=./plane/plane-app/plane.env
 
 .PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
+		start-owncloud stop-owncloud reset-owncloud \
 		create-nextcloud-backup-volume rm-nextcloud-backup-volume rm-nextcloud-volume stop-nextcloud-side-container \
 		rm-nextcloud-side-container get-nextcloud-config enter-nextcloud-container \
 		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume reset-rocketchat backup-rocketchat
@@ -109,6 +110,7 @@ rebuild-gitlab: init
 		echo "Image servers-gitlab does not exist. Skipping removal."; \
 	fi
 	@echo "rebuild gitlab from clean state..."
+	@echo "Before building, please make sure you have modified docker-compose.yml according to the instructions in the comments."
 	docker compose build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again
@@ -161,10 +163,9 @@ attach-sotopia-redis:
 
 # Plane
 download-plane:
-	sh ./plane/download.sh
 	cd plane && make download-setup
 
-start-plane: download-plane
+start-plane:
 	cd plane && make start-plane
 
 stop-plane:
@@ -174,16 +175,29 @@ backup-plane:
 	cd plane && make backup-plane
 
 rm-plane-volume:
-	docker volume rm plane-app_redisdata
-	docker volume rm plane-app_uploads
-	docker volume rm plane-app_logs_api
-	docker volume rm plane-app_logs_beat-worker
-	docker volume rm plane-app_logs_migrator
-	docker volume rm plane-app_logs_worker
-	docker volume rm plane-app_pgdata
+	-docker volume rm plane-app_redisdata
+	-docker volume rm plane-app_uploads
+	-docker volume rm plane-app_logs_api
+	-docker volume rm plane-app_logs_beat-worker
+	-docker volume rm plane-app_logs_migrator
+	-docker volume rm plane-app_logs_worker
+	-docker volume rm plane-app_pgdata
+	cd plane && make rm-plane-volume
 
 reset-plane:
-	make stop-plane
-	./plane/restore.sh ./plane/
-	make start-plane
+	cd plane && make reset-plane
+
+start-owncloud:
+	docker compose up owncloud owncloud-collabora -d
+
+stop-owncloud:
+	docker compose stop owncloud owncloud-collabora
+
+reset-owncloud: init
+	@echo "stopping existing owncloud instance..."
+	docker compose stop owncloud owncloud-collabora
+	@echo "remove owncloud container..."
+	docker compose rm -f owncloud owncloud-collabora
+	@echo "start owncloud from clean state..."
+	docker compose up owncloud owncloud-collabora -d
 
