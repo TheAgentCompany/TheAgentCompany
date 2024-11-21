@@ -74,6 +74,10 @@ def run_checkpoint_1(trajectory: str):
     num_forms = len(df)
     total_correct_forms = sum([1 for name in discrepancies if not discrepancies[name]])
     total_incorrect_fields = sum([len(discrepancies[name]) for name in discrepancies])
+    # log the discrepancies
+    for name in discrepancies:
+        for discrepancy in discrepancies[name]:
+            logging.warning(discrepancy)
 
     logging.info(f"Total correct forms: {total_correct_forms}")
     if total_correct_forms == num_forms:
