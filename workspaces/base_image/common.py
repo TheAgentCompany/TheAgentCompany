@@ -189,7 +189,6 @@ def check_rocketchat_message_posted(rocket_client, channel_name, keywords):
             return True
     return False
 
-
 def download_image_from_url(image_url, output_file_path):
     try:
         response = requests.get(image_url)

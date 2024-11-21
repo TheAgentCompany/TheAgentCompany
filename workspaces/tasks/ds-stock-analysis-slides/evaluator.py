@@ -5,6 +5,7 @@ from common import evaluate_with_llm, grader
 from pptx import Presentation
 import logging
 import pandas as pd
+from collections import defaultdict
 
 
 
@@ -31,24 +32,35 @@ def grade_checkpoint2():
     ]
 
     os.makedirs(output_dir, exist_ok=True)
-    results = []
+    
+    # key of results are predicates, value of results are the evaluation results
+    results = defaultdict(int)
 
     for idx, slide in enumerate(presentation.slides, start=1):
+        image_found = 0
         for shape in slide.shapes:
             if shape.shape_type == 13:  # Picture type
+                image_found = 1
                 image = shape.image
                 image_bytes = image.blob
                 image_path = os.path.join(output_dir, f"slide_{idx}.png")
                 with open(image_path, "wb") as f:
                     f.write(image_bytes)
-                predicate = predicates[idx - 1]
-                evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path)
-                results.append((idx, evaluation_result))
+        if image_found:
+            predicate = predicates[idx - 1]
+            evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path)
 
-    for slide_idx, result in results:
-        logging.info(f"Slide {slide_idx}: {'Pass' if result else 'Fail'}")
+            # if there are more than one images on the slide, as long as one image is true, the slide is considered as pass
+            if evaluation_result:
+                result[predicate] = 1
+
+    idx = 0
+    for predicate, result in results:
+        if result == 0:
+            logging.warning(f"Slide {idx} failed, Predicate: {predicate}")
+        idx += 1
     
-    return sum([int(result) for _, result in results])
+    return sum([results[pred] for pred in results.keys()])
 
 @grader
 def grade_checkpoint3():
@@ -62,6 +74,10 @@ def grade_checkpoint3():
         script_content = f.read()
 
     results = {pred: evaluate_with_llm(script_content, pred) for pred in predicates}
+
+    for pred, result in results.items():
+        logging.info(f"{pred}: {'Pass' if result else 'Fail'}")
+
     # sum over all pass result as int
     return sum([int(result) for result in results.values()])
 
