@@ -1,27 +1,28 @@
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import create_rocketchat_client, get_rocketchat_personal_chat_history, make_gitlab_request, grader
+from common import create_rocketchat_client, num_rocketchat_users_contacted, make_gitlab_request, grader
 from config import GITLAB_USER
 
-CHECKPOINT_1_POINTS = 1
+CHECKPOINT_1_POINTS = 2
 CHECKPOINT_2_POINTS = 1
-CHECKPOINT_3_POINTS = 1
+CHECKPOINT_3_POINTS = 2
 
 rocket = create_rocketchat_client()
 
 PROJECT_NAME = "risingwave"
 PROJECT_PATH = f"{GITLAB_USER}/{PROJECT_NAME}"
-ROCKETCHAT_USERNAME = "li_ming"
+ROCKETCHAT_USERNAMES = ["li_ming", "mike_chen", "mark_johnson"]
 ISSUE_NAME = "Improve Logging for Bulk Request Failures"
 MILESTONE_NAME = "release-1.9"
+DESCRIPTION = "We need to improve the logging for bulk request failures, so we can better understand the root cause of the issue."
+DUE_DATE = "2024-11-15"
 
 issue = None
 
 @grader
 def grade_checkpoint1():
-    chat_history = get_rocketchat_personal_chat_history(rocket, ROCKETCHAT_USERNAME)
-    return chat_history is not None and len(chat_history) > 0
+    return num_rocketchat_users_contacted(rocket, ROCKETCHAT_USERNAMES) == len(ROCKETCHAT_USERNAMES)
 
 @grader
 def grade_checkpoint2():
@@ -42,7 +43,13 @@ def grade_checkpoint3():
     if issue is None:
         return False
     milestone = issue.get('milestone')
-    return milestone and milestone['title'] == MILESTONE_NAME
+    milestone = milestone and milestone.get('title') == MILESTONE_NAME
+    description = issue.get('description')
+    description = description and DESCRIPTION in description
+    due_date = issue.get('due_date')
+    due_date = due_date and due_date == DUE_DATE
+
+    return milestone and description and due_date
 
     
 def grade_checkpoints(trajectory="") -> Result:

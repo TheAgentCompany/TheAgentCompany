@@ -1,0 +1,70 @@
+{
+  "Sarah Johnson": {
+    "extra_info": "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, mention you're considering Paris, but you haven't finalized. If asked about number of days, say around 10 days. If asked about budget, start with 4000 dollars, but follow up with saying 5000 dollars instead."
+  },
+  "Li Ming": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked, mention Tokyo might be the destination, but still deciding. If asked about days, suggest a week-long trip. For budget, say something like 3000 dollars but could change."
+  },
+  "Zhang Wei": {
+    "extra_info": "Someone might want to know your vacation plans. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If destination is asked, say Sydney sounds ideal but not certain. If asked about number of days, say it could be 2 weeks. For budget, suggest it might cost around 4000 dollars."
+  },
+  "Wang Fang": {
+    "extra_info": "Expect someone to ask about your travel plans. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, mention you're eyeing Seoul, but no firm decision yet. For days, suggest around 10 days. For budget, give an estimate of 2500 dollars."
+  },
+  "Mike Chen": {
+    "extra_info": "Someone may ask about your holiday destination. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "When first asked about holiday plans, ask them why they are asking these questions. When asked again about holiday destination, mention Los Angeles, but say it’s not set in stone. For days, say around a week. For budget, mention it could be about 2000 dollars."
+  },
+  "Emily Zhou": {
+    "extra_info": "Be prepared to discuss your vacation plans if asked. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "Say New York sounds good, but quickly follow up saying Vancouver instead. For days, mention around 6 days. For budget, say around 1500 dollars but could vary."
+  },
+  "Liu Qiang": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "First ask Mention Beijing as a potential destination. For days, at first say a week, but quickly follow up with approximately 10 in the next message. For budget, suggest about 2200 dollars but could be flexible."
+  },
+  "Priya Sharma": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "For destination, mention New Delhi. For days, suggest around 12 days. For budget, say around 1800 dollars but may need adjusting."
+  },
+  "Mark Johnson": {
+    "extra_info": "You might be asked about your year-end plans. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, mention Miami seems likely but not certain. For days, say about a week. For budget, suggest around 3000 dollars."
+  },
+  "Jessica Lee": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about vacation plans, say New York. For days, say roughly 5 days. For budget, suggest about 1500 dollars but could change."
+  },
+  "Chen Xinyi": {
+    "extra_info": "Someone may inquire about your holiday plans. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "For destination, mention Shanghai as an option, not confirmed. For days, suggest 6 days. For budget, mention about 1200 dollars but flexible."
+  },
+  "David Wong": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "For destination, say London but mention undecided. For days, say it could be 10 days. For budget, mention around 4000 dollars."
+  },
+  "Huang Jie": {
+    "extra_info": "Someone may ask about your holiday destination. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, mention Berlin sounds appealing, but not fixed. For days, say about a week. For budget, suggest 2800 dollars, might adjust."
+  },
+  "Sophia Rodriguez": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, say Barcelona but still considering. For days, mention around 10 days. For budget, suggest 3500 dollars."
+  },
+  "Alex Turner": {
+    "extra_info": "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "For destination, mention San Francisco, but could change. For days, suggest around 5 days. For budget, say around 1800 dollars."
+  },
+  "Emma Lewis": {
+    "extra_info": "Someone might ask about your vacation destination. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "For destination, mention Austin, though not set. For days, say around a week. For budget, mention around 1600 dollars."
+  },
+  "Jessica Chen": {
+    "extra_info":  "Someone will ask you about your year-end vacation plan. Only answer the questions they asked, don't volunteer extra information.",
+    "strategy_hint": "If asked about destination, say Bangkok. For days, mention around 9 days. For budget, suggest around 1400 dollars but open to change."
+  }
+}
