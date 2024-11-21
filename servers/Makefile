@@ -175,13 +175,14 @@ backup-plane:
 	cd plane && make backup-plane
 
 rm-plane-volume:
-	docker volume rm plane-app_redisdata
-	docker volume rm plane-app_uploads
-	docker volume rm plane-app_logs_api
-	docker volume rm plane-app_logs_beat-worker
-	docker volume rm plane-app_logs_migrator
-	docker volume rm plane-app_logs_worker
-	docker volume rm plane-app_pgdata
+	-docker volume rm plane-app_redisdata
+	-docker volume rm plane-app_uploads
+	-docker volume rm plane-app_logs_api
+	-docker volume rm plane-app_logs_beat-worker
+	-docker volume rm plane-app_logs_migrator
+	-docker volume rm plane-app_logs_worker
+	-docker volume rm plane-app_pgdata
+	cd plane && make rm-plane-volume
 
 reset-plane:
 	cd plane && make reset-plane
