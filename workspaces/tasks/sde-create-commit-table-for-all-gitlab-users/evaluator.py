@@ -6,14 +6,13 @@ from common import grader
 from scoring import Result, Checkpoint
 from create_reference_solution import generate_commit_report
 
-CSV_FILE = "/workspace/commit_report.csv"
-REFERENCE_SOLUTION = '/workspace/reference_report.csv'
+CSV_FILE_PATH = "/workspace/commit_report.csv"
+REFERENCE_SOLUTION = '/utils/reference_commit_report.csv'
 
-generate_commit_report()
 
 def read_csv():
     try:
-        df = pd.read_csv(CSV_FILE)
+        df = pd.read_csv(CSV_FILE_PATH)
     except Exception as e:
         logging.error("Error reading CSV file: %s", e)
         return None
@@ -56,7 +55,7 @@ def grade_checkpoint3():
         return False
     expected_format="%Y/%m/%d"
     invalid_dates = df[~df['week'].apply(lambda x: pd.to_datetime(x, format=expected_format, errors='coerce')).notna()]
-    return invalid_dates.empty, invalid_dates['week'].tolist()
+    return invalid_dates.empty
 
 
 #check if the final file matches the expected format exactly
