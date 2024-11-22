@@ -1,4 +1,4 @@
-Find the `respondent_counts.xlsx` file at https://ogma.lti.cs.cmu.edu/apps/files/files/1555?dir=/Documents/Data%20Analysis&openfile=true, and based on the source "unformatted" sheet, create a "formatted" sheet and make formatting edits based on the following requirements:
+Find the `respondent_counts.xlsx` file at http://the-agent-company.com:8092/1555?dir=/Documents/Data%20Analysis&openfile=true, and based on the source "unformatted" sheet, create a "formatted" sheet and make formatting edits based on the following requirements:
 1. Change the background color of top-header cells to skyblue (#87CEEB)
 2. Make sure all cell values are horizontally centered in their cells
 

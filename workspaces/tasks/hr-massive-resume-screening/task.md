@@ -4,7 +4,7 @@ that are good fits for this position. LLM knowledge is not required but helpful.
 Experience with OpenHands is a must. There's no other requirement on degree or
 years of experience.
 
-You can find all resumes on owncloud (https://ogma.lti.cs.cmu.edu/). Navigate to
+You can find all resumes on owncloud (http://the-agent-company.com:8092/). Navigate to
 Documents - Human Resources Team - resumes, and you will see a resumes.zip file.
 
 Finally, goto RocketChat (http://the-agent-company.com:3000/) and tell

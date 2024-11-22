@@ -1,4 +1,4 @@
-Download resumes.zip from owncloud on https://ogma.lti.cs.cmu.edu/ under Documents > Human Resources Team > resumes folder and categorize them locally based on the candidates' YOE. You should place them into one of the following folders under /workspace directory:
+Download resumes.zip from owncloud on http://the-agent-company.com:8092/ under Documents > Human Resources Team > resumes folder and categorize them locally based on the candidates' YOE. You should place them into one of the following folders under /workspace directory:
 
 - early-career
 - mid-level

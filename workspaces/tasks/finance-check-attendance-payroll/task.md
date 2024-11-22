@@ -1,4 +1,4 @@
-Navigate to owncloud at https://ogma.lti.cs.cmu.edu/apps/dashboard.
+Navigate to owncloud at http://the-agent-company.com:8092.
 
 * Use the provided "april-attendance-data.csv" spreadsheet in owncloud's "Documents/Human Resources Team/Attendance" folder, and the pay rates information in "salary-rates.pdf" file in the same folder to calculate the total earnings for each employee based on the number of hours that they have worked in total. 
 

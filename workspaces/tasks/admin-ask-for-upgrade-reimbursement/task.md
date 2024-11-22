@@ -1,2 +1,2 @@
-Find the expenses record in Documents/Financials/expenses on owncloud('https://ogma.lti.cs.cmu.edu/apps/files/files') to Chen Xinyi (on http://the-agent-company.com:3000/) to request for reimbursement. 
+Find the expenses record in Documents/Financials/expenses on owncloud('http://the-agent-company.com:8092') to Chen Xinyi (on http://the-agent-company.com:3000/) to request for reimbursement. 
 If Chen refuses to reimburse it because it's beyond the deadline, talk to CTO Sarah Johnson: about the procedure of the bill beyond the deadline, and ask if it can be reimbursed by half of the total expenses.
