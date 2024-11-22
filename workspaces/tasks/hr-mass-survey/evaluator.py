@@ -4,7 +4,7 @@ from io import BytesIO
 import pandas as pd
 from collections import defaultdict
 
-from common import create_rocketchat_client, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, evaluate_with_llm, evaluate_chat_history_with_llm, grader
+from common import create_rocketchat_client, check_file_in_owncloud_directory, get_binary_file_content_owncloud, evaluate_chat_history_with_llm, grader
 from scoring import Result, Checkpoint
 
 rocket = create_rocketchat_client()
@@ -19,10 +19,10 @@ employees_involved = [
 def grade_checkpoint1():
     file_name = "YearEnd_Vacation_Survey.xlsx"
     dir_name = "Documents/Human%20Resources%20Team"
-    if not check_file_in_nextcloud_directory(file_name, dir_name):
+    if not check_file_in_owncloud_directory(file_name, dir_name):
         return 0
 
-    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    content = get_binary_file_content_owncloud(file_name, dir_name)
     if not content:
         logging.warning("Failed to download content")
         return 0

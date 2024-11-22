@@ -5,7 +5,7 @@ import re
 import numpy as np
 from io import BytesIO
 
-from common import check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
+from common import check_file_in_owncloud_directory, get_binary_file_content_owncloud, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 from config import NEXTCLOUD_URL
 
@@ -20,10 +20,10 @@ def grade_checkpoint1(trajectory):
 def grade_checkpoint2():
     file_name = "flagged_payments.xlsx"
     dir_name = "Documents/Financials"
-    if not check_file_in_nextcloud_directory(file_name, dir_name):
+    if not check_file_in_owncloud_directory(file_name, dir_name):
         return 0
 
-    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    content = get_binary_file_content_owncloud(file_name, dir_name)
     if not content:
         logging.warning("Failed to download content")
         return 0
@@ -57,7 +57,7 @@ def grade_checkpoint3():
     file_name = "flagged_payments.xlsx"
     dir_name = "Documents/Financials"
     try:
-        content = get_binary_file_content_nextcloud(file_name, dir_name)
+        content = get_binary_file_content_owncloud(file_name, dir_name)
         flagged_df = pd.read_excel(BytesIO(content))
     except Exception as e:
         logging.warning(f"Failed to read flagged_payments.xlsx: {e}")

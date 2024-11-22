@@ -17,7 +17,7 @@ INIT_FILE_PATH = '/utils/respondent_counts.xlsx'
 
 
 def save_excel():
-    binary_content = get_binary_file_content_nextcloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
+    binary_content = get_binary_file_content_owncloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
     try:
         open(FILE_PATH, 'wb').write(binary_content)
     except:
