@@ -76,11 +76,10 @@ def grade_checkpoint4():
 @grader
 def grade_checkpoint5():
     # Verify if Mark Johnson was contacted with the correct file path and signatories count
-    chat_history = get_rocketchat_personal_chat_history(rocket, "Mark Johnson")
-    for msg in chat_history:
-        if REFERENCE_DIRECTORY in msg and str(REFERENCE_SIGNATORIES_COUNT) in msg:
-            return True
-    return False
+    predicate = f'The path file mentioned was {REFERENCE_DIRECTORY} and the number of signatories was {REFERENCE_SIGNATORIES_COUNT} '
+    chat_history = evaluate_chat_history_with_llm(rocket, "Mark Johnson", predicate)
+    
+    return chat_history
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
