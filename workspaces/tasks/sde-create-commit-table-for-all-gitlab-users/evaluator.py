@@ -1,10 +1,8 @@
 import logging
-import numpy as np
 import pandas as pd
 
 from common import grader
 from scoring import Result, Checkpoint
-from create_reference_solution import generate_commit_report
 
 CSV_FILE_PATH = "/workspace/commit_report.csv"
 REFERENCE_SOLUTION = '/utils/reference_commit_report.csv'
