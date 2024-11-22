@@ -34,7 +34,7 @@ def grade_checkpoint1():
     return True
 
 @grader
-def grade_checkpoint2(project_id, all_issues):
+def grade_checkpoint2():
     base_name = 'AgentCompany_ML_Quiz_Attempt'
     files_graded = {
         'AgentCompany_ML_Quiz_Attempt1_1':False,
@@ -61,7 +61,7 @@ def grade_checkpoint2(project_id, all_issues):
     return score
 
 @grader
-def grade_checkpoint3(next_cycle_issues):
+def grade_checkpoint3():
     for file in os.listdir('/workspace'):
         #Check if wrong file or multiple files are selected for submission
         if 'submit' in file and file != 'AgentCompany_ML_Quiz_Attempt2_15-submit.pdf':
