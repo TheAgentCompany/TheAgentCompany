@@ -14,6 +14,12 @@ NEXTCLOUD_URL = os.environ.get("NEXTCLOUD_URL", "https://ogma.lti.cs.cmu.edu")
 NEXTCLOUD_USERNAME = 'admin'
 NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
 
+# OwnCloud Config
+OWNCLOUD_PORT = os.getenv('OWNCLOUD_PORT') or '8092'
+OWNCLOUD_URL = f"http://{SERVER_HOSTNAME}:{OWNCLOUD_PORT}"
+OWNCLOUD_USERNAME = "theagentcompany"
+OWNCLOUD_PASSWORD = "theagentcompany"
+
 # Rocketchat Config
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
