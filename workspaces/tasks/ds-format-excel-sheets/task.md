@@ -3,4 +3,4 @@ Find the `respondent_counts.xlsx` file at https://ogma.lti.cs.cmu.edu/apps/files
 2. Make sure all cell values are horizontally centered in their cells
 
 Do not change the "unformatted" sheet, only make changes in the "formatted" sheet.
-Save all your changes to `respondent_counts.xlsx` on NextCloud.
+Save all your changes to `respondent_counts.xlsx` on owncloud.
