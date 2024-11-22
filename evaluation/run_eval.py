@@ -87,43 +87,6 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     assert obs.exit_code == 0
 
 
-def get_nextcloud_password(hostname: str):
-    """
-    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
-
-    TODO: this is a temporary solution. Once #169 is solved,
-    we should be able to use a hard-coded password to avoid
-    this extra API call.
-
-    Args:
-        hostname (str): The hostname of the server
-   
-    Returns:
-        str: The NEXTCLOUD_PASSWORD value
-  
-    Raises:
-        requests.RequestException: If API call fails
-        KeyError: If NEXTCLOUD_PASSWORD is not in response
-        json.JSONDecodeError: If response is not valid JSON
-    """
-    url = f"http://{hostname}:2999/api/nextcloud-config"
-
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an exception for bad status codes
- 
-        data = response.json()
-        logger.info(f"NEXTCLOUD_PASSWORD: {data['NEXTCLOUD_PASSWORD']}")
-        return data["NEXTCLOUD_PASSWORD"]
- 
-    except requests.RequestException as e:
-        logger.error(f"Error making API request: {e}")
-        raise
-    except (KeyError, json.JSONDecodeError) as e:
-        logger.error(f"Error processing response: {e}")
-        raise
-
-
 def codeact_user_response(state: State) -> str:
     msg = (
         'Please continue working on the task on whatever approach you think is suitable.\n'
@@ -164,9 +127,8 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
     return state
 
 
-def run_evaluator(runtime: Runtime, llm_config: LLMConfig, nextcloud_password: str, trajectory_path: str, result_path: str):
+def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str, result_path: str):
     command = (
-        f"NEXTCLOUD_ADMIN_PASSWORD={nextcloud_password} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
@@ -222,18 +184,14 @@ if __name__ == '__main__':
     dependencies = load_dependencies(runtime)
     logger.info(f"Service dependencies: {dependencies}")
 
-    # TODO: #169 remove this once we are able to use a hard-coded password
-    nextcloud_password = get_nextcloud_password(args.server_hostname)
-
     try:
-        pre_login(runtime, dependencies, nextcloud_password)
+        pre_login(runtime, dependencies)
     except Exception as e:
         logger.error(f"Failed to pre-login: {e}")
 
         # before giving up, let's try to init and login again
         init_task_env(runtime, args.server_hostname, llm_config)
-        nextcloud_password = get_nextcloud_password(args.server_hostname)
-        pre_login(runtime, dependencies, nextcloud_password)
+        pre_login(runtime, dependencies)
 
     state = run_solver(runtime, args.task_image_name, config)
 
@@ -241,4 +199,4 @@ if __name__ == '__main__':
     trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
-    run_evaluator(runtime, llm_config, nextcloud_password, trajectory_path, result_path)
+    run_evaluator(runtime, llm_config, trajectory_path, result_path)

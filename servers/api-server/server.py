@@ -51,19 +51,6 @@ def execute_command(command):
 def async_execute_command(command):
     threading.Thread(target=execute_command, args=(command,)).start()
 
-@app.route('/api/nextcloud-config', methods=['GET'])
-def get_nextcloud_config():
-    output = execute_command('docker exec nextcloud-aio-mastercontainer cat /mnt/docker-aio-config/data/configuration.json')
-    try:
-        config = json.loads(output)
-        password = config.get('secrets', {}).get('NEXTCLOUD_PASSWORD')
-        if password:
-            return jsonify({"NEXTCLOUD_PASSWORD": password})
-        else:
-            return jsonify({"error": "NEXTCLOUD_PASSWORD not found"}), 404
-    except json.JSONDecodeError:
-        return jsonify({"error": "Failed to parse JSON output"}), 500
-
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
     async_execute_command('make reset-rocketchat')
@@ -83,21 +70,10 @@ def reset_gitlab():
     execute_command('make reset-gitlab')
     return jsonify({"message": "Reset GitLab command initiated"}), 202
 
-@app.route('/api/reset-nextcloud', methods=['POST'])
-def reset_nextcloud():
-    async_execute_command('make reset-nextcloud')
-    return jsonify({"message": "Reset Nextcloud command initiated"}), 202
-
 @app.route('/api/healthcheck/gitlab', methods=['GET'])
 def healthcheck_gitlab():
     # TODO (yufansong): this check cannot cover all case
     code, msg = check_url("http://localhost:8929")
-    return jsonify({"message":msg}), code
-
-@app.route('/api/healthcheck/nextcloud', methods=['GET'])
-def healthcheck_nextcloud():
-    # TODO (yufansong): either fix SSL issue, or pass this address from outside
-    code, msg = check_url(f"https://{HOSTNAME}")
     return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
