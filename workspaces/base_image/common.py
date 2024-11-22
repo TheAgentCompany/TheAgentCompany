@@ -453,12 +453,17 @@ def check_file_in_owncloud_directory(file_name, dir_name):
         'Depth': '1',
     }
 
-    response = requests.request(
-        method="PROPFIND",
+    try:
+        response = requests.request(
+            method="PROPFIND",
         url=server_url,
         headers=headers,
         auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD)
-    )
+        )
+    except requests.RequestException as e:
+        logging.warning(f"Failed to check file in owncloud directory: {e}")
+        return False
+
     if response.status_code == 207:
         root = ET.fromstring(response.text)
         for response_element in root.findall(".//{DAV:}response"):
@@ -475,10 +480,14 @@ def check_file_in_owncloud_directory(file_name, dir_name):
 def get_binary_file_content_owncloud(file_name, dir_name):
     server_url = f"{OWNCLOUD_URL}/remote.php/webdav/{dir_name}/{file_name}"
 
-    response = requests.get(
-        server_url, 
+    try:
+        response = requests.get(
+            server_url, 
         auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD)
-    )
+        )
+    except requests.RequestException as e:
+        logging.warning(f"Failed to get binary file content from owncloud: {e}")
+        return None
 
     if response.status_code == 200:
         return response.content
