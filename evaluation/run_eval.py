@@ -162,8 +162,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--server-hostname',
         type=str,
-        default='localhost',
-        help='Server hostname, e.g. localhost'
+        default='host.docker.internal',
+        help='Server hostname, e.g. host.docker.internal to access the host machine from the container, '
+        'assuming the task docker container is run with --add-host=host.docker.internal:host-gateway flag'
     )
     args, _ = parser.parse_known_args()
 
