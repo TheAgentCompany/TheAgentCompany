@@ -147,10 +147,10 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig, use_gitlab = False) -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str]) -> State:
     instruction = "Complete the task in /instruction/task.md"
 
-    if use_gitlab:
+    if 'gitlab' in dependencies:
         instruction += "\n\nGitlab username is 'root' and password is 'theagentcompany'"
 
     # TODO: OpenHands should optionally, save browser screenshots to a place
@@ -238,7 +238,7 @@ if __name__ == '__main__':
         nextcloud_password = get_nextcloud_password(args.server_hostname)
         pre_login(runtime, dependencies, nextcloud_password)
 
-    state = run_solver(runtime, args.task_image_name, config, use_gitlab='gitlab' in dependencies)
+    state = run_solver(runtime, args.task_image_name, config, dependencies)
 
     # this path is the absolute path in the runtime container
     trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
