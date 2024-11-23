@@ -2,7 +2,7 @@
 
 ## Checkpoint 1 (1 pt)
 
-Confirmed the agent visited the file link on NextCloud
+Confirmed the agent visited the file link on ownCloud
 
 ## Checkpoint 2 (1 pt)
 
