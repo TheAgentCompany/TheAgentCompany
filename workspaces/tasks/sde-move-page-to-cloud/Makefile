@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-move-page-to-nextcloud-image
-CONTAINER_NAME=sde-move-page-to-nextcloud
+IMAGE_NAME=sde-move-page-to-cloud-image
+CONTAINER_NAME=sde-move-page-to-cloud
 
 .PHONY: build run stop
 

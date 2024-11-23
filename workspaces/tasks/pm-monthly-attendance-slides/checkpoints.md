@@ -1,7 +1,7 @@
 # Checkpoints
 
 ## Checkpoint 1 (1 point)
-Check if the agent accesses the attendance file on nextcloud
+Check if the agent accesses the attendance file on owncloud
 
 ## Checkpoint 2 (1 point)
 Check if the slide '/workspace/April Attendance.pptx' exists

@@ -1,5 +1,5 @@
 # This file defines all dependencies this task relies on.
-# Available options are: rocketchat, gitlab, plane, and nextcloud
+# Available options are: rocketchat, gitlab, plane, and owncloud
 # (all in lower cases).
 # For example, example task involves RocketChat and GitLab,
 # so we need to declare RocketChat and GitLab as dependencies.
