@@ -1,4 +1,4 @@
-On our office cloud at https://ogma.lti.cs.cmu.edu/, find the July-Sep 2024
+On our office cloud at http://the-agent-company.com:8092/, find the July-Sep 2024
 financial report for our company, and create a SQLite database with two tables that
 appropriately populates the data in the report:
 

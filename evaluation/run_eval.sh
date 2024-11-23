@@ -18,8 +18,8 @@ LLM_CONFIG="claude"
 # OUTPUTS_PATH is the path to save trajectories and evaluation results
 OUTPUTS_PATH="outputs"
 # SERVER_HOSTNAME is the hostname of the server that hosts all the web services,
-# including RocketChat, NextCloud, GitLab, and Plane.
-SERVER_HOSTNAME="ogma.lti.cs.cmu.edu"
+# including RocketChat, ownCloud, GitLab, and Plane.
+SERVER_HOSTNAME="host.docker.internal"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do

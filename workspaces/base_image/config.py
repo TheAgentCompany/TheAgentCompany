@@ -9,10 +9,11 @@ LITELLM_API_KEY = os.environ.get("LITELLM_API_KEY")
 LITELLM_BASE_URL = os.environ.get("LITELLM_BASE_URL", "https://api.openai.com/v1")
 LITELLM_MODEL = os.environ.get("LITELLM_MODEL", "gpt-4o")
 
-# Nextcloud Config
-NEXTCLOUD_URL = os.environ.get("NEXTCLOUD_URL", "https://ogma.lti.cs.cmu.edu")
-NEXTCLOUD_USERNAME = 'admin'
-NEXTCLOUD_PASSWORD = os.environ.get('NEXTCLOUD_ADMIN_PASSWORD')
+# OwnCloud Config
+OWNCLOUD_PORT = os.getenv('OWNCLOUD_PORT') or '8092'
+OWNCLOUD_URL = f"http://{SERVER_HOSTNAME}:{OWNCLOUD_PORT}"
+OWNCLOUD_USERNAME = "theagentcompany"
+OWNCLOUD_PASSWORD = "theagentcompany"
 
 # Rocketchat Config
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'

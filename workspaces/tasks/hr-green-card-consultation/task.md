@@ -6,4 +6,4 @@ her the current date of filing for her category based on the information provide
 her on RocketChat.
 
 RocketChat link: http://the-agent-company.com:3000
-NextCloud link: https://ogma.lti.cs.cmu.edu/
+owncloud link: http://the-agent-company.com:8092/

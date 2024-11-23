@@ -1,6 +1,6 @@
 You are an admin looking for an office for our company's new branch in China. Mandy
 helped with some initial search, but she just left our company. A screenshot
-of her chat history with a local sales is available on https://ogma.lti.cs.cmu.edu/.
+of her chat history with a local sales is available on http://the-agent-company.com:8092/.
 You can find an image named "office_sales_chat_history.jpg" under Documents/Admin directory.
 
 Your task is to read the chat history and compute how much money (in their local

@@ -1,4 +1,4 @@
-Navigate to the quick start guide: https://ogma.lti.cs.cmu.edu/s/xixPqB2WpEHR5ei
+Navigate to owncloud: http://the-agent-company.com:8092 and find Quick_start_RisingWave.pdf.
 
 Install and start Rising Wave locally by following the command in the wiki page above. Assume psql is already installed.
 Install risingwave under the /workspace directory. You may have to use /workspace/risingwave command to start the 

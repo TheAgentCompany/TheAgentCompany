@@ -5,5 +5,5 @@ figure out the requirements for this position, and judge if this candidate could
 proceed with next steps. If Li Ming is not available, ask Chen Xinyi. Finally, tell Li Ming about the result
 with supporting evidence.
 
-The candidate's resume is available on https://ogma.lti.cs.cmu.edu/, under
+The candidate's resume is available on http://the-agent-company.com:8092/, under
 Documents/Human Resources Team/resumes folder.

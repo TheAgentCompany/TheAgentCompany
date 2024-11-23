@@ -5,7 +5,7 @@ either checkpoint 1 or checkpoint 2 passes.
 
 ## Checkpoint 1 (1pt)
 
-Navigated to the file on NextCloud.
+Navigated to the file on owncloud.
 
 ## Checkpoint 2 (1pts)
 

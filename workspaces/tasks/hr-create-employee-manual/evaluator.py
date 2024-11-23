@@ -8,9 +8,8 @@ from odf.element import Node
 import json
 from typing import List
 
-from common import llm_complete, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
+from common import llm_complete, check_file_in_owncloud_directory, get_binary_file_content_owncloud, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from config import NEXTCLOUD_URL
 
 
 @grader
@@ -27,12 +26,12 @@ def grade_checkpoint2():
 
     score = 0
 
-    if check_file_in_nextcloud_directory(file_name, dir_name):
+    if check_file_in_owncloud_directory(file_name, dir_name):
         score += 1
     else:
         return 0
 
-    binary_content = get_binary_file_content_nextcloud(file_name, dir_name)
+    binary_content = get_binary_file_content_owncloud(file_name, dir_name)
 
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
@@ -57,7 +56,7 @@ def grade_checkpoint3():
 
     score = 0
 
-    binary_content = get_binary_file_content_nextcloud(file_name, dir_name)
+    binary_content = get_binary_file_content_owncloud(file_name, dir_name)
 
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
