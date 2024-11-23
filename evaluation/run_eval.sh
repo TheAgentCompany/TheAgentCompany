@@ -19,7 +19,7 @@ LLM_CONFIG="claude"
 OUTPUTS_PATH="outputs"
 # SERVER_HOSTNAME is the hostname of the server that hosts all the web services,
 # including RocketChat, ownCloud, GitLab, and Plane.
-SERVER_HOSTNAME="host.docker.internal"
+SERVER_HOSTNAME="localhost"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do

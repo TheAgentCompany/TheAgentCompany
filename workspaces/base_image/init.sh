@@ -5,7 +5,7 @@ set -e
 
 # Use synthetic service hostname, the-agent-company.com in tasks and point it
 # to the real service host
-SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-host.docker.internal} | grep PING | awk -F'[()]' '{print $2}')
+SERVICE_IP=$(ping -c 1 ${SERVER_HOSTNAME:-localhost} | grep PING | awk -F'[()]' '{print $2}')
 echo "$SERVICE_IP the-agent-company.com" >> /etc/hosts
 
 # Reset services if declared as a dependency

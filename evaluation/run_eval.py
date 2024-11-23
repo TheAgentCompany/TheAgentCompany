@@ -36,7 +36,8 @@ def get_config(
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
-            use_host_network=False,
+            # using host network to access the host machine from the container
+            use_host_network=True,
             # large enough timeout, since some testcases take very long to run
             timeout=300,
             api_key=os.environ.get('ALLHANDS_API_KEY', None),
@@ -162,9 +163,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--server-hostname',
         type=str,
-        default='host.docker.internal',
-        help='Server hostname, e.g. host.docker.internal to access the host machine from the container, '
-        'assuming the task docker container is run with --add-host=host.docker.internal:host-gateway flag'
+        default='localhost',
+        help='Server hostname, e.g. localhost to access the host machine from the container, '
+        'assuming the task docker container is run with `--network host` flag'
     )
     args, _ = parser.parse_known_args()
 
