@@ -71,7 +71,14 @@ def grade_checkpoint4():
     if not check_file_exists(file_path):
         return False
 
-    df = pd.read_csv(file_path)
+    # Try reading the CSV with both quote characters
+    try:
+        df = pd.read_csv(file_path, delimiter=',', quotechar='"')
+    except pd.errors.ParserError:
+        try:
+            df = pd.read_csv(file_path, delimiter=',', quotechar="'")
+        except pd.errors.ParserError:
+            return False
     ref_df = pd.read_csv(REFERENCE_CSV)
 
     if set(df.columns) != set(ref_df.columns):
