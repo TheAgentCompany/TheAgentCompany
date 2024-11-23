@@ -197,8 +197,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--server-hostname',
         type=str,
-        default='ogma.lti.cs.cmu.edu',
-        help='Server hostname, e.g. ogma.lti.cs.cmu.edu'
+        default='localhost',
+        help='Server hostname, e.g. localhost'
     )
     args, _ = parser.parse_known_args()
 
