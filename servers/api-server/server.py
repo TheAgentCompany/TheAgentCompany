@@ -8,7 +8,7 @@ import requests
 
 app = Flask(__name__)
 
-HOSTNAME= os.getenv('HOSTNAME', "ogma.lti.cs.cmu.edu")
+HOSTNAME= os.getenv('HOSTNAME', "localhost")
 
 # TODO (yufansong): using git to find root is hacky and wrong
 def get_git_root():
@@ -51,6 +51,13 @@ def execute_command(command):
 def async_execute_command(command):
     threading.Thread(target=execute_command, args=(command,)).start()
 
+@app.route('/api/reset-owncloud', methods=['POST'])
+def reset_owncloud():
+    # owncloud reset is essentially a restart
+    # since it takes a while to stop, we need to make sure this is synchronous
+    execute_command('make reset-owncloud')
+    return jsonify({"message": "Reset ownCloud command initiated"}), 202
+
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
     async_execute_command('make reset-rocketchat')
@@ -69,6 +76,11 @@ def reset_gitlab():
     # gitlab service takes a while to fully function after the container starts
     execute_command('make reset-gitlab')
     return jsonify({"message": "Reset GitLab command initiated"}), 202
+
+@app.route('/api/healthcheck/owncloud', methods=['GET'])
+def healthcheck_owncloud():
+    code, msg = check_url("http://localhost:8092")
+    return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/gitlab', methods=['GET'])
 def healthcheck_gitlab():
