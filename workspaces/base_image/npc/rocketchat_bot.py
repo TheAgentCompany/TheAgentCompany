@@ -101,62 +101,9 @@ class RocketChatBot(object):
 
         message = ""
         while 1:
-            # Add error handler None 
-            # for channel in self.api.channels_list_joined().json().get('channels', []):
-            #     message = self.process_channel(channel.get('_id'))
-            #     if message is not None:
-            #         return message
-
-            # for group in self.api.groups_list().json().get('groups', []):
-            #     message = self.process_group(group.get('_id'))
-            #     if message is not None:
-            #         return message
-
             for im in self.api.im_list().json().get('ims', []):
                 message = self.process_im(im.get('_id'))
                 if message is not None:
                     return message
             print(self.botname, ": No message received, waiting...")
             sleep(1)
-
-"""
-message format
-{
-  "_id": "rZnsWiF9YywGi4itM",
-  "rid": "qgyxXGaG3uzLq7gDtrocket.cat",
-  "msg": "hi",
-  "ts": "2024-09-07T09:07:13.769Z",
-  "u": {
-    "_id": "qgyxXGaG3uzLq7gDt",
-    "username": "theagentcompany",
-    "name": "theagentcompany"
-  },
-  "_updatedAt": "2024-09-07T09:07:13.817Z",
-  "urls": [],
-  "mentions": [],
-  "channels": [],
-  "md": [
-    {
-      "type": "PARAGRAPH",
-      "value": [
-        {
-          "type": "PLAIN_TEXT",
-          "value": "hi"
-        }
-      ]
-    }
-  ]
-}
-
-"""
-
-"""
-# Useage
-
-import os
-botname = os.getenv('BOTNAME') or "rocket.cat"
-botpassword = os.getenv('BOTPASSWORD') or "theagentcompany"
-server_url = os.getenv('BOT_URL') or 'http://localhost:3000'
-bot = RocketChatBot(botname, botpassword, server_url)
-bot.run()
-"""
