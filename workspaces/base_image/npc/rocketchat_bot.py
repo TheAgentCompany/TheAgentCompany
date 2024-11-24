@@ -102,15 +102,15 @@ class RocketChatBot(object):
         message = ""
         while 1:
             # Add error handler None 
-            for channel in self.api.channels_list_joined().json().get('channels', []):
-                message = self.process_channel(channel.get('_id'))
-                if message is not None:
-                    return message
+            # for channel in self.api.channels_list_joined().json().get('channels', []):
+            #     message = self.process_channel(channel.get('_id'))
+            #     if message is not None:
+            #         return message
 
-            for group in self.api.groups_list().json().get('groups', []):
-                message = self.process_group(group.get('_id'))
-                if message is not None:
-                    return message
+            # for group in self.api.groups_list().json().get('groups', []):
+            #     message = self.process_group(group.get('_id'))
+            #     if message is not None:
+            #         return message
 
             for im in self.api.im_list().json().get('ims', []):
                 message = self.process_im(im.get('_id'))
