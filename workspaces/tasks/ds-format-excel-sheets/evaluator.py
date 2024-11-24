@@ -17,11 +17,11 @@ INIT_FILE_PATH = '/utils/respondent_counts.xlsx'
 
 
 def save_excel():
-    binary_content = get_binary_file_content_nextcloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
+    binary_content = get_binary_file_content_owncloud("respondent_counts.xlsx", "Documents/Data%20Analysis")
     try:
         open(FILE_PATH, 'wb').write(binary_content)
     except:
-        logging.warning("Cannot Download file from NextCloud")
+        logging.warning("Cannot Download file from ownCloud")
         
 
 def load_spreadsheet(file_path, sheet_name, return_type="workbook"):
@@ -129,7 +129,7 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     
-    # Download updated file from NextCloud
+    # Download updated file from ownCLoud
     save_excel()
 
     # Checkpoint 1: The 'unformatted' sheet remains unchanged

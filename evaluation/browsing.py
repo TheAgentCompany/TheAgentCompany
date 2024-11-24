@@ -152,7 +152,7 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
     return action
 
 
-def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, save_screenshots=True, screenshots_dir='screenshots'):
+def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, screenshots_dir='screenshots'):
     """
     Logs in to all the websites that are needed for the evaluation.
     Once logged in, the sessions would be cached in the browser, so OpenHands
@@ -161,20 +161,21 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
     TODO: right now we assume all login actions succeed. We need to add some sanity
     checks to ensure that login is successful.
     """
-    nextcloud_login_actions = [
-        GotoAction("https://ogma.lti.cs.cmu.edu"),
+    owncloud_login_actions = [
+        GotoAction("http://the-agent-company.com:8092"),
         NoopAction(1000),
         InputAction(
-            "textbox 'Login with username or email', clickable",
-            "admin"
+            "textbox '', clickable, focused, required",
+            "theagentcompany"
         ),
         NoopAction(1000),
         InputAction(
-            "textbox 'Password', clickable",
-            nextcloud_password
+            "textbox '', clickable, required",
+            "theagentcompany"
         ),
         NoopAction(1000),
-        ClickAction("button 'Log in', clickable")
+        ClickAction("button '', clickable"),
+        NoopAction(1000)
     ]
 
     rocketchat_login_actions = [
@@ -190,11 +191,7 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
             "theagentcompany"
         ),
         NoopAction(1000),
-        ClickAction("button 'Login', clickable"),
-        NoopAction(1000),
-        # after login, a popup asking to change hostname appears. We need to click on cancel button.
-        # FIXME: this seems useless. Plus, it interferes with developers' activities.
-        # ClickAction("button 'Cancel', clickable")
+        ClickAction("button 'Login', clickable")
     ]
 
     gitlab_login_actions = [
@@ -233,7 +230,7 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
     ]
 
     all_login_actions = [
-        ('nextcloud', nextcloud_login_actions),
+        ('owncloud', owncloud_login_actions),
         ('rocketchat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
         ('plane', plane_login_actions),
