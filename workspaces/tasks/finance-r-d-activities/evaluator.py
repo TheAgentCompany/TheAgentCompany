@@ -5,7 +5,7 @@ from collections import defaultdict
 import numpy as np
 from io import BytesIO
 
-from common import create_rocketchat_client, evaluate_chat_history_with_llm, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, grader
+from common import create_rocketchat_client, evaluate_chat_history_with_llm, check_file_in_owncloud_directory, get_binary_file_content_owncloud, grader
 from scoring import Result, Checkpoint
 
 employees_involved = ["Sarah Johnson","Li Ming","Zhang Wei","Wang Fang",
@@ -30,10 +30,10 @@ def grade_checkpoint1():
 def grade_checkpoint2():
     file_name = "Research_Time_Tracking_Records.csv"
     dir_name = "Documents/Financials"
-    if not check_file_in_nextcloud_directory(file_name, dir_name):
+    if not check_file_in_owncloud_directory(file_name, dir_name):
         return 0
 
-    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    content = get_binary_file_content_owncloud(file_name, dir_name)
     if not content:
         logging.warning("Failed to download content")
         return 0
