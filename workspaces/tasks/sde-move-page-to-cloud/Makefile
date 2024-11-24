@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-delete-all-rocketchat-channels-image
-CONTAINER_NAME=sde-delete-all-rocketchat-channels
+IMAGE_NAME=sde-move-page-to-cloud-image
+CONTAINER_NAME=sde-move-page-to-cloud
 
 .PHONY: build run stop
 
@@ -12,3 +12,4 @@ run:
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
+

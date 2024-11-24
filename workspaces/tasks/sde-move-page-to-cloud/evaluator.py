@@ -15,18 +15,18 @@ def grade_checkpoint1(trajectory):
 # Check if shared page exists
 @grader
 def grade_checkpoint2():
-    return get_nextcloud_url_in_file('/workspace/sharelink.txt')
+    return get_owncloud_url_in_file('/workspace/sharelink.txt')
 
-# Check if content in nextcloud has the same keyword as the original one
+# Check if content in owncloud has the same keyword as the original one
 @grader
 def grade_checkpoint3():
     try:
-        url_content = get_nextcloud_url_in_file('/workspace/sharelink.txt')
+        url_content = get_owncloud_url_in_file('/workspace/sharelink.txt')
         if not url_content:
-            logging.warning("Could not get valid Nextcloud URL")
+            logging.warning("Could not get valid OwnCloud URL")
             return False
         
-        if not download_nextcloud_content(url_content, "/workspace/downloaded.md"):
+        if not download_owncloud_content(url_content, "/workspace/downloaded.md"):
             logging.warning("Failed to download content")
             return False
             
