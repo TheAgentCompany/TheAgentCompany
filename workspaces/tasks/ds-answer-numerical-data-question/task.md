@@ -1,5 +1,5 @@
 One of our clients doing beverage-related commercials has requested us to conduct this data analysis for them.
-Specifically, find the `beverage_reports.pdf` under `Documents/Data Analysis` in cloud drive, and answer the following questions:
+Specifically, find the `beverage_stats.xlsx` under `Documents/Data Analysis` in cloud drive, and answer the following questions:
 
 1. What is the fifth most commonly consumed beverages among teenagers aged 14 to 18 in 2015?
 2. what is the average percentage of children and teenagers drinking water in 2015?
