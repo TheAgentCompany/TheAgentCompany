@@ -1,4 +1,4 @@
-We have a collection of spreadsheet data files under the "Data Analysis" folder at https://ogma.lti.cs.cmu.edu/apps/files/files?dir=/Documents. However, their names are inconsistent, with some being confusing or non-interpretable. Your task is to review the files in the "Data Analysis" folder and identify those with the following naming issues:
+We have a collection of spreadsheet data files under the "Data Analysis" folder at http://the-agent-company.com:8092?dir=/Documents. However, their names are inconsistent, with some being confusing or non-interpretable. Your task is to review the files in the "Data Analysis" folder and identify those with the following naming issues:
 
 1. Files without Meaningful Names: Files with names that lack context or interpretability (e.g., a random list of characters, numbers or symbols) are to be avoided. Examples: `"rxuts 31t3b.xlsx"`.
 

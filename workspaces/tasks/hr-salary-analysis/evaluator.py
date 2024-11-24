@@ -1,23 +1,18 @@
-import requests
-import os
 from io import BytesIO
 from odf.opendocument import load
 from odf.text import P
 
 from typing import List
-from requests.auth import HTTPBasicAuth
-import xml.etree.ElementTree as ET
 
 import pandas as pd
 
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from config import NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD
-from common import grader
+from common import grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud
 
 
 @grader
 def grade_checkpoint1(trajectory):
-    urls = [f"https://ogma.lti.cs.cmu.edu/apps/files/files/575?dir=/Documents/Human%20Resources%20Team"]
+    urls = [f"dir=/Documents/Human%20Resources%20Team"]
     return any(url in trajectory for url in urls)
 
 
@@ -36,7 +31,7 @@ def grade_checkpoint2():
     file_name = "Salary_Analysis_Report.odt"
     dir_name = "Documents/Human%20Resources%20Team"
     try: 
-        if file_exists_in_directory(file_name, dir_name):
+        if check_file_in_owncloud_directory(file_name, dir_name):
             return 1
         else:
             return 0
@@ -50,7 +45,7 @@ def grade_checkpoint3():
     dir_name = "Documents/Human%20Resources%20Team"
 
     try:
-        binary_content = get_binary_file_content(file_name, dir_name)
+        binary_content = get_binary_file_content_owncloud(file_name, dir_name)
 
         if binary_content:
             text_content = extract_text_from_odt(binary_content)
@@ -71,55 +66,7 @@ def grade_checkpoint3():
         print("Failed to retrieve file content.")
         print(f"Error: {e}")
         return 0
-    
 
-
-def file_exists_in_directory(file_name, dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
-    headers = {
-        'OCS-APIRequest': 'true',
-        'Content-Type': 'application/xml',
-        'Depth': '1',  # Depth of 1 to list the immediate contents of the directory
-    }
-
-    # Send PROPFIND request
-    response = requests.request(
-        method="PROPFIND",
-        url=server_url,
-        headers=headers,
-        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
-    )
-
-    if response.status_code == 207:
-        root = ET.fromstring(response.text)
-        for response in root.findall(".//{DAV:}response"):
-            href = response.find("{DAV:}href").text
-            if file_name in href:
-                print(f"File '{file_name}' found.")
-                return True
-
-        # If loop completes and file is not found
-        print(f"File '{file_name}' not found.")
-        return False
-    else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
-        return None
-
-
-def get_binary_file_content(file_name, dir_name):
-    server_url = f"https://ogma.lti.cs.cmu.edu/remote.php/dav/files/admin/{dir_name}"
-    file_url = f"{server_url}/{file_name}"
-    print(f"File URL: {file_url}")
-
-    response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
-
-    if response.status_code == 200:
-        return response.content
-    else:
-        print(f"Error: {response.status_code}")
-        print(response.text)
-        return None
 
 def extract_text_from_odt(binary_content):
     # Load the binary content into a BytesIO stream

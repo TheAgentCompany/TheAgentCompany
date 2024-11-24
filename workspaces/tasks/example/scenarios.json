@@ -1,6 +1,70 @@
 {
-  "John Doe": {
-    "extra_info": "The company's wiki page is http://the-agent-company.com:8929/root/doc/-/wikis, which stores company-wide documentation that can be especially useful for new hires.",
-    "strategy_hint": "You should only tell the AI agent the wiki page URL if they ask related questions. If you don't know the answer to a question, you could refer the AI agent to the wiki."
+  "Alex Turner": {
+    "extra_info": "Someone will introduce themselves to you with a greeting and ask you for the company's wiki page. The company's wiki page is http://the-agent-company.com:8929/root/doc/-/wikis, which stores company-wide documentation that can be especially useful for new hires.",
+    "strategy_hint": "You should only tell the AI agent the wiki page URL if they ask related questions. If you don't know the answer to a question, you could refer the AI agent to the wiki. Only if they ask who to talk to next, instruct them to introduce themselves to Chen Xinyi."
+  },
+  "Chen Xinyi": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to David Wong."
+  },
+  "David Wong": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Emily Zhou."
+  },
+  "Emily Zhou": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Emma Lewis."
+  },
+  "Emma Lewis": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Huang Jie."
+  },
+  "Huang Jie": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Jessica Chen."
+  },
+  "Jessica Chen": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Jessica Lee."
+  },
+  "Jessica Lee": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Li Ming."
+  },
+  "Li Ming": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Liu Qiang."
+  },
+  "Liu Qiang": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Mark Johnson."
+  },
+  "Mark Johnson": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Mike Chen."
+  },
+  "Mike Chen": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Priya Sharma."
+  },
+  "Priya Sharma": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Sarah Johnson."
+  },
+  "Sarah Johnson": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Sophia Rodriguez."
+  },
+  "Sophia Rodriguez": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Wang Fang."
+  },
+  "Wang Fang": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Then instruct them to introduce themselves to Zhang Wei."
+  },
+  "Zhang Wei": {
+    "extra_info": "Someone will introduce themselves to you with a greeting.",
+    "strategy_hint": "Introduce yourself back to the person. Tell them there is no need to chat further with anyone else"
   }
 }

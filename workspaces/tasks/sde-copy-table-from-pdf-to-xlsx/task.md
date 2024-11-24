@@ -1,3 +1,3 @@
-There is a PDF file OpenHands.pdf on NextCloud ("https://ogma.lti.cs.cmu.edu/apps/files/files/1864?dir=/Documents/Research").
-Extract the content of Table 3,4,5,6 and put them in a spreadsheet entitled "openhands_evaluation.xlsx" in the same directory on NextCloud. Each table should be a separate sheet in the spreadsheet.
-After you upload the xlsx file to NextCloud, create a share link to the file and write it in "/workspace/link.txt" in local storage. "link.txt" should only contain the link and nothing else.
+There is a PDF file OpenHands.pdf on owncloud (http://the-agent-company.com:8092) under directory Documents/Research.
+Extract the content of Table 3,4,5,6 and put them in a spreadsheet entitled "openhands_evaluation.xlsx" in the same directory on owncloud. Each table should be a separate sheet in the spreadsheet.
+After you upload the xlsx file to owncloud, create a share link to the file and write it in "/workspace/link.txt" in local storage. "link.txt" should only contain the link and nothing else.

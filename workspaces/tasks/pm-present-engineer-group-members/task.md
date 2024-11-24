@@ -1,0 +1,3 @@
+We are participating a career fair at Carnegie Mellon University to potentially hire more engineers. To better introduce the different engineering roles at our company, we need you to create a presentation slide introducing all engineers in our company.
+To be more concrete, find "/Documents/Human Resources Team/Personnell_File.odt" on owncloud(http://the-agent-company.com:8092), and create one slide for each employee. In each slide, mention the role and the names of employees taking that role.
+After you finish the presentation, save it as '/workspace/engineers.pptx' and inform Chen Xinyi at http://the-agent-company.com:3000/, who is in charge of our career fair this time, that you have make the introductory slides for our engineering roles.
