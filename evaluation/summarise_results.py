@@ -110,7 +110,7 @@ def main():
     ]
     
     # Sort by completion ratio in descending order
-    detailed_results.sort(key=lambda x: x[3], reverse=True)
+    detailed_results.sort(key=lambda x: (-x[3], x[0]))
     
     # Calculate perfect completion stats
     perfect_completions = sum(1 for _, _, _, _, is_perfect in detailed_results if is_perfect)
