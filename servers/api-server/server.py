@@ -98,5 +98,10 @@ def healthcheck_plane():
     code, msg = check_url("http://localhost:8091")
     return jsonify({"message":msg}), code
 
+@app.route('/api/healthcheck/redis', methods=['GET'])
+def healthcheck_redis():
+    code, msg = check_url("http://localhost:6379")
+    return jsonify({"message":msg}), code
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
