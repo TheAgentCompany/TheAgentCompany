@@ -129,6 +129,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
 
     if save_screenshots:
         screenshots_dir = os.path.join(screenshots_dir, task_name)
+        os.makedirs(screenshots_dir, exist_ok=True)
         for image_id, obs in enumerate(state.history):
             if isinstance(obs, BrowserOutputObservation):
                 image_data = base64.b64decode(obs.screenshot)
