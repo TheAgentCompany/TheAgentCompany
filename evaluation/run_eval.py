@@ -2,8 +2,7 @@ import asyncio
 import os
 from typing import List
 import yaml
-import requests
-import json
+import base64
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
@@ -16,7 +15,7 @@ from openhands.core.config import (
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, MessageAction
-from openhands.events.observation import CmdOutputObservation
+from openhands.events.observation import CmdOutputObservation, BrowserOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
 
@@ -111,13 +110,12 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str]) -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str], save_screenshots=True, screenshots_dir='screenshots') -> State:
     instruction = "Complete the task in /instruction/task.md"
 
     if 'gitlab' in dependencies:
         instruction += "\n\nGitlab username is 'root' and password is 'theagentcompany'"
 
-    # TODO: OpenHands should optionally, save browser screenshots to a place
     state: State | None = asyncio.run(
         run_controller(
             config=config,
@@ -128,6 +126,14 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
         )
     )
     logger.info(state)
+
+    if save_screenshots:
+        screenshots_dir = os.path.join(screenshots_dir, task_name)
+        for image_id, obs in enumerate(state.history):
+            if isinstance(obs, BrowserOutputObservation):
+                image_data = base64.b64decode(obs.screenshot)
+                with open(os.path.join(screenshots_dir, f'{image_id}.png'), 'wb') as file:
+                    file.write(image_data)
     return state
 
 
