@@ -1,5 +1,5 @@
 IMAGE_NAME=ds-fix-table-values-and-missing-answers-image
-CONTAINER_NAME=fix-table-values-and-missing-answers
+CONTAINER_NAME=ds-fix-table-values-and-missing-answers
 
 .PHONY: build run stop attach
 
