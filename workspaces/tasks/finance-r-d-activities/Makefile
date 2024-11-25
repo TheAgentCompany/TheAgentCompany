@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-delete-all-rocketchat-channels-image
-CONTAINER_NAME=sde-delete-all-rocketchat-channels
+IMAGE_NAME=finance-r-d-activities-image
+CONTAINER_NAME=finance-r-d-activities
 
 .PHONY: build run stop
 
