@@ -20,10 +20,10 @@ def grade_checkpoint1():
     
     ref_file_path = r"/workspace/ref_data.xlsx"
     
-    download_owncloud_content(
-        link="http://the-agent-company.com:8092/index.php/s/b61rG8gHESP84Na/download",
-        output_file_path=ref_file_path,
-    )
+    # download_owncloud_content(
+    #     link="http://the-agent-company.com:8092/index.php/s/b61rG8gHESP84Na/download",
+    #     output_file_path=ref_file_path,
+    # )
     
     ref_file = read_xlsx(ref_file_path)
     generated_file = read_xlsx(generated_file_path)
