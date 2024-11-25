@@ -6,7 +6,7 @@ completed.
 
 ## Checkpoint 1 (1pts)
 
-Check if the agent visits the "Customer.xlsx" file on nextcloud
+Check if the agent visits the "Customer.xlsx" file on owncloud
 
 ## Checkpoint 2 (2pt)
 

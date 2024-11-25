@@ -2,7 +2,7 @@
 
 ## Checkpoint 1 (1 point)
 
-Confirmed visited the reimbursement policy file on nextcloud
+Confirmed visited the reimbursement policy file on owncloud
 
 ## Checkpoint 2 (1 point)
 
