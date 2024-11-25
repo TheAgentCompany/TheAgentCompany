@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from typing import List
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_final
 import logging
 from common import grader
 
@@ -71,7 +71,7 @@ def grade_checkpoint4():
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_final)
     checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
     checkpoints.append(Checkpoint(1, grade_checkpoint2()))
     checkpoints.append(Checkpoint(1, grade_checkpoint3()))
