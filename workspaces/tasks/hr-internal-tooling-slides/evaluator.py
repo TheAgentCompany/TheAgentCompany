@@ -4,7 +4,7 @@ from io import BytesIO
 
 from pptx import Presentation
 
-from common import create_rocketchat_client, check_file_in_nextcloud_directory, get_binary_file_content_nextcloud, evaluate_with_llm, evaluate_chat_history_with_llm, grader
+from common import create_rocketchat_client, check_file_in_owncloud_directory, get_binary_file_content_owncloud, evaluate_with_llm, evaluate_chat_history_with_llm, grader
 from scoring import Result, Checkpoint
 from config import NEXTCLOUD_URL, ROCKETCHAT_URL, GITLAB_BASEURL, PLANE_BASEURL
 
@@ -68,10 +68,10 @@ def check_markdown_formatting(slides):
 def grade_checkpoint1():
     file_name = "Internal_Tooling_Training.pptx"
     dir_name = "Documents/Human%20Resources%20Team"
-    if not check_file_in_nextcloud_directory(file_name, dir_name):
+    if not check_file_in_owncloud_directory(file_name, dir_name):
         return 0
 
-    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    content = get_binary_file_content_owncloud(file_name, dir_name)
     if not content:
         logging.warning("Failed to download content")
         return 0
@@ -84,7 +84,7 @@ def grade_checkpoint1():
     
     slides = prs.slides
 
-    TAC_content = get_binary_file_content_nextcloud("TAC_overview.md", "Documents").decode("utf-8")
+    TAC_content = get_binary_file_content_owncloud("TAC_overview.md", "Documents").decode("utf-8")
 
     if len(slides) != 7:
         return 0
@@ -110,10 +110,10 @@ def grade_checkpoint1():
 def grade_checkpoint2():
     file_name = "Internal_Tooling_Training.pptx"
     dir_name = "Documents/Human%20Resources%20Team"
-    if not check_file_in_nextcloud_directory(file_name, dir_name):
+    if not check_file_in_owncloud_directory(file_name, dir_name):
         return 0
 
-    content = get_binary_file_content_nextcloud(file_name, dir_name)
+    content = get_binary_file_content_owncloud(file_name, dir_name)
     if not content:
         logging.warning("Failed to download content")
         return 0
