@@ -11,7 +11,7 @@ rocket = create_rocketchat_client()
 
 # Reference solution
 REFERENCE_CSV = "/utils/reference_net_income.csv"
-REFERENCE_OWNCLOUD_PATH = "/Documents/Data%20Analysis/Annual%20Reports/10Ks"
+REFERENCE_OWNCLOUD_PATH = "/Documents/Financials/Annual%20Reports/10Ks"
 REFERENCE_FILE_PATH = '/workspace/net_income_report.csv'
 REFERENCE_COMPANY = 'Meta Platforms, Inc.'
 

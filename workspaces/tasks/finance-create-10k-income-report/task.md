@@ -1,4 +1,4 @@
-Navigate to the folder /Documents/Data Analysis/Annual Reports/10Ks on OwnCloud (http://the-agent-company.com:8092)
+Navigate to the folder /Documents/Data Analysis/Annual Reports/10Ks on Owncloud (http://the-agent-company.com:8092)
 Here you wil find 10K annual reports for multiple tech companies. Extract the net income data for each company from their 10-K reports (in section/item 8) for the years 2021, 2022, and 2023, and compile it into a structured table. 
 The table should be in a csv format and should have the following column strucutre:
 - 'Company Name': The company name according to the name of registrant as specified in its charter document.

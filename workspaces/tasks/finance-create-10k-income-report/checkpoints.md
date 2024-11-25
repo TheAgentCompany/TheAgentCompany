@@ -4,7 +4,7 @@ There are 5 checkpoints in total.
 
 ## Checkpoint 1 (1 point)
 
-Navigated to correct folder on OwmCloud
+Navigated to correct folder on Owncloud
 
 ## Checkpoint 2 (1 point)
 
