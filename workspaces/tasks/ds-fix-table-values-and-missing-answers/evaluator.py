@@ -1,8 +1,10 @@
 from typing import List
 
 from scoring import Result, Checkpoint, bonus_for_completing_final
-from common import grader, download_nextcloud_content, get_binary_file_content_nextcloud
+from common import grader, download_owncloud_content
 import pandas as pd
+
+generated_file_path = r"/workspace/Other Corp Area Totals.xlsx"
 
 # devnote: @grader is required for each checkpoint function
 #         it would capture runtime errors, log them, and return False
@@ -12,28 +14,28 @@ import pandas as pd
 def grade_checkpoint1():
     # [2pts] Check if all missing values (previously 'x') are replaced with "0"
     
-    ref_file_path = "/workspace/ref_data.xlsx"
-    content = get_binary_file_content_nextcloud(
-        dir_name="Documents/Data%20Analysis",
-        file_name="Other%20Corp%20Area%20Totals.xlsx",
-    )
-    with open(ref_file_path, "wb") as f:
-        f.write(content)
+    ref_file_path = r"/workspace/ref_data.xlsx"
     
-    # download_nextcloud_content("https://ogma.lti.cs.cmu.edu/apps/files/files/1738?dir=Documents/Data%20Analysis/Other%20Crop%20Area%20Totals.xlsx", ref_file_path)
-    generated_file_path = "/workspace/Other Corp Area Totals.xlsx"
+    download_owncloud_content(
+        link="http://the-agent-company.com:8092/index.php/s/b61rG8gHESP84Na/download",
+        output_file_path=ref_file_path,
+    )
+     
+    generated_file_path = r"/workspace/Other Corp Area Totals.xlsx"
     
     ref_file = pd.read_excel(ref_file_path)
     generated_file = pd.read_excel(generated_file_path)
-    
-    # check all x (in ref_file) has been replaced with 0 (in generated_file)
-    return ref_file.replace("x", 0).equals(generated_file)  
+    for row in range(ref_file.shape[0]):
+        for col in range(ref_file.shape[1]):
+            if ref_file.iloc[row, col] == "x":
+                if generated_file.iloc[row, col] not in [0, "0"]:
+                    return False
+    return True
 
 @grader
 def grade_checkpoint2():
     # [2pts] Check if question 1 is correctly answered with "2809" or formula "=B5"
     # find the answer in B24
-    generated_file_path = "/workspace/Other Corp Area Totals.xlsx"
     generated_file = pd.read_excel(generated_file_path)
     answer = generated_file.iloc[22, 1]
     return answer == 2809 or answer == "=B5"
@@ -43,9 +45,8 @@ def grade_checkpoint3():
     # [2pts] Check if question 2 is correctly answered with "98.8%" or formula "=H18/B18"
     # find the answer in B92
     
-    generated_file_path = "/workspace/Other Crop Area Totals.xlsx"
     generated_file = pd.read_excel(generated_file_path)
-    answer = generated_file.loc[92, 1]
+    answer = generated_file.iloc[90, 1]
     # the answer could be in percentage or pure number, check both
     numerical_ref_answer = 0.988
     # change the percentage to number
@@ -69,6 +70,3 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(2, 2 * int(passed3)))
 
     return result
-
-
-
