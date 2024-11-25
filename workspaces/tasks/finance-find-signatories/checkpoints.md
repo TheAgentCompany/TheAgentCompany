@@ -10,7 +10,7 @@ Reach out to David Wong (director of Finance) to get the path to the company ann
 
 ## Checkpoint 2 (1pt)
 
-Confirm that the agent navigates to the correct directory on NextCloud.
+Confirm that the agent navigates to the correct directory on Owncloud.
 
 ## Checkpoint 3 (1pt)
 

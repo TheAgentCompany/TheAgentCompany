@@ -11,7 +11,7 @@ rocket = create_rocketchat_client()
 
 # Reference solution
 REFERENCE_DIRECTORY = "/workspace/signatories.csv"
-REFERENCE_OWNCLOUD_PATH = "/Documents/Data%20Analysis/Annual%20Reports"
+REFERENCE_OWNCLOUD_PATH = "/Documents/Financials/Annual%20Reports"
 REFERENCE_SIGNATORIES_COUNT = 27
 
 def check_file_exists(file_path):
