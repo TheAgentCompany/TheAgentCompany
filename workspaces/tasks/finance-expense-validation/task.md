@@ -19,7 +19,7 @@ Your job is to:
 1. Review each expense transaction in expenses.xlsx
 2. Compare the description against category rules in category_rules.xlsx
 3. Identify expenses where the current category doesn't match the rules
-4. Create a file called expenses_corrected.xlsx saved in the /workspace folder.
+4. Create a file called expenses_corrected.xlsx saved in the /workspace folder. This should be the same as expenses.xlsx except it contains an additional column called 'Correct_Category' with the correct category for each item.
 5. Using the corrected transactions create analysis report in workspace/expenses_analysis that is a csv with the following structure:
    - 'Category': The expense category
    - 'Total_Amount': Which is the total amount spent for that category
