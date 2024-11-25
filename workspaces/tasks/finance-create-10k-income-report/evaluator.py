@@ -11,7 +11,7 @@ rocket = create_rocketchat_client()
 
 # Reference solution
 REFERENCE_CSV = "/utils/reference_net_income.csv"
-REFERENCE_NEXTCLOUD_PATH = "/Documents/Data%20Analysis/Annual%20Reports/10Ks"
+REFERENCE_OWNCLOUD_PATH = "/Documents/Data%20Analysis/Annual%20Reports/10Ks"
 REFERENCE_FILE_PATH = '/workspace/net_income_report.csv'
 REFERENCE_COMPANY = 'Meta Platforms, Inc.'
 
@@ -24,7 +24,7 @@ def check_file_exists(file_path):
 @grader
 def grade_checkpoint1(trajectory):
     # Confirm if the agent navigated to the correct directory
-    return REFERENCE_NEXTCLOUD_PATH in trajectory
+    return REFERENCE_OWNCLOUD_PATH in trajectory
 
 @grader
 def grade_checkpoint2():
