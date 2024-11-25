@@ -6,7 +6,7 @@ from pptx import Presentation
 
 from common import create_rocketchat_client, check_file_in_owncloud_directory, get_binary_file_content_owncloud, evaluate_with_llm, evaluate_chat_history_with_llm, grader
 from scoring import Result, Checkpoint
-from config import NEXTCLOUD_URL, ROCKETCHAT_URL, GITLAB_BASEURL, PLANE_BASEURL
+from config import OWNCLOUD_URL, ROCKETCHAT_URL, GITLAB_BASEURL, PLANE_BASEURL
 
 # Initialize RocketChat client
 rocket = create_rocketchat_client()
@@ -95,7 +95,7 @@ def grade_checkpoint1():
         "RocketChat": check_rocketchat(slides[2], rocketchat_channels, ROCKETCHAT_URL),
         "Gitlab Usage": check_gitlab(slides[3], GITLAB_BASEURL),
         "Gitlab Repos": get_title(slides[4]) == "Gitlab Repos" and all(repo in get_content(slides[4]) for repo in gitlab_repos),
-        "Nextcloud Folders": check_nextcloud(slides[5], folder_structure, NEXTCLOUD_URL),
+        "Nextcloud Folders": check_nextcloud(slides[5], folder_structure, OWNCLOUD_URL),
         "Plane Overview": check_plane(slides[6], PLANE_BASEURL),
     }
 
