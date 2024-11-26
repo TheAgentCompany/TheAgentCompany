@@ -11,6 +11,7 @@ import litellm
 from rocketchat_API.rocketchat import RocketChat
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
+from difflib import SequenceMatcher
 
 from config import *
 
@@ -270,6 +271,75 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
         return False
 
+def compare_images_with_llm(image_path1: str = None, image_path2: str = None, query='', additional_prompt: str = ''):
+    """
+    Evaluates if a 2 images represnt the same information and look identical, judged by LLM
+    """
+    if not image_path1 or not image_path2:
+        logging.warning(f"Image paths must be provided")
+        return False
+
+
+    query += f' Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
+
+    try:
+        with open(image_path1, "rb") as f:
+            base64_image1 = base64.b64encode(f.read()).decode('utf-8')
+        with open(image_path2, "rb") as f:
+            base64_image2 = base64.b64encode(f.read()).decode('utf-8')
+    except Exception as e:
+        logging.error(f"Failed to read image: {e}")
+        return False
+
+    content = [
+        {
+            "type": "text",
+            "text": query
+        }
+    ]
+    content.extend([{
+        "type": "image_url",
+        "image_url": {
+            "url": f"data:image/jpeg;base64,{base64_image1}"
+        }
+    },
+    {
+        "type": "image_url",
+        "image_url": {
+            "url": f"data:image/jpeg;base64,{base64_image2}"
+        }
+    }])
+
+    try:
+        # Construct LLM query
+        llm_messages = [{
+            "role": "user",
+            "content": content
+        }]
+
+        # Call LLM for evaluation
+        llm_response = llm_complete(llm_messages)
+        logging.info("LLM evaluation completed", extra={"response": llm_response})
+
+        # Extract and process response
+        content = llm_response["choices"][0]["message"]["content"].lower().strip()
+
+        # Evaluate result
+        result = "yes" in content
+        if result:
+            logging.info(f'Image comparisons evaluated to "{result}"')
+        else:
+            logging.warning(f'Image comparisons evaluated to "{result}"')
+
+        return result
+
+    except KeyError as e:
+        logging.error("Invalid LLM response structure", exc_info=True)
+        return False
+
+    except Exception as e:
+        logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
+        return False
 
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
     """
@@ -302,6 +372,21 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
+
+def file_content_overlap(file_path1:str, file_path2:str, threshold:float):
+    try:
+        with open(file_path1,'r') as file:
+            content1 = file.read()
+        with open(file_path2,'r') as file:
+            content2 = file.read()
+    except FileNotFoundError:
+        logging.warning('File not found')
+    except Exception as e:
+        logging.error(f'Error when comparing file content: {e}')
+
+    overall_similarity = SequenceMatcher(None, content1, content2).ratio()
+
+    return overall_similarity >= threshold
 
 def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
