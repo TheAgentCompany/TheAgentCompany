@@ -12,11 +12,16 @@ PLANE_HEADERS = {
 }
 
 def login_to_plane():
-    if len(get_all_plane_projects()) == 0:
+    res = []
+    try:
+        res = get_all_plane_projects()
+        if len(res) == 0:
+            return 400, "failed to login"
+        else:
+            return 200, "login success"
+    except Exception as e:
+        print(f"{e}")
         return 400, "failed to login"
-    else:
-        return 200, "login success"
-    
 
 def get_all_plane_projects():
     """Get all projects in plane."""
@@ -26,7 +31,5 @@ def get_all_plane_projects():
         response.raise_for_status()
         return response.json().get('results', [])
     except Exception as e:
-        logging.warning(f"Get all projects failed: {e}")
+        print(f"Get all projects failed: {e}")
         return []
-
-print(login_to_plane())
