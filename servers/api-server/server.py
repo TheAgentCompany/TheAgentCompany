@@ -4,7 +4,7 @@ import os
 import json
 import threading
 import requests
-
+from plane_health_check import login_to_plane
 
 app = Flask(__name__)
 
@@ -95,8 +95,9 @@ def healthcheck_rocketchat():
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
-    code, msg = check_url("http://localhost:8091")
+    code, msg = login_to_plane()
     return jsonify({"message":msg}), code
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
