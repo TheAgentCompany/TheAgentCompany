@@ -4,11 +4,11 @@ import os
 import json
 import threading
 import requests
-
+from plane_health_check import login_to_plane
 
 app = Flask(__name__)
 
-HOSTNAME= os.getenv('HOSTNAME', "ogma.lti.cs.cmu.edu")
+HOSTNAME= os.getenv('HOSTNAME', "localhost")
 
 # TODO (yufansong): using git to find root is hacky and wrong
 def get_git_root():
@@ -51,18 +51,12 @@ def execute_command(command):
 def async_execute_command(command):
     threading.Thread(target=execute_command, args=(command,)).start()
 
-@app.route('/api/nextcloud-config', methods=['GET'])
-def get_nextcloud_config():
-    output = execute_command('docker exec nextcloud-aio-mastercontainer cat /mnt/docker-aio-config/data/configuration.json')
-    try:
-        config = json.loads(output)
-        password = config.get('secrets', {}).get('NEXTCLOUD_PASSWORD')
-        if password:
-            return jsonify({"NEXTCLOUD_PASSWORD": password})
-        else:
-            return jsonify({"error": "NEXTCLOUD_PASSWORD not found"}), 404
-    except json.JSONDecodeError:
-        return jsonify({"error": "Failed to parse JSON output"}), 500
+@app.route('/api/reset-owncloud', methods=['POST'])
+def reset_owncloud():
+    # owncloud reset is essentially a restart
+    # since it takes a while to stop, we need to make sure this is synchronous
+    execute_command('make reset-owncloud')
+    return jsonify({"message": "Reset ownCloud command initiated"}), 202
 
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
@@ -83,21 +77,15 @@ def reset_gitlab():
     execute_command('make reset-gitlab')
     return jsonify({"message": "Reset GitLab command initiated"}), 202
 
-@app.route('/api/reset-nextcloud', methods=['POST'])
-def reset_nextcloud():
-    async_execute_command('make reset-nextcloud')
-    return jsonify({"message": "Reset Nextcloud command initiated"}), 202
+@app.route('/api/healthcheck/owncloud', methods=['GET'])
+def healthcheck_owncloud():
+    code, msg = check_url("http://localhost:8092")
+    return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/gitlab', methods=['GET'])
 def healthcheck_gitlab():
     # TODO (yufansong): this check cannot cover all case
     code, msg = check_url("http://localhost:8929")
-    return jsonify({"message":msg}), code
-
-@app.route('/api/healthcheck/nextcloud', methods=['GET'])
-def healthcheck_nextcloud():
-    # TODO (yufansong): either fix SSL issue, or pass this address from outside
-    code, msg = check_url(f"https://{HOSTNAME}")
     return jsonify({"message":msg}), code
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
@@ -107,8 +95,9 @@ def healthcheck_rocketchat():
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
-    code, msg = check_url("http://localhost:8091")
+    code, msg = login_to_plane()
     return jsonify({"message":msg}), code
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
