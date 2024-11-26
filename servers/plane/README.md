@@ -1,7 +1,7 @@
 # How to run
 Execute download.sh first
 
-Before start, remember the default download version of `plane.env` need to be changed. You should change from `NGINX_PORT=90` into `NGINX_PORT=8091`. Then it will not conflict with nextcloud port.
+Before start, remember the default download version of `plane.env` need to be changed. You should change from `NGINX_PORT=90` into `NGINX_PORT=8091`.
  
 Run `./setup.sh`, then choose `2` start. Then you will get a new cluster
 See here for mored details `https://docs.plane.so/self-hosting/methods/docker-compose`

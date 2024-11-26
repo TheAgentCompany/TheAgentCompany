@@ -16,7 +16,7 @@ rocket = create_rocketchat_client()
 
 @grader
 def grade_checkpoint1(trajectory):
-    """Check if the 'april-attendance-data.xlsx' file on Nextcloud was accessed."""
+    """Check if the 'april-attendance-data.xlsx' file on owncloud was accessed."""
     required_url_part = "/Documents/Human%20Resources%20Team/Attendance"
     return required_url_part in trajectory
 

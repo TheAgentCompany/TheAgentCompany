@@ -1,54 +1,43 @@
 # Intro
 
 This directory contains code & configs needed to run all services,
-including GitLab, NextCloud, Plane, and RocketChat. All services
+including GitLab, ownCloud, Plane, and RocketChat. All services
 are launched and running on CMU ogma server, but if you'd like
 to launch them by yourself, please refer to [Development Guide](https://github.com/neulab/TheAgentCompany/blob/main/DEVELOPMENT.md).
 
-Below are the addresses, usernames, and passwords for each service:
+Below are the addresses, usernames, and passwords for each service. Note that you must
+add `<server-ip> the-agent-company.com` to your `/etc/hosts` file. For example, `128.2.205.27`
+is the IP address of ogma.lti.cs.cmu.edu.
 
 ## GitLab
-* service url: http://ogma.lti.cs.cmu.edu:8929/
+* service url: http://the-agent-company.com:8929
 * root email: `root@local`
 * root password: `theagentcompany`
 
-## NextCloud
-* service url: https://ogma.lti.cs.cmu.edu/login
-* username: admin
-* password: 
-    * current password `cf6a70e7fbef0dc2f6e8c48369b30ab8357b3c10063f5fbe`
-    * If out of date, try `make get-nextcloud-config` then check `secrets.NEXTCLOUD_PASSWORD`. This only works if you have admin access to the server where nextcloud is hosted.
-    * If you cannot find it, try the following command to get a correct one
-    `curl http://ogma.lti.cs.cmu.edu:2999/api/nextcloud-config`
+## ownCloud
+* service url: http://the-agent-company.com:8092
+* username: `theagentcompany`
+* password: `theagentcompany`
+
 ## Plane
-* http://ogma.lti.cs.cmu.edu:8091
-* email:`agent@company.com`
-* password:`theagentcompany`
+* service url: http://the-agent-company.com:8091
+* email: `agent@company.com`
+* password: `theagentcompany`
 * API_KEY:`plane_api_83f868352c6f490aba59b869ffdae1cf`
 * If the API_KEY not work, ping @Yufan Song. And feel free to follow [here](https://developers.plane.so/api-reference/introduction) to create your temporary key to develop. We will always reset the server, so your temporary key may be deleted sometime after reset.
 
 ## RocketChat
-* http://ogma.lti.cs.cmu.edu:3000/
-* email: theagentcompany
-* password: theagentcompany
+* service url: http://the-agent-company.com:3000
+* email: `theagentcompany`
+* password: `theagentcompany`
 
 # Troubleshooting
 
 ## SSL Error
 
-### Solution 1 (Recommend):
-The hosts trick actually work arounds the https problem.
+### Solution 1:
 
-Add `128.2.205.27 the-agent-company.com` to your `/etc/hosts` file and then you can start using http://the-agent-company.com:8929/ in your browser.
-
-Note: for NextCloud you still have to use https://ogma.lti.cs.cmu.edu as of now.
-
-This is a useful for Linux/Mac, Windows user should find the similar way to change your DNS.
-
-### Solution 2:
-
-Note that only NextCloud is hosted on SSL-enabled address, starting with `https`.
-Other services are only accessible via `http` protocol. Sometimes your browser
+All services are only accessible via `http` protocol. Sometimes your browser
 might force you to use `https`, and you would see SSL-related errors. 
 In such cases,
 you need to delete domain security policies. For example, if you are using Chrome,
@@ -61,10 +50,10 @@ Then, go to chrome://settings/clearBrowserData, tick *only* the box Cached image
 
 Now you should be able to use `http` protocol to visit the services.
 
-### Solution 3:
+### Solution 2:
 Open chrome://settings/security and disable "Always use secure connections". It will disable the redirect in ALL web url.
 
-### Solution 4:
+### Solution 3:
 * When use open the web using chrome, it will show `Not Secure` beside the url. 
 * Click it, select the "site settings". 
 
