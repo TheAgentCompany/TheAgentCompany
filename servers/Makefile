@@ -120,6 +120,7 @@ rm-plane-volume:
 	-docker volume rm plane-app_logs_migrator
 	-docker volume rm plane-app_logs_worker
 	-docker volume rm plane-app_pgdata
+	-docker network rm plane-app_default
 	cd plane && make rm-plane-volume
 
 reset-plane:
