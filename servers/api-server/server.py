@@ -90,8 +90,14 @@ def healthcheck_gitlab():
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
 def healthcheck_rocketchat():
-    code, msg = check_url("http://localhost:3000")
-    return jsonify({"message":msg}), code
+    rocketchat_code, rocketchat_msg = check_url("http://localhost:3000")
+    redis_code, redis_msg = check_url("http://localhost:6379")
+    message = {
+        "rocketchat_msg": rocketchat_msg,
+        "redis_msg": redis_msg,
+    }
+
+    return jsonify({"message": message, "redis": redis_code == 200, "rocketchat": rocketchat_code == 200}), code
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
