@@ -17,7 +17,7 @@ The agent has downloaded the quotes to the workspace directory:
 - techpro_solutions_quote.pdf
 
 ## Checkpoint 4 (1pt)
-The agent has uploaded a valid-quotes.csv file to NextCloud under the Documents/Administrative%20Specialist directory.
+The agent has uploaded a valid-quotes.csv file to OwnCloud under the Documents/Administrative%20Specialist directory.
 
 ## Checkpoint 5 (1pt)
 The agent has shared a valid-quotes.csv file link with Sarah Johnson

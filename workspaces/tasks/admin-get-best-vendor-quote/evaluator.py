@@ -36,7 +36,7 @@ def checkpoint3():
 
 @grader
 def checkpoint4():
-    file_check = check_file_in_nextcloud_directory('valid-quotes.csv','Documents/Administrative%20Specialist')
+    file_check = check_file_in_owncloud_directory('valid-quotes.csv','Documents/Administrative%20Specialist')
     if file_check is None:
         return False
     return file_check
@@ -65,7 +65,7 @@ def checkpoint6():
         logging.warning("Valid quotes link not found in Sarah Johnson's chat")
         return False
     else:
-        download_nextcloud_content(link.group(0) ,'/workspace/valid-quotes-downloaded.csv')
+        download_owncloud_content(link.group(0) ,'/workspace/valid-quotes-downloaded.csv')
         with open('/workspace/valid-quotes-downloaded.csv', 'r') as file:
             csv_reader = csv.DictReader(file)
             data = list(csv_reader)
