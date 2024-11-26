@@ -4,7 +4,7 @@ This task has 7 points in total.
 
 ## Checkpoint 1 (1pts)
 
-Downloaded all csv files from NextCloud to the workspace folder.
+Downloaded all csv files from OwnCloud to the workspace folder.
 
 ## Checkpoint 2 (1pt)
 
