@@ -24,7 +24,7 @@ Your job is to:
    - 'Category': The expense category
    - 'Total_Amount': Which is the total amount spent for that category
    - 'Number_of_Employees': The number of employees that have made an expense for that category
-   - 'Cost_Per_Employee': Which is just the total amount divided by the number of employees
+   - 'Cost_Per_Employee': Which is just the total amount divided by the number of employees, rounded to 2 decimal places
 
 Notes:
 - A transaction is considered miscategorized if its description contains keywords from a different category than its current assignment
