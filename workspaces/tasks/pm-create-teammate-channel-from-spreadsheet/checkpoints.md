@@ -9,7 +9,7 @@ Check if the agent visits Task_assignment.xlsx on owncloud
 
 ## Checkpoint 2 (1pt)
 
-Check if the agent creates a channel called "Group2".
+Check if the agent creates a channel called "Group2" and makes it  public.
 
 ## Checkpoint 3 (1pt)
 
