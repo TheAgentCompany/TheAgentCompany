@@ -8,7 +8,7 @@ rocket = create_rocketchat_client()
 
 @grader
 def grade_checkpoint1(trajectory):
-    # Check if the agent visits Task_assignment.xlsx on Nextcloud
+    # Check if the agent visits Task_assignment.xlsx on Owncloud
     target_url = "Documents/Marketing"
     return target_url in trajectory
 
