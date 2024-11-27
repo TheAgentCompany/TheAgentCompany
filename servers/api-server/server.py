@@ -96,6 +96,7 @@ def healthcheck_rocketchat():
         "rocketchat_msg": rocketchat_msg,
         "redis_msg": redis_msg,
     }
+    code = 200 if redis_code == 200 and rocketchat_code == 200 else 500
 
     return jsonify({"message": message, "redis": redis_code == 200, "rocketchat": rocketchat_code == 200}), code
 
