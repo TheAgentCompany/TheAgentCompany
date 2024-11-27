@@ -16,6 +16,9 @@ from config import *
 
 logging.basicConfig(level=logging.INFO)
 
+IMAGE_JPEG = 'image/jpeg'
+IMAGE_PNG = 'image/png'
+
 
 class MockRocketChatClient:
 
@@ -204,10 +207,13 @@ def download_image_from_url(image_url, output_file_path):
         logging.error(f"Failed to download image from {image_url}: {e}")
         return None
 
-def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None):
+def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None, image_type: str = IMAGE_JPEG):
     """
     Evaluates if a predicate can be inferred from the content/image, judged by LLM
     """
+    if image_path is not None and image_type not in [IMAGE_JPEG, IMAGE_PNG]:
+        logging.warning(f"Invalid image type: {image_type}")
+        return False
     if not content and not image_path:
         logging.warning(f"Both content and image are empty, cannot evaluate")
         return False
@@ -235,7 +241,7 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         content.append({
             "type": "image_url",
             "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_image}"
+                "url": f"data:{image_type};base64,{base64_image}"
             }
         })
 
@@ -389,50 +395,6 @@ def get_gitlab_file_in_mr(mr: dict, file_path: str) -> str:
     return resp.text
 
 
-def check_file_in_nextcloud_directory(file_name, dir_name):
-    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
-    headers = {
-        'OCS-APIRequest': 'true',
-        'Content-Type': 'application/xml',
-        'Depth': '1',  # Depth of 1 to list the immediate contents of the directory
-    }
-
-    # Send PROPFIND request
-    response = requests.request(
-        method="PROPFIND",
-        url=server_url,
-        headers=headers,
-        auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
-    )
-
-    if response.status_code == 207:
-        root = ET.fromstring(response.text)
-        for response in root.findall(".//{DAV:}response"):
-            href = response.find("{DAV:}href").text
-            if file_name in href:
-                logging.info(f"File '{file_name}' found.")
-                return True
-
-        # If loop completes and file is not found
-        logging.warning(f"File '{file_name}' not found.")
-        return False
-    else:
-        logging.error(f"Error: {response.status_code}, {response.text}")
-        return None
-
-def get_binary_file_content_nextcloud(file_name, dir_name):
-    server_url = f"{NEXTCLOUD_URL}/remote.php/dav/files/admin/{dir_name}"
-    file_url = f"{server_url}/{file_name}"
-
-    response = requests.get(file_url, auth=HTTPBasicAuth(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD))
-
-    if response.status_code == 200:
-        return response.content
-    else:
-        logging.error(f"Error: {response.status_code}, {response.text}")
-        return None
-
-
 def get_owncloud_url_in_file(filename: str):
     try:
         with open(filename, 'r') as file:
@@ -497,12 +459,17 @@ def check_file_in_owncloud_directory(file_name, dir_name):
         'Depth': '1',
     }
 
-    response = requests.request(
-        method="PROPFIND",
+    try:
+        response = requests.request(
+            method="PROPFIND",
         url=server_url,
         headers=headers,
         auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD)
-    )
+        )
+    except requests.RequestException as e:
+        logging.warning(f"Failed to check file in owncloud directory: {e}")
+        return False
+
     if response.status_code == 207:
         root = ET.fromstring(response.text)
         for response_element in root.findall(".//{DAV:}response"):
@@ -519,10 +486,14 @@ def check_file_in_owncloud_directory(file_name, dir_name):
 def get_binary_file_content_owncloud(file_name, dir_name):
     server_url = f"{OWNCLOUD_URL}/remote.php/webdav/{dir_name}/{file_name}"
 
-    response = requests.get(
-        server_url, 
+    try:
+        response = requests.get(
+            server_url, 
         auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD)
-    )
+        )
+    except requests.RequestException as e:
+        logging.warning(f"Failed to get binary file content from owncloud: {e}")
+        return None
 
     if response.status_code == 200:
         return response.content
@@ -536,7 +507,8 @@ PROJECT_FILES = {
     'janusgraph': '.backportrc.json',
     'colly': 'xmlelement_test.go',
     'streamlit': '.ruff.toml',
-    'risingwave': 'risedev.yml'
+    'risingwave': 'risedev.yml',
+    'bustub': 'CMakeLists.txt'
 }
 
 def check_repo_exists(project_name: str):

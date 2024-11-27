@@ -11,7 +11,7 @@ check whether link.txt file exist
 
 ## Checkpoint 3 (1pt)
 
-Confirm the file exists on NextCloud
+Confirm the file exists on owncloud
 
 ## Checkpoint 4 (1pt)
 

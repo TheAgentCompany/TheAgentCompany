@@ -15,7 +15,7 @@ def validate_dependencies(file_path):
             if len(data) != len(set(data)):
                 print(f'Error: {file_path} contains duplicate values')
                 return False
-            valid_deps = {'gitlab', 'rocketchat', 'plane', 'nextcloud', 'owncloud'}
+            valid_deps = {'gitlab', 'rocketchat', 'plane', 'owncloud'}
             for dep in data:
                 if dep.lower() not in valid_deps:
                     print(f'Error: Invalid dependency {dep} in {file_path}')
