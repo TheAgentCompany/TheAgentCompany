@@ -10,7 +10,7 @@ check had conversation with Huang Jie, Sophia Rodriguez, Mike Chen, Sarah Johnso
 
 ## Checkpoint 2 (1pt)
 
-check accessed nextcloud
+check accessed owncloud
 
 ## Checkpoint 3 (1pt)
 

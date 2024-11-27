@@ -18,9 +18,10 @@ rm -rf $PLANE_INSTALL_DIR/restore.sh
 
 # v0.22-dev
 # Aug 30 2024 latest commit
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/docker-compose.yaml https://raw.githubusercontent.com/makeplane/plane/599092d76b076c833afbe6f1c7233fc7d5f622c1/deploy/selfhost/docker-compose.yml
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/plane.env https://raw.githubusercontent.com/makeplane/plane/599092d76b076c833afbe6f1c7233fc7d5f622c1/deploy/selfhost/variables.env
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh https://raw.githubusercontent.com/makeplane/plane/599092d76b076c833afbe6f1c7233fc7d5f622c1/deploy/selfhost/restore.sh
+curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/docker-compose.yaml https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
+curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/plane.env https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/variables.env
+curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore.sh
 
-sed -i 's/NGINX_PORT=80/NGINX_PORT=8091/' $PLANE_INSTALL_DIR/plane.env
-
+chmod 777 $PLANE_INSTALL_DIR/docker-compose.yaml
+chmod 777 $PLANE_INSTALL_DIR/plane.env
+chmod 777 $PLANE_INSTALL_DIR/restore.sh

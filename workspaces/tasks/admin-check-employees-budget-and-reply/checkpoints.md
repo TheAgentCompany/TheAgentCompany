@@ -13,7 +13,7 @@ check chat history exists between the agent and:
 
 ## Checkpoint 2 (1pt)
 
-check accessed nextcloud
+check accessed owncloud
 
 ## Checkpoint 3 (2pt)
 
