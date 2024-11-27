@@ -16,3 +16,8 @@ stop:
 
 attach:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
+
+push:
+	make build
+	docker tag servers-rocketchat-npc-data-population-image:latest ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
+	docker push ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
