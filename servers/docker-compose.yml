@@ -117,6 +117,8 @@ services:
   redis-stack-npc-data-population:
     image: ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
     container_name: redis-stack-npc-data-population
+    pull_policy: always
+    restart: always
     depends_on:
       - redis-stack
     networks:
