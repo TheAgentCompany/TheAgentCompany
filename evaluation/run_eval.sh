@@ -87,7 +87,9 @@ for task_dir in */; do
     poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
 
     # Prune unused images and volumes
+    docker image rm $task_name-image
     docker images "ghcr.io/all-hands-ai/runtime" -q | xargs -r docker rmi -f
+    docker volume prune -f
     docker system prune -f
 
     # Return to tasks directory for next iteration
