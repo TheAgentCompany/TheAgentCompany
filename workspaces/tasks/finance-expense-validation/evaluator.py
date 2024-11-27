@@ -47,7 +47,7 @@ def grade_checkpoint3():
         return False
     try:
         analysis_df = pd.read_csv("/workspace/expenses_analysis.csv")
-        expected_columns = {"Correct_Category", "Total_Amount", "Number_of_Employees", "Cost_Per_Employee"}
+        expected_columns = {"Category", "Total_Amount", "Number_of_Employees", "Cost_Per_Employee"}
         return set(analysis_df.columns) == expected_columns
     except Exception:
         return False
