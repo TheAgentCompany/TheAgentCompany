@@ -16,6 +16,9 @@ from config import *
 
 logging.basicConfig(level=logging.INFO)
 
+IMAGE_JPEG = 'image/jpeg'
+IMAGE_PNG = 'image/png'
+
 
 class MockRocketChatClient:
 
@@ -204,10 +207,13 @@ def download_image_from_url(image_url, output_file_path):
         logging.error(f"Failed to download image from {image_url}: {e}")
         return None
 
-def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None):
+def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '', image_path: str = None, image_type: str = IMAGE_JPEG):
     """
     Evaluates if a predicate can be inferred from the content/image, judged by LLM
     """
+    if image_path is not None and image_type not in [IMAGE_JPEG, IMAGE_PNG]:
+        logging.warning(f"Invalid image type: {image_type}")
+        return False
     if not content and not image_path:
         logging.warning(f"Both content and image are empty, cannot evaluate")
         return False
@@ -235,7 +241,7 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         content.append({
             "type": "image_url",
             "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_image}"
+                "url": f"data:{image_type};base64,{base64_image}"
             }
         })
 
@@ -501,7 +507,8 @@ PROJECT_FILES = {
     'janusgraph': '.backportrc.json',
     'colly': 'xmlelement_test.go',
     'streamlit': '.ruff.toml',
-    'risingwave': 'risedev.yml'
+    'risingwave': 'risedev.yml',
+    'bustub': 'CMakeLists.txt'
 }
 
 def check_repo_exists(project_name: str):

@@ -4,7 +4,7 @@ import os
 import json
 import threading
 import requests
-
+from plane_health_check import login_to_plane
 
 app = Flask(__name__)
 
@@ -60,6 +60,7 @@ def reset_owncloud():
 
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
+    async_execute_command('make reset-sotopia-redis')
     async_execute_command('make reset-rocketchat')
     return jsonify({"message": "Reset RocketChat command initiated"}), 202
 
@@ -90,12 +91,25 @@ def healthcheck_gitlab():
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
 def healthcheck_rocketchat():
-    code, msg = check_url("http://localhost:3000")
-    return jsonify({"message":msg}), code
+    rocketchat_code, rocketchat_msg = check_url("http://localhost:3000")
+    redis_code, redis_msg = check_url("http://localhost:6379")
+    message = {
+        "rocketchat_msg": rocketchat_msg,
+        "redis_msg": redis_msg,
+    }
+    code = 200 if redis_code == 200 and rocketchat_code == 200 else 500
+
+    return jsonify({"message": message, "redis": redis_code == 200, "rocketchat": rocketchat_code == 200}), code
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
-    code, msg = check_url("http://localhost:8091")
+    code, msg = login_to_plane()
+    return jsonify({"message":msg}), code
+    
+
+@app.route('/api/healthcheck/redis', methods=['GET'])
+def healthcheck_redis():
+    code, msg = check_url("http://localhost:6379")
     return jsonify({"message":msg}), code
 
 if __name__ == '__main__':
