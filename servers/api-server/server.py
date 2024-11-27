@@ -60,6 +60,7 @@ def reset_owncloud():
 
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
+    async_execute_command('make reset-sotopia-redis')
     async_execute_command('make reset-rocketchat')
     return jsonify({"message": "Reset RocketChat command initiated"}), 202
 
