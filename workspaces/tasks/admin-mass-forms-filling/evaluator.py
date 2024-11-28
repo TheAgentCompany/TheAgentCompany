@@ -1,16 +1,16 @@
 from typing import List
 import PyPDF2
 import pandas as pd
-import os
 import logging
+from io import BytesIO
 
 from scoring import Result, Checkpoint
-from common import grader
+from common import grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud
 
 @grader
-def run_checkpoint_1(trajectory: str):
-    pdf_folder_path = "/workspace/i_9_forms"
-    csv_path = "/utils/personell_data_golden.csv"
+def run_checkpoint_1():
+    pdf_folder_path = "/Documents/Admin/i_9_forms"
+    csv_path = "/utils/personell_data_golden.csv" # the cleaned personell data csv not provided to the agent
 
     df = pd.read_csv(csv_path, dtype=str)
 
@@ -21,18 +21,28 @@ def run_checkpoint_1(trajectory: str):
     num_fields = 0
 
     for index, row in df.iterrows():
-        pdf_path = os.path.join(pdf_folder_path, f"i-9_{row['First Name (Given Name)']}_{row['Last Name (Family Name)']}.pdf")
-        if not os.path.exists(pdf_path):
-            discrepancies.append((pdf_path, "File missing"))
+        file_name = f"i-9_{row['First Name (Given Name)']}_{row['Last Name (Family Name)']}.pdf"
+        name = row['Name']
+        if not check_file_in_owncloud_directory(file_name, pdf_folder_path):
+            discrepancies[name].append((file_name, "File missing"))
+            continue
+            
+        content = get_binary_file_content_owncloud(file_name, pdf_folder_path)
+        if not content:
+            discrepancies[name].append((file_name, "File empty"))
+            continue
+            
+        try:
+            pdf_reader = PyPDF2.PdfReader(BytesIO(content))
+        except Exception as e:
+            discrepancies[name].append((file_name, f"Error reading PDF: {e}"))
             continue
         
         # Extract data from the PDF
-        pdf_reader = PyPDF2.PdfReader(pdf_path)
         form_data = pdf_reader.get_fields()
         pdf_data = {key: form_data[key].get('/V') for key in form_data.keys() if form_data[key].get('/V')}
         
         # Compare extracted data with CSV row data
-        name = row['Name']
         golden_values = {
             'Last Name (Family Name)': row['Last Name (Family Name)'],
             'First Name Given Name': row['First Name (Given Name)'],
@@ -67,9 +77,9 @@ def run_checkpoint_1(trajectory: str):
                 if not pdf_value:
                     continue
                 elif pdf_value not in ["", "/Off"]:
-                    discrepancies[name].append(f"{pdf_path}: {field} - Expected: {expected_value}, Found: {pdf_value}")
+                    discrepancies[name].append(f"{file_name}: {field} - Expected: {expected_value}, Found: {pdf_value}")
             if str(pdf_value) != expected_value:
-                discrepancies[name].append(f"{pdf_path}: {field} - Expected: {expected_value}, Found: {pdf_value}")
+                discrepancies[name].append(f"{file_name}: {field} - Expected: {expected_value}, Found: {pdf_value}")
 
     num_forms = len(df)
     total_correct_forms = sum([1 for name in discrepancies if not discrepancies[name]])
@@ -91,5 +101,5 @@ def run_checkpoint_1(trajectory: str):
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-    checkpoints.append(Checkpoint(5, int(run_checkpoint_1(trajectory))))
+    checkpoints.append(Checkpoint(5, int(run_checkpoint_1())))
     return result
