@@ -36,7 +36,10 @@ with open('npc_definition.json', 'r') as file:
     print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
 def get_by_name(first_name, last_name):
-    return AgentProfile.find(AgentProfile.first_name == first_name and AgentProfile.last_name == last_name).execute()
+    return AgentProfile.find(
+        (AgentProfile.first_name == first_name) & 
+        (AgentProfile.last_name == last_name)
+    )
 
 for definition in agent_definitions:
     if get_by_name(definition["first_name"],definition["last_name"]):
