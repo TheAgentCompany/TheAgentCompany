@@ -12,7 +12,8 @@ rocket = create_rocketchat_client()
 # Reference solution
 REFERENCE_DIRECTORY = "/workspace/signatories.csv"
 REFERENCE_OWNCLOUD_PATH = "/Documents/Financials/Annual%20Reports"
-REFERENCE_SIGNATORIES_COUNT = 27
+REFERENCE_TOTAL_SIGNATURES = 38
+REFERENCE_SIGNATORIES_COUNT = 29
 
 def check_file_exists(file_path):
     abs_path = os.path.abspath(file_path)
@@ -49,8 +50,8 @@ def grade_checkpoint4():
     if not all(col in df.columns for col in required_columns):
         logging.error(f"Missing required columns. Expected: {required_columns}")
         return False
-    if len(df) != REFERENCE_SIGNATORIES_COUNT:
-        logging.error(f"Row count mismatch. Expected: {REFERENCE_SIGNATORIES_COUNT}, Found: {len(df)}")
+    if len(df) != REFERENCE_TOTAL_SIGNATURES:
+        logging.error(f"Row count mismatch. Expected: {REFERENCE_TOTAL_SIGNATURES}, Found: {len(df)}")
         return False
 
     # Ensure 'company' column only contains 'Amazon' or 'Alphabet'
@@ -76,7 +77,7 @@ def grade_checkpoint4():
 @grader
 def grade_checkpoint5():
     # Verify if Mark Johnson was contacted with the correct file path and signatories count
-    predicate = f'The path file mentioned was {REFERENCE_DIRECTORY} and the number of signatories was {REFERENCE_SIGNATORIES_COUNT} '
+    predicate = f'The path file mentioned was {REFERENCE_DIRECTORY} and the number of signatories to reach out to was {REFERENCE_SIGNATORIES_COUNT} '
     chat_history = evaluate_chat_history_with_llm(rocket, "Mark Johnson", predicate)
     
     return chat_history
