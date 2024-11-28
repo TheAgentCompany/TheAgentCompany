@@ -2,8 +2,7 @@ import asyncio
 import os
 from typing import List
 import yaml
-import requests
-import json
+import base64
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
@@ -16,7 +15,7 @@ from openhands.core.config import (
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, MessageAction
-from openhands.events.observation import CmdOutputObservation
+from openhands.events.observation import CmdOutputObservation, BrowserOutputObservation
 from openhands.runtime.base import Runtime
 from openhands.utils.async_utils import call_async_from_sync
 
@@ -36,7 +35,8 @@ def get_config(
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
-            use_host_network=False,
+            # using host network to access the host machine from the container
+            use_host_network=True,
             # large enough timeout, since some testcases take very long to run
             timeout=300,
             api_key=os.environ.get('ALLHANDS_API_KEY', None),
@@ -87,43 +87,6 @@ def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
     assert obs.exit_code == 0
 
 
-def get_nextcloud_password(hostname: str):
-    """
-    Retrieves NEXTCLOUD_PASSWORD from the API endpoint
-
-    TODO: this is a temporary solution. Once #169 is solved,
-    we should be able to use a hard-coded password to avoid
-    this extra API call.
-
-    Args:
-        hostname (str): The hostname of the server
-   
-    Returns:
-        str: The NEXTCLOUD_PASSWORD value
-  
-    Raises:
-        requests.RequestException: If API call fails
-        KeyError: If NEXTCLOUD_PASSWORD is not in response
-        json.JSONDecodeError: If response is not valid JSON
-    """
-    url = f"http://{hostname}:2999/api/nextcloud-config"
-
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an exception for bad status codes
- 
-        data = response.json()
-        logger.info(f"NEXTCLOUD_PASSWORD: {data['NEXTCLOUD_PASSWORD']}")
-        return data["NEXTCLOUD_PASSWORD"]
- 
-    except requests.RequestException as e:
-        logger.error(f"Error making API request: {e}")
-        raise
-    except (KeyError, json.JSONDecodeError) as e:
-        logger.error(f"Error processing response: {e}")
-        raise
-
-
 def codeact_user_response(state: State) -> str:
     msg = (
         'Please continue working on the task on whatever approach you think is suitable.\n'
@@ -147,10 +110,12 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str], save_screenshots=True, screenshots_dir='screenshots') -> State:
     instruction = "Complete the task in /instruction/task.md"
 
-    # TODO: OpenHands should optionally, save browser screenshots to a place
+    if 'gitlab' in dependencies:
+        instruction += "\n\nGitlab username is 'root' and password is 'theagentcompany'"
+
     state: State | None = asyncio.run(
         run_controller(
             config=config,
@@ -161,12 +126,20 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig) -> State:
         )
     )
     logger.info(state)
+
+    if save_screenshots:
+        screenshots_dir = os.path.join(screenshots_dir, task_name)
+        os.makedirs(screenshots_dir, exist_ok=True)
+        for image_id, obs in enumerate(state.history):
+            if isinstance(obs, BrowserOutputObservation):
+                image_data = base64.b64decode(obs.screenshot)
+                with open(os.path.join(screenshots_dir, f'{image_id}.png'), 'wb') as file:
+                    file.write(image_data)
     return state
 
 
-def run_evaluator(runtime: Runtime, llm_config: LLMConfig, nextcloud_password: str, trajectory_path: str, result_path: str):
+def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str, result_path: str):
     command = (
-        f"NEXTCLOUD_ADMIN_PASSWORD={nextcloud_password} "
         f"LITELLM_API_KEY={llm_config.api_key} "
         f"LITELLM_BASE_URL={llm_config.base_url} "
         f"LITELLM_MODEL={llm_config.model} "
@@ -197,8 +170,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--server-hostname',
         type=str,
-        default='ogma.lti.cs.cmu.edu',
-        help='Server hostname, e.g. ogma.lti.cs.cmu.edu'
+        default='localhost',
+        help='Server hostname, e.g. localhost to access the host machine from the container, '
+        'assuming the task docker container is run with `--network host` flag'
     )
     args, _ = parser.parse_known_args()
 
@@ -222,23 +196,19 @@ if __name__ == '__main__':
     dependencies = load_dependencies(runtime)
     logger.info(f"Service dependencies: {dependencies}")
 
-    # TODO: #169 remove this once we are able to use a hard-coded password
-    nextcloud_password = get_nextcloud_password(args.server_hostname)
-
     try:
-        pre_login(runtime, dependencies, nextcloud_password)
+        pre_login(runtime, dependencies)
     except Exception as e:
         logger.error(f"Failed to pre-login: {e}")
 
         # before giving up, let's try to init and login again
         init_task_env(runtime, args.server_hostname, llm_config)
-        nextcloud_password = get_nextcloud_password(args.server_hostname)
-        pre_login(runtime, dependencies, nextcloud_password)
+        pre_login(runtime, dependencies)
 
-    state = run_solver(runtime, args.task_image_name, config)
+    state = run_solver(runtime, args.task_image_name, config, dependencies)
 
     # this path is the absolute path in the runtime container
     trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
-    run_evaluator(runtime, llm_config, nextcloud_password, trajectory_path, result_path)
+    run_evaluator(runtime, llm_config, trajectory_path, result_path)

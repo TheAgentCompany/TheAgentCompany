@@ -152,7 +152,7 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
     return action
 
 
-def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, save_screenshots=True, screenshots_dir='screenshots'):
+def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, screenshots_dir='screenshots'):
     """
     Logs in to all the websites that are needed for the evaluation.
     Once logged in, the sessions would be cached in the browser, so OpenHands
@@ -176,22 +176,6 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
         NoopAction(1000),
         ClickAction("button '', clickable"),
         NoopAction(1000)
-    ]
-
-    nextcloud_login_actions = [
-        GotoAction("https://ogma.lti.cs.cmu.edu"),
-        NoopAction(1000),
-        InputAction(
-            "textbox 'Login with username or email', clickable",
-            "admin"
-        ),
-        NoopAction(1000),
-        InputAction(
-            "textbox 'Password', clickable",
-            nextcloud_password
-        ),
-        NoopAction(1000),
-        ClickAction("button 'Log in', clickable")
     ]
 
     rocketchat_login_actions = [
@@ -246,7 +230,6 @@ def pre_login(runtime: Runtime, services: List[str], nextcloud_password: str, sa
     ]
 
     all_login_actions = [
-        ('nextcloud', nextcloud_login_actions),
         ('owncloud', owncloud_login_actions),
         ('rocketchat', rocketchat_login_actions),
         ('gitlab', gitlab_login_actions),
