@@ -65,26 +65,29 @@ reset-gitlab: init
 # RocketChat
 start-rocketchat: init
 	docker compose up rocketchat -d
-	python ./rocketchat/restore_data.py
+	docker compose up rocketchat-restore -d
 
 stop-rocketchat:
 	docker compose stop rocketchat
 	docker compose stop mongodb
 
-rm-rocketchat:
+rm-rocketchat: stop-rocketchat
 	docker compose rm -f rocketchat
 	docker compose rm -f mongodb
+	docker compose stop rocketchat-restore
+	docker compose rm -f rocketchat-restore
 	make rm-rocketchat-volume
 
 rm-rocketchat-volume:
 	docker volume rm servers_mongodb_data
 
 reset-rocketchat:
-	docker exec -i servers-mongodb-1 sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
+	docker compose stop rocketchat-restore
+	docker compose rm -f rocketchat-restore
+	docker compose up rocketchat-restore -d
 
 backup-rocketchat:
-	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/db.dump
-
+	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/data_restore/db.dump
 
 # Sotopia Redis
 start-sotopia-redis: init
