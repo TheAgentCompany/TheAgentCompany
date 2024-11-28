@@ -7,7 +7,6 @@ from io import BytesIO
 
 from common import check_file_in_owncloud_directory, get_binary_file_content_owncloud, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
-from config import NEXTCLOUD_URL
 
 
 @grader
