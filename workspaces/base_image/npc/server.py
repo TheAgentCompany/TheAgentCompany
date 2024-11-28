@@ -88,8 +88,11 @@ class BridgeSampler(BaseSampler[ObsType, ActType]):
         agent_profiles = [
             # Only get the first result. If not item in list, should raise error
             # Please check the redis server, you should populate data before running
-            AgentProfile.find(AgentProfile.first_name == 'X').execute()[0],
-            AgentProfile.find(AgentProfile.first_name == name[0] and AgentProfile.last_name==name[1]).execute()[0],
+            AgentProfile.find(AgentProfile.first_name == 'theagentcompany').all()[0],
+            AgentProfile.find(
+                (AgentProfile.first_name == name[0]) &
+                (AgentProfile.last_name == name[1])
+            ).all()[0],
         ]
         for _ in range(size):
             agents = [

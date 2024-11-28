@@ -6,7 +6,7 @@ from scoring import Result, Checkpoint
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 
-REFERENCE_ANSWER = 3
+REFERENCE_ANSWER = 4
 
 rocket_client = create_rocketchat_client()
 
