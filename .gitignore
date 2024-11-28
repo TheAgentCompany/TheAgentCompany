@@ -1,8 +1,7 @@
 # Evaluation-related
-evaluation/screenshots/
+evaluation/screenshots*/
+evaluation/outputs*/
 evaluation/config.toml
-traj_*.json
-eval_*.json
 *download*
 *owncloud_data*
 *owncloud_apps*
