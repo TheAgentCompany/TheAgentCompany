@@ -191,7 +191,7 @@ if __name__ == '__main__':
         agent_llm_config = get_llm_config_arg(args.agent_llm_config)
 
     if agent_llm_config is None:
-        raise ValueError(f'Could not find LLM config for agent: --agent_llm_config {args.agent_llm_config}')
+        raise ValueError(f'Could not find LLM config for agent: --agent-llm-config {args.agent_llm_config}')
 
     if agent_llm_config.api_key is None:
         raise ValueError(f'LLM API key is not set for agent')
@@ -201,7 +201,7 @@ if __name__ == '__main__':
         env_llm_config = get_llm_config_arg(args.env_llm_config)
 
     if env_llm_config is None:
-        raise ValueError(f'Could not find LLM config for evaluation environment: --env_llm_config {args.env_llm_config}')
+        raise ValueError(f'Could not find LLM config for evaluation environment: --env-llm-config {args.env_llm_config}')
 
     if env_llm_config.api_key is None:
         raise ValueError(f'LLM API key is not set for evaluation environment')
