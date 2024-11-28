@@ -28,15 +28,12 @@ def grade_checkpoint2():
     """
     if not check_file_exists("/workspace/expenses_corrected.xlsx"):
         return False
-    try:
-        corrected_df = pd.read_excel("/workspace/expenses_corrected.xlsx")
-        reference_df = pd.read_excel("/utils/ref_expenses_corrected.xlsx")
-        corrected_df_sorted = corrected_df.sort_values(by=corrected_df.columns.tolist()).reset_index(drop=True)
-        reference_df_sorted = reference_df.sort_values(by=reference_df.columns.tolist()).reset_index(drop=True)
-        
-        return corrected_df_sorted.equals(reference_df_sorted)
-    except Exception:
-        return False
+
+    corrected_df = pd.read_excel("/workspace/expenses_corrected.xlsx")
+    reference_df = pd.read_excel("/utils/ref_expenses_corrected.xlsx")
+    corrected_df_sorted = corrected_df.sort_values(by=corrected_df.columns.tolist()).reset_index(drop=True)
+    reference_df_sorted = reference_df.sort_values(by=reference_df.columns.tolist()).reset_index(drop=True)    
+    return corrected_df_sorted.equals(reference_df_sorted)
 
 @grader
 def grade_checkpoint3():
@@ -45,13 +42,11 @@ def grade_checkpoint3():
     """
     if not check_file_exists("/workspace/expenses_analysis.csv"):
         return False
-    try:
-        analysis_df = pd.read_csv("/workspace/expenses_analysis.csv")
-        expected_columns = {"Category", "Total_Amount", "Number_of_Employees", "Cost_Per_Employee"}
-        return set(analysis_df.columns) == expected_columns
-    except Exception:
-        return False
-
+    
+    analysis_df = pd.read_csv("/workspace/expenses_analysis.csv")
+    expected_columns = {"Category", "Total_Amount", "Number_of_Employees", "Cost_Per_Employee"}
+    return set(analysis_df.columns) == expected_columns
+    
 @grader
 def grade_checkpoint4():
     """
@@ -59,15 +54,14 @@ def grade_checkpoint4():
     """
     if not check_file_exists("/workspace/expenses_analysis.csv"):
         return False
-    try:
-        analysis_df = pd.read_csv("/workspace/expenses_analysis.csv")
-        reference_analysis_df = pd.read_csv("/utils/ref_expenses_analysis.csv")
-        analysis_df_sorted = analysis_df.sort_values(by=analysis_df.columns.tolist()).reset_index(drop=True)
-        reference_analysis_df_sorted = reference_analysis_df.sort_values(by=reference_analysis_df.columns.tolist()).reset_index(drop=True)
-        
-        return analysis_df_sorted.equals(reference_analysis_df_sorted)
-    except Exception:
-        return False
+
+    analysis_df = pd.read_csv("/workspace/expenses_analysis.csv")
+    reference_analysis_df = pd.read_csv("/utils/ref_expenses_analysis.csv")
+    analysis_df_sorted = analysis_df.sort_values(by=analysis_df.columns.tolist()).reset_index(drop=True)
+    reference_analysis_df_sorted = reference_analysis_df.sort_values(by=reference_analysis_df.columns.tolist()).reset_index(drop=True)
+    
+    return analysis_df_sorted.equals(reference_analysis_df_sorted)
+
 
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
