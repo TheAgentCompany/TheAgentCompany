@@ -1,6 +1,7 @@
 import asyncio
 import os
 from typing import List
+import json
 import yaml
 import base64
 
@@ -108,7 +109,9 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str], save_screenshots=True, screenshots_dir='screenshots') -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str],
+               save_final_state=True, state_dir="state",
+               save_screenshots=True, screenshots_dir='screenshots') -> State:
     instruction = "Complete the task in /instruction/task.md"
 
     if 'gitlab' in dependencies:
@@ -133,6 +136,13 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
                 image_data = base64.b64decode(obs.screenshot)
                 with open(os.path.join(screenshots_dir, f'{image_id}.png'), 'wb') as file:
                     file.write(image_data)
+
+    if save_final_state:
+        state_dir = os.path.join(state_dir, task_name)
+        os.makedirs(state_dir, exist_ok=True)
+        with open(os.path.join(state_dir, 'state.json'), 'w') as file:
+            json.dump(state, file)
+
     return state
 
 
@@ -226,6 +236,7 @@ if __name__ == '__main__':
         pre_login(runtime, dependencies)
 
     state = run_solver(runtime, args.task_image_name, config, dependencies,
+                       save_final_state=True, state_dir=os.path.join(os.path.abspath(args.outputs_path), "state"),
                        save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
     # this path is the absolute path in the runtime container
