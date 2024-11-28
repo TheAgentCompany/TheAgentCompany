@@ -38,11 +38,11 @@ def check_gitlab(slide, url):
     keywords = ["code collaboration", "project management", "issue tracking"]
     return get_title(slide) == "Gitlab" and all(keyword in content for keyword in keywords) and url in content
 
-def check_nextcloud(slide, folder_structure, url):
+def check_Owncloud(slide, folder_structure, url):
     content = get_content(slide)
     
     folders_present = evaluate_with_llm(content, f"the content includes intros to all folders in below folders: {" ".join(folder_structure)}")
-    return get_title(slide) == "Nextcloud" and folders_present and url in content
+    return get_title(slide) == "Owncloud" and folders_present and url in content
 
 def check_plane(slide, url):
     content = get_content(slide)
@@ -95,7 +95,7 @@ def grade_checkpoint1():
         "RocketChat": check_rocketchat(slides[2], rocketchat_channels, ROCKETCHAT_URL),
         "Gitlab Usage": check_gitlab(slides[3], GITLAB_BASEURL),
         "Gitlab Repos": get_title(slides[4]) == "Gitlab Repos" and all(repo in get_content(slides[4]) for repo in gitlab_repos),
-        "Nextcloud Folders": check_nextcloud(slides[5], folder_structure, OWNCLOUD_URL),
+        "Owncloud Folders": check_Owncloud(slides[5], folder_structure, OWNCLOUD_URL),
         "Plane Overview": check_plane(slides[6], PLANE_BASEURL),
     }
 
