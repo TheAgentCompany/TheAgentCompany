@@ -5,7 +5,7 @@ granted.
 
 ## Checkpoint 1 (1pts)
 
-the research paper and questions sheet is downloaded to workspace.
+The research paper 'noise_simulation_paper.pdf' and the analysis sheet 'noise_simulation_analysis_sheet.txt' are downloaded to the workspace directory.
 
 ## Checkpoint 2 (11pt)
 
