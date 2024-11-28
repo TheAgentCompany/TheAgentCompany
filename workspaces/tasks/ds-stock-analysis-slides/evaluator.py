@@ -2,8 +2,9 @@ import os
 from typing import List
 from PIL import Image
 import io
+from io import BytesIO
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, grader
+from common import evaluate_with_llm, grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud
 from pptx import Presentation
 import logging
 import pandas as pd
@@ -13,17 +14,47 @@ from collections import defaultdict
 
 @grader
 def grade_checkpoint1():
-    csv_path = "/workspace/stock_cleaned.csv"
+    csv_path = "stock_cleaned.csv"
     golden_path = "/utils/stock_data.csv"
-    df = pd.read_csv(csv_path)
+    dir_name = "Documents/Financials/stock_presentation"
+
+    if not check_file_in_owncloud_directory(csv_path, dir_name):
+        return 0
+    
+    content = get_binary_file_content_owncloud(csv_path, dir_name)
+    if not content:
+        logging.warning(f"Failed to download content {csv_path}")
+        return 0
+
+    try:
+        df = pd.read_csv(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read {csv_path}: {e}")
+        return 0
+
     golden_df = pd.read_csv(golden_path)
     return df.equals(golden_df)    
     
 
 @grader
 def grade_checkpoint2():
-    pptx_path = "/workspace/stock_analysis.pptx"
-    presentation = Presentation(pptx_path)
+    pptx_path = "stock_analysis.pptx"
+    dir_name = "Documents/Financials/stock_presentation"
+
+    if not check_file_in_owncloud_directory(pptx_path, dir_name):
+        return 0
+    
+    content = get_binary_file_content_owncloud(pptx_path, dir_name)
+    if not content:
+        logging.warning(f"Failed to download content {pptx_path}")
+        return 0
+
+    try:
+        presentation = Presentation(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read {pptx_path}: {e}")
+        return 0
+
     output_dir = "/utils/figs"
     predicates = [
         "Closing Prices Over Time: Display the stock's closing prices over time to show the overall trend.",
@@ -69,14 +100,29 @@ def grade_checkpoint2():
 
 @grader
 def grade_checkpoint3():
-    script_path = "/workspace/stock_analysis_script.md"
+    script_path = "stock_analysis_script.md"
+    dir_name = "Documents/Financials/stock_presentation"
+
+    if not check_file_in_owncloud_directory(script_path, dir_name):
+        return 0
+    
+    content = get_binary_file_content_owncloud(script_path, dir_name)
+    if not content:
+        logging.warning(f"Failed to download content {script_path}")
+        return 0
+
+    try:
+        # save bytesio of the script
+        script_content = content.decode("utf-8")
+    except Exception as e:
+        logging.warning(f"Failed to read {script_path}: {e}")
+        return 0
+
+
     predicates = [
         "The script contains clear introductions, addressing and greeting the audience, provides presentation context for the audience, analyzes the business context and impact of each graph. The script ends with closing comments expressing gratitude.",
         "The script includes correspondence for each slide below: Slide 1: Closing Prices Over Time, Slide 2: Close Price with 50 and 200-Day Moving Averages, Slide 3: Correlation Between Columns, Slide 4: Daily Return Distribution, Slide 5: Volume Distribution.",
     ]
-
-    with open(script_path, "r") as f:
-        script_content = f.read()
 
     results = {pred: evaluate_with_llm(script_content, pred) for pred in predicates}
 

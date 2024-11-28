@@ -7,5 +7,4 @@ RUN pip install python-pptx==1.0.2
 RUN pip install Pillow==11.0.0
 
 
-COPY stock_data_raw.csv /workspace
 COPY stock_data.csv /utils
