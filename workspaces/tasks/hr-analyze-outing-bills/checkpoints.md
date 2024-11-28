@@ -20,8 +20,8 @@ Correct establishment name, address, datetime, number of items, and item totals 
 
 ## Checkpoint 5 (1pt)
 
-Bar graph created to reflect values in excel sheet and stored in workspace folder.
+Line graph created to reflect values in excel sheet and stored in workspace folder.
 
 ## Checkpoint 6 (1pt)
 
-There's a conversation with Chen Xinyi, the HR manager, on RocketChat that mentions the excel file and bar graph
+There's a conversation with Chen Xinyi, the HR manager, on RocketChat that mentions the excel file and line graph
