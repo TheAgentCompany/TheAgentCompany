@@ -1,0 +1,11 @@
+Ultra High Frequency/ Very High Frequency (UHF/VHF), additive stationary, additive non-stationary, codec-based distortion
+RATS dataset
+Log Spectral Distance (LSD) and Multi-Scale Spectral Loss (MSSL)
+Speech2Speech-Augment
+PatchNCE loss
+Aggregating noise with clean speech followed by codec distortion using g726
+5.78
+Magnitude and Phase. The GANs act on the magnitude component
+Content Masks, Foreground Attention Masks and Background Attention Masks
+The SpeechAttentionGAN is the least practical to use for general application as it requires parallel training data and getting parallel data may be difficult in real world applications
+The original converter was MelGAN. it had to be changed because upon conversion of a noisy spectrogram to an audio clip, MelGAN performs poorly and outputs unintelligible clips
