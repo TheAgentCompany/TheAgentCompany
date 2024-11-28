@@ -2,13 +2,29 @@ from typing import List
 import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from scoring import Result, Checkpoint
-from common import grader
+from common import grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud
+from io import BytesIO
 import logging
 
 @grader
 def grade_checkpoint1():
+    file_name = "stock_test_answer.csv"
+    dir_name = "Documents/Financials"
+    if not check_file_in_owncloud_directory(file_name, dir_name):
+        return 0
+
+    content = get_binary_file_content_owncloud(file_name, dir_name)
+    if not content:
+        logging.warning("Failed to download content {file_name}")
+        return 0
+
+    try:
+        stock_test_answer = pd.read_csv(BytesIO(content))
+    except Exception as e:
+        logging.warning(f"Failed to read {file_name}: {e}")
+        return 0
+    
     golden_answer = pd.read_csv('/utils/golden_answer.csv')
-    stock_test_answer = pd.read_csv('/workspace/stock_test_answer.csv')
 
     actual, pred = golden_answer['Close Price'], stock_test_answer['Close Price']
     mse = mean_squared_error(actual, pred)
