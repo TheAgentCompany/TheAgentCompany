@@ -85,7 +85,7 @@ As described in [here](https://github.com/neulab/TheAgentCompany/labels), we cre
 ## How to begin
 Please check the details in each parts.
 
-For Server work: [gitlab](./servers/gitlab/README.md), [nextcloud](./servers//nextcloud/README.md), [plane](./servers/plane/README.md), [rocketchat](./servers/rocketchat/README.md)
+For Server work: [gitlab](./servers/gitlab/README.md), [owncloud](./servers/owncloud/README.md), [plane](./servers/plane/README.md), [rocketchat](./servers/rocketchat/README.md)
 
 For task work: [example](./workspaces/tasks/example/README.md)
 

@@ -2,11 +2,11 @@
 
 ## Checkpoint 1 (1 point)
 
-Confirm the agent has accessed the provided receipt on nextcloud.
+Confirm the agent has accessed the provided receipt on owncloud.
 
 ## Checkpoint 2 (1 point)
 
-Confirm the agent has visited nextcloud and read the reimbursement criteria.
+Confirm the agent has visited owncloud and read the reimbursement criteria.
 
 ## Checkpoint 3 (1 point)
 

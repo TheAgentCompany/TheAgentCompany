@@ -4,7 +4,7 @@ from odf.opendocument import load
 from odf.element import Node
 import logging
 
-from common import llm_complete, get_binary_file_content_nextcloud, create_rocketchat_client, get_rocketchat_channel_history, grader
+from common import llm_complete, get_binary_file_content_owncloud, create_rocketchat_client, get_rocketchat_channel_history, grader
 from scoring import Result, Checkpoint, bonus_for_completing_any
 
 rocket = create_rocketchat_client()
@@ -22,7 +22,7 @@ def grade_checkpoint2():
 
     score = 0
 
-    binary_content = get_binary_file_content_nextcloud(file_name, dir_name)
+    binary_content = get_binary_file_content_owncloud(file_name, dir_name)
 
     if binary_content:
         text_content = extract_text_from_odt(binary_content)

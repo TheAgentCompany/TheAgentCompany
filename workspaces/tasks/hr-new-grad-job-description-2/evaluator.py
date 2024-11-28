@@ -3,7 +3,7 @@ import logging
 from typing import List
 
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_nextcloud_url_in_file, download_nextcloud_content, grader
+from common import evaluate_with_llm, create_rocketchat_client, get_rocketchat_personal_chat_history, get_owncloud_url_in_file, download_owncloud_content, grader
 
 
 # Create RocketChat instance
@@ -39,11 +39,11 @@ def grade_checkpoints(trajectory=""):
     pass_checkpoint1 = chat_history is not None and len(chat_history) > 0
     checkpoints.append(Checkpoint(1, int(pass_checkpoint1)))
 
-    link = get_nextcloud_url_in_file("/workspace/link.txt")
+    link = get_owncloud_url_in_file("/workspace/link.txt")
     pass_checkpoint2 = bool(link)
     checkpoints.append(Checkpoint(1, int(pass_checkpoint2)))
 
-    pass_checkpoint3 = pass_checkpoint1 and download_nextcloud_content(link, "/workspace/job_description.md")
+    pass_checkpoint3 = pass_checkpoint1 and download_owncloud_content(link, "/workspace/job_description.md")
     checkpoints.append(Checkpoint(1, int(pass_checkpoint3)))
 
     pass_checkpoint4 = pass_checkpoint2 and check_job_description_content()
