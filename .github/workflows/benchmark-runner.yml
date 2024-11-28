@@ -104,7 +104,8 @@ jobs:
         run: |
           poetry install
           poetry run python run_eval.py \
-            --llm-config eval \
+            --agent-llm-config eval \
+            --env-llm-config eval \
             --server-hostname ogma.lti.cs.cmu.edu \
             --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
 

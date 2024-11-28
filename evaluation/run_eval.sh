@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Exit on any error
-set -e
+# Exit on any error would be useful for debugging
+if [ -n "$DEBUG" ]; then
+    set -e
+fi
 
 # Check if current directory is "evaluation"
 current_dir=$(basename "$PWD")
@@ -13,8 +15,9 @@ fi
 
 
 # Set default values
-# LLM_CONFIG is an OpenHands LLM config defined in config.toml
-LLM_CONFIG="claude"
+AGENT_LLM_CONFIG="agent"
+ENV_LLM_CONFIG="env"
+
 # OUTPUTS_PATH is the path to save trajectories and evaluation results
 OUTPUTS_PATH="outputs"
 # SERVER_HOSTNAME is the hostname of the server that hosts all the web services,
@@ -24,8 +27,12 @@ SERVER_HOSTNAME="localhost"
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --llm-config)
-            LLM_CONFIG="$2"
+        --agent-llm-config)
+            AGENT_LLM_CONFIG="$2"
+            shift 2
+            ;;
+        --env-llm-config)
+            ENV_LLM_CONFIG="$2"
             shift 2
             ;;
         --outputs-path)
@@ -49,7 +56,8 @@ if [[ ! "$OUTPUTS_PATH" = /* ]]; then
     OUTPUTS_PATH="$(cd "$(dirname "$OUTPUTS_PATH")" 2>/dev/null && pwd)/$(basename "$OUTPUTS_PATH")"
 fi
 
-echo "Using LLM config: $LLM_CONFIG"
+echo "Using agent LLM config: $AGENT_LLM_CONFIG"
+echo "Using environment LLM config: $ENV_LLM_CONFIG"
 echo "Outputs path: $OUTPUTS_PATH"
 echo "Server hostname: $SERVER_HOSTNAME"
 
@@ -84,7 +92,7 @@ for task_dir in */; do
     # Navigate to evaluation folder and run evaluation
     echo "Running evaluation for $task_name..."
     cd ../../../evaluation
-    poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
+    poetry run python run_eval.py --agent-llm-config $AGENT_LLM_CONFIG --env-llm-config $ENV_LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
 
     # Prune unused images and volumes
     docker image rm $task_name-image
