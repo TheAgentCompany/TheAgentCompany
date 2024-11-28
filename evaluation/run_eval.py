@@ -225,7 +225,8 @@ if __name__ == '__main__':
         init_task_env(runtime, args.server_hostname, env_llm_config)
         pre_login(runtime, dependencies)
 
-    state = run_solver(runtime, args.task_image_name, config, dependencies)
+    state = run_solver(runtime, args.task_image_name, config, dependencies,
+                       save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
     # this path is the absolute path in the runtime container
     trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
