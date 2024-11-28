@@ -1,5 +1,5 @@
-IMAGE_NAME=hr-organize-outing-bills-image
-CONTAINER_NAME=hr-organize-outing-bills
+IMAGE_NAME=hr-analyze-outing-bills-image
+CONTAINER_NAME=hr-analyze-outing-bills
 
 .PHONY: build run stop
 

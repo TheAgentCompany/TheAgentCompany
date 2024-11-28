@@ -2,7 +2,7 @@ import os
 import logging
 from typing import List
 import pandas as pd
-
+import string 
 from common import grader
 from common import create_rocketchat_client, evaluate_chat_history_with_llm
 from scoring import Result, Checkpoint
@@ -18,21 +18,26 @@ REFERENCE_COLUMNS = [
 ]
 REFERENCE_TOTALS = [57.71, 124.53, 23.88, 76.16, 114.95]
 REFERENCE_NO_ITEMS = [3, 3, 3, 7, 13]
-REFERENCE_ESTABLISHMENT = ["La Cabana", "The Tack Room", "Brasa Rotisserie", "Seaside Sushi House", "Peter Chang"],
+REFERENCE_ESTABLISHMENT = ["La Cabana", "The Tack Room", "Brasa Rotisserie", "Seaside Sushi House", "Peter Chang"]
 REFERENCE_LOCATIONS = [
         "738 Rose Ave, Venice, CA 90291",
         "145 Lincoln Road, Lincoln, MA 01773",
         "600 East Hennepin Ave, Minneapolis, MN 55414",
         "1500 Main Ave, Long Beach, CA 90712",
         "2503 N. Harrison St Ste E, Arlington, VA 22207"
-    ],
+    ]
 REFERENCE_DATETIME = [
         "03/10/2024 1:06 PM",
         "4/8/24 7:13 PM",
         "1/27/2024 8:50 PM",
         "10/07/2020 9:04 PM",
         "05/07/2016 7:48 PM"
-    ],
+    ]
+
+
+def remove_punctuation(s):
+    return s.translate(str.maketrans('', '', string.punctuation))
+
 
 @grader
 def grade_checkpoint1(trajectory):
@@ -55,7 +60,7 @@ def grade_checkpoint3():
         total_amounts_match = sorted(df["Total Amount"].tolist()) != sorted(REFERENCE_TOTALS)
         total_number_of_items_match = df["Number of Items"].tolist() != sorted(REFERENCE_NO_ITEMS)
         establishment_match = sorted(df["Establishment"].tolist()) != sorted(REFERENCE_ESTABLISHMENT)
-        location_match = sorted(df["Location"].tolist()) != sorted(REFERENCE_LOCATIONS)
+        location_match = sorted([remove_punctuation(loc) for loc in df["Address"].tolist()]) != sorted([remove_punctuation(loc) for loc in REFERENCE_LOCATIONS])
         datetime_match = sorted(df["Datetime"].tolist()) != sorted(REFERENCE_DATETIME)
         return (columns_match and total_amounts_match and total_number_of_items_match and
                 establishment_match and location_match and datetime_match)
