@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Exit on any error
-set -e
+# Exit on any error would be useful for debugging
+if [ -n "$DEBUG" ]; then
+    set -e
+fi
 
 # Check if current directory is "evaluation"
 current_dir=$(basename "$PWD")
