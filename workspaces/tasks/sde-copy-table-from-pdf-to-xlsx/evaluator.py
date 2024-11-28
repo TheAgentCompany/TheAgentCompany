@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from common import get_nextcloud_url_in_file, download_nextcloud_content, grader
+from common import get_owncloud_url_in_file, download_owncloud_content, grader
 from scoring import Result, Checkpoint, bonus_for_completing_final
 
 
@@ -82,8 +82,8 @@ def grade_checkpoint5():
     return found_matching_row(read_sheet(3), sheet4)
 
 def grade_checkpoints(trajectory="") -> Result:
-    xlsx_link = get_nextcloud_url_in_file(LINK_FILE)
-    download_nextcloud_content(xlsx_link, LOCAL_DST)
+    xlsx_link = get_owncloud_url_in_file(LINK_FILE)
+    download_owncloud_content(xlsx_link, LOCAL_DST)
     checkpoint1 = Checkpoint(1, 1*int(grade_checkpoint1(xlsx_link)))
     checkpoint2 = Checkpoint(1, 1*int(grade_checkpoint2()))
     checkpoint3 = Checkpoint(1, 1*int(grade_checkpoint3()))

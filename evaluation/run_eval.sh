@@ -18,8 +18,8 @@ LLM_CONFIG="claude"
 # OUTPUTS_PATH is the path to save trajectories and evaluation results
 OUTPUTS_PATH="outputs"
 # SERVER_HOSTNAME is the hostname of the server that hosts all the web services,
-# including RocketChat, NextCloud, GitLab, and Plane.
-SERVER_HOSTNAME="ogma.lti.cs.cmu.edu"
+# including RocketChat, ownCloud, GitLab, and Plane.
+SERVER_HOSTNAME="localhost"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -87,7 +87,9 @@ for task_dir in */; do
     poetry run python run_eval.py --llm-config $LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
 
     # Prune unused images and volumes
+    docker image rm $task_name-image
     docker images "ghcr.io/all-hands-ai/runtime" -q | xargs -r docker rmi -f
+    docker volume prune -f
     docker system prune -f
 
     # Return to tasks directory for next iteration

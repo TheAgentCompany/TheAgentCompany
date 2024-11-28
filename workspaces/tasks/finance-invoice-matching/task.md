@@ -1,4 +1,4 @@
-Navigate to Nextcloud at https://ogma.lti.cs.cmu.edu. Find the provided payments file at "/Documents/Financials/payments.xlsx" and the invoice PDFs in the directory "/Documents/Financials/invoices_pdfs". 
+Navigate to owncloud at http://the-agent-company.com:8092. Find the provided payments file at "/Documents/Financials/payments.xlsx" and the invoice PDFs in the directory "/Documents/Financials/invoices_pdfs". 
 
 Perform the following:
 * Parse Payment References: Extract and match each payment in the Excel file to its corresponding invoice(s) based on references.

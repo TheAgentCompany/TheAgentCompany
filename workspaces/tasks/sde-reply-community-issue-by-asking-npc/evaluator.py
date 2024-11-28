@@ -8,6 +8,7 @@ from scoring import Result, Checkpoint
 from common import evaluate_with_llm
 from common import make_gitlab_request
 from common import create_rocketchat_client, grader
+from common import get_rocketchat_personal_chat_history, evaluate_chat_history_with_llm
 
 # Create RocketChat instance
 rocket = create_rocketchat_client()
@@ -25,30 +26,6 @@ def get_gitlab_issue_notes():
         logging.error(f"Error occurred while checking the repository: {e}")
         return []
 
-def get_history(username):
-    id = ""
-    for item in rocket.users_list().json()['users']:
-        if item['username'] == username:
-            id = item["_id"]
-            break
-    msgs = rocket.im_history(room_id=id).json()['messages']
-
-    for msg in msgs[::-1]:
-        print(f"{username}'s chat: {msg['msg']}")
-
-    return msgs
-
-
-def check_with_llm(msgs, predicate):
-    content = ""
-    for msg in msgs[::-1]:
-        content += msg['msg']
-
-    if len(content) == 0:
-        return False
-
-    return evaluate_with_llm(content, predicate)
-
 
 @grader
 def grade_checkpoint1(trajectory: str):
@@ -56,8 +33,8 @@ def grade_checkpoint1(trajectory: str):
 
 
 @grader
-def grade_checkpoint2(username='mike_chen'):
-    msgs = get_history(username=username)
+def grade_checkpoint2(username='Mike Chen'):
+    msgs = get_rocketchat_personal_chat_history(rocket, username=username)
     return bool(msgs)
 
 
@@ -70,8 +47,7 @@ def grade_checkpoint3():
         return False
 
 @grader
-def grade_checkpoint4(username='mike_chen'):
-    msgs = get_history(username=username)
+def grade_checkpoint4(username='Mike Chen'):
 
     issue_notes = get_gitlab_issue_notes()
     target = None
@@ -85,7 +61,7 @@ def grade_checkpoint4(username='mike_chen'):
     if target is None:
         return False
 
-    return check_with_llm(msgs, predicate=target)
+    return evaluate_chat_history_with_llm(rocket, username=username, predicate=target)
 
 
 def grade_checkpoints(trajectory="") -> Result:

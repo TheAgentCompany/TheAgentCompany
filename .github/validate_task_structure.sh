@@ -89,6 +89,15 @@ for task_dir in *; do
     exit 1
   fi
 
+  # 7. Check for "nextcloud" keyword in all files
+  # TODO: remove this before release. Needed as we recently migrated from nextcloud to onecloud
+  if grep -r -i "nextcloud" . > /dev/null 2>&1; then
+    echo "Error: Found prohibited keyword 'nextcloud' in $task_dir"
+    echo "Files containing 'nextcloud':"
+    grep -r -i "nextcloud" .
+    exit 1
+  fi
+
   poetry run python ../../../.github/validate_dependencies.py "dependencies.yml"
 
   cd -

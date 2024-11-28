@@ -3,7 +3,7 @@ from typing import List
 
 from scoring import Result, Checkpoint
 
-from common import evaluate_with_llm, get_nextcloud_url_in_file, download_nextcloud_content, grader
+from common import evaluate_with_llm, get_owncloud_url_in_file, download_owncloud_content, grader
 
 ############################# Helper Functions #####################################
 
@@ -33,17 +33,14 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    link = get_nextcloud_url_in_file("/workspace/link.txt")
+    link = get_owncloud_url_in_file("/workspace/link.txt")
     pass_checkpoint1 = bool(link)
     checkpoints.append(Checkpoint(1, int(pass_checkpoint1)))
 
-    pass_checkpoint2 = pass_checkpoint1 and download_nextcloud_content(link, "/workspace/job_description.md")
+    pass_checkpoint2 = pass_checkpoint1 and download_owncloud_content(link, "/workspace/job_description.md")
     checkpoints.append(Checkpoint(1, int(pass_checkpoint2)))
 
     pass_checkpoint3 = pass_checkpoint2 and check_job_description_content()
     checkpoints.append(Checkpoint(1, int(pass_checkpoint3)))
 
     return result
-
-
-

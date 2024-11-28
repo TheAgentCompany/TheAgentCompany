@@ -115,7 +115,7 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
             raise RuntimeError(f"Login failed: {login_info['error']}")
         
         print(f"Login successful! User info: {login_info}")
-        self.bot.send_message("RocketChat Agent Listening")
+        print("RocketChat Agent Listening")
         return
 
     async def send_message(self,obs: Observation):
@@ -125,7 +125,10 @@ class RocketChatAgent(BaseAgent[Observation, AgentAction]):
         if obs.last_turn:
             # get rid of x said
             output_msg = obs.last_turn.split(": ", 1)[1].replace('"', '')
-            self.bot.send_message(output_msg)
+            if "Here is the context" not in obs.last_turn:
+                self.bot.send_message(output_msg)
+            else:
+                print(output_msg)
         else:
             print("Sotopia NPC decide to reply Empty String. Chenge to not send.")
         return last_timestamp
