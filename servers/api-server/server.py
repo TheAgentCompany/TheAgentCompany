@@ -97,7 +97,9 @@ def healthcheck_rocketchat():
         "rocketchat_msg": rocketchat_msg,
         "redis_msg": redis_msg,
     }
-    code = 200 if redis_code == 200 and rocketchat_code == 200 else 500
+    # redis check not work, has bug, temporarily disable it
+    # code = 200 if redis_code == 200 and rocketchat_code == 200 else 500
+    code = rocketchat_code
 
     return jsonify({"message": message, "redis": redis_code == 200, "rocketchat": rocketchat_code == 200}), code
 
@@ -107,6 +109,7 @@ def healthcheck_plane():
     return jsonify({"message":msg}), code
     
 
+# Not work, has bug
 @app.route('/api/healthcheck/redis', methods=['GET'])
 def healthcheck_redis():
     code, msg = check_url("http://localhost:6379")
