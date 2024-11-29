@@ -56,6 +56,7 @@ services:
   rocketchat:
     image: registry.rocket.chat/rocketchat/rocket.chat:5.3.0
     restart: always
+    container_name: rocketchat
     labels:
       traefik.enable: "true"
       traefik.http.routers.rocketchat.rule: Host(`${DOMAIN:-}`)
@@ -92,6 +93,7 @@ services:
   mongodb:
     image: docker.io/bitnami/mongodb:${MONGODB_VERSION:-5.0}
     restart: always
+    container_name: rocketchat-mongodb
     volumes:
       - mongodb_data:/bitnami/mongodb
     environment:

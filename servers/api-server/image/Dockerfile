@@ -47,4 +47,4 @@ COPY data/restore.sh /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
 RUN chmod 777 /rocketchat/restore.sh
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["python", "api-server.py"]

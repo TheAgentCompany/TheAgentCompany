@@ -18,29 +18,29 @@ init:
 # in a clean state (with pre-populated data)
 reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
-	docker compose stop gitlab
+	docker compose -p theagentcompany stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm -f gitlab
+	docker compose -p theagentcompany rm -f gitlab
 	@echo "start gitlab from clean state..."
-	docker compose up gitlab -d
+	docker compose -p theagentcompany up gitlab -d
 
 # Sotopia Redis
 reset-sotopia-redis: init
 	@echo "stopping existing sotopia redis instance..."
-	docker compose stop redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany stop redis-stack redis-stack-npc-data-population
 	@echo "remove sotopia redis container..."
-	docker compose rm -f redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany rm -f redis-stack redis-stack-npc-data-population
 	@echo "start sotopia redis from clean state..."
-	docker compose up redis-stack redis-stack-npc-data-population -d
+	docker compose -p theagentcompany up redis-stack redis-stack-npc-data-population -d
 
 # owncloud
 reset-owncloud: init
 	@echo "stopping existing owncloud instance..."
-	docker compose stop owncloud owncloud-collabora
+	docker compose -p theagentcompany stop owncloud owncloud-collabora
 	@echo "remove owncloud container..."
-	docker compose rm -f owncloud owncloud-collabora
+	docker compose -p theagentcompany rm -f owncloud owncloud-collabora
 	@echo "start owncloud from clean state..."
-	docker compose up owncloud owncloud-collabora -d
+	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
 # Inside the container
 # RocketChat
