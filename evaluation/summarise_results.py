@@ -50,6 +50,32 @@ def analyze_folder(folder_path: str) -> Dict[str, Tuple[int, int]]:
     
     return results
 
+def calculate_completion_ratio(total: int, result: int) -> float:
+    """
+    Calculate the completion ratio as a percentage.
+    
+    Args:
+        total: Total possible points
+        result: Actual points achieved
+        
+    Returns:
+        Completion ratio as a percentage
+    """
+    return (result / total * 100) if total > 0 else 0.0
+
+def is_perfect_completion(total: int, result: int) -> bool:
+    """
+    Check if the task achieved perfect completion.
+    
+    Args:
+        total: Total possible points
+        result: Actual points achieved
+        
+    Returns:
+        True if result equals total, False otherwise
+    """
+    return total > 0 and total == result
+
 def main():
     if len(sys.argv) != 2:
         print("Usage: python summarise_results.py <folder_path>")
@@ -67,30 +93,66 @@ def main():
         print(f"No eval_*.json files found in {folder_path}")
         return
     
-    # Calculate totals
+    # Calculate totals and create sorted results with completion ratios
     total_sum = sum(total for total, _ in results.values())
     result_sum = sum(result for _, result in results.values())
     
-    # Find the longest filename for proper formatting
-    max_filename_length = max(len(filename) for filename in results.keys())
-    column_width = max(max_filename_length, 70)  # minimum 70 characters for readability
+    # Create list of results with completion ratios for sorting
+    detailed_results = [
+        (
+            filename,
+            total,
+            result,
+            calculate_completion_ratio(total, result),
+            is_perfect_completion(total, result)
+        )
+        for filename, (total, result) in results.items()
+    ]
+    
+    # Sort by completion ratio in descending order
+    detailed_results.sort(key=lambda x: (-x[3], x[0]))
+    
+    # Calculate perfect completion stats
+    perfect_completions = sum(1 for _, _, _, _, is_perfect in detailed_results if is_perfect)
+    
+    # Print header
+    print("\n# Evaluation Results Report")
+    print("\n## Results per File")
+    print("\n*Sorted by completion ratio (⭐ indicates perfect completion)*\n")
+    
+    # Print table header
+    print("| Filename | Total | Result | Completion |")
+    print("|----------|--------|---------|------------|")
     
     # Print individual file results
-    print("\nResults per file:")
-    print("-" * (column_width + 25))  # Adjust line length based on filename length
-    print(f"{'Filename':<{column_width}} {'Total':>10} {'Result':>10}")
-    print("-" * (column_width + 25))
+    for filename, total, result, ratio, is_perfect in detailed_results:
+        perfect_marker = " ⭐" if is_perfect else ""
+        print(f"| {filename} | {total:,} | {result:,} | {ratio:.2f}%{perfect_marker} |")
     
-    for filename, (total, result) in sorted(results.items()):
-        print(f"{filename:<{column_width}} {total:>10} {result:>10}")
+    # Print summary section
+    print("\n## Summary\n")
+    print(f"**Tasks Evaluated:** {len(results)}\n")
+    print(f"**Perfect Completions:** {perfect_completions}/{len(results)} ({(perfect_completions/len(results)*100):.1f}%)\n")
+    print(f"**Total Points:** {total_sum:,}\n")
+    print(f"**Points Achieved:** {result_sum:,}\n")
     
-    # Print summary
-    print("\nSummary:")
-    print("-" * (column_width + 25))
-    print(f"Number of tasks evaluated: {len(results)}")
-    print(f"Sum of total points: {total_sum}")
-    print(f"Sum of actual points: {result_sum}")
-    print(f"Overall score: {(result_sum / total_sum * 100):.2f}%" if total_sum > 0 else "N/A")
+    overall_completion = calculate_completion_ratio(total_sum, result_sum)
+    print(f"**Overall Completion:** {overall_completion:.2f}%")
+    
+    # Additional statistics
+    if detailed_results:
+        highest_completion = max(ratio for _, _, _, ratio, _ in detailed_results)
+        lowest_completion = min(ratio for _, _, _, ratio, _ in detailed_results)
+        median_completion = detailed_results[len(detailed_results) // 2][3]
+        avg_completion = sum(ratio for _, _, _, ratio, _ in detailed_results) / len(detailed_results)
+        
+        print("\n## Statistics\n")
+        print("| Metric | Value |")
+        print("|---------|--------|")
+        print(f"| Highest Task Completion | {highest_completion:.2f}% |")
+        print(f"| Lowest Task Completion | {lowest_completion:.2f}% |")
+        print(f"| Median Task Completion | {median_completion:.2f}% |")
+        print(f"| Average Task Completion | {avg_completion:.2f}% |")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,71 @@
+{
+    "Sarah Johnson": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 5 hours on assessing new technologies for potential improvements."
+    },
+    "Li Ming": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 4 hours assessing improvements in distributed systems for JanusGraph."
+    },
+    "Zhang Wei": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 20 hours developing core functionalities for RisingWave and 10 hours optimizing database performance."
+    },
+    "Wang Fang": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 15 hours designing machine learning models and 10 hours testing and tuning model performance."
+    },
+    "Mike Chen": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 15 hours developing and optimizing LLM inference engines."
+    },
+    "Emily Zhou": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 15 hours implementing distributed web crawler functionality."
+    },
+    "Liu Qiang": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 5 hours developing new test strategies."
+    },
+    "Priya Sharma": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "Mark Johnson": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "Jessica Lee": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "Chen Xinyi": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "David Wong": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "Huang Jie": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    },
+    "Sophia Rodriguez": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 5 hours improving user experience through design experimentation."
+    },
+    "Alex Turner": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 15 hours developing low-code platform functionalities in Node-RED."
+    },
+    "Emma Lewis": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you spend 15 hours on API development and optimization."
+    },
+    "Jessica Chen": {
+      "extra_info": "Someone will ask you about your time spent on R&D hours every week.",
+      "strategy_hint": "Answer that you do not spend any hours on qualified R&D activities."
+    }
+  }
+  

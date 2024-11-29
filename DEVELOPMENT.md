@@ -39,14 +39,9 @@ For how to access each service, see [here](./servers/README.md)
 ### 2. Initialize parameters
 In the [Makefile](./servers/Makefile), we create several environment parameters, like below
 ```
-NEXTCLOUD_HOME?=/home/yufansong/data
 HOSTNAME?=ogma.lti.cs.cmu.edu
 FILE_SERVER_PORT?=8081
 GITLAB_PORT?=8929
-NEXTCLOUD_BACKUP_VOLUME_NAME?=nextcloud_aio_backupdir
-NEXTCLOUD_BACKUP_VOLUME_PATH?=/home/yufansong/data/backup
-NEXTCLOUD_IMAGE_TAG?=20240808_083748
-NEXTCLOUD_PORT?=8090
 ```
 Make sure you understand each parameter's meaning and configure it with the correct value. At the very least, you need to change the home file path, change the HOSTNAME, and ensure all ports are available on your server.
 
