@@ -1,0 +1,54 @@
+SHELL = /bin/bash
+
+HOSTNAME?=localhost
+FILE_SERVER_PORT?=8081
+GITLAB_PORT?=8929
+
+.PHONY: init start-all stop-all start-file-server stop-file-server start-gitlab stop-gitlab rebuild-gitlab reset-gitlab \
+		start-owncloud stop-owncloud reset-owncloud \
+		start-rocketchat stop-rocketchat rm-rocketchat rm-rocketchat-volume reset-rocketchat backup-rocketchat
+
+init:
+	$(eval export HOSTNAME)
+	$(eval export GITLAB_PORT)
+	@echo "Initialization done."
+
+# reset stops the gitlab container, destroys and starts again
+# any changes to gitlab will disappear, and the container will start
+# in a clean state (with pre-populated data)
+reset-gitlab: init
+	@echo "stopping existing gitlab instance..."
+	docker compose stop gitlab
+	@echo "remove gitlab container..."
+	docker compose rm -f gitlab
+	@echo "start gitlab from clean state..."
+	docker compose up gitlab -d
+
+# Sotopia Redis
+reset-sotopia-redis: init
+	@echo "stopping existing sotopia redis instance..."
+	docker compose stop redis-stack redis-stack-npc-data-population
+	@echo "remove sotopia redis container..."
+	docker compose rm -f redis-stack redis-stack-npc-data-population
+	@echo "start sotopia redis from clean state..."
+	docker compose up redis-stack redis-stack-npc-data-population -d
+
+# owncloud
+reset-owncloud: init
+	@echo "stopping existing owncloud instance..."
+	docker compose stop owncloud owncloud-collabora
+	@echo "remove owncloud container..."
+	docker compose rm -f owncloud owncloud-collabora
+	@echo "start owncloud from clean state..."
+	docker compose up owncloud owncloud-collabora -d
+
+# Inside the container
+# RocketChat
+reset-rocketchat:
+	docker compose stop rocketchat-restore
+	docker compose rm -f rocketchat-restore
+	docker compose up rocketchat-restore -d
+
+# Plane
+reset-plane:
+	cd /plane && make reset-plane
