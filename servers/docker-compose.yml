@@ -104,18 +104,6 @@ services:
       MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
   
-  rocketchat-restore:
-    image: ghcr.io/theagentcompany/servers-rocketchat-restore:latest
-    container_name: servers-rocketchat-restore
-    pull_policy: always
-    restart: "no"
-    network_mode: "host"
-    depends_on:
-      - mongodb
-      - rocketchat
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  
   redis-stack:
     image: redis/redis-stack-server:7.4.0-v0
     container_name: redis-stack
