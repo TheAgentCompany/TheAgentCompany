@@ -149,3 +149,12 @@ reset-owncloud: init
 	@echo "start owncloud from clean state..."
 	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
+# api-server
+start-api-server: init
+	docker compose -p theagentcompany up api-server -d
+
+stop-api-server:
+	docker compose -p theagentcompany stop api-server
+
+rm-api-server:
+	docker compose -p theagentcompany rm api-server

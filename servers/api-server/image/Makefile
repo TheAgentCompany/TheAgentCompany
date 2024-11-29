@@ -1,6 +1,8 @@
 IMAGE_NAME=servers-api-server-image
 CONTAINER_NAME=servers-api-server
 IMAGE_TAG=latest
+GHCR=ghcr.io/theagentcompany
+GHCR_NAME=servers-api-server
 
 .PHONY: build run
 
@@ -34,3 +36,6 @@ stop:
 attach:
 	docker exec -it $(CONTAINER_NAME) sh
 
+push:
+	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${GHCR}/${GHCR_NAME}:latest
+	docker push ${GHCR}/${GHCR_NAME}:latest
