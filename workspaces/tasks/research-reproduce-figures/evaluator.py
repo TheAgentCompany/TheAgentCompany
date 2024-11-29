@@ -1,7 +1,6 @@
 import requests
 import os
 import logging
-from datetime import datetime, timezone
 from typing import List
 import json
 
@@ -19,7 +18,7 @@ rocket = create_rocketchat_client()
 
 def compare_figures(index):
     query = 'Are the 2 images roughly the same in terms of appearance and the information represented?'
-    return compare_images_with_llm(f'/workspace/figure{index}.pdf',f'/data/figure{index}',query)
+    return compare_images_with_llm(f'/workspace/figure{index}.pdf',f'/eval_data/figure{index}.pdf',query)
 
 def is_pdf(file_path):
     if len(file_path.split('.'))<2:
@@ -42,6 +41,12 @@ def is_pdf(file_path):
     except Exception as e:
         logging.error(f"Error while checking file {file_path}: {str(e)}")
         return False
+    
+def compare_tables(index):
+    query = 'Are the 2 tables roughly similar in terms of appearance and represent the same information?'
+    if not os.path.exists(f'/workspace/table{index}.pdf'):
+        return False
+    return compare_images_with_llm(f'/workspace/table{index}.pdf',f'/data/table{index}.pdf',query)
 
 
 ############################# grade checkpoints #####################################
@@ -67,15 +72,15 @@ def grade_checkpoint4():
 
 @grader
 def grade_checkpoint5():
-    return file_content_overlap('/workspace/table1.tex','/data/table1.tex',0.9)
+    return file_content_overlap('/workspace/table1.tex','/data/table1.tex',0.9) and compare_tables(1)
 
 @grader
 def grade_checkpoint6():
-    return file_content_overlap('/workspace/table2.tex','/data/table2.tex',0.9)
+    return file_content_overlap('/workspace/table2.tex','/data/table2.tex',0.9) and compare_tables(2)
 
 @grader
 def grade_checkpoint7():
-    return file_content_overlap('/workspace/table3.tex','/data/table3.tex',0.9)
+    return file_content_overlap('/workspace/table3.tex','/data/table3.tex',0.9) and compare_tables(3)
 
 @grader
 def grade_checkpoint8():
@@ -93,5 +98,10 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint2())))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint4())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint5())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint6())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint7())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint8())))
 
     return result
