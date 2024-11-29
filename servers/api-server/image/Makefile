@@ -10,6 +10,8 @@ build:
 	cp ../../docker-compose.yml data/
 	cd ../../plane && make download-setup
 	cp -r ../../plane data/
+	wget -P ./data/ https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/rocketchat-20241123/db.dump
+	cp ../../rocketchat/data_restore/restore.sh data/restore.sh
 	docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true && docker build -t $(IMAGE_NAME) . --no-cache
 
 run:

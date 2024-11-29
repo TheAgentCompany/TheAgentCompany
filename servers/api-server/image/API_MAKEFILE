@@ -45,9 +45,7 @@ reset-owncloud: init
 # Inside the container
 # RocketChat
 reset-rocketchat:
-	docker compose stop rocketchat-restore
-	docker compose rm -f rocketchat-restore
-	docker compose up rocketchat-restore -d
+	cd /rocketchat && ./restore.sh
 
 # Plane
 reset-plane:

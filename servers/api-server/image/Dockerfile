@@ -10,7 +10,8 @@ RUN apk update && apk add --no-cache \
     musl-dev \
     linux-headers \
     make \
-    bash
+    bash \
+    curl
 
 # Install python package, in Alpine Linux, we cannot fix the version
 RUN apk add py3-flask
@@ -34,9 +35,16 @@ COPY data/plane/plane-app/restore.sh /plane/plane-app
 COPY data/plane/setup.sh /plane/
 COPY data/plane/download.sh /plane/
 COPY data/plane/Makefile /plane/
-# fake data
+# plane fake data, needed by restore.sh
 COPY data/plane/Makefile /plane/pgdata.tar.gz
 COPY data/plane/Makefile /plane/redisdata.tar.gz
 COPY data/plane/Makefile /plane/uploads.tar.gz
+
+# rocketchat
+RUN mkdir /rocketchat
+COPY data/db.dump /rocketchat/
+COPY data/restore.sh /rocketchat/
+RUN chmod 777 /rocketchat/db.dump
+RUN chmod 777 /rocketchat/restore.sh
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
