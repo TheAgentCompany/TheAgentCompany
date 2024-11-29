@@ -1,0 +1,27 @@
+\begin{table}[ht]
+    \small
+    \vspace{-1mm}
+    \begin{center}
+        \begin{tabular}{l|lllc}
+        \toprule
+        \multicolumn{1}{c|}{\textbf{Benchmark}} & \multicolumn{1}{c}{\textbf{Tool Source}} & \multicolumn{1}{c}{\textbf{Example Curation}} & \textbf{Domain} & \multicolumn{1}{c}{\textbf{Executable}} \\ 
+        \midrule
+        {ToolBench$_1$} & {existing dataset} & {adopted, human annotated} & {\work, \world} & {\ding{51}} \\
+        {ToolBench$_2$} & {RapidAPI} & {model synthesized} & {\work, \world} & {\ding{51}} \\
+        {ToolQA} & {existing dataset} & {model synthesized} & {\work, \kn} & {\ding{51}} \\
+        {ToolAlpaca} & {PublicAPIs} & {model synthesized} & {\kn, \work, \world, \modal} & {\ding{55}} \\
+        {API-Bank} & {PublicAPIs} & {human annotated} & {\work, \world} & {\ding{51}} \\
+        {MetaTool} & {OpenAI Plugins} & {model synthesized} & {\work, \world, \modal} & {\ding{55}} \\
+        % \midrule
+        {Gorilla} & {HF, Torch, TF} & {model synthesized} & {\nn} & {\ding{55}} \\
+        {HuggingGPT} & {HF} & {human annotated} & {\nn} & {$~~$\ding{55}$^{*}$}\\
+        {Task Bench} & {HF, PublicAPIs} & {model synthesized} & {\nn, \modal, \world} & {\ding{55}} \\
+        \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{-3mm}
+    \caption{Benchmarks of providing aggregated APIs to LMs as tools. 
+    HF is short for HuggingFace. `\ding{55}$^{*}$' means that: though tools employed by HuggingGPT are executable, it does not evaluate the execution output due to the cost of hosting and inferencing.}
+    \vspace{-1mm}
+    \label{tab:api-benchmarks}
+    \end{table}

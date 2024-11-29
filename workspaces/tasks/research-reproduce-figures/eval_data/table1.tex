@@ -1,0 +1,36 @@
+
+\textbf{\begin{table}[t]
+    \vspace{-5mm}
+    \small
+    \begin{center}
+        \begin{tabular}{ll}
+        \toprule
+        \multicolumn{1}{c}{\textbf{Category}} & \multicolumn{1}{c}{\textbf{Example Tools}} \\
+        \midrule
+        \multirow{3}{*}{\kn ~~Knowledge access} & {\texttt{sql\_executor(query:~str) -> answer:~any}} \\
+        {} & {\texttt{search\_engine(query:~str) -> document:~str}} \\
+        {} & {\texttt{retriever(query:~str) -> document:~str}} \\
+        \midrule
+        \multirow{3}{*}{\work ~~Computation activities} & {\texttt{calculator(formula:~str) -> value:~int | float}} \\
+        {} & {\texttt{python\_interpreter(program:~str) -> result:~any}} \\
+        {} & {\texttt{worksheet.insert\_row(row:~list, index:~int) -> None}} \\
+        \midrule
+        \multirow{4}{*}{\world ~~Interaction w/ the world} & \texttt{get\_weather(city\_name:~str) -> weather:~str} \\
+        {} & \texttt{get\_location(ip:~str) -> location:~str} \\
+        {} & \texttt{calendar.fetch\_events(date:~str) -> events:~list} \\
+        {} & \texttt{email.verify(address:~str) -> result:~bool} \\
+        \midrule
+        \multirow{3}{*}{\modal ~~Non-textual modalities} & \texttt{cat\_image.delete(image\_id:~str) -> None} \\
+        {} & \texttt{spotify.play\_music(name:~str) -> None} \\
+        {} & \texttt{visual\_qa(query:~str, image:~Image) -> answer:~str} \\
+        \midrule
+        \multirow{2}{*}{\nn ~~Special-skilled LMs} & {\texttt{QA(question:~str) -> answer:~str}} \\
+        {} & \texttt{translation(text:~str, language:~str) -> text:~str} \\
+        \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{-2mm}
+    \caption{Exemplar tools for each category.}
+    \vspace{-15mm}
+    \label{tab:example-tools}
+    \end{table}}

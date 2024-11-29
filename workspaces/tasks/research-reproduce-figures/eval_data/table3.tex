@@ -1,0 +1,43 @@
+\begin{table}[ht]
+    \vspace{-3mm}
+    \small
+    \begin{center}
+    \resizebox{0.92\linewidth}{!}{
+        \begin{tabular}{llcrcrr}
+        \toprule
+        \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Type}}} & \multirow{2}{*}{\textbf{Method}} & \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Task}}} & \multicolumn{1}{c}{\multirow{2}{*}{\textbf{$\Delta$ Perf.}}} & \multirow{2}{*}{\textbf{\# Params (B)}} & \multicolumn{2}{c}{\textbf{\# Tokens (M)}} \\
+        {} & {} & {} & {} & {} & {train} & {test} \\
+        \midrule
+        \multirowcell{9}{tool\\use} & \multirow{5}{*}{ToolFormer} & \color{blue} {cloze} & {+ 14.7} & {6.7} & {642.1} & {269.0} \\
+        {} & {} & \color{ao} {math} & {+ 30.4} & {6.7} & {3864.2} & {421.0} \\
+        {} & {} & \color{chromeyellow} {QA} & {+ 5.8} & {6.7} & {1101.2} & {189.0} \\
+        {} & {} & \color{red} {multilingual} & \colorbox{red!27}{- 0.2}  & {6.7} & {606.0} & {274.0} \\
+        {} & {} & \color{ballblue} {temporal} & {+ 13.0} & {6.7} & {508.8} & {202.0} \\
+        \cmidrule{2-7}
+        {} & {API-Bank} & {API} & {+ 24.4} & {7} & \textbf{190414.6} & {0.0} \\
+        \cmidrule{2-7}
+        {} & {ToolAlpaca} & {API} & {+ 45.2} & {7} & \textbf{241889.3} & {0.0} \\
+        \cmidrule{2-7}
+        {} & \multirow{2}{*}{Chameleon} & {science} & {+ 2.6} & {-} & {0.0} & {88.3} \\
+        {} & {} & \color{darklavender} {table} & {+ 1.9} & {-} & {0.0} & {325.9} \\
+        \midrule
+        \midrule
+        \multirowcell{7}{tool\\making} & {LATM} & {BigBench} & {+ 29.1} & {-} & {28.5} & {4720.0} \\
+        \cmidrule{2-7}
+        {} & \multirow{2}{*}{CREATOR} & \color{ao} {math} & {+ 4.5} & {-} & {0.0} & {5113.6} \\
+        {} & {} & \color{darklavender} {table} & \colorbox{chromeyellow!20}{+ 0.0} & {-} & {0.0} & \textbf{6827.6} \\
+        \cmidrule{2-7}
+        {} & \multirow{2}{*}{CRAFT} & \color{ao} {math} & {+ 13.2} & {-} & {4126.6} & {4098.5} \\
+        {} & {} & \color{darklavender} {table} & {+ 17.2} & {-} & {2750.6} & {5018.2} \\
+        \cmidrule{2-7}
+        {} & \multirow{2}{*}{TroVE} & \color{ao} {math} & {+ 21.0} & {-} & {0.0} & {1825.2} \\
+        {} & {} & \color{darklavender} {table} & {+ 12.0} & {-} & {0.0} & {1358.8} \\
+        \bottomrule
+        \end{tabular}
+        }
+    \end{center}
+    \vspace{-2mm}
+    \caption{Computation cost (number of tokens in $M$ and parameters in $B$) of tooling methods and their performance gain on experimented datasets. To fairly compare costs on datasets with different sizes, we report the average number of tokens spent on a testing example.}
+    \vspace{-3mm}
+    \label{tab:compute-cost}
+    \end{table}

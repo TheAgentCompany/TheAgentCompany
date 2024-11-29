@@ -279,7 +279,7 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
 
 def compare_images_with_llm(image_path1: str = None, image_path2: str = None, query='', additional_prompt: str = ''):
     """
-    Evaluates if a 2 images represnt the same information and look identical, judged by LLM
+    Evaluates if  2 images based on the query, judged by LLM
     """
     if not image_path1 or not image_path2:
         logging.warning(f"Image paths must be provided")
@@ -377,22 +377,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
 
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
-        return False
-
-def file_content_overlap(file_path1:str, file_path2:str, threshold:float):
-    try:
-        with open(file_path1,'r') as file:
-            content1 = file.read()
-        with open(file_path2,'r') as file:
-            content2 = file.read()
-    except FileNotFoundError:
-        logging.warning('File not found')
-    except Exception as e:
-        logging.error(f'Error when comparing file content: {e}')
-
-    overall_similarity = SequenceMatcher(None, content1, content2).ratio()
-
-    return overall_similarity >= threshold
+        return False    
 
 def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
