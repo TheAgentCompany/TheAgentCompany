@@ -26,3 +26,38 @@ stop-plane:
 
 backup-plane:
 	./setup.sh backup
+
+IMAGE_NAME=servers-plane-restore-image
+CONTAINER_NAME=servers-plane-restore
+IMAGE_TAG=latest
+GHCR=ghcr.io/theagentcompany
+GHCR_NAME=servers-plane-restore
+
+.PHONY: build run
+
+build:
+	docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true && docker build -t $(IMAGE_NAME) . --no-cache
+
+run:
+	docker run --rm -d \
+		--network host \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		--name $(CONTAINER_NAME) $(IMAGE_NAME)
+
+run-tail:
+	docker run --rm -d \
+		--network host \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		--name $(CONTAINER_NAME) $(IMAGE_NAME) \
+		tail -f /dev/null
+
+stop:
+	docker stop $(CONTAINER_NAME)
+	docker rm $(CONTAINER_NAME)
+
+attach:
+	docker exec -it $(CONTAINER_NAME) sh
+
+# push:
+# 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${GHCR}/${GHCR_NAME}:latest
+# 	docker push ${GHCR}/${GHCR_NAME}:latest
