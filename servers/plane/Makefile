@@ -1,3 +1,7 @@
+IMAGE_NAME=servers-plane-restore-image
+CONTAINER_NAME=servers-plane-restore
+IMAGE_TAG=latest
+
 download-setup:
 	sh ./download.sh
 	curl -fsSL -o setup.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/install.sh
@@ -27,12 +31,6 @@ stop-plane:
 backup-plane:
 	./setup.sh backup
 
-IMAGE_NAME=servers-plane-restore-image
-CONTAINER_NAME=servers-plane-restore
-IMAGE_TAG=latest
-GHCR=ghcr.io/theagentcompany
-GHCR_NAME=servers-plane-restore
-
 .PHONY: build run
 
 build:
@@ -58,6 +56,3 @@ stop:
 attach:
 	docker exec -it $(CONTAINER_NAME) sh
 
-# push:
-# 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${GHCR}/${GHCR_NAME}:latest
-# 	docker push ${GHCR}/${GHCR_NAME}:latest

@@ -17,6 +17,4 @@ COPY download.sh /plane/
 RUN chmod +x /plane/setup.sh
 RUN chmod +x /plane/download.sh
 
-CMD ["tail", "-f", "/dev/null"]
-# ENTRYPOINT ["/restore.sh"]
-# plane restore里面会开一个新的container，会有点问题
+ENTRYPOINT ["/plane/plane-app/restore.sh"]
