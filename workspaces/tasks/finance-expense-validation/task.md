@@ -5,7 +5,7 @@ The company has specific rules for categorizing expenses based on an expense pol
 Navigate to owncloud on http://the-agent-company.com:8092/ and navigate to the folder Documents/Financials/Expenses. Here you will find two files:
 
 1. `expenses.xlsx`: 
-2. `category_rules.xlsx`
+2. `category_rules.txt`
 
 Your job is to:
 
