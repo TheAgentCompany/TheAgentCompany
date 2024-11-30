@@ -4,13 +4,13 @@ run:
 stop:
 	docker compose down
 	docker rm servers-rocketchat-1
-	docker rm servers-mongodb-1
+	docker rm rocketchat-mongodb
 
 clean-data:
 	docker volume rm servers_mongodb_data
 
 restore:
-	docker exec -i servers-mongodb-1 sh -c 'mongorestore --archive' < db.dump
+	docker exec -i rocketchat-mongodb sh -c 'mongorestore --archive' < db.dump
 
 backup:
-	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > db.dump
+	docker exec rocketchat-mongodb sh -c 'mongodump --archive' > db.dump
