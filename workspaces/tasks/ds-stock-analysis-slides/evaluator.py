@@ -84,7 +84,7 @@ def grade_checkpoint2():
             predicate = predicates[idx - 1]
             for img in range(1, image_found + 1):
                 image_path = os.path.join(output_dir, f"slide_{idx}_{img}.png")
-                evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path)
+                evaluation_result = evaluate_with_llm(None, predicate, image_path=image_path, image_type=IMAGE_PNG)
                 # if there are more than one images on the slide, as long as one image is true, the slide is considered as pass
                 if evaluation_result:
                     results[predicate] = 1
