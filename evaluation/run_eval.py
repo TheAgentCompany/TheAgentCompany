@@ -139,7 +139,7 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
 
     if save_final_state:
         os.makedirs(state_dir, exist_ok=True)
-        with open(os.path.join(state_dir, f'state_{image_id}.json'), 'w') as file:
+        with open(os.path.join(state_dir, f'state_{task_name}.json'), 'w') as file:
             json.dump(str(state), file)
 
     return state
