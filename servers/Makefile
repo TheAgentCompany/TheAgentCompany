@@ -16,21 +16,21 @@ init:
 	@echo "Initialization done."
 
 start-all: init
-	docker compose up -d
+	docker compose -p theagentcompany up -d
 	make start-plane
 	make start-rocketchat
 	make start-sotopia-redis
 
 stop-all: init
-	docker compose down
+	docker compose -p theagentcompany down
 	$(MAKE) rm-rocketchat-volume
 
 # GitLab
 start-gitlab: init
-	docker compose up gitlab -d
+	docker compose -p theagentcompany up gitlab -d
 
 stop-gitlab:
-	docker compose stop gitlab
+	docker compose -p theagentcompany stop gitlab
 
 # rebuild destroys the gitlab image and start from scratch
 # useful when you have new data to bake into the image
@@ -38,9 +38,9 @@ stop-gitlab:
 # large repositories to bake into the image
 rebuild-gitlab: init
 	@echo "stopping existing gitlab instance..."
-	docker compose stop gitlab
+	docker compose -p theagentcompany stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm gitlab
+	docker compose -p theagentcompany rm gitlab
 	@if docker image inspect servers-gitlab >/dev/null 2>&1; then \
 		echo "Image servers-gitlab exists. Removing..."; \
 		docker image rm servers-gitlab; \
@@ -49,66 +49,62 @@ rebuild-gitlab: init
 	fi
 	@echo "rebuild gitlab from clean state..."
 	@echo "Before building, please make sure you have modified docker-compose.yml according to the instructions in the comments."
-	docker compose build --no-cache gitlab
+	docker compose -p theagentcompany build --no-cache gitlab
 
 # reset stops the gitlab container, destroys and starts again
 # any changes to gitlab will disappear, and the container will start
 # in a clean state (with pre-populated data)
 reset-gitlab: init
 	@echo "stopping existing gitlab instance..."
-	docker compose stop gitlab
+	docker compose -p theagentcompany stop gitlab
 	@echo "remove gitlab container..."
-	docker compose rm -f gitlab
+	docker compose -p theagentcompany rm -f gitlab
 	@echo "start gitlab from clean state..."
-	docker compose up gitlab -d
+	docker compose -p theagentcompany up gitlab -d
 
 # RocketChat
 start-rocketchat: init
-	docker compose up rocketchat -d
-	docker compose up rocketchat-restore -d
+	docker compose -p theagentcompany up rocketchat -d
+	python rocketchat/restore_data.py
 
 stop-rocketchat:
-	docker compose stop rocketchat
-	docker compose stop mongodb
+	docker compose -p theagentcompany stop rocketchat
+	docker compose -p theagentcompany stop mongodb
 
 rm-rocketchat: stop-rocketchat
-	docker compose rm -f rocketchat
-	docker compose rm -f mongodb
-	docker compose stop rocketchat-restore
-	docker compose rm -f rocketchat-restore
+	docker compose -p theagentcompany rm -f rocketchat
+	docker compose -p theagentcompany rm -f mongodb
 	make rm-rocketchat-volume
 
 rm-rocketchat-volume:
 	docker volume rm servers_mongodb_data
 
 reset-rocketchat:
-	docker compose stop rocketchat-restore
-	docker compose rm -f rocketchat-restore
-	docker compose up rocketchat-restore -d
+	docker exec -i rocketchat-mongodb sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
 
 backup-rocketchat:
-	docker exec servers-mongodb-1 sh -c 'mongodump --archive' > ./rocketchat/data_restore/db.dump
+	docker exec rocketchat-mongodb sh -c 'mongodump --archive' > ./rocketchat/data_restore/db.dump
 
 # Sotopia Redis
 start-sotopia-redis: init
-	docker compose up -d redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany up -d redis-stack redis-stack-npc-data-population
 
 stop-sotopia-redis:
-	docker compose stop redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany stop redis-stack redis-stack-npc-data-population
 
 rm-sotopia-redis:
-	docker compose rm -f redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany rm -f redis-stack redis-stack-npc-data-population
 
 attach-sotopia-redis:
 	docker exec -it redis-stack /bin/bash
 
 reset-sotopia-redis: init
 	@echo "stopping existing sotopia redis instance..."
-	docker compose stop redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany stop redis-stack redis-stack-npc-data-population
 	@echo "remove sotopia redis container..."
-	docker compose rm -f redis-stack redis-stack-npc-data-population
+	docker compose -p theagentcompany rm -f redis-stack redis-stack-npc-data-population
 	@echo "start sotopia redis from clean state..."
-	docker compose up redis-stack redis-stack-npc-data-population -d
+	docker compose -p theagentcompany up redis-stack redis-stack-npc-data-population -d
 
 # Plane
 download-plane:
@@ -138,16 +134,25 @@ reset-plane:
 	cd plane && make reset-plane
 
 start-owncloud:
-	docker compose up owncloud owncloud-collabora -d
+	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
 stop-owncloud:
-	docker compose stop owncloud owncloud-collabora
+	docker compose -p theagentcompany stop owncloud owncloud-collabora
 
 reset-owncloud: init
 	@echo "stopping existing owncloud instance..."
-	docker compose stop owncloud owncloud-collabora
+	docker compose -p theagentcompany stop owncloud owncloud-collabora
 	@echo "remove owncloud container..."
-	docker compose rm -f owncloud owncloud-collabora
+	docker compose -p theagentcompany rm -f owncloud owncloud-collabora
 	@echo "start owncloud from clean state..."
-	docker compose up owncloud owncloud-collabora -d
+	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
+# api-server
+start-api-server: init
+	docker compose -p theagentcompany up api-server -d
+
+stop-api-server:
+	docker compose -p theagentcompany stop api-server
+
+rm-api-server:
+	docker compose -p theagentcompany rm api-server

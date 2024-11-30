@@ -20,7 +20,7 @@ rm -rf $PLANE_INSTALL_DIR/restore.sh
 # Aug 30 2024 latest commit
 curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/docker-compose.yaml https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
 curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/plane.env https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/variables.env
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore.sh
+curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore-customized.sh
 
 chmod 777 $PLANE_INSTALL_DIR/docker-compose.yaml
 chmod 777 $PLANE_INSTALL_DIR/plane.env
