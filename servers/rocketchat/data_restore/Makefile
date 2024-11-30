@@ -1,8 +1,8 @@
-IMAGE_NAME=base-image
-CONTAINER_NAME=base-image
+IMAGE_NAME=servers-rocketchat-restore-image
+CONTAINER_NAME=servers-rocketchat-restore
 IMAGE_TAG=latest
 GHCR=ghcr.io/theagentcompany
-GHCR_NAME=task-base-image
+GHCR_NAME=servers-rocketchat-restore
 
 .PHONY: build run
 
@@ -10,7 +10,11 @@ build:
 	docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true && docker build -t $(IMAGE_NAME) . --no-cache
 
 run:
-	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker run --rm -d \
+		--network host \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		--name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker logs $(CONTAINER_NAME)
 
 stop:
 	docker stop $(CONTAINER_NAME)
