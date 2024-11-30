@@ -110,8 +110,8 @@ def codeact_user_response(state: State) -> str:
 
 
 def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str],
-               save_final_state=True, state_dir="state",
-               save_screenshots=True, screenshots_dir='screenshots') -> State:
+               save_final_state: bool, state_dir: str,
+               save_screenshots: bool, screenshots_dir: str) -> State:
     instruction = "Complete the task in /instruction/task.md"
 
     if 'gitlab' in dependencies:
@@ -138,10 +138,9 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
                     file.write(image_data)
 
     if save_final_state:
-        state_dir = os.path.join(state_dir, task_name)
         os.makedirs(state_dir, exist_ok=True)
-        with open(os.path.join(state_dir, 'state.json'), 'w') as file:
-            json.dump(state, file)
+        with open(os.path.join(state_dir, f'state_{task_name}.json'), 'w') as file:
+            json.dump(str(state), file)
 
     return state
 
@@ -227,16 +226,16 @@ if __name__ == '__main__':
     logger.info(f"Service dependencies: {dependencies}")
 
     try:
-        pre_login(runtime, dependencies)
+        pre_login(runtime, dependencies, save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
     except Exception as e:
         logger.error(f"Failed to pre-login: {e}")
 
         # before giving up, let's try to init and login again
         init_task_env(runtime, args.server_hostname, env_llm_config)
-        pre_login(runtime, dependencies)
+        pre_login(runtime, dependencies, save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
     state = run_solver(runtime, args.task_image_name, config, dependencies,
-                       save_final_state=True, state_dir=os.path.join(os.path.abspath(args.outputs_path), "state"),
+                       save_final_state=True, state_dir=os.path.abspath(args.outputs_path),
                        save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
     # this path is the absolute path in the runtime container
