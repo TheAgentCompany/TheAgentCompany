@@ -1,0 +1,6 @@
+customer_id,name,email,shipping_address
+1,"John Smith",john.smith@email.com,"123 Main St, Anytown, ST 12345"
+2,"Sarah Johnson",sarah.j@email.com,"456 Oak Ave, Somewhere, ST 23456"
+3,"Mike Wilson",mike.w@email.com,"789 Pine Rd, Elsewhere, ST 34567"
+4,"Emma Brown",emma.b@email.com,"321 Elm St, Nowhere, ST 45678"
+5,"David Lee",david.l@email.com,"654 Maple Ave, Anywhere, ST 56789"

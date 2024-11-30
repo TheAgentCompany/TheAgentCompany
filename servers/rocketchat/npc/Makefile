@@ -21,6 +21,5 @@ attach:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
 
 push:
-	make build
 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${GHCR}/${GHCR_NAME}:latest
 	docker push ${GHCR}/${GHCR_NAME}:latest
