@@ -41,7 +41,7 @@ def get_all_plane_projects():
 
 app = Flask(__name__)
 
-HOSTNAME= os.getenv('HOSTNAME', "localhost")
+HOSTNAME= os.getenv('HOSTNAME', "/localhost")
 
 EXECUTION_DIR = os.getenv('EXECUTION_DIR', "workspace")
 
