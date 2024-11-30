@@ -7,15 +7,10 @@ Navigate to Documents/Human Resources Team/Contracts on Owncloud (http://the-age
 For each contract, sum up all revenue recognition entries
 - Compare total recognized revenue against the contract value
 - Identify contracts where:
-   - Total recognized revenue doesn't match contract value
+   - Total recognized revenue doesn't match contract value (within a small tolerance)
    - Recognition schedule doesn't align with contract term
 - Account for contracts with different terms and payment schedules
 
 Create `flagged_contracts.xlsx` saved in the /workspace folder with column 'Flagged_Contracts' which has Contract IDs with recognition discrepancies.
 
 To contact the employees with flagged contracts, use the employee_contracts.xlsx file to find which employees have flagged contracts.
-
-## Notes
-- Revenue recognition should match contract value within a small tolerance (±0.01%)
-- Recognition periods should align with contract terms
-- Some contracts may have intentional errors in their recognition schedules
