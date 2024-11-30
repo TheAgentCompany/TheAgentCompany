@@ -65,7 +65,7 @@ reset-gitlab: init
 # RocketChat
 start-rocketchat: init
 	docker compose -p theagentcompany up rocketchat -d
-	docker compose -p theagentcompany up rocketchat-restore -d
+	python rocketchat/restore_data.py
 
 stop-rocketchat:
 	docker compose -p theagentcompany stop rocketchat
@@ -74,8 +74,6 @@ stop-rocketchat:
 rm-rocketchat: stop-rocketchat
 	docker compose -p theagentcompany rm -f rocketchat
 	docker compose -p theagentcompany rm -f mongodb
-	docker compose -p theagentcompany stop rocketchat-restore
-	docker compose -p theagentcompany rm -f rocketchat-restore
 	make rm-rocketchat-volume
 
 rm-rocketchat-volume:
