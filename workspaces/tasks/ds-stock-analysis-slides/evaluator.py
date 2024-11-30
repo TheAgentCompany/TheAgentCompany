@@ -4,7 +4,7 @@ from PIL import Image
 import io
 from io import BytesIO
 from scoring import Result, Checkpoint
-from common import evaluate_with_llm, grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud
+from common import evaluate_with_llm, grader, check_file_in_owncloud_directory, get_binary_file_content_owncloud, IMAGE_PNG
 from pptx import Presentation
 import logging
 import pandas as pd
