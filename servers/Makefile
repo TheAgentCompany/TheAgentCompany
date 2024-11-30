@@ -155,4 +155,4 @@ stop-api-server:
 	docker compose -p theagentcompany stop api-server
 
 rm-api-server:
-	docker compose -p theagentcompany rm api-server
+	docker compose -p theagentcompany rm -f api-server
