@@ -5,8 +5,12 @@ import json
 import threading
 import requests
 import os
+import time
+from rocketchat_API.rocketchat import RocketChat
+import redis
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
+ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
 PLANE_PORT = os.getenv('PLANE_PORT') or '8091'
 PLANE_BASEURL = f"http://{SERVER_HOSTNAME}:{PLANE_PORT}"
 PLANE_WORKSPACE_SLUG = os.getenv("PLANE_WORKSPACE_SLUG") or "tac"
@@ -38,6 +42,34 @@ def get_all_plane_projects():
     except Exception as e:
         print(f"Get all projects failed: {e}")
         return []
+
+def create_rocketchat_client(username='theagentcompany', password='theagentcompany'):
+    SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
+    ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
+    
+    # Construct RocketChat URL
+    ROCKETCHAT_URL = f"http://{SERVER_HOSTNAME}:{ROCKETCHAT_PORT}"
+    
+    try:
+        return RocketChat(username, password, server_url=ROCKETCHAT_URL)
+    except:
+        logging.warning("Fail to connect to rocketchat")
+    return None
+
+def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retries=3, delay=1):
+    client = redis.StrictRedis(host=host, port=port, password=password)
+    
+    for attempt in range(retries):
+        try:
+            # Test if Redis is responding to PING command
+            if client.ping():
+                print("Redis is up and running!")
+                return True
+        except redis.exceptions.ConnectionError:
+            print(f"Attempt {attempt + 1} failed: Redis not available yet, retrying in {delay} seconds...")
+            time.sleep(delay)
+    print("Failed to connect to Redis after several retries.")
+    return False
 
 app = Flask(__name__)
 
@@ -111,29 +143,24 @@ def healthcheck_gitlab():
 
 @app.route('/api/healthcheck/rocketchat', methods=['GET'])
 def healthcheck_rocketchat():
-    rocketchat_code, rocketchat_msg = check_url("http://localhost:3000")
-    redis_code, redis_msg = check_url("http://localhost:6379")
-    message = {
-        "rocketchat_msg": rocketchat_msg,
-        "redis_msg": redis_msg,
-    }
-    # redis check not work, has bug, temporarily disable it
-    # code = 200 if redis_code == 200 and rocketchat_code == 200 else 500
-    code = rocketchat_code
-
-    return jsonify({"message": message, "redis": redis_code == 200, "rocketchat": rocketchat_code == 200}), code
+    rocketchat_cli = create_rocketchat_client()
+    rocketchat_code = 400 if rocketchat_cli is None else 200
+    redis_msg, redis_code = healthcheck_redis()
+    code = 200 if redis_code == 200 and rocketchat_code == 200 else 400
+    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code}), code
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
     code, msg = login_to_plane()
     return jsonify({"message":msg}), code
     
-
-# Not work, has bug
 @app.route('/api/healthcheck/redis', methods=['GET'])
 def healthcheck_redis():
-    code, msg = check_url("http://localhost:6379")
-    return jsonify({"message":msg}), code
+    success = wait_for_redis()
+    if success:
+        return jsonify({"message":"success connect to redis"}), 200
+    else:
+        return jsonify({"message":"failed connect to redis"}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
