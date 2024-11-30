@@ -5,7 +5,8 @@ FROM docker:27.3.1
 RUN apk add --no-cache curl
 
 # Copy backup data and script
-COPY db.dump /backup/db.dump
+RUN mkdir /rocketchat
+COPY db.dump /rocketchat/db.dump
 COPY restore.sh /restore.sh
 
 # Make script executable

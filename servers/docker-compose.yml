@@ -56,6 +56,7 @@ services:
   rocketchat:
     image: registry.rocket.chat/rocketchat/rocket.chat:5.3.0
     restart: always
+    container_name: rocketchat
     labels:
       traefik.enable: "true"
       traefik.http.routers.rocketchat.rule: Host(`${DOMAIN:-}`)
@@ -92,6 +93,7 @@ services:
   mongodb:
     image: docker.io/bitnami/mongodb:${MONGODB_VERSION:-5.0}
     restart: always
+    container_name: rocketchat-mongodb
     volumes:
       - mongodb_data:/bitnami/mongodb
     environment:
@@ -103,18 +105,6 @@ services:
       MONGODB_ADVERTISED_HOSTNAME: ${MONGODB_ADVERTISED_HOSTNAME:-mongodb}
       MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
-  
-  rocketchat-restore:
-    image: ghcr.io/theagentcompany/servers-rocketchat-restore:latest
-    container_name: servers-rocketchat-restore
-    pull_policy: always
-    restart: "no"
-    network_mode: "host"
-    depends_on:
-      - mongodb
-      - rocketchat
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   
   redis-stack:
     image: redis/redis-stack-server:7.4.0-v0
@@ -135,6 +125,15 @@ services:
       - redis-stack
     networks:
       - rocketchat-redis-net
+
+  api-server:
+    image: ghcr.io/theagentcompany/servers-api-server:latest
+    container_name: api-server
+    pull_policy: always
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   mongodb_data: { driver: local }

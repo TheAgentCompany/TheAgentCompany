@@ -18,7 +18,7 @@ while [ $attempt -le $MAX_ATTEMPTS ]; do
     
     if [ "$status_code" = "200" ]; then
         echo "RocketChat is available. Starting MongoDB restore..."
-        docker exec -i servers-mongodb-1 sh -c 'mongorestore --drop --archive' < /backup/db.dump
+        docker exec -i rocketchat-mongodb sh -c 'mongorestore --drop --archive' < /rocketchat/db.dump
         exit 0
     fi
     
