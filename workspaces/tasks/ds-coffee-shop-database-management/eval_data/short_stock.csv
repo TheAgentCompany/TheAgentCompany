@@ -1,0 +1,3 @@
+product_id,quantity_in_stock,reorder_point
+P001,150,200
+P003,75,85

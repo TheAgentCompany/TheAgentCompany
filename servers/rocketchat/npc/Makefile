@@ -1,5 +1,8 @@
 IMAGE_NAME=servers-rocketchat-npc-data-population-image
 CONTAINER_NAME=servers-rocketchat-npc-data-population
+IMAGE_TAG=latest
+GHCR=ghcr.io/theagentcompany
+GHCR_NAME=servers-rocketchat-npc-data-population
 
 .PHONY: build run
 
@@ -18,6 +21,5 @@ attach:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
 
 push:
-	make build
-	docker tag servers-rocketchat-npc-data-population-image:latest ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
-	docker push ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
+	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${GHCR}/${GHCR_NAME}:latest
+	docker push ${GHCR}/${GHCR_NAME}:latest

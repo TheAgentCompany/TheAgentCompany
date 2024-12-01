@@ -1,6 +1,7 @@
 import asyncio
 import os
 from typing import List
+import json
 import yaml
 import base64
 
@@ -69,14 +70,12 @@ def load_dependencies(runtime: Runtime) -> List[str]:
     return dependencies
 
 
-def init_task_env(runtime: Runtime, hostname: str, llm_config: LLMConfig):
+def init_task_env(runtime: Runtime, hostname: str, env_llm_config: LLMConfig):
     command = (
         f"SERVER_HOSTNAME={hostname} "
-        f"LITELLM_API_KEY={llm_config.api_key} "
-        f"LITELLM_BASE_URL={llm_config.base_url} "
-        f"LITELLM_MODEL={llm_config.model} "
-        # TODO: remove this once ready for release
-        "RESET_ENV=true "
+        f"LITELLM_API_KEY={env_llm_config.api_key} "
+        f"LITELLM_BASE_URL={env_llm_config.base_url} "
+        f"LITELLM_MODEL={env_llm_config.model} "
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
@@ -110,7 +109,9 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str], save_screenshots=True, screenshots_dir='screenshots') -> State:
+def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str],
+               save_final_state: bool, state_dir: str,
+               save_screenshots: bool, screenshots_dir: str) -> State:
     instruction = "Complete the task in /instruction/task.md"
 
     if 'gitlab' in dependencies:
@@ -135,14 +136,20 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
                 image_data = base64.b64decode(obs.screenshot)
                 with open(os.path.join(screenshots_dir, f'{image_id}.png'), 'wb') as file:
                     file.write(image_data)
+
+    if save_final_state:
+        os.makedirs(state_dir, exist_ok=True)
+        with open(os.path.join(state_dir, f'state_{task_name}.json'), 'w') as file:
+            json.dump(str(state), file)
+
     return state
 
 
-def run_evaluator(runtime: Runtime, llm_config: LLMConfig, trajectory_path: str, result_path: str):
+def run_evaluator(runtime: Runtime, env_llm_config: LLMConfig, trajectory_path: str, result_path: str):
     command = (
-        f"LITELLM_API_KEY={llm_config.api_key} "
-        f"LITELLM_BASE_URL={llm_config.base_url} "
-        f"LITELLM_MODEL={llm_config.model} "
+        f"LITELLM_API_KEY={env_llm_config.api_key} "
+        f"LITELLM_BASE_URL={env_llm_config.base_url} "
+        f"LITELLM_MODEL={env_llm_config.model} "
         f"python_default /utils/eval.py --trajectory_path {trajectory_path} --result_path {result_path}"
     )
     action = CmdRunAction(command=command)
@@ -174,41 +181,65 @@ if __name__ == '__main__':
         help='Server hostname, e.g. localhost to access the host machine from the container, '
         'assuming the task docker container is run with `--network host` flag'
     )
+    parser.add_argument(
+        '--agent-llm-config',
+        type=str,
+        default=None,
+        help='LLM config for agent',
+    )
+    parser.add_argument(
+        '--env-llm-config',
+        type=str,
+        default=None,
+        help='LLM config for evaluation environment (NPC & llm-based evaluator)',
+    )
     args, _ = parser.parse_known_args()
 
-    llm_config: LLMConfig | None = None
-    if args.llm_config:
-        llm_config = get_llm_config_arg(args.llm_config)
+    agent_llm_config: LLMConfig | None = None
+    if args.agent_llm_config:
+        agent_llm_config = get_llm_config_arg(args.agent_llm_config)
 
-    if llm_config is None:
-        raise ValueError(f'Could not find LLM config: --llm_config {args.llm_config}')
+    if agent_llm_config is None:
+        raise ValueError(f'Could not find LLM config for agent: --agent-llm-config {args.agent_llm_config}')
 
-    if llm_config.api_key is None:
-        raise ValueError(f'LLM API key is not set')
+    if agent_llm_config.api_key is None:
+        raise ValueError(f'LLM API key is not set for agent')
+
+    env_llm_config: LLMConfig | None = None
+    if args.env_llm_config:
+        env_llm_config = get_llm_config_arg(args.env_llm_config)
+
+    if env_llm_config is None:
+        raise ValueError(f'Could not find LLM config for evaluation environment: --env-llm-config {args.env_llm_config}')
+
+    if env_llm_config.api_key is None:
+        raise ValueError(f'LLM API key is not set for evaluation environment')
 
     logger.info(f"Task image name is {args.task_image_name}")
-    config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.outputs_path), llm_config)
+    config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.outputs_path), agent_llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
 
-    init_task_env(runtime, args.server_hostname, llm_config)
+    init_task_env(runtime, args.server_hostname, env_llm_config)
 
     dependencies = load_dependencies(runtime)
     logger.info(f"Service dependencies: {dependencies}")
 
     try:
-        pre_login(runtime, dependencies)
+        pre_login(runtime, dependencies, save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
     except Exception as e:
         logger.error(f"Failed to pre-login: {e}")
 
         # before giving up, let's try to init and login again
-        init_task_env(runtime, args.server_hostname, llm_config)
-        pre_login(runtime, dependencies)
+        init_task_env(runtime, args.server_hostname, env_llm_config)
+        pre_login(runtime, dependencies, save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
-    state = run_solver(runtime, args.task_image_name, config, dependencies)
+    state = run_solver(runtime, args.task_image_name, config, dependencies,
+                       save_final_state=True, state_dir=os.path.abspath(args.outputs_path),
+                       save_screenshots=True, screenshots_dir=os.path.join(os.path.abspath(args.outputs_path), "screenshots"))
 
     # this path is the absolute path in the runtime container
     trajectory_path = f'/outputs/traj_{args.task_image_name}.json'
     result_path = f'/outputs/eval_{args.task_image_name}.json'
 
-    run_evaluator(runtime, llm_config, trajectory_path, result_path)
+    run_evaluator(runtime, env_llm_config, trajectory_path, result_path)
