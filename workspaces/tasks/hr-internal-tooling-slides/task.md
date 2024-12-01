@@ -1,0 +1,10 @@
+Develop slides to introduce the products and main internal tools used by TAC, aimed at onboarding new hires, serving as a foundational overview for new employees. This presentation should cover the purpose and functionalities of each tool, with detailed descriptions for RocketChat, GitLab, Owncloud, and Plane. Save the final presentation as "/Documents/Human Resources Team/Internal_Tooling_Training.pptx" at OwnCloud (http://the-agent-company.com:8092). Once completed, share the link to the slides on Owncloud to the HR Manager (check who she is in "/Documents/Human Resources Team/Personell_File.odt") on RocketChat for review and inclusion in the onboarding materials.
+
+* In the first slide, provide a reasonable theme and title.
+* According to TAC_overview.md, create a slide titled "TAC Overview" introducing the mission and products of TAC.
+* RocketChat: Navigate to RocketChat at http://the-agent-company.com:3000/. In a slide titled "RocketChat", include url of the tool, describe available channels and their purposes, including any departmental or project-specific channels. Introduce which channels are default channels.
+* GitLab: Navigate to Gitlab at http://the-agent-company.com:8929/. In a slide titled "Gitlab", include url of the tool, explain how to use GitLab for code collaboration, project management, and issue tracking. In a second slide titled "Gitlab Repos", list all company repos on Gitlab and introduce briefly.
+* OwnCloud: Navigate to OwnCloud at http://the-agent-company.com:8092. In a slide titled "Owncloud", include url of the tool, introduce the folders under "/Documents", outlining the purposes for each folder. 
+* Plane: Navigate to Plane at http://the-agent-company.com:8091/. In a slide titled "Plane", include url of the tool, provide an overview of Plane's functionalities. Describe how to use the analytics page to track project metrics.
+
+Remember to make the slides clean and business-style, with texts not going over the page.
