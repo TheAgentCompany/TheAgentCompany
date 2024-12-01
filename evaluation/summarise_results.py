@@ -1,12 +1,13 @@
 import json
 import glob
+import re
 import os
 import sys
 from typing import Dict, Tuple
 
-def analyze_json_file(filepath: str) -> Tuple[int, int]:
+def analyze_eval_json_file(filepath: str) -> Tuple[int, int]:
     """
-    Analyze a single JSON file and extract the total and result from final_score.
+    Analyze a single eval JSON file and extract the total and result from final_score.
     
     Args:
         filepath: Path to the JSON file
@@ -30,25 +31,65 @@ def analyze_json_file(filepath: str) -> Tuple[int, int]:
         print(f"Error processing {filepath}: {e}")
         return (0, 0)
 
-def analyze_folder(folder_path: str) -> Dict[str, Tuple[int, int]]:
+def analyze_state_json_file(filepath: str) -> Tuple[int, float]:
     """
-    Analyze all eval_*.json files in the specified folder.
+    Analyze a single final state JSON file and extract the steps and cost.
+    TODO: this is not a real JSON file at the moment, but a custom str format,
+    so we need to parse it manually.
+
+    Args:
+        filepath: Path to the JSON file
+
+    Returns:
+        Tuple containing (steps, cost)
+    """
+    try:
+        with open(filepath, 'r') as f:
+            data = f.read()
+
+        if 'iteration=' in data:
+            iteration_part = data.split('iteration=')[1]
+            steps = int(iteration_part.split(',')[0])
+
+        if "accumulated_cost': " in data:
+            cost_part = data.split("accumulated_cost': ")[1]
+            cost = float(cost_part.split(',')[0])
+
+        return (steps, cost)
+    except Exception as e:
+        print(f"Error processing {filepath}: {e}")
+        return (0, 0)
+
+def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[str, Tuple[int, float]]]:
+    """
+    Analyze all eval_*.json & state_*.json files in the specified folder.
     
     Args:
         folder_path: Path to the folder containing JSON files
         
     Returns:
-        Dictionary with filename as key and (total, result) tuple as value
+        Two dictionaries:
+        - eval_results: Dictionary with filename as key and (total, result) tuple as value
+        - state_results: Dictionary with filename as key and (steps, cost) tuple as value
     """
-    results = {}
-    pattern = os.path.join(folder_path, "eval_*.json")
+    eval_results = {}
+    state_results = {}
+    eval_pattern = os.path.join(folder_path, "eval_*.json")
+    state_pattern = os.path.join(folder_path, "state_*.json")
     
-    for filepath in glob.glob(pattern):
+    for filepath in glob.glob(eval_pattern):
         filename = os.path.basename(filepath)
-        total, result = analyze_json_file(filepath)
-        results[filename] = (total, result)
+        total, result = analyze_eval_json_file(filepath)
+        key = re.search(r"eval_(.+)\.json", filename).group(1)
+        eval_results[key] = (total, result)
     
-    return results
+    for filepath in glob.glob(state_pattern):
+        filename = os.path.basename(filepath)
+        steps, cost = analyze_state_json_file(filepath)
+        key = re.search(r"state_(.+)\.json", filename).group(1)
+        state_results[key] = (steps, cost)
+
+    return eval_results, state_results
 
 def calculate_score(total: int, result: int) -> float:
     """
@@ -92,26 +133,22 @@ def main():
         print(f"Error: '{folder_path}' is not a valid directory")
         sys.exit(1)
     
-    results = analyze_folder(folder_path)
+    eval_results, state_results = analyze_folder(folder_path)
     
-    if not results:
+    if not eval_results:
         print(f"No eval_*.json files found in {folder_path}")
         return
-    
-    # Calculate totals and create sorted results with completion ratios
-    total_sum = sum(total for total, _ in results.values())
-    result_sum = sum(result for _, result in results.values())
-    
+
     # Create list of results with completion ratios for sorting
     detailed_results = [
         (
-            filename,
+            task_name,
             total,
             result,
             calculate_score(total, result),
             is_perfect_completion(total, result)
         )
-        for filename, (total, result) in results.items()
+        for task_name, (total, result) in eval_results.items()
     ]
     
     # Sort by score in descending order
@@ -126,18 +163,18 @@ def main():
     print("\n*Sorted by score (⭐ indicates perfect completion)*\n")
     
     # Print table header
-    print("| Filename | Total | Result | Score |")
-    print("|----------|--------|---------|-------|")
+    print("| Filename | Total | Result | Score | Steps | Cost |")
+    print("|----------|--------|---------|-------|-------|------|")
     
     # Print individual file results
-    for filename, total, result, score, is_perfect in detailed_results:
+    for task_name, total, result, score, is_perfect in detailed_results:
         perfect_marker = " ⭐" if is_perfect else ""
-        print(f"| {filename} | {total:,} | {result:,} | {score:.2f}{perfect_marker} |")
+        print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {state_results[task_name][0]} | {state_results[task_name][1]:.2f} |")
     
     # Print summary section
     print("\n## Summary\n")
-    print(f"**Tasks Evaluated:** {len(results)}\n")
-    print(f"**Perfect Completions:** {perfect_completions}/{len(results)} ({(perfect_completions/len(results)*100):.1f}%)\n")
+    print(f"**Tasks Evaluated:** {len(eval_results)}\n")
+    print(f"**Perfect Completions:** {perfect_completions}/{len(eval_results)} ({(perfect_completions/len(eval_results)*100):.1f}%)\n")
     
     overall_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results) * 100
     print(f"**Overall Score:** {overall_score:.2f}%")
