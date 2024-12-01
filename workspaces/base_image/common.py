@@ -277,14 +277,42 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
         return False
 
+def verify_image_file(image_path: str) -> bool:
+    """
+    Verifies if a file exists and is a valid JPEG/JPG or PNG image.
+    
+    Args:
+        image_path (str): Path to the image file
+        
+    Returns:
+        bool: True if file exists and is a valid JPEG/JPG or PNG image, False otherwise
+    """
+    if not image_path or not os.path.isfile(image_path):
+        logging.warning(f"Image file not provided or does not exist: {image_path}")
+        return False
+    
+    try:
+        with open(image_path, "rb") as f:
+            # Try reading first few bytes to check if it's a valid image
+            header = f.read(8)
+            # Check for JPEG/JPG or PNG signatures
+            if not (header.startswith(b'\xFF\xD8\xFF') or  # JPEG/JPG (both use same signature)
+                   header.startswith(b'\x89PNG\r\n')):     # PNG
+                logging.warning(f"Invalid image format for {image_path}. Only JPEG/JPG and PNG are supported.")
+                return False
+        return True
+    except Exception as e:
+        logging.error(f"Failed to read image file {image_path}: {e}")
+        return False
+
 def compare_images_with_llm(image_path1: str = None, image_path2: str = None, query='', additional_prompt: str = ''):
     """
     Evaluates if  2 images based on the query, judged by LLM
     """
-    if not image_path1 or not image_path2:
-        logging.warning(f"Image paths must be provided")
-        return False
 
+    # Validate both images
+    if not verify_image_file(image_path1) or not verify_image_file(image_path2):
+        return False
 
     query += f' Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
 
