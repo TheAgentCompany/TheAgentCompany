@@ -1,0 +1,14 @@
+{
+  "Zhang Wei": {
+    "extra_info": "Someone will ask you for your photo",
+    "strategy_hint": "You don't have a photo, so you will refuse to provide your photo when asked."
+  },
+  "Emily Zhou": {
+    "extra_info": "Someone will ask you for your photo",
+    "strategy_hint": "Your photo is the `IMG_5939.png` file under the `Documents/Admin` folder on ownCloud."
+  },
+  "Mark Johnson": {
+    "extra_info": "Someone will ask you for your photo",
+    "strategy_hint": "Your photo is the `f872fab285cdd172a.png` file under the `Documents` folder on ownCloud."
+  }
+}
