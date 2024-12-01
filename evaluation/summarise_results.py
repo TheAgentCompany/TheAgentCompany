@@ -50,18 +50,23 @@ def analyze_folder(folder_path: str) -> Dict[str, Tuple[int, int]]:
     
     return results
 
-def calculate_completion_ratio(total: int, result: int) -> float:
+def calculate_score(total: int, result: int) -> float:
     """
-    Calculate the completion ratio as a percentage.
+    Calculate the score as a number between 0 and 1.
+
+    Formula: score = (result / total) * 0.5 + (result // total) * 0.5
+    Explanation:
+    - (result / total) * 0.5: This is the completion ratio, scaled down to a 0-0.5 range.
+    - (result // total) * 0.5: This is a binary score indicating whether the task was completed or not.
     
     Args:
         total: Total possible points
         result: Actual points achieved
         
     Returns:
-        Completion ratio as a percentage
+        Score as a number between 0 and 1
     """
-    return (result / total * 100) if total > 0 else 0.0
+    return (result / total * 0.5) + (result // total * 0.5)
 
 def is_perfect_completion(total: int, result: int) -> bool:
     """
@@ -103,13 +108,13 @@ def main():
             filename,
             total,
             result,
-            calculate_completion_ratio(total, result),
+            calculate_score(total, result),
             is_perfect_completion(total, result)
         )
         for filename, (total, result) in results.items()
     ]
     
-    # Sort by completion ratio in descending order
+    # Sort by score in descending order
     detailed_results.sort(key=lambda x: (-x[3], x[0]))
     
     # Calculate perfect completion stats
@@ -118,41 +123,39 @@ def main():
     # Print header
     print("\n# Evaluation Results Report")
     print("\n## Results per File")
-    print("\n*Sorted by completion ratio (⭐ indicates perfect completion)*\n")
+    print("\n*Sorted by score (⭐ indicates perfect completion)*\n")
     
     # Print table header
-    print("| Filename | Total | Result | Completion |")
-    print("|----------|--------|---------|------------|")
+    print("| Filename | Total | Result | Score |")
+    print("|----------|--------|---------|-------|")
     
     # Print individual file results
-    for filename, total, result, ratio, is_perfect in detailed_results:
+    for filename, total, result, score, is_perfect in detailed_results:
         perfect_marker = " ⭐" if is_perfect else ""
-        print(f"| {filename} | {total:,} | {result:,} | {ratio:.2f}%{perfect_marker} |")
+        print(f"| {filename} | {total:,} | {result:,} | {score:.2f}{perfect_marker} |")
     
     # Print summary section
     print("\n## Summary\n")
     print(f"**Tasks Evaluated:** {len(results)}\n")
     print(f"**Perfect Completions:** {perfect_completions}/{len(results)} ({(perfect_completions/len(results)*100):.1f}%)\n")
-    print(f"**Total Points:** {total_sum:,}\n")
-    print(f"**Points Achieved:** {result_sum:,}\n")
     
-    overall_completion = calculate_completion_ratio(total_sum, result_sum)
-    print(f"**Overall Completion:** {overall_completion:.2f}%")
+    overall_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results) * 100
+    print(f"**Overall Score:** {overall_score:.2f}%")
     
     # Additional statistics
     if detailed_results:
-        highest_completion = max(ratio for _, _, _, ratio, _ in detailed_results)
-        lowest_completion = min(ratio for _, _, _, ratio, _ in detailed_results)
-        median_completion = detailed_results[len(detailed_results) // 2][3]
-        avg_completion = sum(ratio for _, _, _, ratio, _ in detailed_results) / len(detailed_results)
+        highest_score = max(score for _, _, _, score, _ in detailed_results)
+        lowest_score = min(score for _, _, _, score, _ in detailed_results)
+        median_score = detailed_results[len(detailed_results) // 2][3]
+        avg_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results)
         
         print("\n## Statistics\n")
         print("| Metric | Value |")
         print("|---------|--------|")
-        print(f"| Highest Task Completion | {highest_completion:.2f}% |")
-        print(f"| Lowest Task Completion | {lowest_completion:.2f}% |")
-        print(f"| Median Task Completion | {median_completion:.2f}% |")
-        print(f"| Average Task Completion | {avg_completion:.2f}% |")
+        print(f"| Highest Task Score | {highest_score:.2f} |")
+        print(f"| Lowest Task Score | {lowest_score:.2f} |")
+        print(f"| Median Task Score | {median_score:.2f} |")
+        print(f"| Average Task Score | {avg_score:.2f} |")
 
 if __name__ == "__main__":
     main()
