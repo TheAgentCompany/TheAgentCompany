@@ -39,7 +39,7 @@ def get_by_name(first_name, last_name):
     return AgentProfile.find(
         (AgentProfile.first_name == first_name) & 
         (AgentProfile.last_name == last_name)
-    )
+    ).all()
 
 for definition in agent_definitions:
     if get_by_name(definition["first_name"],definition["last_name"]):
