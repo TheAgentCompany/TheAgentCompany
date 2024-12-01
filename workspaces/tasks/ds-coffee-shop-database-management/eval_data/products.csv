@@ -1,0 +1,6 @@
+product_id,name,category,unit_price,unit_cost,supplier
+P001,"Premium Coffee Beans, Dark Roast",Coffee,15.99,10.50,"Global Coffee Supplies"
+P002,"Ceramic Coffee Mug",Accessories,12.99,8.00,"HomeGoods Inc"
+P003,"Tea Sampler Pack",Tea,24.99,18.50,"Tea Traders Ltd"
+P004,"Coffee Filter Papers",Accessories,5.99,3.50,"Paper Products Co"
+P005,"Premium Coffee Beans, Light Roast",Coffee,15.99,10.50,"Global Coffee Supplies"

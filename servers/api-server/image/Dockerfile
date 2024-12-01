@@ -11,11 +11,9 @@ RUN apk update && apk add --no-cache \
     linux-headers \
     make \
     bash \
-    curl
-
-# Install python package, in Alpine Linux, we cannot fix the version
-RUN apk add py3-flask
-RUN apk add py3-requests
+    curl \
+    py3-pip \
+    vim
 
 RUN ln -sf python3 /usr/bin/python
 ENV PYTHONPATH="/workspace:$PYTHONPATH"
@@ -46,5 +44,14 @@ COPY data/db.dump /rocketchat/
 COPY data/restore.sh /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
 RUN chmod 777 /rocketchat/restore.sh
+ENV REDIS_OM_URL redis://default:theagentcompany@redis-stack:6379
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN . /opt/venv/bin/activate && \
+    pip install --no-cache-dir \
+    rocketchat_API==1.32.0 \
+    redis==5.2.0 \ 
+    flask==3.1.0 \ 
+    requests==2.32.3
 
 ENTRYPOINT ["python", "api-server.py"]
