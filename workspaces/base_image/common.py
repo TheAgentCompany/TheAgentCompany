@@ -11,7 +11,6 @@ import litellm
 from rocketchat_API.rocketchat import RocketChat
 from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
-from difflib import SequenceMatcher
 
 from config import *
 
@@ -277,6 +276,7 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         logging.error(f"Failed to evaluate message: {str(e)}", exc_info=True)
         return False
 
+
 def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str):
     """
     Evaluates chat history from RocketChat server against a given predicate using LLM.
@@ -307,7 +307,7 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
 
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
-        return False    
+        return False
 
 def make_gitlab_request(project_identifier: str = None, additional_path: str = None, method: str = 'GET', params: dict = None):
     url = f"{GITLAB_BASEURL}/api/v4"
