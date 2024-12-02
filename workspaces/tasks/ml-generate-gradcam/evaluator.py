@@ -124,7 +124,7 @@ def grade_checkpoint1():
     try:
         return compare_images_with_llm(
             '/workspace/gradcam_output.jpg', 
-            '/eval_data/reference_gradcam.jpg',
+            '/utils/reference_gradcam.jpg',
             'Do these two GradCAM visualizations highlight similar regions in the image?',
             'Focus on the regions highlighted in red/orange and their intensity patterns.'
         )
@@ -155,7 +155,7 @@ def grade_checkpoint3():
     try:
         # Load saved gradients
         student_gradients = torch.load('/workspace/raw_gradients.pt')
-        reference_gradients = torch.load('/eval_data/reference_gradients.pt')
+        reference_gradients = torch.load('/utils/reference_gradients.pt')
         
         # Calculate cosine similarity
         similarity = F.cosine_similarity(
@@ -176,7 +176,7 @@ def grade_checkpoint4():
     try:
         # Load saved activations
         student_activations = torch.load('/workspace/raw_activations.pt')
-        reference_activations = torch.load('/eval_data/reference_activations.pt')
+        reference_activations = torch.load('/utils/reference_activations.pt')
         
         # Calculate cosine similarity
         similarity = F.cosine_similarity(
