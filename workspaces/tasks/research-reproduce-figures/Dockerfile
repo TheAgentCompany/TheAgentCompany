@@ -6,4 +6,4 @@ RUN mkdir -p /eval_data
 
 COPY eval_data/* /eval_data
 
-RUN pip install pdf2image
+RUN pip install pdf2image=1.17.0
