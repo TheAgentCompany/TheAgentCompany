@@ -6,7 +6,7 @@ This task has 4 points in total.
 
 The agent correctly generated the GradCAM image.
 
-## Checkpoint 2 (6pt)
+## Checkpoint 2 (1pt)
 
 Agent explain what regions the model focused on while making the prediction.
 
