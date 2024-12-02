@@ -8,7 +8,7 @@ The agent correctly generated the GradCAM image.
 
 ## Checkpoint 2 (6pt)
 
-Agent correctly predicts the predicted class and why the model predicted it.
+Agent explain what regions the model focused on while making the prediction.
 
 ## Checkpoint 3 (1pt)
 

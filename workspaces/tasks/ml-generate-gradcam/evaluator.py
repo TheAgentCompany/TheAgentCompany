@@ -143,7 +143,7 @@ def grade_checkpoint2():
     try:
         return evaluate_with_llm(
             gradcam_explanation,
-            'The model predicted the image as a dog by focusing on the head area to a high degree and also the body to a lower degree.',
+            'The model made the prediction by focusing on the head area to a high degree and also the body to a lower degree.',
         )
     except Exception as e:
         logging.error(f"Failed to compare GradCAM explanations: {e}")
