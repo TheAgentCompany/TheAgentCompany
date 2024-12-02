@@ -30,7 +30,7 @@ def compare_figures(index):
     generated_png = pdf_to_png(f'/workspace/figure{index}.pdf',f'/workspace/figure{index}.png')
     if not generated_png:
         return False
-    return compare_images_with_llm(generated_png,f'/eval_data/figure{index}.png',query)
+    return compare_images_with_llm(generated_png,f'/utils/figure{index}.png',query)
 
 def is_pdf(file_path):
     if len(file_path.split('.'))<2:
@@ -61,7 +61,7 @@ def compare_tables(index):
     generated_png = pdf_to_png(f'/workspace/table{index}.pdf',f'/workspace/table{index}.png')
     if not generated_png:
         return False
-    return compare_images_with_llm(generated_png,f'/eval_data/table{index}.png',query)
+    return compare_images_with_llm(generated_png,f'/utils/table{index}.png',query)
 
 def table_code_overlap(file_path1:str, file_path2:str, threshold:float):
     try:
@@ -215,15 +215,15 @@ def grade_checkpoint4():
 
 @grader
 def grade_checkpoint5():
-    return table_code_overlap('/workspace/table1.tex','/eval_data/table1.tex',0.9) and compare_tables(1)
+    return table_code_overlap('/workspace/table1.tex','/utils/table1.tex',0.9) and compare_tables(1)
 
 @grader
 def grade_checkpoint6():
-    return table_code_overlap('/workspace/table2.tex','/eval_data/table2.tex',0.9) and compare_tables(2)
+    return table_code_overlap('/workspace/table2.tex','/utils/table2.tex',0.9) and compare_tables(2)
 
 @grader
 def grade_checkpoint7():
-    return table_code_overlap('/workspace/table3.tex','/eval_data/table3.tex',0.9) and compare_tables(3)
+    return table_code_overlap('/workspace/table3.tex','/utils/table3.tex',0.9) and compare_tables(3)
 
 @grader
 def grade_checkpoint8():
