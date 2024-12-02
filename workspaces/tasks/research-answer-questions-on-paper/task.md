@@ -1,0 +1,3 @@
+You need to download the research paper 'noise_simulation_paper.pdf' and the analysis sheet 'noise_simulation_analysis_sheet.txt' from owncloud under the Documents/Research/Noise Simulation/ folder and place them in the workspace directory. Then you need to answer the questions in the analysis sheet using the research paper. Replace the <ANSWER HERE> placeholders with your answer. In order for the evaluator to work properly you must ensure that the answer to each question is placed in the same line as the question and should not extend to a new line.
+
+OwnCloud can be accessed at: http://the-agent-company.com:8092

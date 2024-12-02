@@ -1,0 +1,6 @@
+order_id,customer_id,order_date,payment_status,total_amount
+1001,1,2024-01-15,PAID,31.98
+1002,1,2024-01-15,PAID,38.97
+1003,2,2024-01-16,PENDING,56.97
+1004,3,2024-01-17,PAID,29.95
+1005,4,2024-01-17,PENDING,41.97
