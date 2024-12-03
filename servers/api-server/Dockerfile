@@ -42,6 +42,7 @@ COPY data/plane/Makefile /plane/uploads.tar.gz
 RUN mkdir /rocketchat
 COPY data/db.dump /rocketchat/
 COPY data/restore.sh /rocketchat/
+COPY data/npc_definition.json /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
 RUN chmod 777 /rocketchat/restore.sh
 ENV REDIS_OM_URL redis://default:theagentcompany@redis-stack:6379
@@ -54,6 +55,5 @@ RUN . /opt/venv/bin/activate && \
     flask==3.1.0 \ 
     requests==2.32.3 \
     sotopia==0.1.2
-COPY ../../rocketchat/npc/npc_definition.json /rocketchat/
 
 ENTRYPOINT ["python", "api-server.py"]
