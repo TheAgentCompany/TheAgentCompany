@@ -1,20 +1,6 @@
-FROM docker:27.3.1
+FROM python:3.12
 
-RUN apk update && apk add --no-cache \
-    python3 \
-    py3-pip \
-    iputils \
-    lsof \
-    gcc \
-    g++ \
-    python3-dev \
-    musl-dev \
-    linux-headers \
-    make \
-    bash \
-    curl \
-    vim \
-    cmake
+RUN apt-get update && apt-get install -y iputils-ping vim
 
 RUN ln -sf python3 /usr/bin/python
 ENV PYTHONPATH="/workspace:$PYTHONPATH"
