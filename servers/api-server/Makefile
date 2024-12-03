@@ -11,7 +11,7 @@ build:
 	mkdir data
 	cp ../rocketchat/npc/npc_definition.json data/
 	cp ../docker-compose.yml data/
-	cd ../plane && make download-setup
+	cd ../plane && make download-setup && cd -
 	cp -r ../plane data/
 	wget -P ./data/ https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/rocketchat-20241123/db.dump
 	cp ../rocketchat/data_restore/restore.sh data/restore.sh
