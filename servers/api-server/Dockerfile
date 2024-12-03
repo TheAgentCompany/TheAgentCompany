@@ -22,6 +22,7 @@ ENV PYTHONPATH="/workspace:$PYTHONPATH"
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY api-server.py /workspace
+COPY utils.py /workspace
 COPY data/docker-compose.yml /workspace/
 COPY API_MAKEFILE /workspace/Makefile
 
