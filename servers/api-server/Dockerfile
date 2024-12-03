@@ -13,7 +13,8 @@ RUN apk update && apk add --no-cache \
     bash \
     curl \
     py3-pip \
-    vim
+    vim \
+    cmake
 
 RUN ln -sf python3 /usr/bin/python
 ENV PYTHONPATH="/workspace:$PYTHONPATH"
