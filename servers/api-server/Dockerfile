@@ -40,6 +40,7 @@ COPY data/plane/Makefile /plane/uploads.tar.gz
 
 # rocketchat
 RUN mkdir /rocketchat
+COPY data/npc_definition.json /rocketchat/
 COPY data/db.dump /rocketchat/
 COPY data/restore.sh /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
@@ -52,6 +53,7 @@ RUN . /opt/venv/bin/activate && \
     rocketchat_API==1.32.0 \
     redis==5.2.0 \ 
     flask==3.1.0 \ 
-    requests==2.32.3
+    requests==2.32.3 \
+    redis-om==0.3.2
 
 ENTRYPOINT ["python", "api-server.py"]
