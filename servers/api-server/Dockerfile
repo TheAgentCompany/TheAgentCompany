@@ -52,6 +52,8 @@ RUN . /opt/venv/bin/activate && \
     rocketchat_API==1.32.0 \
     redis==5.2.0 \ 
     flask==3.1.0 \ 
-    requests==2.32.3
+    requests==2.32.3 \
+    sotopia==0.1.2
+COPY ../../rocketchat/npc/npc_definition.json /rocketchat/
 
 ENTRYPOINT ["python", "api-server.py"]

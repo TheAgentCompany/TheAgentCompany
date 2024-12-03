@@ -1,12 +1,15 @@
-from flask import Flask, jsonify
 import subprocess
 import os
 import json
+import logging
 import threading
 import requests
 import os
 import time
+
+from flask import Flask, jsonify
 from rocketchat_API.rocketchat import RocketChat
+from sotopia.database import AgentProfile
 import redis
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
@@ -19,6 +22,11 @@ PLANE_HEADERS = {
     "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
+
+agent_definitions = []
+with open('/rocketchat/npc_definition.json', 'r') as file:
+    agent_definitions = json.load(file)
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
 def login_to_plane():
     res = []
@@ -145,9 +153,13 @@ def healthcheck_gitlab():
 def healthcheck_rocketchat():
     rocketchat_cli = create_rocketchat_client()
     rocketchat_code = 400 if rocketchat_cli is None else 200
-    redis_msg, redis_code = healthcheck_redis()
-    code = 200 if redis_code == 200 and rocketchat_code == 200 else 400
-    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code}), code
+    _, redis_code = healthcheck_redis()
+    # Sotopia is optional if no NPC is needed for the task,
+    # but for simplicity, we always check Sotopia NPC profiles are correctly
+    # loaded whenever RocketChat service is needed
+    _, sotopia_code = healthcheck_sotopia()
+    code = 200 if redis_code == 200 and rocketchat_code == 200 and sotopia_code == 200 else 400
+    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code, "sotopia": sotopia_code}), code
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
@@ -161,6 +173,21 @@ def healthcheck_redis():
         return jsonify({"message":"success connect to redis"}), 200
     else:
         return jsonify({"message":"failed connect to redis"}), 400
+
+@app.route('/api/healthcheck/sotopia', methods=['GET'])
+def healthcheck_sotopia():
+    success = wait_for_redis()
+    assert len(agent_definitions) > 0
+    for definition in agent_definitions:
+        if not success:
+            continue
+        if not AgentProfile.find((AgentProfile.first_name == definition["first_name"]) & (AgentProfile.last_name == definition["last_name"])).all():
+            success = False
+            print(f"NPC ({definition['first_name']} {definition['last_name']}) not found")
+    if success:
+        return jsonify({"message":"sotopia npc profiles loaded successfully"}), 200
+    else:
+        return jsonify({"message":"sotopia npc profiles not loaded"}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
