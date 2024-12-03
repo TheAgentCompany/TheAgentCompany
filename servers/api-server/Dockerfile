@@ -6,13 +6,13 @@ RUN apk update && apk add --no-cache \
     iputils \
     lsof \
     gcc \
+    g++ \
     python3-dev \
     musl-dev \
     linux-headers \
     make \
     bash \
     curl \
-    py3-pip \
     vim \
     cmake
 
