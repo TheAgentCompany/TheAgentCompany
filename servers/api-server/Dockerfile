@@ -46,7 +46,8 @@ COPY data/db.dump /rocketchat/
 COPY data/restore.sh /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
 RUN chmod 777 /rocketchat/restore.sh
-ENV REDIS_OM_URL redis://default:theagentcompany@redis-stack:6379
+# For sotopia redis address, use localhost, rather than redis-stack
+ENV REDIS_OM_URL redis://default:theagentcompany@localhost:6379
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN . /opt/venv/bin/activate && \
