@@ -124,7 +124,7 @@ conda create -n bridge python=3.11; conda activate bridge;
 curl -sSL https://install.python-poetry.org | python3
 poetry install
 # option 2: use pip
-pip install sotopia=="0.1.0-rc.1"
+pip install sotopia=="0.1.2"
 ```
 
 ## OPENAI_API_KEY
