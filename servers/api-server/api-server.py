@@ -8,6 +8,8 @@ import os
 import time
 from rocketchat_API.rocketchat import RocketChat
 import redis
+from redis_om import JsonModel
+from redis_om.model.model import Field
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
@@ -70,6 +72,37 @@ def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retr
             time.sleep(delay)
     print("Failed to connect to Redis after several retries.")
     return False
+
+class AgentProfile(JsonModel):
+    first_name: str = Field(index=True)
+    last_name: str = Field(index=True)
+    age: int = Field(index=True, default_factory=lambda: 0)
+    occupation: str = Field(index=True, default_factory=lambda: "")
+    gender: str = Field(index=True, default_factory=lambda: "")
+    gender_pronoun: str = Field(index=True, default_factory=lambda: "")
+    public_info: str = Field(index=True, default_factory=lambda: "")
+    big_five: str = Field(index=True, default_factory=lambda: "")
+    moral_values: list[str] = Field(index=False, default_factory=lambda: [])
+    schwartz_personal_values: list[str] = Field(index=False, default_factory=lambda: [])
+    personality_and_values: str = Field(index=True, default_factory=lambda: "")
+    decision_making_style: str = Field(index=True, default_factory=lambda: "")
+    secret: str = Field(default_factory=lambda: "")
+    model_id: str = Field(default_factory=lambda: "")
+    mbti: str = Field(default_factory=lambda: "")
+    tag: str = Field(
+        index=True,
+        default_factory=lambda: "",
+        description="The tag of the agent, used for searching, could be convenient to document agent profiles from different works and sources",
+    )
+    class Meta:
+        global_key_prefix = ""  # clear prefix
+        model_key_prefix = "sotopia.database.persistent_profile.AgentProfile"  # set correct prefix to match sotopia package
+
+agent_definitions = []
+with open('/rocketchat/npc_definition.json', 'r') as file:
+    agent_definitions = json.load(file)
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
+
 
 app = Flask(__name__)
 
@@ -145,9 +178,13 @@ def healthcheck_gitlab():
 def healthcheck_rocketchat():
     rocketchat_cli = create_rocketchat_client()
     rocketchat_code = 400 if rocketchat_cli is None else 200
-    redis_msg, redis_code = healthcheck_redis()
-    code = 200 if redis_code == 200 and rocketchat_code == 200 else 400
-    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code}), code
+    _, redis_code = healthcheck_redis()
+    # Sotopia is optional if no NPC is needed for the task,
+    # but for simplicity, we always check Sotopia NPC profiles are correctly
+    # loaded whenever RocketChat service is needed
+    _, sotopia_code = healthcheck_sotopia()
+    code = 200 if redis_code == 200 and rocketchat_code == 200 and sotopia_code == 200 else 400
+    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code, "sotopia": sotopia_code}), code
 
 @app.route('/api/healthcheck/plane', methods=['GET'])
 def healthcheck_plane():
@@ -161,6 +198,28 @@ def healthcheck_redis():
         return jsonify({"message":"success connect to redis"}), 200
     else:
         return jsonify({"message":"failed connect to redis"}), 400
+
+def get_by_name(first_name, last_name):
+    return AgentProfile.find(
+        (AgentProfile.first_name == first_name) & 
+        (AgentProfile.last_name == last_name)
+    ).all()
+
+@app.route('/api/healthcheck/sotopia', methods=['GET'])
+def healthcheck_sotopia():
+    success = wait_for_redis()
+    assert len(agent_definitions) > 0
+    for definition in agent_definitions:
+        if not success:
+            continue
+    if not AgentProfile.find((AgentProfile.first_name == definition["first_name"]) & (AgentProfile.last_name == definition["last_name"])).all():
+        success = False
+        print(f"NPC ({definition['first_name']} {definition['last_name']}) not found")
+    
+    if success:
+        return jsonify({"message":"sotopia npc profiles loaded successfully"}), 200
+    else:
+        return jsonify({"message":"sotopia npc profiles not loaded"}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=2999)
