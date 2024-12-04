@@ -6,6 +6,9 @@ evaluation/config.toml
 *owncloud_data*
 *owncloud_apps*
 
+# Server-related
+servers/api-server/data/
+
 *.tar.gz
 *db.dump
 __pycache__

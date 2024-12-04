@@ -1,13 +1,14 @@
-from flask import Flask, jsonify
-import subprocess
-import os
-import json
-import threading
-import requests
-import os
-import time
 from rocketchat_API.rocketchat import RocketChat
 import redis
+from redis_om import JsonModel
+from redis_om.model.model import Field
+import subprocess
+import os
+import threading
+import requests
+import time
+import json
+
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
 ROCKETCHAT_PORT = os.getenv('ROCKETCHAT_PORT') or '3000'
@@ -71,7 +72,35 @@ def wait_for_redis(host='localhost', port=6379, password='theagentcompany', retr
     print("Failed to connect to Redis after several retries.")
     return False
 
-app = Flask(__name__)
+class AgentProfile(JsonModel):
+    first_name: str = Field(index=True)
+    last_name: str = Field(index=True)
+    age: int = Field(index=True, default_factory=lambda: 0)
+    occupation: str = Field(index=True, default_factory=lambda: "")
+    gender: str = Field(index=True, default_factory=lambda: "")
+    gender_pronoun: str = Field(index=True, default_factory=lambda: "")
+    public_info: str = Field(index=True, default_factory=lambda: "")
+    big_five: str = Field(index=True, default_factory=lambda: "")
+    moral_values: list[str] = Field(index=False, default_factory=lambda: [])
+    schwartz_personal_values: list[str] = Field(index=False, default_factory=lambda: [])
+    personality_and_values: str = Field(index=True, default_factory=lambda: "")
+    decision_making_style: str = Field(index=True, default_factory=lambda: "")
+    secret: str = Field(default_factory=lambda: "")
+    model_id: str = Field(default_factory=lambda: "")
+    mbti: str = Field(default_factory=lambda: "")
+    tag: str = Field(
+        index=True,
+        default_factory=lambda: "",
+        description="The tag of the agent, used for searching, could be convenient to document agent profiles from different works and sources",
+    )
+    class Meta:
+        global_key_prefix = ""  # clear prefix
+        model_key_prefix = "sotopia.database.persistent_profile.AgentProfile"  # set correct prefix to match sotopia package
+
+agent_definitions = []
+with open('/rocketchat/npc_definition.json', 'r') as file:
+    agent_definitions = json.load(file)
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
 
 HOSTNAME= os.getenv('HOSTNAME', "localhost")
 
@@ -102,65 +131,3 @@ def execute_command(command):
 
 def async_execute_command(command):
     threading.Thread(target=execute_command, args=(command,)).start()
-
-@app.route('/api/reset-owncloud', methods=['POST'])
-def reset_owncloud():
-    # owncloud reset is essentially a restart
-    # since it takes a while to stop, we need to make sure this is synchronous
-    execute_command('make reset-owncloud')
-    return jsonify({"message": "Reset ownCloud command initiated"}), 202
-
-@app.route('/api/reset-rocketchat', methods=['POST'])
-def reset_rocketchat():
-    async_execute_command('make reset-sotopia-redis')
-    async_execute_command('make reset-rocketchat')
-    return jsonify({"message": "Reset RocketChat command initiated"}), 202
-
-@app.route('/api/reset-plane', methods=['POST'])
-def reset_plane():
-    async_execute_command('make reset-plane')
-    return jsonify({"message": "Reset Plane command initiated"}), 202
-
-@app.route('/api/reset-gitlab', methods=['POST'])
-def reset_gitlab():
-    # gitlab reset is essentially a restart
-    # since it takes a while to stop, we need to make sure this is synchronous
-    # devnote: health check + polling on client side is still needed because
-    # gitlab service takes a while to fully function after the container starts
-    execute_command('make reset-gitlab')
-    return jsonify({"message": "Reset GitLab command initiated"}), 202
-
-@app.route('/api/healthcheck/owncloud', methods=['GET'])
-def healthcheck_owncloud():
-    code, msg = check_url("http://localhost:8092")
-    return jsonify({"message":msg}), code
-
-@app.route('/api/healthcheck/gitlab', methods=['GET'])
-def healthcheck_gitlab():
-    # TODO (yufansong): this check cannot cover all case
-    code, msg = check_url("http://localhost:8929")
-    return jsonify({"message":msg}), code
-
-@app.route('/api/healthcheck/rocketchat', methods=['GET'])
-def healthcheck_rocketchat():
-    rocketchat_cli = create_rocketchat_client()
-    rocketchat_code = 400 if rocketchat_cli is None else 200
-    redis_msg, redis_code = healthcheck_redis()
-    code = 200 if redis_code == 200 and rocketchat_code == 200 else 400
-    return jsonify({"redis": redis_code, "rocketchat": rocketchat_code}), code
-
-@app.route('/api/healthcheck/plane', methods=['GET'])
-def healthcheck_plane():
-    code, msg = login_to_plane()
-    return jsonify({"message":msg}), code
-    
-@app.route('/api/healthcheck/redis', methods=['GET'])
-def healthcheck_redis():
-    success = wait_for_redis()
-    if success:
-        return jsonify({"message":"success connect to redis"}), 200
-    else:
-        return jsonify({"message":"failed connect to redis"}), 400
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=2999)

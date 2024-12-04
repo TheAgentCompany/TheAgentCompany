@@ -13,7 +13,7 @@ import pandas as pd
 ############################# init variable #####################################
 
 DB_PATH = '/data/coffee_shop.db'
-CSV_DIRECTORY = '/data'
+CSV_DIRECTORY = '/utils'
 SHORT_STOCK_VIEW_CSV = '/utils/short_stock.csv'
 AVERAGE_SALES_VIEW = '/utils/average_sales.csv'
 ANALYSIS_SHEET = 'analysis.txt'

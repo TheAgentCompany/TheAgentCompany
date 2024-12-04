@@ -9,11 +9,12 @@ GHCR_NAME=servers-api-server
 build:
 	rm -rf data
 	mkdir data
-	cp ../../docker-compose.yml data/
-	cd ../../plane && make download-setup
-	cp -r ../../plane data/
+	cp ../rocketchat/npc/npc_definition.json data/
+	cp ../docker-compose.yml data/
+	cd ../plane && make download-setup && cd -
+	cp -r ../plane data/
 	wget -P ./data/ https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/rocketchat-20241123/db.dump
-	cp ../../rocketchat/data_restore/restore.sh data/restore.sh
+	cp ../rocketchat/data_restore/restore.sh data/restore.sh
 	docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true && docker build -t $(IMAGE_NAME) . --no-cache
 
 run:

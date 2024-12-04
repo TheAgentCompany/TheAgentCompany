@@ -22,6 +22,7 @@ ENV PYTHONPATH="/workspace:$PYTHONPATH"
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY api-server.py /workspace
+COPY utils.py /workspace
 COPY data/docker-compose.yml /workspace/
 COPY API_MAKEFILE /workspace/Makefile
 
@@ -40,11 +41,13 @@ COPY data/plane/Makefile /plane/uploads.tar.gz
 
 # rocketchat
 RUN mkdir /rocketchat
+COPY data/npc_definition.json /rocketchat/
 COPY data/db.dump /rocketchat/
 COPY data/restore.sh /rocketchat/
 RUN chmod 777 /rocketchat/db.dump
 RUN chmod 777 /rocketchat/restore.sh
-ENV REDIS_OM_URL redis://default:theagentcompany@redis-stack:6379
+# For sotopia redis address, use localhost, rather than redis-stack
+ENV REDIS_OM_URL redis://default:theagentcompany@localhost:6379
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN . /opt/venv/bin/activate && \
@@ -52,6 +55,7 @@ RUN . /opt/venv/bin/activate && \
     rocketchat_API==1.32.0 \
     redis==5.2.0 \ 
     flask==3.1.0 \ 
-    requests==2.32.3
+    requests==2.32.3 \
+    redis-om==0.3.2
 
 ENTRYPOINT ["python", "api-server.py"]
