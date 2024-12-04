@@ -5,6 +5,7 @@ from pdf2image import convert_from_path
 from scoring import Result, Checkpoint
 from config import *
 from common import *
+from difflib import SequenceMatcher
 
 ############################# init variable #####################################
 
@@ -146,13 +147,13 @@ def compare_images_with_llm(image_path1: str = None, image_path2: str = None, qu
     content.extend([{
         "type": "image_url",
         "image_url": {
-            "url": f"data:image/jpeg;base64,{base64_image1}"
+            "url": f"data:image/png;base64,{base64_image1}"
         }
     },
     {
         "type": "image_url",
         "image_url": {
-            "url": f"data:image/jpeg;base64,{base64_image2}"
+            "url": f"data:image/png;base64,{base64_image2}"
         }
     }])
 
