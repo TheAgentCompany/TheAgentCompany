@@ -170,3 +170,6 @@ stop-api-server:
 
 rm-api-server: stop-api-server
 	docker rm api-server
+
+get-ip:
+	curl ifconfig.me
