@@ -253,4 +253,3 @@ if __name__ == '__main__':
 
     # finally, move trajectory file from mount path on host (temp dir) to outputs path
     shutil.move(os.path.join(temp_dir, f'traj_{args.task_image_name}.json'), os.path.join(os.path.abspath(args.outputs_path), f'traj_{args.task_image_name}.json'))
-    os.rmdir(temp_dir)
