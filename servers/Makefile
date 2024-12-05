@@ -148,7 +148,7 @@ reset-owncloud: init
 	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
 # api-server
-start-api-server: init
+start-api-server-with-setup: init
 	docker run -d \
 		--name api-server \
 		--network host \
@@ -156,7 +156,7 @@ start-api-server: init
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		ghcr.io/theagentcompany/servers-api-server:latest
 
-start-api-server-with-setup: init
+start-api-server: init
 	docker run -d \
 		--name api-server \
 		--network host \
