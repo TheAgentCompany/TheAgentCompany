@@ -29,7 +29,6 @@ if [ -f "/npc/scenarios.json" ]; then
 fi
 
 # populate task-specific data if applicable
-# TODO: revisit this: do tasks really need private data?
 if [ -f "/utils/populate_data.py" ]; then
     python_default /utils/populate_data.py
 fi

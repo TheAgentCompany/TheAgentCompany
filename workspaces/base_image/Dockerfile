@@ -40,7 +40,7 @@ RUN pip install sotopia==0.1.2
 RUN pip install hiredis==3.0.0
 RUN pip install litellm==1.23.16
 
-# create npc directory (TODO: examinee MUST not access this directory)
+# create npc directory
 RUN mkdir -p /npc
 COPY ./npc  /npc
 

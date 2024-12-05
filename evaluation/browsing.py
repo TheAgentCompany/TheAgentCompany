@@ -157,9 +157,6 @@ def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, scre
     Logs in to all the websites that are needed for the evaluation.
     Once logged in, the sessions would be cached in the browser, so OpenHands
     agent doesn't need to log in to these websites again.
-
-    TODO: right now we assume all login actions succeed. We need to add some sanity
-    checks to ensure that login is successful.
     """
     owncloud_login_actions = [
         GotoAction("http://the-agent-company.com:8092"),

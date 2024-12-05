@@ -40,7 +40,6 @@ def get_by_name(first_name, last_name):
 
 for definition in agent_definitions:
     if get_by_name(definition["first_name"],definition["last_name"]):
-        # TODO: shall we support modifications?
         print(f'NPC ({definition["first_name"]} {definition["last_name"]}) already inserted, skip')
         continue
     agent_profile = AgentProfile.parse_obj(definition)

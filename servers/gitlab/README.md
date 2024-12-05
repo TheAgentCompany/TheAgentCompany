@@ -26,8 +26,6 @@ Before every task that involves GitLab, we need to restore GitLab to its initial
 state (i.e. the state with prepopulated data). This is handled by `init.sh`, so
 benchmark users don't need to worry about it.
 
-TODO: set up GitHub CI to publish built image to ghcr.io
-
 #### Benchmark developer
 
 If you are a benchmark developer and would like to add a new repo, please follow

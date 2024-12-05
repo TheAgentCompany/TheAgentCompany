@@ -95,7 +95,6 @@ OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_
     3. Set `BOT_URL` as the rocketchat URL. We already host it on ogma server. You can use the default value
     4. Set `BOT_NAME` and `BOT_PASSWORD` as the NPC you want to simulate.
     5. Change the `scenarios.json` file to your customized setting. See here for [guideline](./NPC_GUIDELINE.md).
-    6. TODO: We will working on provide more predefined NPCs for choice
 
 The following is a dockerfile example, you can use it build a npc example and run it.
 ```Dockerfile
