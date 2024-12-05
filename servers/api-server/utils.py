@@ -128,7 +128,4 @@ def execute_command(command):
         return f"Error : {e}"
 
 def async_execute_command(command):
-    if SKIP_SETUP:
-        print(f"Skip the setup")
-        return
     threading.Thread(target=execute_command, args=(command,)).start()
