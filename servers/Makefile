@@ -193,3 +193,9 @@ pull-image:
 	docker pull postgres:15.7-alpine
 	docker pull bitnami/mongodb:5.0
 	docker pull registry.rocket.chat/rocketchat/rocket.chat:5.3.0
+
+check:
+	@echo "check docker version"
+	docker version
+	@echo "check docker compose version"
+	docker compose version
