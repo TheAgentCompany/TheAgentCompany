@@ -8,7 +8,6 @@ Open Phil Call for Proposal: https://www.openphilanthropy.org/rfp-llm-benchmarks
 ## Tracking of progress
 Our Project: https://www.openphilanthropy.org/grants/carnegie-mellon-university-benchmark-for-web-based-tasks/
 
-Project tracker document: https://docs.google.com/document/d/1w8vjsha5tRHYkLgpJwruFIlsrjNLtH3X_PICpsGW04U/edit?usp=sharing
 
 ## Backgroud
 Check the backgroup, detail proposal and design details in [BACKGROUND.md](./BACKGROUND.md)

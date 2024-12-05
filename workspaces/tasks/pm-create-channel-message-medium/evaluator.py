@@ -3,7 +3,7 @@ import logging
 
 from typing import List
 
-from scoring import Result, Checkpoint, bonus_for_completing_final
+from scoring import Result, Checkpoint
 from common import get_rocketchat_channel_room_id, check_rocketchat_message_posted,create_rocketchat_client, grader
 
 # Create RocketChat instance
