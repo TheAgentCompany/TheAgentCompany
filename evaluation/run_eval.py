@@ -219,9 +219,12 @@ if __name__ == '__main__':
 
     logger.info(f"Task image name is {args.task_image_name}")
 
-    # mount a temporary directory to pass trajectory from host to container
-    # trajectory is dumped by OpenHands library (on host machine), but it's needed by
+    # mount a temporary directory to pass trajectory from host to container, and to
+    # pass the evaluation result from container to host
+    # 1) trajectory is dumped by OpenHands library (on host machine), but it's needed by
     # evaluator (in container), so we mount a temporary directory to pass it in
+    # 2) evaluation result is written by evaluator (in container), but we need to persist
+    # it on host machine, so we mount a temporary directory to pass it out
     temp_dir = tempfile.mkdtemp()
     config: AppConfig = get_config(args.task_image_name, temp_dir, agent_llm_config)
     runtime: Runtime = create_runtime(config)
@@ -251,5 +254,6 @@ if __name__ == '__main__':
 
     run_evaluator(runtime, env_llm_config, trajectory_path, result_path)
 
-    # finally, move trajectory file from mount path on host (temp dir) to outputs path
+    # finally, move trajectory file and evaluation result from mount path on host (temp dir) to outputs path
     shutil.move(os.path.join(temp_dir, f'traj_{args.task_image_name}.json'), os.path.join(os.path.abspath(args.outputs_path), f'traj_{args.task_image_name}.json'))
+    shutil.move(os.path.join(temp_dir, f'eval_{args.task_image_name}.json'), os.path.join(os.path.abspath(args.outputs_path), f'eval_{args.task_image_name}.json'))
