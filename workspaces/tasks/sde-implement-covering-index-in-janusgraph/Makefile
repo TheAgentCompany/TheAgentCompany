@@ -1,5 +1,5 @@
-IMAGE_NAME=sde-implement-covering-index-image
-CONTAINER_NAME=sde-implement-covering-index
+IMAGE_NAME=sde-implement-covering-index-in-janusgraph-image
+CONTAINER_NAME=sde-implement-covering-index-in-janusgraph
 
 .PHONY: build run stop
 
