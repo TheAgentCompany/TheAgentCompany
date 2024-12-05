@@ -21,19 +21,20 @@ ENV PYTHONPATH="/workspace:$PYTHONPATH"
 # api-server
 RUN mkdir -p /workspace
 WORKDIR /workspace
-COPY api-server.py /workspace
-COPY utils.py /workspace
-COPY data/docker-compose.yml /workspace/
+COPY api-server.py /workspace/
+COPY utils.py /workspace/
+COPY docker-compose.yml /workspace/
 COPY API_MAKEFILE /workspace/Makefile
+ENV SKIP_SETUP="False"
 
 # plane
 RUN mkdir -p /plane/plane-app
-COPY data/plane/plane-app/docker-compose.yaml /plane/plane-app
-COPY data/plane/plane-app/plane.env /plane/plane-app
-COPY data/plane/plane-app/restore.sh /plane/plane-app
-COPY data/plane/setup.sh /plane/
-COPY data/plane/download.sh /plane/
-COPY data/plane/Makefile /plane/
+COPY data/plane/plane-app/docker-compose.yaml /plane/plane-app/docker-compose.yaml
+COPY data/plane/plane-app/plane.env /plane/plane-app/plane.env
+COPY data/plane/plane-app/restore.sh /plane/plane-app/restore.sh
+COPY data/plane/setup.sh /plane/setup.sh
+COPY data/plane/download.sh /plane/download.sh
+COPY data/plane/Makefile /plane/Makefile
 # plane fake data, needed by restore.sh
 COPY data/plane/Makefile /plane/pgdata.tar.gz
 COPY data/plane/Makefile /plane/redisdata.tar.gz

@@ -20,6 +20,13 @@ PLANE_HEADERS = {
     "x-api-key": PLANE_API_KEY,
     "Content-Type": "application/json"
 }
+agent_definitions = []
+with open('/rocketchat/npc_definition.json', 'r') as file:
+    agent_definitions = json.load(file)
+    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
+HOSTNAME = os.getenv('HOSTNAME', "localhost")
+EXECUTION_DIR = os.getenv('EXECUTION_DIR', "/workspace")
+SKIP_SETUP = os.getenv('SKIP_SETUP', 'False').lower() == 'true'
 
 def login_to_plane():
     res = []
@@ -97,15 +104,6 @@ class AgentProfile(JsonModel):
         global_key_prefix = ""  # clear prefix
         model_key_prefix = "sotopia.database.persistent_profile.AgentProfile"  # set correct prefix to match sotopia package
 
-agent_definitions = []
-with open('/rocketchat/npc_definition.json', 'r') as file:
-    agent_definitions = json.load(file)
-    print(f"NPC definitions loaded, number of NPCs = {len(agent_definitions)}")
-
-HOSTNAME= os.getenv('HOSTNAME', "localhost")
-
-EXECUTION_DIR = os.getenv('EXECUTION_DIR', "/workspace")
-
 def check_url(url):
     try:
         response = requests.get(url)
@@ -130,4 +128,7 @@ def execute_command(command):
         return f"Error : {e}"
 
 def async_execute_command(command):
+    if SKIP_SETUP:
+        print(f"Skip the setup")
+        return
     threading.Thread(target=execute_command, args=(command,)).start()

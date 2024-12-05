@@ -13,6 +13,18 @@ init:
 	$(eval export GITLAB_PORT)
 	@echo "Initialization done."
 
+start-all: init
+	@echo "stopping everything..."
+	-docker compose -p theagentcompany down -v
+	@echo "stopping plane..."
+	-cd /plane && make stop-plane
+	-cd /plane && make rm-plane-volume
+	@echo "starting everything..."
+	-docker compose -p theagentcompany up -d
+	@echo "starting plane..."
+	-cd /plane && make start-plane
+	-make reset-rocketchat
+
 # reset stops the gitlab container, destroys and starts again
 # any changes to gitlab will disappear, and the container will start
 # in a clean state (with pre-populated data)

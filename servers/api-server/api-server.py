@@ -89,4 +89,5 @@ def healthcheck_sotopia():
         return jsonify({"message":"sotopia npc profiles not loaded"}), 400
 
 if __name__ == '__main__':
+    async_execute_command("make start-all")
     app.run(host='0.0.0.0', port=2999)
