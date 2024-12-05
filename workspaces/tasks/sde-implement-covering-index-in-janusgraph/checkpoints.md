@@ -1,12 +1,17 @@
 # Checkpoints
 
-This task has 3 points in total. Partial credits will be granted if only some checkpoints are
-completed.
+This task has 2 points in total. The first checkpoint doesn't count any score but if the first checkpoint fails, it will get 0 score in total and won't proceed to other checkpoints.
 
-## Checkpoint 1 (2pts)
+## Checkpoint 1 (0pt)
 
-Verify the performance improve more than 10 times
+Verify that IndexSerializerTest passes successfully.
 
 ## Checkpoint 2 (1pt)
 
-Verify the existing tests are not broken
+Verify that CQLCompositeIndexInlinePropBenchmark can run successfully.
+
+## Checkpoint 3 (1pt)
+
+Verify that performance improvement is greater than 10 times.
+
+

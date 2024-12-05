@@ -8,66 +8,21 @@ import re
 import os
 
 JANUSGRAPH_DIR = "/workspace/janusgraph"
-BENCHMARK_FILE = "janusgraph-benchmark/src/main/java/org/janusgraph/CQLCompositeIndexInlinePropBenchmark.java"
 
-def check_benchmark_file():
-    file_path = os.path.join(JANUSGRAPH_DIR, BENCHMARK_FILE)
-    if not os.path.exists(file_path):
-        logging.error(f"Benchmark file not found: {file_path}")
-        return False
-    return True
-
-# Verify the performance has been significant improved. Based on my test, it has been improved 140x
-@grader
-def grade_checkpoint1():
-    if not check_benchmark_file():
-        return False
-
-    result = subprocess.run(
-        ['java', '-cp', 'janusgraph-benchmark/target/janusgraph-benchmark-1.1.0-SNAPSHOT.jar:janusgraph-benchmark/target/lib/*:janusgraph-core/target/janusgraph-core-1.1.0-SNAPSHOT.jar',
-         'org.janusgraph.CQLCompositeIndexInlinePropBenchmark'],
-        cwd=JANUSGRAPH_DIR,
-        capture_output=True,
-        text=True
-    )
-
-    true_pattern = r'CQLCompositeIndexInlinePropBenchmark.searchVertices\s+true\s+\d+\s+avgt\s+\d+\s+(\d+\.?\d*)'
-    false_pattern = r'CQLCompositeIndexInlinePropBenchmark.searchVertices\s+false\s+\d+\s+avgt\s+\d+\s+(\d+\.?\d*)'
-
-    try:
-        inline_time = float(re.search(true_pattern, result.stdout).group(1))
-        regular_time = float(re.search(false_pattern, result.stdout).group(1))
-        improvement = regular_time / inline_time
-        
-        if improvement >= 10:
-            logging.info(f"Performance improvement: {improvement}x")
-            return True
-        else:
-            logging.error(f"Insufficient performance improvement: {improvement}x (required: 10x)")
-            return False
-    except Exception as e:
-        logging.error(f"Failed to parse benchmark results: {e}")
-        return False
-
-# Copy the test file in case cheating
 def copy_test_file():
     source = "/utils/IndexSerializerTest.java"  
     destination = os.path.join(JANUSGRAPH_DIR, "janusgraph-test/src/test/java/org/janusgraph/graphdb/database/IndexSerializerTest.java")
     try:
         shutil.copy2(source, destination)
-        logging.info(f"Copied {source} to {destination}")
         return True
     except Exception as e:
         logging.error(f"Failed to copy test file: {e}")
         return False
 
 @grader
-def grade_checkpoint2():
-    if not check_benchmark_file():
-        return False
-    
+def grade_checkpoint1():
     if not copy_test_file():
-        logging.error("Failed to copy test file in checkpoint2")
+        logging.error("Failed to copy test file in checkpoint1")
         return False
     
     result = subprocess.run(
@@ -91,14 +46,77 @@ def grade_checkpoint2():
         logging.error(output)
         return False
 
+def run_benchmark():
+    try:
+        result = subprocess.run(
+            ['java', '-cp', 'janusgraph-benchmark/target/janusgraph-benchmark-1.1.0-SNAPSHOT.jar:janusgraph-benchmark/target/lib/*:janusgraph-core/target/janusgraph-core-1.1.0-SNAPSHOT.jar',
+             'org.janusgraph.CQLCompositeIndexInlinePropBenchmark'],
+            cwd=JANUSGRAPH_DIR,
+            capture_output=True,
+            text=True
+        )
+        return result.stdout
+    except Exception as e:
+        logging.error(f"Error running benchmark: {str(e)}")
+        return None
+
+@grader
+def grade_checkpoint2():
+    result = getattr(grade_checkpoint2, 'benchmark_result', None)
+    if result is None:
+        result = run_benchmark()
+        setattr(grade_checkpoint2, 'benchmark_result', result)
+    
+    if result is None:
+        return False
+        
+    pattern = r'CQLCompositeIndexInlinePropBenchmark.searchVertices\s+(\w+)\s+5000\s+avgt\s+\d+\s+\d+\.\d+'
+    results = re.findall(pattern, result)
+    
+    if 'true' in results and 'false' in results:
+        return True
+    else:
+        logging.error("Missing benchmark results")
+        return False
+
+@grader
+def grade_checkpoint3():
+    result = getattr(grade_checkpoint2, 'benchmark_result', None)
+    if result is None:
+        logging.error("No benchmark result available")
+        return False
+    
+    try:
+        true_pattern = r'CQLCompositeIndexInlinePropBenchmark.searchVertices\s+true\s+\d+\s+avgt\s+\d+\s+(\d+\.?\d*)'
+        false_pattern = r'CQLCompositeIndexInlinePropBenchmark.searchVertices\s+false\s+\d+\s+avgt\s+\d+\s+(\d+\.?\d*)'
+
+        inline_time = float(re.search(true_pattern, result).group(1))
+        regular_time = float(re.search(false_pattern, result).group(1))
+        improvement = regular_time / inline_time
+        
+        logging.info(f"Performance improvement: {improvement}x")
+        return improvement >= 10
+        
+    except Exception as e:
+        logging.error(f"Failed to parse benchmark results: {e}")
+        return False
+
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
-
-    performance_passed = grade_checkpoint1()
-    functionality_passed = grade_checkpoint2()
-
-    checkpoints.append(Checkpoint(2, int(performance_passed) * 2))
-    checkpoints.append(Checkpoint(1, int(functionality_passed)))
-
+    
+    checkpoint1_passed = grade_checkpoint1()
+    if not checkpoint1_passed:
+        checkpoints.append(Checkpoint(0, 0))
+        checkpoints.append(Checkpoint(1, 0))
+        checkpoints.append(Checkpoint(1, 0))
+        return result
+        
+    checkpoint2_passed = grade_checkpoint2()
+    checkpoint3_passed = grade_checkpoint3() if checkpoint2_passed else False
+    
+    checkpoints.append(Checkpoint(0, int(checkpoint1_passed) * 0))
+    checkpoints.append(Checkpoint(1, int(checkpoint2_passed)))
+    checkpoints.append(Checkpoint(1, int(checkpoint3_passed)))
+    
     return result

@@ -1,10 +1,10 @@
-**# JanusGraph Setup Guide**
+# JanusGraph Setup Guide
 
 This guide will walk you through implementing covering index for JanusGraph. This file is only for developers' reference and is not accessible to the examinee.
 
-**## Prerequisites Installation**
+## Prerequisites Installation
 
-**### Step 1: Install Java 11 and Maven**
+### Step 1: Install Java 11 and Maven
 
 ```bash
 apt-get update
@@ -15,13 +15,13 @@ sdk install java 11.0.25-zulu
 apt install maven
 ```
 
-**## JanusGraph Setup**
+## JanusGraph Setup
 
-**### Step 2: Clone and Configure JanusGraph**
+### Step 2: Clone and Configure JanusGraph
 
 Clone the JanusGraph repository and follow [this PR](https://github.com/JanusGraph/janusgraph/pull/4694/files) to skip the docker-in-docker build.
 
-**### Step 3: Build Binary**
+### Step 3: Build Binary
 
 Build the JanusGraph binary with the following command (with skipdocker):
 
@@ -29,7 +29,7 @@ Build the JanusGraph binary with the following command (with skipdocker):
 mvn clean install -Pjanusgraph-release -Dgpg.skip=true -DskipTests=true -Pskip-docker
 ```
 
-**### Step 4: Verify and Extract Binary**
+### Step 4: Verify and Extract Binary
 
 Check if the binary (janusgraph-dist/target/janusgraph-$VERSION.zip) exists and extract it:
 
@@ -37,9 +37,9 @@ Check if the binary (janusgraph-dist/target/janusgraph-$VERSION.zip) exists and 
 unzip janusgraph-full-1.1.0-SNAPSHOT.zip
 ```
 
-**## Storage Backend Setup (Cassandra)**
+## Storage Backend Setup (Cassandra)
 
-**### Step 5: Configure Cassandra**
+### Step 5: Configure Cassandra
 
 Install and configure Cassandra as the storage backend:
 
@@ -62,7 +62,7 @@ Verify Cassandra is running (here also need to modify the CQLCompositeIndexInlin
 nodetool status
 ```
 
-**### Step 6: Configure host address for gremlin-server and start the janusgraph**
+### Step 6: Configure host address for gremlin-server and start the janusgraph
 
 Update `janusgraph/janusgraph-dist/target/janusgraph-full-1.1.0-SNAPSHOT/conf/gremlin-server/gremlin-server.yaml` with the following configuration:
 
@@ -76,7 +76,7 @@ Start the JanusGraph server:
 ./bin/janusgraph-server.sh start
 ```
 
-**### Step 7: Run the benchmark**
+### Step 7: Run the benchmark
 
 Modify the datacenter name in CQLCompositeIndexInlinePropBenchmark.java if it is needed (default is CQLConfigOptions.LOCAL_DATACENTER, "dc1"):
 
@@ -98,7 +98,7 @@ Run the benchmark:
 java -cp "janusgraph-benchmark/target/janusgraph-benchmark-1.1.0-SNAPSHOT.jar:janusgraph-benchmark/target/lib/*:janusgraph-core/target/janusgraph-core-1.1.0-SNAPSHOT.jar" org.janusgraph.CQLCompositeIndexInlinePropBenchmark
 ```
 
-**### Step 8: Run all the test cases in IndexSerializerTest.java**
+### Step 8: Run all the test cases in IndexSerializerTest.java
 
 ```bash
 mvn test -pl janusgraph-test -Dtest=IndexSerializerTest
