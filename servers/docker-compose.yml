@@ -126,17 +126,6 @@ services:
     networks:
       - rocketchat-redis-net
 
-  api-server:
-    image: ghcr.io/theagentcompany/servers-api-server:latest
-    container_name: api-server
-    pull_policy: always
-    restart: always
-    network_mode: "host"
-    environment:
-      - SKIP_SETUP=True
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
 volumes:
   mongodb_data: { driver: local }
 
