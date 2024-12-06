@@ -39,13 +39,13 @@ def grade_checkpoint1():
     
     solution = pd.read_excel("/utils/solution.xlsx")
     expected_data = solution.iloc[:-1].set_index("Name").T.to_dict()
-    expected_data = {key.lower(): value for key, value in expected_data.items()}
+    expected_data = {str(key).lower(): value for key, value in expected_data.items()}
 
     correct_rows = defaultdict(int)
     res = len(expected_data) + 1
 
     for _, row in survey_results.iterrows():
-        name = row["Name"].lower()
+        name = str(row["Name"]).lower()
         if name in expected_data:
             expected_row = expected_data[name]
             row_correct = all(row[col] == expected_row[col] for col in expected_row)
