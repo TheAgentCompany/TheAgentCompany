@@ -1,145 +1,105 @@
-# How to Launch Your NPC
+# NPC (Non-Player Character)
 
-## Build the Base Image
+Target audience of this doc: benchmark developers that would like to incorporate NPCs in their tasks.
 
-* Make sure you are using the latest main branch.
-* Navigate to the [base image folder](../base_image/).
-* Set the following environment variables:
-```
-ENV LITELLM_API_KEY <YOUR LITELLM_API_KEY>
-ENV LITELLM_BASE_URL <YOUR LITELLM_BASE_URL>
-ENV LITELLM_MODEL <YOUR LITELLM_MODEL>
-```
-A good example is:
-```
-ENV LITELLM_API_KEY <YOUR OPENAI API KEY>
-ENV LITELLM_BASE_URL https://api.openai.com/v1
-ENV LITELLM_MODEL gpt-4o
-```
+## Existing NPCs and Channels
+You to use existing NPCs and channels when creating the tasks.
 
-* Run `make build` in the base image folder.
+Here are the existing channels
 
-## Build Your Task Image
+| Name               | Users | Created At       |
+|--------------------|-------|------------------|
+| engineering        | 2     | October 11, 2024 |
+| general            |       | October 19, 2024 |
+| help-desk          | 14    | October 11, 2024 |
+| hr-announcements   | 3     | October 11, 2024 |
+| kudos              | 19    | October 11, 2024 |
+| product            | 4     | October 11, 2024 |
+| project-ai         | 6     | October 11, 2024 |
+| project-graphdb    | 6     | October 11, 2024 |
+| project-lowcode    | 5     | October 11, 2024 |
+| project-search     | 5     | October 11, 2024 |
+| project-streamdb   | 5     | October 11, 2024 |
+| project-webcrawler | 6     | October 11, 2024 |
+| random             | 8     | October 11, 2024 |
+| sales-marketing    | 3     | October 11, 2024 |
+| tech-talk          | 12    | October 11, 2024 |
 
-* Create a `scenarios.json` file in your task folder. Each item in this file represents an NPC.
-* The key should be the full name of the NPC, which must match the name in [this file](./npc/npc_credential.json).
-* For more information about NPC roles, check [this file](../../servers/rocketchat/npc/npc_definition.json).
-* In the `scenarios.json` file:
-  - The `extra_info` field is information that the NPC may share with others.
-  - The `strategy_hint` field is private information that the NPC will use to act in a certain way.
+Here are the existing NPCs and their channels:
 
-```
-{
-  "Emily Zhou": {
-    "extra_info": "Someone will ask you for your free time for the meeting",
-    "strategy_hint": "You're available on Mondays, Wednesday, and Fridays. You're not available on all other week days."
-  },
-  "Liu Qiang": {
-    "extra_info": "Someone will ask you for your free time for the meeting",
-    "strategy_hint": "You're available on Tuesday, Thursday. You're not available on all other week days."
-  }
-}
-```
+| Name               | User Name         | Occupation                                  | Info                                                                                                                                                  | Channels                                            |
+|--------------------|-------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Sarah Johnson      | sarah_johnson     | CTO                                         | Responsibilities: Technical strategy planning, R&D team leadership, new technology assessment; Project: Oversees all technical projects; Skills: N/A | All technical channels, #general, #tech-talk       |
+| Li Ming            | li_ming           | Database Team Project Manager               | Responsibilities: Managing database projects, resource coordination, ensuring timely delivery; Project: JanusGraph (Graph Database); Skills: Java, distributed systems | #project-graphdb, #engineering, #tech-talk         |
+| Zhang Wei          | zhang_wei         | Senior Software Engineer (Streaming DB Team)| Responsibilities: Developing and optimizing core streaming database functionalities; Project: RisingWave (Streaming Database); Skills: Rust, database systems | #project-streamdb, #engineering, #tech-talk        |
+| Wang Fang          | wang_fang         | AI Researcher (AI Team)                     | Responsibilities: Designing and implementing machine learning models, optimizing model performance; Project: OpenHands (LLM project); Skills: Python, machine learning, LLM | #project-ai, #engineering, #tech-talk              |
+| Mike Chen          | mike_chen         | Senior Software Engineer (AI Team)          | Responsibilities: Developing and optimizing LLM inference engines; Project: llama.cpp (LLM inference project); Skills: C++, CUDA, performance optimization | #project-ai, #engineering, #tech-talk              |
+| Emily Zhou         | emily_zhou        | Software Engineer (Web Crawler Team)        | Responsibilities: Designing and implementing web crawler functionalities; Project: Colly (Web Crawler Framework); Skills: Go, distributed systems | #project-webcrawler, #engineering, #tech-talk      |
+| Liu Qiang          | liu_qiang         | Quality Assurance Engineer                  | Responsibilities: Developing test strategies, executing tests, ensuring product quality; Project: All projects (focusing on testing and quality); Skills: N/A | All project channels, #engineering, #tech-talk     |
+| Priya Sharma       | priya_sharma      | Documentation Engineer                      | Responsibilities: Writing technical documentation, maintaining wiki, improving documentation processes; Project: Documentation (Wiki); Skills: N/A | All project channels, #engineering, #tech-talk     |
+| Mark Johnson       | mark_johnson      | Sales Director                              | Responsibilities: Developing sales strategies, managing sales team, expanding client relationships; Project: N/A (Sales); Skills: N/A | #sales-marketing, #general                         |
+| Jessica Lee        | jessica_lee       | Marketing Manager                           | Responsibilities: Developing marketing strategies, managing brand image, organizing marketing events; Project: N/A (Marketing); Skills: N/A | #sales-marketing, #general                         |
+| Chen Xinyi         | chen_xinyi        | Human Resources Manager                     | Responsibilities: Recruitment, employee training, compensation management; Project: N/A (HR); Skills: N/A | #hr-announcements, #general                         |
+| David Wong         | david_wong        | Finance Director                            | Responsibilities: Financial planning, budget management, financial reporting; Project: N/A (Finance); Skills: N/A | #general                                            |
+| Huang Jie          | huang_jie         | Product Manager (Search Engine Team)        | Responsibilities: Defining product requirements, planning product roadmap, communicating with clients; Project: OpenSearch (Search Engine); Skills: N/A | #project-search, #product, #tech-talk              |
+| Sophia Rodriguez   | sophia_rodriguez  | UX Designer                                 | Responsibilities: Designing user interfaces, improving user experience, conducting user research; Project: All projects (focusing on user experience); Skills: N/A | All project channels, #product, #tech-talk         |
+| Alex Turner        | alex_turner       | Software Engineer (Low-Code Platform Team)  | Responsibilities: Developing low-code platform features; Project: Node-RED (Low-Code Platform); Skills: N/A | #project-lowcode, #engineering, #tech-talk         |
+| Emma Lewis         | emma_lewis        | Software Engineer (API Team)                | Responsibilities: Developing API functionalities using Python; Project: API-server; Skills: N/A | #engineering, #tech-talk                            |
+| Jessica Chen       | jessica_chen      | Frontend Software Engineer                  | Responsibilities: Developing user interfaces, implementing responsive designs, optimizing web performance; Project: E-commerce Website Redesign; Skills: N/A | #project-ecommerce, #frontend, #tech-talk          |
 
-# Launch NPC
+## How to create new NPCs
+If necessary, you can create new NPCs.
 
-* Run `make build` in your folder to build the task image.
-* Execute `make run` in your folder. This will run the task image and bring you into the container.
-* Manually execute `/utils/init.sh` inside the container. This will launch the NPC, and you will see output similar to the following:
+### Step 1: Create NPC accounts in RocketChat
 
-```
-root@299afff5d411:/utils# ls
-dependencies.yml  evaluator.py  init.sh  llm_evaluator.py
-root@299afff5d411:/utils# sh init.sh 
-+ ping -c 1
-+ grep PING
-+ awk -F[()] {print $2}
-+ SERVICE_IP=
-+ echo  the-agent-company.com
-+ [ -f /utils/pre_init.py ]
-+ [ -f /npc/scenarios.json ]
-+ python_default /npc/run_multi_npc.py
-Launching Emily Zhou
-OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Emily Zhou"
-Launching Liu Qiang
-OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
-+ [ -f /utils/populate_data.py ]
-+ [ -f /utils/post_init.py ]
-```
+NOTE: If you want to use an existing NPC that is already in
+[npc_credential.json](../../base_image/npc_credential.json), you can skip this step.
 
-## How to Debug Your NPC
-* If your NPC is not working as expected, follow these steps:
-  1. Attach to your task container.
-  2. When executing `init.sh`, look for the command to launch a single NPC in the log output. It will look similar to this:
-     ```
-     OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_name="Liu Qiang"
-     ```
-     The `agent_name` parameter determines which NPC gets launched.
+Otherwise, if you'd like to create a new NPC account, please do so in the hosted RocketChat service.
+As of now, this is a manual step that you have to do via web GUI. The idea is that
+NPCs are like normal employees in the company and thus their RocketChat accounts
+as well as their personalities are shared across all tasks.
 
-* This command will display the log output of your NPC:
-  - The message "No message received, waiting..." indicates that the NPC is waiting for a message.
-  - When a message is received, the log will print both the incoming message and the NPC's response.
+After account crreation, please add the username and password to
+[npc_credential.json](../../base_image/npc_credential.json)
+in the following format:
 
-## Notes
-
-* Important: Remember to remove your OpenAI API key from the Dockerfile before committing your code.
-* Use `make stop` to halt and remove your previously running task image.
-
-# Deprecated 
-(You don't need to check the following documentation unless you know what you're looking for)
-
-# Solution 1: How to run dockerfile
-1. Set the correct configuration
-    1. Set the `OPENAI_API_KEY`. You should use your own key.
-    2. Set the `REDIS_OM_URL` as you want. We already host it on ogma server. You can use the default value
-    3. Set `BOT_URL` as the rocketchat URL. We already host it on ogma server. You can use the default value
-    4. Set `BOT_NAME` and `BOT_PASSWORD` as the NPC you want to simulate.
-    5. Change the `scenarios.json` file to your customized setting. See here for [guideline](./NPC_GUIDELINE.md).
-
-The following is a dockerfile example, you can use it build a npc example and run it.
-```Dockerfile
-FROM base-image
-# Step1: Set ENV: OPENAI API KEY, REDIS_OM_URL, BOT_URL
-ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
-# Redis Username: default, Password: theagentcompany
-# Redis service URL: the-agent-company.com/:6379
-ENV REDIS_OM_URL redis://default:theagentcompany@the-agent-company.com/:6379
-# RocketChat service URL
-ENV BOT_URL http://the-agent-company.com:3000
-
-# Step2: Change the scenarios.json to use your own definition
-COPY scenarios.json /npc
-# Step3: Execute the run_multi_npc.py in npc directory. Pay attention you need to execute it under /npc, we already configure the file path env in base-npc-image
-#        If you also have other command to execute, put python run_multi_npc.py and others into scripts. Dockerfile only allow one CMD
-#        run_multi_npc.py will launch the npc in backgroud then exit. In example, we sleep to keep docker running. You don't need to do it in examinee
-CMD python /npc/run_multi_npc.py && sleep 1000000
+```json
+ "<first_name>" : {
+        "username": "<username>",
+        "password": "<password>"
+    },
 ```
 
-## OPENAI_API_KEY
+where `<first_name>` MUST be unique. It is used as a global identifier which is
+also referenced in each individual task's `scenarios.json` and server's
+[npc_definition.json](../../../servers/rocketchat/npc/npc_definition.json).
+Everything in the credential file is case sensitive.
 
-OpenAI key is required to run the code. Please set the environment variable `OPENAI_API_KEY` to your key. The recommend way is to add the key to the conda environment:
-```bash
-conda env config vars set OPENAI_API_KEY=your_key
-```
+### Step 2: Populate NPC definition to Sotopia
 
-## Redis
-You can directly launch the server docker compose file. We already config the redis server there. Port is 8092, username is `theagentcompany` and password is `theagentcompany`
+NPCs are powered by [sotopia](https://github.com/sotopia-lab/sotopia/commits),
+which stores NPCs' definitions in a Redis server.
 
-If you don't want to use it, you can config it follow this doc for linux.
+NOTE: If you want to use an existing NPC, you can skip this step.
 
-A redis-stack server is required to run the code.
-Here are four lines of code to create a redis-stack server:
-```bash
-curl -fsSL https://packages.redis.io/redis-stack/redis-stack-server-7.2.0-v10.focal.x86_64.tar.gz -o redis-stack-server.tar.gz
-tar -xvf redis-stack-server.tar.gz
-pip install redis
-echo -e "port 8092\nrequirepass theagentcompany\nuser theagentcompany on >theagentcompany ~* +@all" > redis-stack-server.conf
-./redis-stack-server-7.2.0-v10/bin/redis-stack-server redis-stack-server.conf --daemonize yes
-```
+Otherwise, please add NPC definition in [npc_definition.json](../../../servers/rocketchat/npc/npc_definition.json)
+and then run [populate_data.py](../../../servers/rocketchat/npc/populate_data.py)
+on the server side to populate data into Redis. The script is designed to be idempotent.
+The complete schema of NPC definition can be found in [NPC_CONFIG.md](../../../servers/rocketchat/npc/NPC_CONFIG.md).
 
-The `REDIS_OM_URL` need to be set before loading and saving agents:
-```bash
-conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
-# For example
-conda env config vars set REDIS_OM_URL="redis://theagentcompany:theagentcompany@localhost:8092"
-```
+### Step 3: Define the NPCs' context in this task
+
+Write a `scenarios.json` like [this](./scenarios.json) that defines the NPCs
+that may involve in the task, and their context.
+
+## NPC rules
+
+* Keep data consistent. Please make sure the `<first_name>` in `npc_credential.json`
+matches the `first_name` field in `npc_definition.json` and the keys in `scenarios.json`.
+* When run one NPC, NPC will reply only when your send massage. It will talk with you TURN by TURN
+* When multiple NPC in one channel, they will only reply your message. NPC cannot talk with each other in channel. If you send one message, all NPC will reply you. We can let only related agent reply. It is feasible, but not support now. Unless you need this feature, or just keep design concise.
+* One NPC can run great now. Because of above problem. Unless neccessary in your task, don't use multiple NPC.
+* Direct message multiple NPC will not cause mess. It run great now.
+* Do fine-grained control on NPC prompt, message filter are feasible. But you need to impelement it and build customized image by yourself.
+* In the end, we want to make NPC definition and NPC credential keep consistency and reused globally.
