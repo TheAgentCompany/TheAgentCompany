@@ -80,8 +80,8 @@ def grade_checkpoints(trajectory=""):
     result = Result(checkpoints, bonus_for_completing_final)
     
     # Checkpoint 1: Conversation with Sarah Johnson
-    passed3 = grade_checkpoint1()
-    checkpoints.append(Checkpoint(1, result=int(passed3)))
+    passed1 = grade_checkpoint1()
+    checkpoints.append(Checkpoint(1, result=int(passed1)))
 
     # Final Checkpoint: Delivered correct order numbers to Sarah Johnson
     passed_final = grade_final_checkpoint()
