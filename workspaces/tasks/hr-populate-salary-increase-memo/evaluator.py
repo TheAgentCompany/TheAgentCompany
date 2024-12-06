@@ -78,9 +78,8 @@ def grade_checkpoint3():
         return 0
     
     file_count = count_files_in_directory(dir_name)
-    if file_count == 10:
-        print(f"Directory '{dir_name}' contains 10 files.")
-        score += 1
+    print(f"Directory '{dir_name}' contains {file_count} files.")
+    score += int(file_count/10 * 3)
 
     return score
     
@@ -154,7 +153,7 @@ def grade_checkpoints(trajectory=""):
     result = Result(checkpoints)
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
     checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
-    checkpoints.append(Checkpoint(2, int(grade_checkpoint3())))
+    checkpoints.append(Checkpoint(4, int(grade_checkpoint3())))
     return result
 
 

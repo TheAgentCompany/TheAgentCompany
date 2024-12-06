@@ -13,6 +13,14 @@ rocket = create_rocketchat_client()
 
 @grader
 def grade_checkpoint_1():
+    messages = get_rocketchat_personal_chat_history(rocket, 'Li Ming')
+    if not messages:
+        logging.warning(f"No chat history found for Li Ming")
+        return False
+    return bool(messages)
+
+@grader
+def grade_checkpoint_2():
     messages = get_rocketchat_personal_chat_history(rocket, 'Chen Xinyi')
     if not messages:
         logging.warning(f"No chat history found for Chen Xinyi")
@@ -23,7 +31,7 @@ def grade_checkpoint_1():
 
 
 @grader
-def grade_checkpoint_2():
+def grade_checkpoint_3():
     return evaluate_chat_history_with_llm(
         rocket,
         'Li Ming',
@@ -35,7 +43,8 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_1())))
-    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint_2())))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint_2())))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint_3())))
     return result
 
 

@@ -83,9 +83,9 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = [
         Checkpoint(1, int(grade_checkpoint1(trajectory))),
         Checkpoint(1, int(grade_checkpoint2())),
-        Checkpoint(1, int(grade_checkpoint3())),
-        Checkpoint(1, int(grade_checkpoint4())),
-        Checkpoint(1, int(grade_checkpoint5())),
+        Checkpoint(2, 2 * int(grade_checkpoint3())),
+        Checkpoint(2, 2 * int(grade_checkpoint4())),
+        Checkpoint(2, 2 * int(grade_checkpoint5())),
     ]
     result = Result(checkpoints)
     return result

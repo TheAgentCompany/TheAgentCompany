@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 5 points in total.
+This task has 9 points in total.
 
 ## Checkpoint 1 (1pt)
 
@@ -10,15 +10,15 @@ Check if the agent visits the correct path in owncloud
 
 Confirm that the excel file Organized_Outings_Receipts.xlsx exists
 
-## Checkpoint 3 (1pt)
+## Checkpoint 3 (2pt)
 
 Excel file has correct structure and number of rows (number of receipts match)
 
-## Checkpoint 4 (1pt)
+## Checkpoint 4 (2pt)
 
 Correct establishment name, address, datetime, number of items, and item totals match as well
 
-## Checkpoint 5 (1pt)
+## Checkpoint 5 (2pt)
 
 Line graph created to reflect values in excel sheet and stored in workspace folder.
 

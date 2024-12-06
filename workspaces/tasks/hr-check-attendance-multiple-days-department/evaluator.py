@@ -126,13 +126,7 @@ def standardize_df(df):
 
 
 @grader
-def grade_checkpoint1(trajectory):
-    urls = ["dir=/Documents/Human%20Resources%20Team/Attendance", "dir=/Documents/Human%20Resources%20Team/Attendance"]
-    return all(url in trajectory for url in urls)
-
-
-@grader
-def grade_checkpoint2():
+def grade_checkpoint1():
     if not check_excel_file_exists("/workspace/department-april-attendance.xlsx"):
         return False
     try:
@@ -143,7 +137,7 @@ def grade_checkpoint2():
 
 
 @grader
-def grade_checkpoint3():
+def grade_checkpoint2():
     agent_output = standardize_df(read_excel("/workspace/department-april-attendance.xlsx"))
 
     department_df = parse_department_data('/utils/department.txt')
@@ -162,7 +156,6 @@ def grade_checkpoint3():
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
-    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
-    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
-    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
     return result

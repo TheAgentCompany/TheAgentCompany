@@ -29,6 +29,29 @@ def grade_checkpoint1():
 
 @grader
 def grade_checkpoint2():
+    # [1pt] Check whether examinee chat with Emily Zhou.
+    try:
+        chat_with_interviewer = evaluate_chat_history_with_llm(
+            rocket_client=rocket,
+            username="Emily Zhou",
+            predicate="there is a conversation about whether someone is available for a technical interview",
+        )
+
+        if not chat_with_interviewer:
+            logging.error(
+                f"Right message was not conveyed to the potential interviewer Emily Zhou"
+            )
+            return False
+
+    except Exception as e:
+        logging.error(f"Error fetching message data: {e}")
+        return False
+
+    return True
+
+
+@grader
+def grade_checkpoint3():
     # [1pt] Check whether examinee chat with Jessica Lee.
     try:
         chat_with_interviewer = evaluate_chat_history_with_llm(
@@ -50,23 +73,6 @@ def grade_checkpoint2():
     return True
 
 
-@grader
-def grade_checkpoint3():
-    # [1pt] Check whether examinee write Yes in `/workspace/accept.txt`.
-    try:
-        with open("/workspace/accept.txt", "r") as f:
-            content = f.read().strip()
-            if "yes" not in content.lower():
-                logging.error(
-                    f"The examinee does not write Yes in /workspace/accept.txt"
-                )
-                return False
-    except Exception as e:
-        logging.error(f"Error reading /workspace/accept.txt: {e}")
-        return False
-
-    return True
-
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
@@ -77,8 +83,8 @@ def grade_checkpoints(trajectory="") -> Result:
 
     passed2 = grade_checkpoint2()
     checkpoints.append(Checkpoint(1, int(passed2)))
-
+    
     passed3 = grade_checkpoint3()
     checkpoints.append(Checkpoint(1, int(passed3)))
-
+    
     return result
