@@ -79,7 +79,7 @@ def grade_checkpoint3():
     
     file_count = count_files_in_directory(dir_name)
     print(f"Directory '{dir_name}' contains {file_count} files.")
-    score += int(file_count/10 * 3)
+    score += min(int(file_count/10 * 3), 3)
 
     return score
     
