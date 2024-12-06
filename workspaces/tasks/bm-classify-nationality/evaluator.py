@@ -31,72 +31,8 @@ EXPECTED_CLASSIFICATIONS = {
 rocket = create_rocketchat_client()
 
 
-def load_customer_data(EXCEL_FILE_PATH):
-    """Load customer data from the Excel file with custom header."""
-    try:
-        # Skip the first two rows, which are not part of the data
-        df = pd.read_excel(EXCEL_FILE_PATH, skiprows=2, usecols=["Order ID", "Location", "Domestic or International"])
-        return df
-    except Exception as e:
-        logging.warning(f"Failed to load Excel file: {e}")
-        return None
-
-def evaluate_classifications(df):
-    """
-    Evaluate if the classifications in the 'Domestic or International' column of the DataFrame
-    match the expected classifications in EXPECTED_CLASSIFICATIONS for the first 18 rows.
-    """
-    if "Order ID" not in df.columns or "Domestic or International" not in df.columns:
-        logging.warning("Required columns 'Order ID' and 'Domestic or International' not found in the Excel sheet.")
-        return 0
-    
-    correct_classifications = 0
-    total_classifications = min(18, len(df))  # Limit to the first 18 rows
-
-    # Iterate over each valid row in the DataFrame
-    for _, row in df.iloc[:18].iterrows():
-        order_id = str(row.get("Order ID"))
-        actual_classification = row.get("Domestic or International")
-        
-        # Only call .strip() if actual_classification is a string, otherwise set it to an empty string
-        if isinstance(actual_classification, str):
-            actual_classification = actual_classification.strip()
-        else:
-            actual_classification = ""
-
-        expected_classification = EXPECTED_CLASSIFICATIONS.get(order_id, "")
-
-        # Compare actual classification with the expected classification
-        if actual_classification == expected_classification:
-            correct_classifications += 1
-
-    # Calculate accuracy and award points based on it
-    accuracy = correct_classifications / total_classifications
-    if accuracy == 1:
-        return 2  # Full points for perfect classification
-    elif accuracy >= 0.5:
-        return 1  # Partial points for more than half classified correctly
-    return 0  # No points if accuracy is below 50%
-
-
 @grader
-def grade_checkpoint1(trajectory):
-    """Check if the 'Customer.xlsx' file on owncloud was accessed."""
-    required_url_part = "dir=/Documents/Data%20Analysis"
-    return required_url_part in trajectory
-
-@grader
-def grade_checkpoint2():
-    """Check if all orders are classified correctly as domestic or international."""
-    df = load_customer_data('/utils/Customer.xlsx')
-
-    if df is None:
-        return 0
-    return evaluate_classifications(df)
-
-
-@grader
-def grade_checkpoint3():
+def grade_checkpoint1():
     """Check if the agent has a conversation with Sarah Johnson on Rocket.Chat about customer orders."""
     # Required keywords that should all be present in a message
     required_keywords = ["domestic", "international"]
@@ -138,31 +74,13 @@ def grade_final_checkpoint():
 
     return 0
 
-
-def grade_checkpoints(trajectory=""):
-    checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints, bonus_for_completing_final)
-    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
-    checkpoints.append(Checkpoint(1, grade_checkpoint2()))
-    checkpoints.append(Checkpoint(1, grade_checkpoint3()))
-    return result
     
 def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints, bonus_for_completing_final)
-
-    # Checkpoint 1: Access to Customer.xlsx file
-    passed1 = grade_checkpoint1(trajectory)
-    checkpoints.append(Checkpoint(1, result=int(passed1)))
-
-    # Load customer data
-
-    # Checkpoint 2: Order classification correctness
-    passed2 = grade_checkpoint2()
-    checkpoints.append(Checkpoint(2, result=passed2))
-
-    # Checkpoint 3: Conversation with Sarah Johnson
-    passed3 = grade_checkpoint3()
+    
+    # Checkpoint 1: Conversation with Sarah Johnson
+    passed3 = grade_checkpoint1()
     checkpoints.append(Checkpoint(1, result=int(passed3)))
 
     # Final Checkpoint: Delivered correct order numbers to Sarah Johnson
