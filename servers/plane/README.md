@@ -99,5 +99,3 @@ Each issue was assigned to one of these sprint cycles, ensuring organized task f
 - **Web Crawling and Distributed Systems** responsibilities are managed by **Emily Zhou**.
 - **Quality Assurance** is overseen by **Liu Qiang**.
 - **Product, Frontend, and API Development** tasks are distributed among **Huang Jie**, **Jessica Chen**, and **Emma Lewis**.
-
-
