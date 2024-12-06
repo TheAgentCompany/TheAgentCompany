@@ -8,16 +8,16 @@ Visited the milestones page in the RisingWave project. (http://the-agent-company
 
 ## Checkpoint 2 (1pt)
 
-Closed the "Alpha Release" milestone.
+Closed the "release-1.9" milestone.
 
 ## Checkpoint 3 (1pt)
 
-Created the "Beta Release" milestone.
+Created the "release-1.95" milestone.
 
 ## Checkpoint 4 (1pts)
 
-Assigned the "Implement stream processing engine" issue to the "Beta Release" milestone.
+Assigned the "support explain format yaml, xml" issue to the "release-1.95" milestone.
 
 ## Checkpoint 5 (1pts)
 
-Assigned the "Integrate with Kafka" issue to the "Beta Release"
+Assigned the "bug: possible data loss for MQTT source" issue to the "release-1.95"
