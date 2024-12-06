@@ -36,7 +36,7 @@ def check_rocketchat(slide, required_channels, url):
 def check_gitlab(slide, url):
     content = get_content(slide)
     keywords = ["code collaboration", "project management", "issue tracking"]
-    return get_title(slide) == "Gitlab" and all(keyword.lower() in content.lower() for keyword in keywords) and url in content
+    return get_title(slide).lower() == "gitlab" and all(keyword.lower() in content.lower() for keyword in keywords) and url in content
 
 def check_Owncloud(slide, folder_structure, url):
     content = get_content(slide)
