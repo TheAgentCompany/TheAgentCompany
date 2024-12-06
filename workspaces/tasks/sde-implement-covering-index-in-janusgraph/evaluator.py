@@ -106,16 +106,12 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints)
     
     checkpoint1_passed = grade_checkpoint1()
-    if not checkpoint1_passed:
-        checkpoints.append(Checkpoint(0, 0))
-        checkpoints.append(Checkpoint(1, 0))
-        checkpoints.append(Checkpoint(1, 0))
-        return result
-        
     checkpoint2_passed = grade_checkpoint2()
     checkpoint3_passed = grade_checkpoint3() if checkpoint2_passed else False
     
-    checkpoints.append(Checkpoint(0, int(checkpoint1_passed) * 0))
+    # only grant checkpoint1 points if the task is complete. In other words,
+    # we don't give free credit for doing nothing.
+    checkpoints.append(Checkpoint(1, int(checkpoint1_passed and checkpoint2_passed and checkpoint3_passed)))
     checkpoints.append(Checkpoint(1, int(checkpoint2_passed)))
     checkpoints.append(Checkpoint(1, int(checkpoint3_passed)))
     

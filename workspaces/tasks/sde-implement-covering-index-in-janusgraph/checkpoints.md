@@ -1,8 +1,8 @@
 # Checkpoints
 
-This task has 2 points in total. The first checkpoint doesn't count any score but if the first checkpoint fails, it will get 0 score in total and won't proceed to other checkpoints.
+This task has 3 points in total. The first checkpoint's score is granted only if all checkpoints pass.
 
-## Checkpoint 1 (0pt)
+## Checkpoint 1 (1pt)
 
 Verify that IndexSerializerTest passes successfully.
 
