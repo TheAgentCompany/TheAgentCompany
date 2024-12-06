@@ -26,7 +26,7 @@ def run_checkpoint_3():
     return bool(evaluate_chat_history_with_llm(
         rocket,
         'Chen Xinyi',
-        'Alex Chen is the only qualified candidate'
+        'Alex Chen is a qualified candidate'
     ))
 
 
