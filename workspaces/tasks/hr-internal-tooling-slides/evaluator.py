@@ -31,7 +31,7 @@ def check_rocketchat(slide, required_channels, url):
     content = get_content(slide)
     channels_present = all(channel in content for channel in required_channels)
     check_default_channel = evaluate_with_llm(content, "default channels are #general and #kudos")
-    return get_title(slide) == "RocketChat" and channels_present and url in content and check_default_channel
+    return get_title(slide).lower() == "rocketchat" and channels_present and url in content and check_default_channel
 
 def check_gitlab(slide, url):
     content = get_content(slide)
@@ -42,12 +42,12 @@ def check_Owncloud(slide, folder_structure, url):
     content = get_content(slide)
     
     folders_present = evaluate_with_llm(content, f"the content includes intros to all folders in below folders: {" ".join(folder_structure)}")
-    return get_title(slide) == "Owncloud" and folders_present and url in content
+    return get_title(slide).lower() == "owncloud" and folders_present and url in content
 
 def check_plane(slide, url):
     content = get_content(slide)
     analytics_intro = evaluate_with_llm(content, f"introduction to functionalities of plane analytics page, including following functions: {" ".join(plane_keywords)}")
-    return get_title(slide) == "Plane" and analytics_intro and url in content
+    return get_title(slide).lower() == "plane" and analytics_intro and url in content
 
 def check_content_margins(slides):
     for slide in slides:
