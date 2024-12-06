@@ -20,8 +20,6 @@ def grade_checkpoint2():
     file_name = "Career_Ladder.odt"
     dir_name = "Documents/Human%20Resources%20Team"
 
-    score = 0
-
     binary_content = get_binary_file_content_owncloud(file_name, dir_name)
 
     if binary_content:
@@ -39,16 +37,16 @@ def grade_checkpoint2():
             llm_resonse = llm_complete(messages)
         except Exception as e:
             logging.warning(f"Error: {e}")
-            return 0
+            return False
 
         if 'yes' in llm_resonse['choices'][0]['message']['content'].lower():
             logging.info("Valid career ladder found.")
-            score += 1            
-
-        return score
+            return True
+        else:
+            return False
     else:
         logging.warning("Failed to retrieve file content.")
-        return 0
+        return False
     
 @grader
 def grade_checkpoint3():
@@ -100,7 +98,7 @@ def grade_checkpoints(trajectory="") -> Result:
     result = Result(checkpoints, bonus_for_completing_any)
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
-    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())*2))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
 
     return result
