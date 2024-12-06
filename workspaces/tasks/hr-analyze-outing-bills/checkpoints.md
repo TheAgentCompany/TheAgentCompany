@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 9 points in total.
+This task has 7 points in total.
 
 ## Checkpoint 1 (1pt)
 
@@ -10,18 +10,16 @@ Check if the agent visits the correct path in owncloud
 
 Confirm that the excel file Organized_Outings_Receipts.xlsx exists
 
-## Checkpoint 3 (2pt)
+## Checkpoint 3 (3pt)
 
-Excel file has correct structure and number of rows (number of receipts match)
+Excel file has 
+- Correct structure and number of rows (number of receipts match).
+- Correct establishment name, address, datetime, number of items, and item totals match as well
 
-## Checkpoint 4 (2pt)
-
-Correct establishment name, address, datetime, number of items, and item totals match as well
-
-## Checkpoint 5 (2pt)
+## Checkpoint 4 (1pt)
 
 Line graph created to reflect values in excel sheet and stored in workspace folder.
 
-## Checkpoint 6 (1pt)
+## Checkpoint 5 (1pt)
 
 There's a conversation with Chen Xinyi, the HR manager, on RocketChat that mentions the excel file and line graph
