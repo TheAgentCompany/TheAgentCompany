@@ -1,18 +1,18 @@
 {
   "Li Ming": {
     "extra_info": "Someone will ask you for equipment needs",
-    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for five Ergonomic Office Chair (Herman Miller), five Standing Desk (Electric Adjustable). If budget reduction is requested, remove one Standing Desk (Electric Adjustable)."
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for five Ergonomic Office Chair (Herman Miller), five Standing Desk (Electric Adjustable). If you're asked to reduce your expense, remove one Standing Desk (Electric Adjustable)."
   },
   "Zhang Wei": {
     "extra_info": "Someone will ask you for equipment needs",
-    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Meeting Table. If budget reduction is requested, remove two Meeting Table."
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Meeting Table. If you're asked to reduce your expense, remove two Meeting Table."
   },
   "Huang Jie": {
     "extra_info": "Someone will ask you for equipment needs",
-    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Desktop Computer (HP WorkStation), three Wireless Mouse. If budget reduction is requested, no items should be removed."
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Desktop Computer (HP WorkStation), three Wireless Mouse. If you're asked to reduce your expense, no items should be removed."
   },
     "Sophia Rodriguez": {
     "extra_info": "Someone will ask you for equipment needs",
-    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Wireless Keyboard. If budget reduction is requested, remove one Wireless Keyboard."
+    "strategy_hint": "Only when department's equipment needs are requested should you respond with an application for three Wireless Keyboard. If you're asked to reduce your expense, remove one Wireless Keyboard."
   }
 }
