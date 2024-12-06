@@ -24,3 +24,5 @@ What you need to do:
 3. Implement a new syntax support - addInlinePropertyKey and make sure the benchmark shows addInline improve more than 10x than without addInline
 
 4. Make sure all test cases pass in IndexSerializerTest.java 
+
+5. Keep Cassandra running so that others could run CQLCompositeIndexInlinePropBenchmark to validate your results.
