@@ -35,7 +35,7 @@ def check_job_description(username: str):
     job_description = user_info.get('bio', '')
     print(f"{username}''s Job Description: {job_description}")
 
-    predicate = 'the person does not work in database team and now works in the AI team'
+    predicate = 'the person works in the AI team'
     return evaluate_with_llm(job_description, predicate)
 
 ############################# Evaluator #####################################
