@@ -20,7 +20,7 @@ The agent has downloaded the quotes to the workspace directory:
 The agent has uploaded a valid-quotes.csv file to OwnCloud under the Documents/Administrative%20Specialist directory.
 
 ## Checkpoint 5 (1pt)
-The agent has shared a valid-quotes.csv file link with Sarah Johnson
+The agent has created a share link for valid-quotes.csv and saved the link to /worksapce/link.txt.
 
 ## Checkpoint 6 (1pt)
 valid-quotes.csv matches the following format:

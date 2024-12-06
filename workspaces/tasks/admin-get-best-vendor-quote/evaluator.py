@@ -42,30 +42,16 @@ def checkpoint4():
     return file_check
 
 @grader
-def checkpoint5():
-    sarah_chat = get_rocketchat_personal_chat_history(rocket, 'Sarah Johnson')
-    if len(sarah_chat) == 0:
-        logging.warning('No chat found with Sarah Johnson')
-        return False
-    #Extracting link from the last chat
-    link = re.search(r'(https?://ogma.lti.cs.cmu.edu/s/[a-zA-Z0-9]+)', "\n".join(sarah_chat))
-    if not link:
-        logging.warning("Valid quotes link not found in Sarah Johnson's chat")
-        return False
-    return True
+def checkpoint5(link):
+    return bool(link)
 
 @grader
-def checkpoint6():
-    sarah_chat = get_rocketchat_personal_chat_history(rocket, 'Sarah Johnson')
-    if len(sarah_chat) == 0:
-        logging.warning('No chat found with Sarah Johnson')
-        return False
-    link = re.search(r'(https?://ogma.lti.cs.cmu.edu/s/[a-zA-Z0-9]+)', "\n".join(sarah_chat))
+def checkpoint6(link):
     if not link:
-        logging.warning("Valid quotes link not found in Sarah Johnson's chat")
+        logging.warning("Valid quotes link not found in /workspace/link.txt")
         return False
     else:
-        download_owncloud_content(link.group(0) ,'/workspace/valid-quotes-downloaded.csv')
+        download_owncloud_content(link, "/workspace/valid-quotes-downloaded.csv")
         with open('/workspace/valid-quotes-downloaded.csv', 'r') as file:
             csv_reader = csv.DictReader(file)
             data = list(csv_reader)
@@ -94,7 +80,9 @@ def grade_checkpoints(trajectory=''):
     checkpoints.append(Checkpoint(1, int(checkpoint2())))
     checkpoints.append(Checkpoint(1, int(checkpoint3())))
     checkpoints.append(Checkpoint(1, int(checkpoint4())))
-    checkpoints.append(Checkpoint(1, int(checkpoint5())))
-    checkpoints.append(Checkpoint(1, int(checkpoint6())))
+    
+    link = get_owncloud_url_in_file("/workspace/link.txt")
+    checkpoints.append(Checkpoint(1, int(checkpoint5(link))))
+    checkpoints.append(Checkpoint(1, int(checkpoint6(link))))
     return result
 
