@@ -98,7 +98,7 @@ jobs:
         run: |
           mkdir -p outputs
           chmod -R 777 outputs
-          sudo chmod 777 /tmp
+          sudo chmod -R 777 /tmp
         
       - name: Run evaluation
         working-directory: ./evaluation
