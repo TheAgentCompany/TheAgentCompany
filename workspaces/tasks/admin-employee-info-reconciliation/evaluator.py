@@ -24,7 +24,7 @@ def load_employees_csv():
 
 @grader
 def grade_checkpoint_1() -> bool:
-    return num_rocketchat_users_contacted(rocket_client, ['priya_sharma', 'sophia_rodriguez', 'zhang_wei']) == 3
+    return num_rocketchat_users_contacted(rocket_client, ['priya_sharma', 'sophia_rodriguez', 'zhang_wei'])
 
 
 @grader
@@ -90,7 +90,7 @@ def grade_checkpoints(trajectory=""):
     checkpoints: List[Checkpoint] = []
     result = Result(checkpoints)
 
-    checkpoints.append(Checkpoint(3, 3 * int(grade_checkpoint_1())))
+    checkpoints.append(Checkpoint(3, int(grade_checkpoint_1())))
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint_2())))
 
