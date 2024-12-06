@@ -5,7 +5,7 @@ This task has 4 points in total.
 
 Talked to Li Ming.
 
-## Checkpoint 1 (1pt)
+## Checkpoint 2 (1pt)
 
 Retrieved the information from Chen Xinyi that green card or citizenship is required.
 
