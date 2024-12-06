@@ -25,7 +25,7 @@ def check_final_result(file_path):
         logging.warning("there is no content in the txt")
         return False
 
-    predicate = 'a meeting is scheduled'
+    predicate = 'No meeting scheduled this week'
     return evaluate_with_llm(content, predicate)
 
 
