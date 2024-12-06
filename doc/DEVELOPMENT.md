@@ -9,21 +9,15 @@ If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRI
 
 ## Table of Contents
 
-1. [Start the server for development](#start-the-server-for-development)
-   1. [Requirements](#1-requirements)
-   2. [Initialize parameters](#2-initialize-parameters)
-   3. [Start the servers](#3-start-the-servers)
-   4. [Backup and Restore](#4-backup-and-restore)
-   5. [Stop the servers](#5-stop-the-servers)
-2. [How to build a task image](#how-to-build-a-task-image)
-   1. [Build from the base image](#1-build-from-the-base-image)
-   2. [Setup the environment](#2-setup-the-environment)
-   3. [Prepare the necessary file](#3-prepare-the-necessary-file)
-   4. [Perform workflow inside the Docker container](#4-perform-workflow-inside-the-docker-container)
-   5. [Perform partial checkpoint](#5-perform-partial-checkpoint)
-      1. [TODO: How to trigger the evaluation process](#1-todo-how-to-trigger-the-evaluation-process)
-      2. [Check whether file exists in image](#2-check-whether-file-exists-in-image)
-      3. [TODO: Check result in GitLab, Nextcloud, Plane, Rocket.Chat](#3-todo-check-result-in-gitlab-nextcloud-plane-rocketchat)
+- [Development Guide](#development-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Start the server for development](#start-the-server-for-development)
+    - [1. Requirements](#1-requirements)
+    - [2. Initialize parameters](#2-initialize-parameters)
+    - [3. Start the servers](#3-start-the-servers)
+    - [4. Backup and Restore](#4-backup-and-restore)
+    - [5. Stop the servers](#5-stop-the-servers)
+  - [How to build a task image](#how-to-build-a-task-image)
 
 
 
@@ -49,23 +43,23 @@ Execute `make start-all` in the servers directory.
 
 For GitLab and Rocket.Chat, you can directly visit the service at the URL you configured earlier.
 
-For Nextcloud, visit the URL, then follow the instructions to perform some manual configuration work. Currently, we have not yet figured out a good way to do it programmatically.
+For OwnCloud, visit the URL, then follow the instructions to perform some manual configuration work. Currently, we have not yet figured out a good way to do it programmatically.
 
 For Plane, you need to execute [setup.sh](./servers/plane/setup.sh), then choose "start" to launch the service.
 
-**NOTE:** If you want to launch Plane and Nextcloud at the same time, you may need to change the web URL of Plane, or its URL will conflict with Nextcloud.
+**NOTE:** If you want to launch Plane and OwnCloud at the same time, you may need to change the web URL of Plane, or its URL will conflict with OwnCloud.
 
 ### 4. Backup and Restore
 **GitLab:** TODO
 
-**Nextcloud:** In the admin panel, you will find options to back up the data as a volume. You need to remember the password for this volume. If you want to restore, restart the service and use this volume with the password, following the instructions in the admin dashboard.
+**OwnCloud** TODO
 
 **Rocket.Chat:** After the service starts, run `backup-rocketchat` to back up the service, and run `restore-rocketchat` to restore the service.
 
-Plane: see [here](./servers/plane/README.md) for more details.
+**Plane:** see [here](./servers/plane/README.md) for more details.
 
 ### 5. Stop the servers
-For GitLab, Nextcloud, and Rocket.Chat, you can directly execute `make stop-all` in the servers directory. This will stop all three servers.
+For GitLab, OwnCloud, and Rocket.Chat, you can directly execute `make stop-all` in the servers directory. This will stop all three servers.
 
 For Plane, run [setup.sh](./servers/plane/setup.sh) and choose "stop."
 

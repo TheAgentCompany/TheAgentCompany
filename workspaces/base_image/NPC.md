@@ -115,17 +115,6 @@ COPY scenarios.json /npc
 CMD python /npc/run_multi_npc.py && sleep 1000000
 ```
 
-# Solution 2: How to run code locally
-## python environment
-```
-conda create -n bridge python=3.11; conda activate bridge;  
-# option 1: use peotry
-curl -sSL https://install.python-poetry.org | python3
-poetry install
-# option 2: use pip
-pip install sotopia=="0.1.2"
-```
-
 ## OPENAI_API_KEY
 
 OpenAI key is required to run the code. Please set the environment variable `OPENAI_API_KEY` to your key. The recommend way is to add the key to the conda environment:
@@ -154,18 +143,3 @@ conda env config vars set REDIS_OM_URL="redis://user:password@host:port"
 # For example
 conda env config vars set REDIS_OM_URL="redis://theagentcompany:theagentcompany@localhost:8092"
 ```
-
-## Usage
-
-```bash
-python run.py
-```
-
-## Reference
-### RocketChat bot Python package
-We copy code from [here](https://github.com/jadolg/RocketChatBot).
-Do little refactor to solve bug.
-You can call `RocketChatBot` to use.
-
-## RocketChat bot Node.JS package
-See [here](https://developer.rocket.chat/docs/develop-a-rocketchat-sdk-bot) for instuction.
