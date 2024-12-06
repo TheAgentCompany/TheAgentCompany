@@ -23,7 +23,7 @@ def calculate_salary_statistics(file_path):
     lowest_salary = df['Salary'].min()
     median_salary = df['Salary'].median()
     
-    return [average_salary, highest_salary, lowest_salary, median_salary]
+    return [int(average_salary), int(highest_salary), int(lowest_salary), int(median_salary)]
 
 
 @grader
@@ -50,7 +50,7 @@ def grade_checkpoint3():
         if binary_content:
             text_content = extract_text_from_odt(binary_content)
 
-            keywords = calculate_salary_statistics("./salary.txt")
+            keywords = calculate_salary_statistics("/utils/salary.txt")
             print(f"Keywords: {keywords}")
             
             found_keywords, keyword_score = check_keywords_in_content(text_content, keywords)
@@ -84,7 +84,7 @@ def check_keywords_in_content(content, keywords):
     content = content.lower()
     found_keywords = [str(keyword) for keyword in keywords if str(keyword) in content]
     score = len(found_keywords) / len(keywords)
-    return found_keywords, score
+    return found_keywords, int(score)
 
 
 def grade_checkpoints(trajectory=""):
