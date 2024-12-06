@@ -61,7 +61,7 @@ def grade_checkpoint3():
     if binary_content:
         text_content = extract_text_from_odt(binary_content)
 
-        messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability, with headings, subheadings, bullet points and table of contents where necessary? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
+        messages = [{"content": f"An Employee Manual is provided below: \"\"{text_content}\"\" \n Is the manual formatted for readability? Please answer 'yes' if it does, or 'no' if it doesn't. ", "role": "user"}]
 
         # Check result
         llm_resonse = llm_complete(messages)

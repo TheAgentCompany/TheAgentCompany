@@ -12,4 +12,4 @@ A new file named "Employee_Manual.odt" is created in the hr folder, including th
 
 ## Checkpoint 3 (1pt)
 
-The manual is formatted for readability, with headings, subheadings, bullet points and table of contents where necessary. 
+The manual is formatted for readability.
