@@ -59,7 +59,7 @@ def grade_checkpoint2():
     predicates = [
         "Closing Prices Over Time: Display the stock's closing prices over time to show the overall trend.",
         "Close Price with 50 and 200-Day Moving Averages: Overlay the 50-day and 200-day moving averages onto the closing price plot.",
-        "Correlation Between Columns: Visualize the correlation matrix focusing on price, volume, and returns.",
+        "Correlation Between Columns: Visualize the correlation matrix.",
         "Daily Return Distribution: Calculate and plot the daily returns to highlight volatility and risk.",
         "Volume Distribution: Plot the distribution of trade volumes to identify trends in stock interest over time.",
     ]
@@ -91,7 +91,7 @@ def grade_checkpoint2():
                     break
 
     idx = 0
-    for predicate, result in results:
+    for predicate, result in results.items():
         if result == 0:
             logging.warning(f"Predicate {idx} failed, Predicate: {predicate}")
         idx += 1
