@@ -1,6 +1,6 @@
 # JanusGraph Setup Guide
 
-This guide will walk you through implementing covering index for JanusGraph. This file is only for developers' reference and is not accessible to the examinee.
+This guide will walk you through necessary setup to finish this task. This file is only for developers' reference and is not accessible to the examinee. The real feature implementation is available [here](https://github.com/JanusGraph/janusgraph/pull/4692)
 
 ## Prerequisites Installation
 
