@@ -4,7 +4,7 @@ This task has 2 points in total.
 
 ## Checkpoint 1 (1pt)
 
-Check if the correct answer, 3, is in the file `/workspace/ans.txt`.
+Check if the correct answer, 4, is in the file `/workspace/ans.txt`.
 
 Engineer: 9:00 AM - 10:30 AM, 12:15 PM - 1:00 PM, 2:00 PM - 3:00 PM
 Marketing: 9:15 AM - 10:00 AM, 11:30 AM - 12:30 PM, 2:30 PM - 3:30 PM

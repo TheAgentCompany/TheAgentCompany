@@ -12,7 +12,7 @@ check had conversation with Huang Jie, Sophia Rodriguez, Mike Chen, Sarah Johnso
 
 check accessed owncloud
 
-## Checkpoint 3 (1pt)
+## Checkpoint 3 (2pt)
 
 check the the total price is correct
 

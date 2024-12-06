@@ -12,6 +12,6 @@ Confirm the agent has visited owncloud and read the reimbursement criteria.
 
 Confirmed conversation with Mike Chen.
 
-## Checkpoint 4 (1 point)
+## Checkpoint 4 (2 point)
 
 Confirmed conversation about the correct reimbursable price ($215) in the chat with Mike Chen.

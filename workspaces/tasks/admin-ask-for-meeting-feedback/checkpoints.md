@@ -16,6 +16,6 @@ Confirm that the excel file contains entries for all participants.
 
 Confirm that Chen Xinyi's score and feedback are empty.
 
-## Checkpoint 5 (1 point)
+## Checkpoint 5 (2 point)
 
 Confirm that other participants think the meeting is helpful and give a 4+ score.

@@ -187,9 +187,9 @@ def grade_checkpoints(trajectory="") -> Result:
 
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1())))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint2(conn)) if conn else 0))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint3(conn)) if conn else 0))
-    checkpoints.append(Checkpoint(1, int(grade_checkpoint4(conn)) if conn else 0))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint2(conn)) if conn else 0))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint3(conn)) if conn else 0))
+    checkpoints.append(Checkpoint(2, 2 * int(grade_checkpoint4(conn)) if conn else 0))
     checkpoints.append(Checkpoint(3, int(grade_checkpoint5())))
 
     return result

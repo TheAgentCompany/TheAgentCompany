@@ -35,7 +35,7 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(passed3)))
 
     passed4 = "215" in ' '.join(chat_history)
-    checkpoints.append(Checkpoint(1, int(passed4)))
+    checkpoints.append(Checkpoint(2, 2 * int(passed4)))
 
     return result
 

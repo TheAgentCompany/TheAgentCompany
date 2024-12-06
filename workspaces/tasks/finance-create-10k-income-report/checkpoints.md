@@ -14,7 +14,7 @@ Reported table contains all company names that match legal entity on 10k documen
 
 Reported table has correct structure, matches all required columns and has correct format
 
-## Checkpoint 4 (1 point)
+## Checkpoint 4 (2 point)
 
 Reported table matches exact numbers and calculation
 

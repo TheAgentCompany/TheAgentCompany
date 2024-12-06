@@ -2,7 +2,7 @@
 
 This task has 5 points in total.
 
-## Checkpoint 1 (1pt)
+## Checkpoint 1 (3pt)
 
 Spoke to Priya Sharma, Sophia Rodriguez, and Zhang Wei on RocketChat.
 

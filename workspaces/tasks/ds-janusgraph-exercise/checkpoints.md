@@ -10,6 +10,6 @@ Check if repo is cloned under /workspace folder
 
 Check if the JanusGraph is running on port 8182 under websocket mode
 
-## Checkpoint 3 (2pts)
+## Checkpoint 3 (4pts)
 
 Check if the data created matches exactly with the hierarchy shown in employee_diagram.jpg
