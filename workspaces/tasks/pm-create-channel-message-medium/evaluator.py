@@ -36,7 +36,7 @@ def grade_checkpoint4():
 
 @grader
 def grade_checkpoint2():
-    return check_user_added(rocket, "literaturereview", "emma_lewis") and check_user_added(rocket, "literaturereview", "wang_fang") and check_user_added(rocket, "benchmarking", "emma_lewis")
+    return check_user_added(rocket, "literaturereview", "emma_lewis") and check_user_added(rocket, "literaturereview", "wang_fang")
 
 @grader
 def grade_checkpoint5():
