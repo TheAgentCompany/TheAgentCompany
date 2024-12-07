@@ -17,7 +17,7 @@ def grade_checkpoint1(trajectory):
 
 @grader
 def grade_checkpoint2():
-    messages = get_message("janusgraph")
+    messages = get_message("Janusgraph")
     if not messages:
         return False
     
@@ -31,7 +31,7 @@ def grade_checkpoint2():
     return False
 
 def grade_final_checkpoint():
-    messages = get_message("janusgraph")
+    messages = get_message("Janusgraph")
     if not messages:
         return False
     
@@ -79,7 +79,7 @@ def grade_checkpoints(trajectory="") -> Result:
     checkpoints.append(Checkpoint(1, int(passed2)))
 
     passed3 = grade_final_checkpoint()
-    checkpoints.append(Checkpoint(2, 2 * int(passed3)))
+    checkpoints.append(Checkpoint(2, int(passed3)))
 
     return result
 
