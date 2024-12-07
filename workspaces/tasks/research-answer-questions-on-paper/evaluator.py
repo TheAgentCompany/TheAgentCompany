@@ -45,7 +45,7 @@ def grade_checkpoint2():
             if len(qa_pair)<2:
                 logging.warning('Analysis sheet corrupted')
                 return 0
-            answer = qa_pair[1].strip().replace("<answer here>","")
+            answer = qa_pair[1].strip()
             score+= 1 if evaluate_with_llm(answer,ref_answers[i]) else 0
             logging.info(f'Question {qa_pair[0]}, Expected Answer: {ref_answers[i]}, Agent Answer: {answer}')
 
