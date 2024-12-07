@@ -8,6 +8,21 @@ from typing import List
 from scoring import Result, Checkpoint
 from common import grader
 
+def is_valid_csv(file_path):
+    try:
+        with open(file_path, 'r') as csv_file:
+            reader = csv.reader(csv_file)
+            # Check if the file is empty
+            if not next(reader, None):
+                return False
+            # Iterate through the remaining rows to check for any errors
+            for row in reader:
+                pass
+        return True
+    except Exception:
+        return False
+
+
 # Check http://the-agent-company.com:8929/root/sotopia/-/issues is in the trajectory
 @grader
 def grade_checkpoint1(trajectory):
@@ -24,15 +39,14 @@ def grade_checkpoint1(trajectory):
 def grade_checkpoint2():
     try:
         file_path = '/workspace/issues.csv'
-        if not os.path.isfile(file_path):
+        is_valid =  is_valid_csv(file_path)
+        if not is_valid:
             return False
         with open(file_path, 'r') as file:
             lines = file.readlines()
-            if len(lines) != 12:
+            lines = [line for line in lines if "," in line]
+            if len(lines) != 13:
                 return False
-            for line in lines:
-                if ',' not in line:
-                    return False
         return True
     except Exception as e:
         logging.warning(f"Error in grade_checkpoint2: {e}")
