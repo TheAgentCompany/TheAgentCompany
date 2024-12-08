@@ -205,11 +205,18 @@ check:
 	docker compose version
 
 health-check:
+	@echo "Checking if api-server is running on port 2999..."
+	@until nc -z localhost 2999 2>/dev/null; do \
+		echo "Waiting for api-server to start on port 2999..."; \
+		sleep 15; \
+	done
+	@echo "api-server is running on port 2999!"
+
 	@echo "Starting health checks..."
-	@for service in owncloud gitlab rocketchat plane; do \
+	@for service in rocketchat owncloud gitlab plane; do \
 		until curl -s -o /dev/null -w "%{http_code}" localhost:2999/api/healthcheck/$$service | grep -q "200"; do \
 			echo "Waiting for $$service to be ready..."; \
-			sleep 5; \
+			sleep 10; \
 		done; \
 		echo "$$service is ready!"; \
 	done
@@ -220,6 +227,6 @@ setup:
 	make pull-image
 	@echo "Starting Setup service"
 	make start-api-server-with-setup
-	sleep 60
+	sleep 120
 	@echo "Starting health check"
 	make health-check
