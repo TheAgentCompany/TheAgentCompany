@@ -64,7 +64,7 @@ for service in rocketchat owncloud gitlab plane; do \
         echo "Waiting for $service to be ready..."; \
         sleep 10; \
     done; \
-    echo "$$service is ready!"; \
+    echo "$service is ready!"; \
 done
 echo "All services are up and running!"
 echo "Setup Finished!"
