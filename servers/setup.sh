@@ -50,6 +50,8 @@ docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     ghcr.io/theagentcompany/servers-api-server:latest
 
+# wait for service launching
+sleep 120
 
 echo "Checking if api-server is running on port 2999..."
 until curl -s -o /dev/null localhost:2999; do \
