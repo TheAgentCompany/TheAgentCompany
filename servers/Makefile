@@ -199,14 +199,28 @@ pull-image:
 	docker pull registry.rocket.chat/rocketchat/rocket.chat:5.3.0
 
 check:
-	@echo "check docker version"
+	@echo "Checking if docker is installed..."
+	@if ! command -v docker >/dev/null 2>&1; then \
+		echo "Error: docker is not installed"; \
+		echo "Please install docker first"; \
+		exit 1; \
+	fi
+	
+	@echo "Checking if docker compose is installed..."
+	@if ! docker compose version >/dev/null 2>&1; then \
+		echo "Error: docker compose is not installed or docker daemon is not running"; \
+		echo "Please install docker compose"; \
+		exit 1; \
+	fi
+	
+	@echo "✓ Docker is installed"
 	docker version
-	@echo "check docker compose version"
+	@echo "\n✓ Docker Compose is installed"
 	docker compose version
 
 health-check:
 	@echo "Checking if api-server is running on port 2999..."
-	@until nc -z localhost 2999 2>/dev/null; do \
+	@until curl -s -o /dev/null localhost:2999; do \
 		echo "Waiting for api-server to start on port 2999..."; \
 		sleep 15; \
 	done
