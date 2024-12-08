@@ -60,8 +60,8 @@ echo "api-server is running on port 2999!"
 
 echo "Starting health checks..."
 for service in rocketchat owncloud gitlab plane; do \
-    until curl -s -o /dev/null -w "%{http_code}" localhost:2999/api/healthcheck/$$service | grep -q "200"; do \
-        echo "Waiting for $$service to be ready..."; \
+    until curl -s -o /dev/null -w "%{http_code}" localhost:2999/api/healthcheck/$service | grep -q "200"; do \
+        echo "Waiting for $service to be ready..."; \
         sleep 10; \
     done; \
     echo "$$service is ready!"; \
