@@ -11,7 +11,18 @@ Check the installation by goto servers directory and run [`make check`](../serve
     * Run [`make start-api-server-with-setup`](../servers/Makefile#L151) and wait 60s for service launching until you pass the next step 
     * Run [`make health-check`](../servers/Makefile#L203) to check whether service up.
 
-4. When you see output `All services are up and running!`, infra setup finished.
+4. When you see output:
+```
+Checking if api-server is running on port 2999...
+api-server is running on port 2999!
+Starting health checks...
+rocketchat is ready!
+owncloud is ready!
+gitlab is ready!
+plane is ready!
+All services are up and running!
+```
+infra setup finished.
 
 # Setup Evaluation
 If you need to use OpenHands for evaluation, you also need:
