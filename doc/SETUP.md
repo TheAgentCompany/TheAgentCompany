@@ -4,10 +4,10 @@
 Install `make` and `curl`, e.g. `sudo apt install -y curl make`.
 
 2. Run `sudo chmod 666 /var/run/docker.sock` since we need to mount docker socket to the container.
-Check the installation by goto servers directory and run `make check`. The command should show your local docker and docker compose version.
 
 3. Goto servers directory and run `make setup`. It will automatically do the following things:
-    * Pull image by `make pull-image`. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
+    * Run `make check`. The command should show your local docker and docker compose version.
+    * Run `make pull-image` to pull image. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
     * Run `make start-api-server-with-setup` and wait 60s for service launching until you pass the next step 
     * Run `make health-check` to check whether service up.
 
