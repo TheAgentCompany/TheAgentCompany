@@ -149,6 +149,8 @@ reset-owncloud: init
 
 # api-server
 start-api-server-with-setup: init
+	docker stop api-server
+	docker rm api-server
 	docker run -d \
 		--name api-server \
 		--network host \
@@ -157,6 +159,8 @@ start-api-server-with-setup: init
 		ghcr.io/theagentcompany/servers-api-server:latest
 
 start-api-server: init
+	docker stop api-server
+	docker rm api-server
 	docker run -d \
 		--name api-server \
 		--network host \
