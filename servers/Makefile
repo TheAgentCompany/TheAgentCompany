@@ -237,6 +237,8 @@ health-check:
 	@echo "All services are up and running!"
 
 setup:
+	@echo "Starting check docker installation"
+	make check
 	@echo "Starting Pull Image..."
 	make pull-image
 	@echo "Starting Setup service"
