@@ -148,7 +148,7 @@ reset-owncloud: init
 	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
 # api-server
-setup: init
+start-api-server-with-setup: init
 	docker run -d \
 		--name api-server \
 		--network host \
@@ -210,3 +210,12 @@ health-check:
 		echo "$$service is ready!"; \
 	done
 	@echo "All services are up and running!"
+
+setup:
+	@echo "Starting Pull Image..."
+	make pull-image
+	@echo "Starting Setup service"
+	make start-api-server-with-setup
+	sleep 60
+	@echo "Starting health check"
+	make health-check
