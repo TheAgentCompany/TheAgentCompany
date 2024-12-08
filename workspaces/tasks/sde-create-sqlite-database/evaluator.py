@@ -43,7 +43,7 @@ def grade_checkpoint4():
 def grade_checkpoint5():
     try:
         import sqlite3
-        conn = sqlite3.connect('financial_data.db')
+        conn = sqlite3.connect('financial_report.db')
         cursor = conn.cursor()
         cursor.execute("PRAGMA table_info(financial_categories);")
         columns = [col[1] for col in cursor.fetchall()]
@@ -56,7 +56,7 @@ def grade_checkpoint5():
 def grade_checkpoint6():
     try:
         import sqlite3
-        conn = sqlite3.connect('financial_data.db')
+        conn = sqlite3.connect('financial_report.db')
         cursor = conn.cursor()
         cursor.execute("PRAGMA table_info(financial_details);")
         columns = [col[1] for col in cursor.fetchall()]
@@ -69,7 +69,7 @@ def grade_checkpoint6():
 def grade_checkpoint7():
     try:
         import sqlite3
-        conn = sqlite3.connect('financial_data.db')
+        conn = sqlite3.connect('financial_report.db')
         cursor = conn.cursor()
         cursor.execute("""
             SELECT month, variance
@@ -89,13 +89,13 @@ def grade_checkpoint7():
 def grade_checkpoint8():
     try:
         import sqlite3
-        conn = sqlite3.connect('financial_data.db')
+        conn = sqlite3.connect('financial_report.db')
         cursor = conn.cursor()
         cursor.execute("""
             SELECT SUM(actual)
             FROM financial_details
             JOIN financial_categories ON financial_details.category_id = financial_categories.category_id
-            WHERE category_name IN ('Software Development', 'Consulting')
+            WHERE category_name IN ('Software Development Services', 'Consulting')
             AND month = '2024-07'
         """)
         result = cursor.fetchone()
