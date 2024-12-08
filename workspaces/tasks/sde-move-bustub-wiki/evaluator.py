@@ -13,7 +13,7 @@ def check_trajectory(trajectory):
 @grader
 def test_wiki():
     try:
-        response = requests.get(f"doc/-/wikis/HyperLogLog_project") 
+        response = requests.get(f"http://the-agent-company.com:8929/root/doc/-/wikis/HyperLogLog_project") 
     except requests.RequestException as e:
         logging.error(f"Error fetching wiki: {e}")
         return False
@@ -31,7 +31,7 @@ def check_key_contents():
     key_links = ["https://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf", "https://engineering.fb.com/2018/12/13/data-infrastructure/hyperloglog/", "https://www.youtube.com/watch?v=lJYufx0bfpw", "https://www.youtube.com/watch?v=2PlrMCiUN_s"]
     
     try:
-        response = requests.get(f"doc/-/wikis/HyperLogLog_project").text
+        response = requests.get(f"http://the-agent-company.com:8929/root/doc/-/wikis/HyperLogLog_project").text
     except requests.RequestException as e:
         logging.error(f"Error fetching wiki: {e}")
         return False
