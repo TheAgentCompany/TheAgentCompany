@@ -148,7 +148,7 @@ reset-owncloud: init
 	docker compose -p theagentcompany up owncloud owncloud-collabora -d
 
 # api-server
-start-api-server-with-setup: init
+setup: init
 	docker run -d \
 		--name api-server \
 		--network host \

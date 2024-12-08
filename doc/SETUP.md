@@ -8,7 +8,7 @@ Check the installation by goto servers directory and run [`make check`](../serve
 
 3. Pull image by [`make pull-image`](../servers/Makefile#L177) . Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
 
-4. Run [`make start-api-server-with-setup`](../servers/Makefile#L151) and wait until you pass the next step 
+4. Run [`make setup`](../servers/Makefile#L151) and wait until you pass the next step 
 
 5. Run [`make health-check`](../servers/Makefile#L203) to check whether service up.
 Setup finished.
