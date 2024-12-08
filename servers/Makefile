@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-HOSTNAME?=ogma.lti.cs.cmu.edu
+HOSTNAME?=localhost
 FILE_SERVER_PORT?=8081
 GITLAB_PORT?=8929
 PLANE_DOCKER_FILE_PATH=./plane/plane-app/docker-compose.yaml
