@@ -42,6 +42,7 @@ def check_readme_content():
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
     try:
         readme = make_gitlab_request(project_path, f"repository/files/{readme_encoded_path}/raw?ref=main")
+        readme = readme.text
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking readme file: {e}")
         return False
