@@ -20,7 +20,7 @@ def grade_checkpoint1(content: list[str]):
 
 @grader
 def grade_checkpoint2(content: list[str]):
-    return '2039fome' in content
+    return '2039fome' in "".join(content)
 
 @grader
 def grade_checkpoint3(content: list[str]):
@@ -28,7 +28,7 @@ def grade_checkpoint3(content: list[str]):
 
 @grader
 def grade_checkpoint4(content: list[str]):
-    return 'cat123' in content
+    return 'cat123' in "".join(content)
 
 @grader
 def grade_checkpoint5():

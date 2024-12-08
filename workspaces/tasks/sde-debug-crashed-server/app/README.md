@@ -58,13 +58,6 @@ The server will start on `http://localhost:5000`.
 - PUT /participants/{participant_id} - Update a participant
 - DELETE /participants/{participant_id} - Delete a participant
 
-## Running Tests
-
-To run the tests, execute:
-
-```
-python test_app.py
-```
 
 ## Security
 
