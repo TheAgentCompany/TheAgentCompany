@@ -1,6 +1,6 @@
 # Setup Infra
 
-1. install docker, install docker compose (note: it is `docker compose`, not `docker-compose`). Make sure your linux user has the right permission to execute the docker and docker compose command. 
+1. Install docker, install docker compose (note: it is `docker compose`, not `docker-compose`). Make sure your linux user has the right permission to execute the docker and docker compose command. 
 Install `make` and `curl`, e.g. `sudo apt install -y curl make`.
 
 2. Run `sudo chmod 666 /var/run/docker.sock` since we need to mount docker socket to the container.
