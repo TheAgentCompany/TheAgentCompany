@@ -1,11 +1,15 @@
 # Setup Infra
 
 1. Install docker, install docker compose (note: it is `docker compose`, not `docker-compose`). Make sure your linux user has the right permission to execute the docker and docker compose command. 
-Install `make` and `curl`, e.g. `sudo apt install -y curl make`.
+Install `curl`, e.g. `sudo apt install -y curl`.
 
 2. Run `sudo chmod 666 /var/run/docker.sock` since we need to mount docker socket to the container.
 
-3. Goto servers directory and run `make setup`. It will automatically do the following things:
+3. Execute the following command:
+```
+curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
+```
+It will automatically do the following things:
     * Run `make check`. The command should show your local docker and docker compose version.
     * Run `make pull-image` to pull image. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
     * Run `make start-api-server-with-setup` and wait 60s for service launching until you pass the next step 
