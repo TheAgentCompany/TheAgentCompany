@@ -199,3 +199,14 @@ check:
 	docker version
 	@echo "check docker compose version"
 	docker compose version
+
+health-check:
+	@echo "Starting health checks..."
+	@for service in owncloud gitlab rocketchat plane; do \
+		until curl -s -o /dev/null -w "%{http_code}" localhost:2999/api/healthcheck/$$service | grep -q "200"; do \
+			echo "Waiting for $$service to be ready..."; \
+			sleep 5; \
+		done; \
+		echo "$$service is ready!"; \
+	done
+	@echo "All services are up and running!"
