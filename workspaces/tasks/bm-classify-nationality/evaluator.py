@@ -1,6 +1,6 @@
 from typing import List
 import pandas as pd
-from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_nextcloud_content
+from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_owncloud_content
 from scoring import Result, Checkpoint, grader
 import logging
 
@@ -80,7 +80,7 @@ def grade_checkpoint1(trajectory):
 @grader
 def grade_checkpoint2():
     """Check the classification correctness."""
-    if not download_nextcloud_content(NEXTCLOUD_FILE_URL, DOWNLOADED_FILE):
+    if not download_owncloud_content(NEXTCLOUD_FILE_URL, DOWNLOADED_FILE):
         return 0
 
     df = load_customer_data(DOWNLOADED_FILE)
