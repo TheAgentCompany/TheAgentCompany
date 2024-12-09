@@ -15,18 +15,18 @@ start-plane: download-setup
 	./setup.sh start
 	make reset-plane
 
-start-plane-without-data:
+start-plane-without-data: download-setup
 	./setup.sh start
 
-reset-plane:
+reset-plane: download-setup
 	make stop-plane
 	./plane-app/restore.sh ./
 	make start-plane-without-data
 
-stop-plane:
+stop-plane: download-setup
 	./setup.sh stop
 
-backup-plane:
+backup-plane: download-setup
 	./setup.sh backup
 
 .PHONY: build run
