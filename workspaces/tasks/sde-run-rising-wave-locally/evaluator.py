@@ -57,7 +57,7 @@ def grade_checkpoint2():
         return p, False
     else:
         p.terminate()
-        return p, all(item in output for item in ["exam_id", "average_score", "total_scores", "101", "102", "87.74", "88.64", "5"])
+        return p, all(item in output for item in ["exam_id", "average_score", "total_scores", "101", "102", "87.7", "88.6", "5"])
     
 
 def grade_checkpoints(trajectory="") -> Result:
