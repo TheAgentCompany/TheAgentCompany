@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
-from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_owncloud_content
-from scoring import Result, Checkpoint, grader
+from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_owncloud_content, grader
+from scoring import Result, Checkpoint
 import logging
 
 
