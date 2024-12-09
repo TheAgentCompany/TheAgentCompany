@@ -24,6 +24,7 @@ start-all: init
 stop-all: init
 	docker compose -p theagentcompany down
 	$(MAKE) rm-rocketchat-volume
+	make stop-api-server
 
 # GitLab
 start-gitlab: init
