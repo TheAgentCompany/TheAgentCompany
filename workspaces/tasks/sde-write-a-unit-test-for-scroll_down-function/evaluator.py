@@ -186,7 +186,7 @@ def grade_checkpoint2(path='/workspace/openhands/tests/unit/test_agent_skill.py'
     return is_function_exists(file_path=path, function_name=function_name)
 
 @grader
-def grade_checkpoint3(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
+def grade_checkpoint3(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_scroll_down'):
     status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
     if not status:
         return False
