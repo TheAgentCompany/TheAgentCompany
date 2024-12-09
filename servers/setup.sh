@@ -51,6 +51,7 @@ docker run -d \
     ghcr.io/theagentcompany/servers-api-server:latest
 
 # wait for service launching
+echo "Waiting for service launching..."
 sleep 120
 
 echo "Checking if api-server is running on port 2999..."
