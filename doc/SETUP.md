@@ -10,12 +10,13 @@ Install `curl`, e.g. `sudo apt install -y curl`.
 curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
 ```
 It will automatically do the following things:
-    * Run `make check`. The command should show your local docker and docker compose version.
-    * Run `make pull-image` to pull image. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
-    * Run `make start-api-server-with-setup` and wait 60s for service launching until you pass the next step 
-    * Run `make health-check` to check whether service up.
 
-4. When you see output:
+* Check your local docker and docker compose version.
+* Pull image. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
+* Wait 120s for service launching until you pass the next step 
+* Check whether service up.
+
+4. Infra setup finished when you see output:
 ```
 Checking if api-server is running on port 2999...
 api-server is running on port 2999!
@@ -26,7 +27,6 @@ gitlab is ready!
 plane is ready!
 All services are up and running!
 ```
-infra setup finished.
 
 # Setup Evaluation
 If you need to use OpenHands for evaluation, you also need:
