@@ -31,7 +31,7 @@ def check_repo_exist():
             logging.info(f"New repository '{project_path}' created successfully.")
             return True
         else:
-            logging.info(f"Repository '{project_path}' not found.")
+            logging.error(f"Repository '{project_path}' not found.")
             return False
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking the repository: {e}")
@@ -41,18 +41,20 @@ def check_repo_exist():
 def check_readme_content():
     readme_encoded_path = urllib.parse.quote(readme_path, safe='')
     try:
-        readme = make_gitlab_request(project_path, f"repository/files/{readme_encoded_path}/raw?ref=main")
-        readme = readme.text
+        response = make_gitlab_request(project_path, f"repository/files/{readme_encoded_path}/raw?ref=main")
+        if response is not None and response.status_code == 200:
+            readme = response.text
+            if not readme:
+                logging.warning("Readme file doesn't exist or is empty")
+                return False
+            predicate = "some details about a new storage system project"
+            return evaluate_with_llm(readme, predicate)
+        else:
+            logging.error("Fail to fetch readme.md file")
+            return False
     except requests.RequestException as e:
         logging.error(f"Error occurred while checking readme file: {e}")
         return False
-    
-    if not readme:
-        logging.warning("Readme file doesn't exist or is empty")
-        return False
-
-    predicate = "some details about a new storage system project"
-    return evaluate_with_llm(readme, predicate)
 
 @grader
 def check_conversation_with_leader():
