@@ -7,8 +7,8 @@ from scoring import Result, Checkpoint
 from common import make_gitlab_request, grader
 from config import GITLAB_USER, GITLAB_BASEURL
 
-CHECKPOINT_1_POINTS = 1
-CHECKPOINT_2_POINTS = 1
+CHECKPOINT_1_POINTS = 3
+CHECKPOINT_2_POINTS = 3
 CHECKPOINT_3_POINTS = 1
 
 

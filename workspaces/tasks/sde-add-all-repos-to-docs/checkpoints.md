@@ -1,12 +1,12 @@
 # Checkpoints
 
-This task has 3 points in total.
+This task has 7 points in total.
 
-## Checkpoint 1 (1pt)
+## Checkpoint 1 (3pt)
 
 Check if the agent correctly puts in each repo's information in the Documentation readme.
 
-## Checkpoint 2 (1pt)
+## Checkpoint 2 (3pt)
 
 Check if the agent put the correct description for each repo in the Documentation readme.
 

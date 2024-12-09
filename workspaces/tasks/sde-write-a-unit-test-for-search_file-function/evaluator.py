@@ -257,9 +257,8 @@ def grade_checkpoints(trajectory="") -> Result:
     scores = {
         grade_checkpoint1: 1,
         grade_checkpoint2: 1,
-        grade_checkpoint3: 1,
-        grade_checkpoint4: 2,
-        grade_checkpoint5: 1
+        grade_checkpoint3: 2,
+        grade_checkpoint4: 1
     }
 
     for func, total_score in scores.items():

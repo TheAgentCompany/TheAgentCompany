@@ -203,15 +203,11 @@ def grade_checkpoint1():
     return check_repo_exists('openhands')
 
 @grader
-def grade_checkpoint2(path=UT_FILE):
-    return is_file_exist(file_path=path)
-
-@grader
-def grade_checkpoint3(path=UT_FILE, function_name='test_append_file'):
+def grade_checkpoint2(path=UT_FILE, function_name='test_append_file'):
     return is_function_exists(file_path=path, function_name=function_name)
 
 @grader
-def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
+def grade_checkpoint3(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_name='test_append_file'):
     status = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path, function_name=function_name)
     if not status:
         return False
@@ -219,7 +215,7 @@ def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE, function_nam
     return True if status['passed']==1 else False
 
 @grader
-def grade_checkpoint5(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
+def grade_checkpoint4(cov_file_path=COV_FILE, ut_file_path=UT_FILE):
     before_stats = run_pytest_with_stats(cov_file_path=cov_file_path, ut_file_path=ut_file_path)
     if not before_stats:
         return False
@@ -255,9 +251,8 @@ def grade_checkpoints(trajectory="") -> Result:
     scores = {
         grade_checkpoint1: 1,
         grade_checkpoint2: 1,
-        grade_checkpoint3: 1,
-        grade_checkpoint4: 2,
-        grade_checkpoint5: 1
+        grade_checkpoint3: 2,
+        grade_checkpoint4: 1
     }
 
     for func, total_score in scores.items():

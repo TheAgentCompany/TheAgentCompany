@@ -1,6 +1,6 @@
 # Checkpoints
 
-This task has 6 points in total. If the last check passes, then full credits are
+This task has 5 points in total. If the last check passes, then full credits are
 granted. Otherwise, partial credits might be granted if only some checkpoints are
 completed.
 
@@ -8,7 +8,7 @@ completed.
 
 confirmed with Emily Zhou about the meeting time
 
-## Checkpoint 2 (2pt)
+## Checkpoint 2 (1pt)
 
 confirmed with Liu Qiang about the meeting time
 

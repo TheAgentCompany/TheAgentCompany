@@ -51,7 +51,7 @@ def grade_checkpoints(trajectory=""):
     # Define the scores corresponding to when each function is True
     scores = {
         grade_checkpoint1: 1,
-        grade_checkpoint2: 2,
+        grade_checkpoint2: 1,
         grade_checkpoint3: 3
     }
 
