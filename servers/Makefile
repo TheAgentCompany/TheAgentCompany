@@ -23,7 +23,7 @@ start-all: init
 
 stop-all: init
 	docker compose -p theagentcompany down
-	$(MAKE) rm-rocketchat-volume
+	make rm-rocketchat-volume
 	make stop-api-server
 
 # GitLab
@@ -78,7 +78,7 @@ rm-rocketchat: stop-rocketchat
 	make rm-rocketchat-volume
 
 rm-rocketchat-volume:
-	docker volume rm servers_mongodb_data
+	docker volume rm -f servers_mongodb_data
 
 reset-rocketchat:
 	docker exec -i rocketchat-mongodb sh -c 'mongorestore --drop --archive' < ./rocketchat/db.dump
