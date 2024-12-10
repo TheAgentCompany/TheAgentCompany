@@ -74,7 +74,7 @@ def evaluate_classifications(df):
 
 @grader
 def grade_checkpoint1(trajectory):
-    """Check if the correct file was accessed on NextCloud."""
+    """Check if the correct file was accessed on ownCloud."""
     return OWNCLOUD_FILE_URL in trajectory
 
 @grader
