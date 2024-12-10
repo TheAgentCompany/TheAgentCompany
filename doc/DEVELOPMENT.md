@@ -19,6 +19,6 @@ All services (GitLab, ownCloud, Rocket.Chat, Plane) are pre-baked with data. If 
 
 ## Contribute to a task
 
-If you want to create a task or modify an existing task, please read [this](./workspaces/tasks/example/README.md). We welcome
+If you want to create a task or modify an existing task, please read [this](../workspaces/tasks/example/README.md). We welcome
 contributions to tasks, including new tasks and bug fixes to existing tasks.
 
