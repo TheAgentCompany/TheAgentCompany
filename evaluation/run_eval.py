@@ -225,7 +225,7 @@ if __name__ == '__main__':
     # evaluator (in container), so we mount a temporary directory to pass it in
     # 2) evaluation result is written by evaluator (in container), but we need to persist
     # it on host machine, so we mount a temporary directory to pass it out
-    temp_dir = tempfile.mkdtemp()
+    temp_dir = tempfile.mkdtemp(dir=os.getenv('TMPDIR'))
     config: AppConfig = get_config(args.task_image_name, temp_dir, agent_llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
