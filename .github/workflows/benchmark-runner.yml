@@ -98,7 +98,18 @@ jobs:
         run: |
           mkdir -p outputs
           chmod -R 777 outputs
-          sudo chmod -R 777 /tmp
+
+      # Create and set permissions for temp directory
+      - name: Setup temp directory
+        run: |
+          # Create a specific temp directory for the job
+          mkdir -p /tmp/github_job_temp
+          # Set ownership to the github actions runner user
+          sudo chown -R $USER:$USER /tmp/github_job_temp
+          # Set permissions
+          chmod -R 755 /tmp/github_job_temp
+          # Set environment variable to use this directory
+          echo "TMPDIR=/tmp/github_job_temp" >> $GITHUB_ENV
         
       - name: Run evaluation
         working-directory: ./evaluation
@@ -109,6 +120,8 @@ jobs:
             --env-llm-config eval \
             --server-hostname ogma.lti.cs.cmu.edu \
             --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
+        env:
+          TMPDIR: /tmp/github_job_temp
 
       - name: Read evaluation results
         id: read-results
@@ -126,6 +139,8 @@ jobs:
           else
             echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
           fi
+        env:
+          TMPDIR: /tmp/github_job_temp
     
       - name: Comment on results
         uses: peter-evans/create-or-update-comment@v4
