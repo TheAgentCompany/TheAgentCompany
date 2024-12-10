@@ -42,23 +42,5 @@ def create_issues_in_gitlab():
         make_gitlab_request(GITLAB_PROJECT_PATH, f"issues/{issue2_id}?state_event=close", method = "PUT")
     return
 
-def create_issues_in_plane():
-    cycle = get_plane_cycle_details(PLANE_PROJECT_ID, CYCLE_NAME)
-    issue1 = get_plane_issue_details(PLANE_PROJECT_ID, ISSUE_1)
-    if issue1 is None:
-        logger.info("Creating issue 1 in Plane")
-        create_plane_issue(PLANE_PROJECT_ID, ISSUE_1)
-        issue1 = get_plane_issue_details(PLANE_PROJECT_ID, ISSUE_1)
-        add_plane_issue_to_cycle(PLANE_PROJECT_ID, cycle["id"], issue1["id"])
-
-    issue2 = get_plane_issue_details(PLANE_PROJECT_ID, ISSUE_2)
-    if issue2 is None:
-        logger.info("Creating issue 2 in Plane")
-        create_plane_issue(PLANE_PROJECT_ID, ISSUE_2)
-        issue2 = get_plane_issue_details(PLANE_PROJECT_ID, ISSUE_2)
-        add_plane_issue_to_cycle(PLANE_PROJECT_ID, cycle["id"], issue2["id"])
-    return
-
 if __name__ == "__main__":
-    create_issues_in_plane()
     create_issues_in_gitlab()
