@@ -102,13 +102,8 @@ jobs:
       # Create and set permissions for temp directory
       - name: Setup temp directory
         run: |
-          # Create a specific temp directory for the job
           mkdir -p /tmp/github_job_temp
-          # Set ownership to the github actions runner user
-          sudo chown -R $USER:$USER /tmp/github_job_temp
-          # Set permissions
-          chmod -R 755 /tmp/github_job_temp
-          # Set environment variable to use this directory
+          chmod -R 777 /tmp/github_job_temp
           echo "TMPDIR=/tmp/github_job_temp" >> $GITHUB_ENV
         
       - name: Run evaluation
@@ -140,8 +135,6 @@ jobs:
           else
             echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
           fi
-        env:
-          TMPDIR: /tmp/github_job_temp
     
       - name: Comment on results
         uses: peter-evans/create-or-update-comment@v4
