@@ -1,68 +1,23 @@
 # Development Guide
 
-Target audience: benchmark developers.
-
-TODO: polish the doc and remove CMU internal guidelines before public release.
-TODO: some content in this doc is actually user doc rather than dev doc. We need to split them.
+Target audience: benchmark developers. You want to create/modify tasks, and/or modify data pre-baked into the servers.
 
 If you wish to contribute your changes, check out the [CONTRIBUTING.md](./CONTRIBUTING.md) on how to clone and set up the project initially before moving on. Otherwise, you can clone TheAgentCompany project directly.
 
-## Table of Contents
 
-- [Development Guide](#development-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Start the server for development](#start-the-server-for-development)
-    - [1. Requirements](#1-requirements)
-    - [2. Initialize parameters](#2-initialize-parameters)
-    - [3. Start the servers](#3-start-the-servers)
-    - [4. Backup and Restore](#4-backup-and-restore)
-    - [5. Stop the servers](#5-stop-the-servers)
-  - [How to build a task image](#how-to-build-a-task-image)
+## Contribute to server data
 
+All services (GitLab, ownCloud, Rocket.Chat, Plane) are pre-baked with data. If you do not need to modify the data, you can skip this section.
 
-
-## Start the server for development
-
-For how to access each service, see [here](./servers/README.md)
-
-### 1. Requirements
-* Linux, Mac OS, or [WSL on Windows](https://learn.microsoft.com/en-us/windows/wsl/install)
-* [Docker](https://docs.docker.com/engine/install/)
-
-### 2. Initialize parameters
-In the [Makefile](./servers/Makefile), we create several environment parameters, like below
-```
-HOSTNAME?=ogma.lti.cs.cmu.edu
-FILE_SERVER_PORT?=8081
-GITLAB_PORT?=8929
-```
-Make sure you understand each parameter's meaning and configure it with the correct value. At the very least, you need to change the home file path, change the HOSTNAME, and ensure all ports are available on your server.
-
-### 3. Start the servers
-Execute `make start-all` in the servers directory.
-
-For GitLab and Rocket.Chat, you can directly visit the service at the URL you configured earlier.
-
-For OwnCloud, visit the URL, then follow the instructions to perform some manual configuration work. Currently, we have not yet figured out a good way to do it programmatically.
-
-For Plane, you need to execute [setup.sh](./servers/plane/setup.sh), then choose "start" to launch the service.
-
-**NOTE:** If you want to launch Plane and OwnCloud at the same time, you may need to change the web URL of Plane, or its URL will conflict with OwnCloud.
-
-### 4. Backup and Restore
-**GitLab:** TODO
+**GitLab:** Please refer to [this](../servers/gitlab/README.md) for more details.
 
 **OwnCloud** TODO
 
 **Rocket.Chat:** After the service starts, run `backup-rocketchat` to back up the service, and run `restore-rocketchat` to restore the service.
 
-**Plane:** see [here](./servers/plane/README.md) for more details.
+**Plane:** TODO
 
-### 5. Stop the servers
-For GitLab, OwnCloud, and Rocket.Chat, you can directly execute `make stop-all` in the servers directory. This will stop all three servers.
+## Contribute to a task
 
-For Plane, run [setup.sh](./servers/plane/setup.sh) and choose "stop."
-
-## How to build a task image
-If you want to create a task for benchmarking, please read [this](./workspaces/tasks/example/README.md).
+If you want to create a task or modify an existing task, please read [this](./workspaces/tasks/example/README.md).
 
