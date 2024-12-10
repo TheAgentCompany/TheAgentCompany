@@ -127,7 +127,7 @@ def grade_checkpoints(trajectory=""):
     result = Result(checkpoints, bonus_for_completing_any)
 
     checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
-    checkpoints.append(Checkpoint(2, grade_checkpoint2()))
+    checkpoints.append(Checkpoint(2, int(grade_checkpoint2())))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
     checkpoints.append(Checkpoint(2, grade_final_checkpoint()))
 
