@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
 from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_owncloud_content, grader
-from scoring import Result, Checkpoint
+from scoring import Result, Checkpoint, bonus_for_completing_any
 import logging
 
 
@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Define constants
-NEXTCLOUD_FILE_URL = "http://the-agent-company.com:8092/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
+OWNCLOUD_FILE_URL = "http://the-agent-company.com:8092/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
 DOWNLOADED_FILE = "/workspace/Customer_downloaded.xlsx"
 
 # Define expected classifications
@@ -75,12 +75,12 @@ def evaluate_classifications(df):
 @grader
 def grade_checkpoint1(trajectory):
     """Check if the correct file was accessed on NextCloud."""
-    return NEXTCLOUD_FILE_URL in trajectory
+    return OWNCLOUD_FILE_URL in trajectory
 
 @grader
 def grade_checkpoint2():
     """Check the classification correctness."""
-    if not download_owncloud_content(NEXTCLOUD_FILE_URL, DOWNLOADED_FILE):
+    if not download_owncloud_content(OWNCLOUD_FILE_URL, DOWNLOADED_FILE):
         return 0
 
     df = load_customer_data(DOWNLOADED_FILE)
@@ -124,9 +124,9 @@ def grade_final_checkpoint():
 def grade_checkpoints(trajectory=""):
     """Evaluate all checkpoints."""
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_any)
 
-    checkpoints.append(Checkpoint(1, grade_checkpoint1(trajectory)))
+    checkpoints.append(Checkpoint(1, int(grade_checkpoint1(trajectory))))
     checkpoints.append(Checkpoint(2, grade_checkpoint2()))
     checkpoints.append(Checkpoint(1, int(grade_checkpoint3())))
     checkpoints.append(Checkpoint(2, grade_final_checkpoint()))
