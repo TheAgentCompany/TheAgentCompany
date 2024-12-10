@@ -5,9 +5,6 @@ from scoring import Result, Checkpoint, bonus_for_completing_any
 import logging
 
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 # Define constants
 OWNCLOUD_FILE_URL = "http://the-agent-company.com:8092/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
 DOWNLOADED_FILE = "/workspace/Customer_downloaded.xlsx"
