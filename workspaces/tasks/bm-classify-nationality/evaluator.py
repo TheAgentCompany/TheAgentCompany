@@ -1,13 +1,17 @@
 from typing import List
 import pandas as pd
-from common import get_rocketchat_personal_chat_history, create_rocketchat_client, download_owncloud_content, grader
+from common import get_rocketchat_personal_chat_history, create_rocketchat_client, grader, check_and_download_file
 from scoring import Result, Checkpoint, bonus_for_completing_any
 import logging
 
 
+
 # Define constants
-OWNCLOUD_FILE_URL = "http://the-agent-company.com:8092/apps/files/files/1749?dir=/Documents/Data%20Analysis&openfile=true"
+OWNCLOUD_FILE_URL = "dir=/Documents/Data%20Analysis"
 DOWNLOADED_FILE = "/workspace/Customer_downloaded.xlsx"
+FILE_NAME = "Customer.xlsx"
+DIR_NAME = "Documents/Data%20Analysis"
+
 
 # Define expected classifications
 EXPECTED_CLASSIFICATIONS = {
@@ -52,15 +56,25 @@ def evaluate_classifications(df):
         return 0
 
     correct = 0
-    total = len(EXPECTED_CLASSIFICATIONS)
+
+    # Ensure only relevant rows are evaluated
+    total = sum(1 for _, row in df.iterrows() if str(row.get("Order ID")).lstrip("0") in EXPECTED_CLASSIFICATIONS)
 
     for _, row in df.iterrows():
-        order_id = str(row.get("Order ID"))
+        order_id = str(row.get("Order ID")).lstrip("0")  # Remove leading zeroes
+        if order_id not in EXPECTED_CLASSIFICATIONS:
+            continue  # Skip rows not in EXPECTED_CLASSIFICATIONS
+
         actual = row.get("Domestic or International", "").strip() if isinstance(row.get("Domestic or International"), str) else ""
         expected = EXPECTED_CLASSIFICATIONS.get(order_id, "")
 
         if actual == expected:
             correct += 1
+
+    # Avoid division by zero
+    if total == 0:
+        logging.warning("No valid rows to evaluate.")
+        return 0
 
     accuracy = correct / total
     if accuracy == 1:
@@ -68,6 +82,7 @@ def evaluate_classifications(df):
     elif accuracy >= 0.5:
         return 1  # Partial points
     return 0
+
 
 @grader
 def grade_checkpoint1(trajectory):
@@ -77,12 +92,19 @@ def grade_checkpoint1(trajectory):
 @grader
 def grade_checkpoint2():
     """Check the classification correctness."""
-    if not download_owncloud_content(OWNCLOUD_FILE_URL, DOWNLOADED_FILE):
+    
+    # Use `check_and_download_file` to check and download the file from OwnCloud
+    success = check_and_download_file(FILE_NAME, DIR_NAME, DOWNLOADED_FILE)
+    if not success:
+        logging.warning("Failed to download the Customer.xlsx file from OwnCloud.")
         return 0
 
+    # Load the customer data from the downloaded file
     df = load_customer_data(DOWNLOADED_FILE)
     if df is None:
         return 0
+
+    # Evaluate the classifications in the file
     return evaluate_classifications(df)
 
 @grader
