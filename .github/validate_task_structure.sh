@@ -35,8 +35,8 @@ for task_dir in *; do
     echo "Error: Dockerfile is missing in $task_dir"
     exit 1
   fi
-  if ! grep -q "FROM base-image" "Dockerfile"; then
-    echo "Error: Dockerfile in $task_dir does not contain 'FROM base-image'"
+  if ! grep -q "FROM ghcr.io/theagentcompany/task-base-image:1.0.0" "Dockerfile"; then
+    echo "Error: Dockerfile in $task_dir does not contain 'FROM ghcr.io/theagentcompany/task-base-image:1.0.0'"
     exit 1
   fi
   # we don't allow CMD or ENTRYPOINT in task Dockerfiles, because OpenHands, or any other
