@@ -75,8 +75,15 @@ def analyze_traj_json_file(filepath: str) -> Tuple[int, float]:
     cost: float = 0.0
     with open(filepath, 'r') as f:
         data = json.load(f)
+        response_id = None
         for action in data:
             if "tool_call_metadata" in action:
+                if action["tool_call_metadata"]["model_response"]["id"] != response_id:
+                    response_id = action["tool_call_metadata"]["model_response"]["id"]
+                else:
+                    # openhands displays the same model response meta data multiple times, when
+                    # a single LLM call leads to multiple actions and observations.
+                    continue
                 steps += 1
                 usage = action["tool_call_metadata"]["model_response"]["usage"]
                 model: str = action["tool_call_metadata"]["model_response"]["model"]
