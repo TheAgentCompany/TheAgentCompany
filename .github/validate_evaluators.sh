@@ -26,7 +26,9 @@ for task_dir in workspaces/tasks/*/; do
   # Run the container and execute the evaluator
   # The evaluator would almost always say 0 marks granted, but that's
   # fine, we only run it to make sure it at least compiles
-  docker run -e TAC_TEST_MODE=true --rm task-image python_default /utils/eval.py
+  docker run -e TAC_TEST_MODE=true --rm task-image sh -c \
+    "echo '127.0.0.1 the-agent-company.com' >> /etc/hosts; \
+    python_default /utils/eval.py"
 
   # Capture the exit code
   EXIT_CODE=$?
