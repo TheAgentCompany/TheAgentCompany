@@ -1,15 +1,32 @@
-"""
-Entrypoint to run evaluation. It calls grade_checkpoints function in
-evaluator.py, which is customized per task.
-"""
+import os
+import base64
 import argparse
 import json
 import sys
 import logging
 
-from evaluator import grade_checkpoints
 from scoring import Result
 
+def decrypt_and_execute():
+    # Get the decryption key from the environment variable
+    decryption_key = os.environ.get('DECRYPTION_KEY')
+    if decryption_key != "theagentcompany":
+        raise ValueError("Invalid decryption key")
+
+    # Read the encrypted evaluator file
+    encrypted_file_path = 'evaluator.py.enc'
+    with open(encrypted_file_path, 'rb') as encrypted_file:
+        encrypted_content = encrypted_file.read()
+
+    # Decrypt the content
+    decrypted_content = base64.b64decode(encrypted_content).decode('utf-8')
+
+    # Execute the decrypted content
+    exec(decrypted_content, globals())
+
+    # Import the evaluator module after successful decryption
+    global grade_checkpoints
+    from evaluator import grade_checkpoints
 
 def load_trajectory(file_path):
     try:
@@ -19,7 +36,6 @@ def load_trajectory(file_path):
     except Exception as e:
         logging.warning(f"Error reading trajectory file: {e}")
         return ""
-
 
 def main():
     # Set up logging
@@ -59,6 +75,5 @@ def main():
         logging.error("Failed to grade the task", exc_info=True)
         sys.exit(1)
 
-
 if __name__ == "__main__":
-    main()
+    decrypt_and_execute()

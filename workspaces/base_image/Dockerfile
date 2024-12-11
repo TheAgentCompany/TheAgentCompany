@@ -66,6 +66,8 @@ ENV PYTHONPATH="/utils:$PYTHONPATH"
 # persist utilities files in the exam image
 ONBUILD COPY *.py /utils/
 
+ONBUILD RUN base64 /utils/evaluator.py > /utils/evaluator.py.enc && rm /utils/evaluator.py
+
 ONBUILD COPY dependencies.yml /utils/
 
 # persist instruction files needed by the examinee
