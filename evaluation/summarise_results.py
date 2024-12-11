@@ -76,7 +76,7 @@ def analyze_traj_json_file(filepath: str) -> Tuple[int, float]:
     with open(filepath, 'r') as f:
         data = json.load(f)
         for action in data:
-            if action["source"] == "agent":
+            if "tool_call_metadata" in action:
                 steps += 1
                 usage = action["tool_call_metadata"]["model_response"]["usage"]
                 model: str = action["tool_call_metadata"]["model_response"]["model"]
@@ -87,54 +87,23 @@ def analyze_traj_json_file(filepath: str) -> Tuple[int, float]:
     return (steps, cost)
 
 
-def analyze_state_json_file(filepath: str) -> Tuple[int, float]:
-    """
-    Analyze a single final state JSON file and extract the steps and cost.
-    TODO: this is not a real JSON file at the moment, but a custom str format,
-    so we need to parse it manually.
-
-    Args:
-        filepath: Path to the JSON file
-
-    Returns:
-        Tuple containing (steps, cost)
-    """
-    try:
-        with open(filepath, 'r') as f:
-            data = f.read()
-
-        if 'iteration=' in data:
-            iteration_part = data.split('iteration=')[1]
-            steps = int(iteration_part.split(',')[0])
-
-        if "accumulated_cost': " in data:
-            cost_part = data.split("accumulated_cost': ")[1]
-            cost = float(cost_part.split(',')[0])
-
-        return (steps, cost)
-    except Exception as e:
-        print(f"Error processing {filepath}: {e}")
-        return (0, 0)
-
 def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[str, Tuple[int, float]]]:
     """
-    Analyze all eval_*.json & state_*.json files in the specified folder.
+    Analyze all eval_*.json & traj_*.json files in the specified folder.
     
     Args:
         folder_path: Path to the folder containing JSON files
         
     Returns:
-        Two dictionaries:
+        dictionaries:
         - eval_results: Dictionary with filename as key and (total, result) tuple as value
-        - state_results: Dictionary with filename as key and (steps, cost) tuple as value
+        - traj_results: Dictionary with filename as key and (steps, cost) tuple as value
     """
     eval_results = {}
     traj_results = {}
-    state_results = {}
 
     eval_pattern = os.path.join(folder_path, "eval_*.json")
     traj_pattern = os.path.join(folder_path, "traj_*.json")
-    state_pattern = os.path.join(folder_path, "state_*.json")
     
     for filepath in glob.glob(eval_pattern):
         filename = os.path.basename(filepath)
@@ -147,14 +116,8 @@ def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[s
         steps, cost = analyze_traj_json_file(filepath)
         key = re.search(r"traj_(.+)\.json", filename).group(1)
         traj_results[key] = (steps, cost)
-    
-    for filepath in glob.glob(state_pattern):
-        filename = os.path.basename(filepath)
-        steps, cost = analyze_state_json_file(filepath)
-        key = re.search(r"state_(.+)\.json", filename).group(1)
-        state_results[key] = (steps, cost)
 
-    return eval_results, state_results
+    return eval_results, traj_results
 
 def calculate_score(total: int, result: int) -> float:
     """
@@ -198,7 +161,7 @@ def main():
         print(f"Error: '{folder_path}' is not a valid directory")
         sys.exit(1)
     
-    eval_results, state_results = analyze_folder(folder_path)
+    eval_results, traj_results = analyze_folder(folder_path)
     
     if not eval_results:
         print(f"No eval_*.json files found in {folder_path}")
@@ -234,7 +197,7 @@ def main():
     # Print individual file results
     for task_name, total, result, score, is_perfect in detailed_results:
         perfect_marker = " ⭐" if is_perfect else ""
-        print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {state_results[task_name][0]} | {state_results[task_name][1]:.2f} |")
+        print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {traj_results[task_name][0]} | {traj_results[task_name][1]:.2f} |")
     
     # Print summary section
     print("\n## Summary\n")
