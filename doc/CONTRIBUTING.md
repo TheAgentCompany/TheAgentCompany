@@ -88,6 +88,3 @@ Please check the details in each parts.
 For Server work: [gitlab](./servers/gitlab/README.md), [owncloud](./servers/owncloud/README.md), [plane](./servers/plane/README.md), [rocketchat](./servers/rocketchat/README.md)
 
 For task work: [example](./workspaces/tasks/example/README.md)
-
-## Tests
-TODO: make sure code pass the test before submit.
