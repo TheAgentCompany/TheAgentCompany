@@ -19,15 +19,15 @@ def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> fl
         # https://ai.google.dev/pricing#1_5pro, accessed 12/11/2024
         # assuming prompts up to 128k tokens
         return 0.00000125 * prompt_tokens + 0.000005 * completion_tokens
-    elif "qwen-2.5-72b" in model.lower():
+    elif "qwen2-72b" in model.lower():
         # assuming hosted on Together
         # https://www.together.ai/pricing, accessed 12/11/2024
-        return 0.0000012 * (prompt_tokens + completion_tokens)
-    elif "llama-3.1-405b" in model.lower():
+        return 0.0000009 * (prompt_tokens + completion_tokens)
+    elif "llama-v3p1-405b-instruct" in model.lower():
         # assuming hosted on Fireworks AI
         # https://fireworks.ai/pricing, accessed 12/11/2024
         return 0.000003 * (prompt_tokens + completion_tokens)
-    elif "llama-3.1-70b" in model.lower():
+    elif "llama-v3p1-70b-instruct" in model.lower():
         # assuming hosted on Fireworks AI
         return 0.0000009 * (prompt_tokens + completion_tokens)
     elif "amazon.nova-pro-v1:0" in model.lower():
