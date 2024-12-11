@@ -29,8 +29,7 @@ def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> fl
         return 0.000003 * (prompt_tokens + completion_tokens)
     elif "llama-3.1-70b" in model.lower():
         # assuming hosted on Fireworks AI
-        # FIXME: price not found on Fireworks AI pricing page
-        return 0 * (prompt_tokens + completion_tokens)
+        return 0.0000009 * (prompt_tokens + completion_tokens)
     elif "amazon.nova-pro-v1:0" in model.lower():
         # assuming hosted on Amazon Bedrock
         # https://aws.amazon.com/bedrock/pricing/, accessed 12/11/2024
