@@ -98,7 +98,7 @@ OPENAI_API_KEY=<YOUR OPENAI API KEY> python_default /npc/run_one_npc.py --agent_
 
 The following is a dockerfile example, you can use it build a npc example and run it.
 ```Dockerfile
-FROM base-image
+FROM ghcr.io/theagentcompany/task-base-image:1.0.0
 # Step1: Set ENV: OPENAI API KEY, REDIS_OM_URL, BOT_URL
 ENV OPENAI_API_KEY <Your OPENAI_API_KEY>
 # Redis Username: default, Password: theagentcompany

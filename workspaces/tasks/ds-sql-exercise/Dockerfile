@@ -1,4 +1,4 @@
-FROM base-image
+FROM ghcr.io/theagentcompany/task-base-image:1.0.0
 
 # install sqlite3
 RUN apt-get update && \
