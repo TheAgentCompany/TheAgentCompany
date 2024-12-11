@@ -14,13 +14,12 @@ def decrypt_and_execute():
         raise ValueError("Invalid decryption key")
 
     # Read the encrypted evaluator file
-    encrypted_file_path = 'evaluator.py.enc'
+    encrypted_file_path = '/utils/evaluator.py.enc'
     with open(encrypted_file_path, 'rb') as encrypted_file:
         encrypted_content = encrypted_file.read()
 
     # Decrypt the content
     decrypted_content = base64.b64decode(encrypted_content).decode('utf-8')
-
     # Execute the decrypted content
     exec(decrypted_content, globals())
 
