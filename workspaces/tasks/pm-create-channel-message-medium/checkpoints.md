@@ -17,7 +17,7 @@ Sent message 'Welcome to the literature review channel!'
 
 ## Checkpoint 4 (1pt)
 
-Created the public #benchmarking channel (http://ogma.lti.cs.cmu.edu:3000/channel/benchmarking)
+Created the public #benchmarking channel (http://the-agent-company.com:3000/channel/benchmarking)
 
 ## Checkpoint 5 (1pt)
 

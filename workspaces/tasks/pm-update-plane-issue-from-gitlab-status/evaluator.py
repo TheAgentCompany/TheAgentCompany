@@ -1,4 +1,4 @@
-import json
+import logging
 from typing import List
 
 from scoring import Result, Checkpoint
@@ -30,11 +30,13 @@ def get_issue_url(issue_name):
 @grader
 def grade_checkpoint1(trajectory):
     url = get_issue_url(ISSUE_1)
+    logging.info(f"Issue1 URL: {url}")
     return url is not None and url in trajectory
 
 @grader
 def grade_checkpoint2(trajectory):
     url = get_issue_url(ISSUE_2)
+    logging.info(f"Issue2 URL: {url}")
     return url is not None and url in trajectory
 
 @grader
@@ -68,12 +70,36 @@ def grade_checkpoint5():
     if state is None:
         return False
     return state["group"] == "completed"
+
+
+def bonus_for_completing_last_two(checkpoints: List[Checkpoint]) -> dict:
+    """
+    If the last two checkpoints are completed successfully (full score),
+    award full points for the complete task.
+    """
+    if not checkpoints:
+        return {"total": 0, "result": 0}
     
+    total = sum(cp.total for cp in checkpoints)
+    
+    # Check if last two checkpoints got full score
+    last_two_complete = all(
+        cp.result == cp.total for cp in checkpoints[-2:]
+    )
+    
+    if last_two_complete:
+        # Award full points for the complete task
+        result = total
+    else:
+        # Normal scoring
+        result = sum(cp.result for cp in checkpoints)
+    
+    return {"total": total, "result": result}
 
 
 def grade_checkpoints(trajectory="") -> Result:
     checkpoints: List[Checkpoint] = []
-    result = Result(checkpoints)
+    result = Result(checkpoints, bonus_for_completing_last_two)
 
     passed1 = grade_checkpoint1(trajectory)
     checkpoints.append(Checkpoint(CHECKPOINT_1_POINTS, CHECKPOINT_1_POINTS * int(passed1)))

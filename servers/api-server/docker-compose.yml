@@ -5,7 +5,7 @@ services:
     # build the gitlab image from scratch
     # build:
     #   context: ./gitlab
-    image: ghcr.io/theagentcompany/servers-gitlab:latest
+    image: ghcr.io/theagentcompany/servers-gitlab:1.0.0
     pull_policy: always
     ############################################################
     container_name: gitlab
@@ -22,7 +22,7 @@ services:
     shm_size: '256m'
 
   owncloud:
-    image: ghcr.io/theagentcompany/servers-owncloud:latest
+    image: ghcr.io/theagentcompany/servers-owncloud:1.0.0
     container_name: owncloud
     pull_policy: always
     restart: always
@@ -117,7 +117,7 @@ services:
       - rocketchat-redis-net
 
   redis-stack-npc-data-population:
-    image: ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
+    image: ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:1.0.0
     container_name: redis-stack-npc-data-population
     pull_policy: always
     restart: on-failure

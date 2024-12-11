@@ -20,15 +20,15 @@ docker compose version
 
 ################## pull docker image ################## 
 echo "Starting Pull Image..."
-docker pull ghcr.io/theagentcompany/servers-api-server:latest
-docker pull ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:latest
-docker pull ghcr.io/theagentcompany/servers-owncloud:latest
-docker pull ghcr.io/theagentcompany/servers-gitlab:latest
-docker pull ghcr.io/theagentcompany/servers-plane-admin:0.0.1
-docker pull ghcr.io/theagentcompany/servers-plane-frontend:0.0.1
-docker pull ghcr.io/theagentcompany/servers-plane-backend:0.0.1
-docker pull ghcr.io/theagentcompany/servers-plane-space:0.0.1
-docker pull ghcr.io/theagentcompany/servers-plane-proxy:0.0.1
+docker pull ghcr.io/theagentcompany/servers-api-server:1.0.0
+docker pull ghcr.io/theagentcompany/servers-rocketchat-npc-data-population:1.0.0
+docker pull ghcr.io/theagentcompany/servers-owncloud:1.0.0
+docker pull ghcr.io/theagentcompany/servers-gitlab:1.0.0
+docker pull ghcr.io/theagentcompany/servers-plane-admin:1.0.0
+docker pull ghcr.io/theagentcompany/servers-plane-frontend:1.0.0
+docker pull ghcr.io/theagentcompany/servers-plane-backend:1.0.0
+docker pull ghcr.io/theagentcompany/servers-plane-space:1.0.0
+docker pull ghcr.io/theagentcompany/servers-plane-proxy:1.0.0
 docker pull minio/minio:RELEASE.2024-11-07T00-52-20Z
 docker pull collabora/code:24.04.9.2.1
 docker pull busybox:1.37.0
@@ -48,7 +48,7 @@ docker run -d \
     --network host \
     --restart always \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    ghcr.io/theagentcompany/servers-api-server:latest
+    ghcr.io/theagentcompany/servers-api-server:1.0.0
 
 # wait for service launching
 echo "Waiting for service launching..."

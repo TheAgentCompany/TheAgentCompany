@@ -212,8 +212,12 @@ def main():
     print(f"**Perfect Completions:** {perfect_completions}/{len(eval_results)} ({(perfect_completions/len(eval_results)*100):.1f}%)\n")
     
     overall_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results) * 100
-    print(f"**Overall Score:** {overall_score:.2f}%")
-    
+    avg_steps = sum(steps for _, steps, _, _, _ in detailed_results) / len(detailed_results)
+    avg_cost = sum(cost for _, _, _, _, cost in detailed_results) / len(detailed_results)
+    print(f"**Overall Score:** {overall_score:.2f}%\n")
+    print(f"**Average Steps:** {avg_steps:.2f}\n")
+    print(f"**Average Cost (USD):** {avg_cost:.2f}\n")
+
     # Additional statistics
     if detailed_results:
         highest_score = max(score for _, _, _, score, _ in detailed_results)
