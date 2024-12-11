@@ -5,6 +5,39 @@ import os
 import sys
 from typing import Dict, Tuple
 
+def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> float:
+    """
+    Calculate the cost of the model call.
+    """
+    if "claude-3-5-sonnet" in model.lower():
+        # https://www.anthropic.com/pricing#anthropic-api, accessed 12/11/2024
+        return 0.000003 * prompt_tokens + 0.000015 * completion_tokens
+    elif "gpt-4o" in model.lower():
+        # https://openai.com/api/pricing/, accessed 12/11/2024
+        return 0.0000025 * prompt_tokens + 0.00001 * completion_tokens
+    elif "gemini-1.5-pro" in model.lower():
+        # https://ai.google.dev/pricing#1_5pro, accessed 12/11/2024
+        # assuming prompts up to 128k tokens
+        return 0.00000125 * prompt_tokens + 0.000005 * completion_tokens
+    elif "qwen-2.5-72b" in model.lower():
+        # assuming hosted on Together
+        # https://www.together.ai/pricing, accessed 12/11/2024
+        return 0.0000012 * (prompt_tokens + completion_tokens)
+    elif "llama-3.1-405b" in model.lower():
+        # assuming hosted on Fireworks AI
+        # https://fireworks.ai/pricing, accessed 12/11/2024
+        return 0.000003 * (prompt_tokens + completion_tokens)
+    elif "llama-3.1-70b" in model.lower():
+        # assuming hosted on Fireworks AI
+        # FIXME: price not found on Fireworks AI pricing page
+        return 0 * (prompt_tokens + completion_tokens)
+    elif "amazon.nova-pro-v1:0" in model.lower():
+        # assuming hosted on Amazon Bedrock
+        # https://aws.amazon.com/bedrock/pricing/, accessed 12/11/2024
+        return 0.0000008 * prompt_tokens + 0.0000032 * completion_tokens
+    else:
+        raise ValueError(f"Unknown model: {model}")
+
 def analyze_eval_json_file(filepath: str) -> Tuple[int, int]:
     """
     Analyze a single eval JSON file and extract the total and result from final_score.
@@ -30,6 +63,29 @@ def analyze_eval_json_file(filepath: str) -> Tuple[int, int]:
     except Exception as e:
         print(f"Error processing {filepath}: {e}")
         return (0, 0)
+
+
+def analyze_traj_json_file(filepath: str) -> Tuple[int, float]:
+    """
+    Analyze a single trajectory JSON file and extract the steps and tokens
+    for each step. Then estimate the cost based on the tokens and the model type.
+    Note: this is assuming there's no prompt caching at all.
+    """
+    steps: int = 0
+    cost: float = 0.0
+    with open(filepath, 'r') as f:
+        data = json.load(f)
+        for action in data:
+            if action["source"] == "agent":
+                steps += 1
+                usage = action["tool_call_metadata"]["model_response"]["usage"]
+                model: str = action["tool_call_metadata"]["model_response"]["model"]
+                prompt_tokens = usage["prompt_tokens"]
+                completion_tokens = usage["completion_tokens"]
+                cost += calculate_cost(model, prompt_tokens, completion_tokens)
+
+    return (steps, cost)
+
 
 def analyze_state_json_file(filepath: str) -> Tuple[int, float]:
     """
@@ -73,8 +129,11 @@ def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[s
         - state_results: Dictionary with filename as key and (steps, cost) tuple as value
     """
     eval_results = {}
+    traj_results = {}
     state_results = {}
+
     eval_pattern = os.path.join(folder_path, "eval_*.json")
+    traj_pattern = os.path.join(folder_path, "traj_*.json")
     state_pattern = os.path.join(folder_path, "state_*.json")
     
     for filepath in glob.glob(eval_pattern):
@@ -82,6 +141,12 @@ def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[s
         total, result = analyze_eval_json_file(filepath)
         key = re.search(r"eval_(.+)\.json", filename).group(1)
         eval_results[key] = (total, result)
+
+    for filepath in glob.glob(traj_pattern):
+        filename = os.path.basename(filepath)
+        steps, cost = analyze_traj_json_file(filepath)
+        key = re.search(r"traj_(.+)\.json", filename).group(1)
+        traj_results[key] = (steps, cost)
     
     for filepath in glob.glob(state_pattern):
         filename = os.path.basename(filepath)
