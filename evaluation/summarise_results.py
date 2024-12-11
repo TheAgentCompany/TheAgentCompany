@@ -181,7 +181,7 @@ def main():
     avg_cost = sum(cost for _, _, _, _, cost in detailed_results) / len(detailed_results)
     print(f"**Overall Score:** {overall_score:.2f}%\n")
     print(f"**Average Steps:** {avg_steps:.2f}\n")
-    print(f"**Average Cost:** {avg_cost:.2f}\n")
+    print(f"**Average Cost (USD):** {avg_cost:.2f}\n")
 
     # Additional statistics
     if detailed_results:
