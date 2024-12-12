@@ -20,32 +20,41 @@ def pad_key(key):
     return key[:32]
 
 def decrypt_and_execute():
-    # Get the decryption key from the environment variable
     decryption_key = os.environ.get('DECRYPTION_KEY')
+
     byte_string = bytes(decryption_key, 'utf-8')
     padded_key = pad_key(byte_string)
     private_key = base64.urlsafe_b64encode(padded_key)
-
-    # Get the Fernet instance
+    
     fernet = Fernet(private_key)
-
-    # Read the encrypted evaluator file
+    
     encrypted_file_path = '/utils/evaluator.py.enc'
     with open(encrypted_file_path, 'rb') as encrypted_file:
         encrypted_content = encrypted_file.read()
-
+    
     try:
         decrypted_content = fernet.decrypt(encrypted_content)
-    except cryptography.fernet.InvalidToken:
-        # If the decryption fails, silently exit the program
-        raise RuntimeError("Failed to decrypt evaluator") 
-
-    # Execute the decrypted content
-    exec(decrypted_content.decode('utf-8'), globals())
-
-    # Import the evaluator module after successful decryption
+        logging.info("Decryption successful")
+        logging.info(f"Decrypted content length: {len(decrypted_content)}")
+        logging.info(f"First 100 characters of decrypted content: {decrypted_content[:100].decode('utf-8')}")
+    except cryptography.fernet.InvalidToken as e:
+        logging.error(f"Decryption failed: {str(e)}")
+        raise RuntimeError("Failed to decrypt evaluator")
+    
+    # Write decrypted content to a file
+    with open('/utils/evaluator.py', 'wb') as f:
+        f.write(decrypted_content)
+    
+    logging.info("Decrypted content written to /utils/evaluator.py")
+    
+    # Import the evaluator module
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("evaluator", "/utils/evaluator.py")
+    evaluator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(evaluator)
+    
     global grade_checkpoints
-    from evaluator import grade_checkpoints
+    grade_checkpoints = evaluator.grade_checkpoints
     
 def load_trajectory(file_path):
     try:
