@@ -52,6 +52,8 @@ def load_trajectory(file_path):
 
 def main():
     # Set up logging
+    decrypt_and_execute()
+
     logging.basicConfig(level=logging.INFO)
 
     # Set up argument parser
@@ -89,4 +91,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    decrypt_and_execute()
+    main()
