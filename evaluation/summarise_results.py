@@ -208,7 +208,7 @@ def main():
     # Print summary section
     print("\n## Summary\n")
     print(f"**Tasks Evaluated:** {len(eval_results)}\n")
-    print(f"**Perfect Completions:** {perfect_completions}/{len(eval_results)} ({(perfect_completions/len(eval_results)*100):.1f}%)\n")
+    print(f"**Perfect Completions:** {perfect_completions}/{len(eval_results)} ({(perfect_completions/len(eval_results)*100):.2f}%)\n")
     
     overall_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results) * 100
     avg_steps = sum(steps for steps, _ in traj_results.values()) / len(traj_results)

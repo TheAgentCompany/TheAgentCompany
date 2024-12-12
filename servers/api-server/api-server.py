@@ -37,7 +37,6 @@ def healthcheck_owncloud():
 
 @app.route('/api/healthcheck/gitlab', methods=['GET'])
 def healthcheck_gitlab():
-    # TODO (yufansong): this check cannot cover all case
     code, msg = check_url("http://localhost:8929")
     return jsonify({"message":msg}), code
 

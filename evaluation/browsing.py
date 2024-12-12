@@ -207,7 +207,8 @@ def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, scre
         ClickAction("button 'Sign in', clickable")
     ]
 
-    # TODO (yufansong): plane reset is not stable, and sometimes it fails to launch
+    # devnote: plane reset is not stable, and sometimes it fails to launch
+    # in which case the login action will fail, and then we would skip the task
     plane_login_actions = [
         GotoAction("http://the-agent-company.com:8091"),
         NoopAction(1000),

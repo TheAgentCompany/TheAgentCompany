@@ -104,5 +104,3 @@ if ls /assets/wikis/*.md 1> /dev/null 2>&1; then
 else
     echo "No .md file found in /assets/wikis/. Nothing to import."
 fi
-
-# TODO: change authorship of issues/prs/commits

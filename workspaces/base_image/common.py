@@ -450,6 +450,75 @@ def download_owncloud_content(link: str, output_file_path: str):
     logging.info(f"Successfully downloaded from link {download_link}")
     return True
 
+
+def check_and_download_file(file_name, dir_name, output_file_path):
+    """
+    Check if a file exists in an ownCloud directory using WebDAV and download it if found.
+
+    Parameters:
+        file_name (str): The name of the file to check and download.
+        dir_name (str): The directory path on NextCloud.
+        output_file_path (str): Path to save the downloaded file locally.
+
+    Returns:
+        bool: True if the file was found and downloaded successfully, False otherwise.
+    """
+    # Construct WebDAV URL for the directory
+    WEBDAV_BASE_URL = f"{OWNCLOUD_URL}/remote.php/webdav/"
+    server_url = f"{WEBDAV_BASE_URL}{dir_name.strip('/')}/"
+    headers = {'Depth': '1'}  # Request depth for PROPFIND
+
+    try:
+        # Check if the file exists in the directory
+        response = requests.request(
+            method="PROPFIND",
+            url=server_url,
+            headers=headers,
+            auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD)
+        )
+
+        if response.status_code == 207:
+            # Parse the XML response to find the file
+            root = ET.fromstring(response.text)
+            for response_element in root.findall(".//{DAV:}response"):
+                href = response_element.find("{DAV:}href").text
+                if file_name in href:
+                    logging.info(f"File '{file_name}' found. Proceeding to download.")
+                    
+                    # Construct full file URL
+                    file_url = server_url + file_name
+
+                    # Download the file
+                    download_response = requests.get(
+                        file_url,
+                        auth=HTTPBasicAuth(OWNCLOUD_USERNAME, OWNCLOUD_PASSWORD),
+                        stream=True
+                    )
+
+                    if download_response.status_code == 200:
+                        with open(output_file_path, "wb") as file:
+                            for chunk in download_response.iter_content(chunk_size=8192):
+                                file.write(chunk)
+                        logging.info(f"File '{file_name}' downloaded successfully to '{output_file_path}'.")
+                        return True
+                    else:
+                        logging.error(f"Failed to download file '{file_name}'. HTTP Status: {download_response.status_code}")
+                        return False
+
+            # File not found in the directory
+            logging.warning(f"File '{file_name}' not found in directory '{dir_name}'.")
+            return False
+
+        else:
+            # Log unexpected HTTP status codes
+            logging.error(f"Error checking directory. HTTP Status: {response.status_code}, Response: {response.text}")
+            return False
+
+    except requests.RequestException as e:
+        logging.warning(f"Failed to check or download file in ownCloud directory: {e}")
+        return False
+
+
 def check_file_in_owncloud_directory(file_name, dir_name):
     """
     Check if a file exists in an ownCloud directory using WebDAV
