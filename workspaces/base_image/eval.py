@@ -1,3 +1,7 @@
+"""
+Entrypoint to run evaluation. It calls grade_checkpoints function in
+evaluator.py, which is customized per task.
+"""
 import os
 import base64
 import argparse
@@ -52,9 +56,10 @@ def load_trajectory(file_path):
 
 def main():
     # Set up logging
-    decrypt_and_execute()
-
     logging.basicConfig(level=logging.INFO)
+    
+    # decrypt evaluator.py
+    decrypt_and_execute()
 
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Grade checkpoints from trajectory and save results')

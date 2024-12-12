@@ -26,8 +26,8 @@ WORKDIR /workspace
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
 
 # install commonly used libraries
-RUN pip install requests
-RUN pip install cryptography
+RUN pip install requests==2.32.3
+RUN pip install cryptography==44.0.0
 
 #############################################################
 
@@ -74,6 +74,6 @@ ONBUILD COPY dependencies.yml /utils/
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
 
-# prevent examinee from accessesing evaluator
-ONBUILD RUN python /utils/encrypt.py && rm /utils/evaluator.py
+# prevent examinee from accessing evaluator
+ONBUILD RUN python /utils/encrypt.py && rm /utils/evaluator.py /utils/encrypt.py
 #############################################################
