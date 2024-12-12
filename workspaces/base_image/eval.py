@@ -8,6 +8,8 @@ import argparse
 import json
 import sys
 import logging
+
+import cryptography
 from cryptography.fernet import Fernet
 
 from scoring import Result
