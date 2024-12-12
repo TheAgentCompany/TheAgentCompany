@@ -13,6 +13,7 @@ COPY common.py /utils
 COPY config.py /utils
 COPY scoring.py /utils
 COPY eval.py /utils
+COPY encrypt.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -26,6 +27,8 @@ RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
 
 # install commonly used libraries
 RUN pip install requests
+RUN pip install cryptography
+
 #############################################################
 
 ################## NPC SETUP ################################
@@ -66,10 +69,11 @@ ENV PYTHONPATH="/utils:$PYTHONPATH"
 # persist utilities files in the exam image
 ONBUILD COPY *.py /utils/
 
-ONBUILD RUN base64 /utils/evaluator.py > /utils/evaluator.py.enc && rm /utils/evaluator.py
-
 ONBUILD COPY dependencies.yml /utils/
 
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
+
+# prevent examinee from accessesing evaluator
+ONBUILD RUN python /utils/encrypt.py && rm /utils/evaluator.py
 #############################################################

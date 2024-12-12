@@ -4,29 +4,43 @@ import argparse
 import json
 import sys
 import logging
+from cryptography.fernet import Fernet
 
 from scoring import Result
+
+def pad_key(key):
+    while len(key) < 32:
+        key += b'\x00'
+    return key[:32]
 
 def decrypt_and_execute():
     # Get the decryption key from the environment variable
     decryption_key = os.environ.get('DECRYPTION_KEY')
-    if decryption_key != "theagentcompany":
-        raise ValueError("Invalid decryption key")
+    byte_string = bytes(decryption_key, 'utf-8')
+    padded_key = pad_key(byte_string)
+    private_key = base64.urlsafe_b64encode(padded_key)
+
+    # Get the Fernet instance
+    fernet = Fernet(private_key)
 
     # Read the encrypted evaluator file
     encrypted_file_path = '/utils/evaluator.py.enc'
     with open(encrypted_file_path, 'rb') as encrypted_file:
         encrypted_content = encrypted_file.read()
 
-    # Decrypt the content
-    decrypted_content = base64.b64decode(encrypted_content).decode('utf-8')
+    try:
+        decrypted_content = fernet.decrypt(encrypted_content)
+    except cryptography.fernet.InvalidToken:
+        # If the decryption fails, silently exit the program
+        raise RuntimeError("Failed to decrypt evaluator") 
+
     # Execute the decrypted content
-    exec(decrypted_content, globals())
+    exec(decrypted_content.decode('utf-8'), globals())
 
     # Import the evaluator module after successful decryption
     global grade_checkpoints
     from evaluator import grade_checkpoints
-
+    
 def load_trajectory(file_path):
     try:
         with open(file_path, 'r') as file:
