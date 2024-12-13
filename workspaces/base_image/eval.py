@@ -21,6 +21,8 @@ def pad_key(key):
 
 def decrypt_and_execute():
     decryption_key = os.environ.get('DECRYPTION_KEY')
+    if decryption_key is None:
+        raise ValueError("DECRYPTION_KEY environment variable is not present")
 
     byte_string = bytes(decryption_key, 'utf-8')
     padded_key = pad_key(byte_string)
