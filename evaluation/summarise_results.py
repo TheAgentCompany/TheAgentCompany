@@ -26,7 +26,7 @@ def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> fl
         # assuming hosted on Together
         # https://www.together.ai/pricing, accessed 12/11/2024
         return 0.0000009 * (prompt_tokens + completion_tokens)
-    elif "qwen2.5-72b" in model.lower():
+    elif "qwen2p5-72b" in model.lower():
         # assuming hosted on Together
         # https://www.together.ai/pricing, accessed 12/14/2024
         return 0.0000012 * (prompt_tokens + completion_tokens)
