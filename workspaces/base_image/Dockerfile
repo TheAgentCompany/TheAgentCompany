@@ -13,6 +13,7 @@ COPY common.py /utils
 COPY config.py /utils
 COPY scoring.py /utils
 COPY eval.py /utils
+COPY encrypt.py /utils
 
 # create instruction directory (examinee should read instructions from here)
 RUN mkdir -p /instruction
@@ -25,7 +26,9 @@ WORKDIR /workspace
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python_default
 
 # install commonly used libraries
-RUN pip install requests
+RUN pip install requests==2.32.3
+RUN pip install cryptography==44.0.0
+
 #############################################################
 
 ################## NPC SETUP ################################
@@ -70,4 +73,7 @@ ONBUILD COPY dependencies.yml /utils/
 
 # persist instruction files needed by the examinee
 ONBUILD COPY task.md /instruction/
+
+# prevent examinee from accessing evaluator
+ONBUILD RUN python /utils/encrypt.py && rm /utils/evaluator.py /utils/encrypt.py
 #############################################################

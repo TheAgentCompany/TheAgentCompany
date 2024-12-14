@@ -28,7 +28,7 @@ for task_dir in workspaces/tasks/*/; do
   # fine, we only run it to make sure it at least compiles
   docker run -e TAC_TEST_MODE=true --rm task-image sh -c \
     "echo '127.0.0.1 the-agent-company.com' >> /etc/hosts; \
-    python_default /utils/eval.py"
+    DECRYPTION_KEY='theagentcompany is all you need' python_default /utils/eval.py"
 
   # Capture the exit code
   EXIT_CODE=$?
