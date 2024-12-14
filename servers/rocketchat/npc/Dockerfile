@@ -1,6 +1,7 @@
 FROM ghcr.io/theagentcompany/task-base-image:1.0.0
 
-COPY *.py /workspace
+COPY populate_data.py /workspace
+COPY evaluator.py /utils
 COPY *.json /workspace
 
 # Redis Username: default, Password: theagentcompany
