@@ -61,13 +61,8 @@ echo "Using environment LLM config: $ENV_LLM_CONFIG"
 echo "Outputs path: $OUTPUTS_PATH"
 echo "Server hostname: $SERVER_HOSTNAME"
 
-# Navigate to base image directory and build
-echo "Building base image..."
-cd ../workspaces/base_image
-make build
-
 # Navigate to tasks directory
-cd ../tasks
+cd ../workspaces/tasks
 
 # Iterate through each directory in tasks
 for task_dir in */; do
@@ -86,6 +81,7 @@ for task_dir in */; do
     cd "$task_dir"
     
     # Build task
+    # TODO: use pre-built 1.0.0 image once released
     echo "Building $task_name..."
     make build
     
