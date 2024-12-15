@@ -104,7 +104,7 @@ for task_dir in "$TASKS_DIR"/*/; do
         --task-image-name "$task_image"
 
     # Prune unused images and volumes
-    docker image rm "$task_name-image"
+    docker image rm "$task_image"
     docker images "ghcr.io/all-hands-ai/runtime" -q | xargs -r docker rmi -f
     docker volume prune -f
     docker system prune -f
