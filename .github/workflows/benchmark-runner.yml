@@ -6,7 +6,7 @@ on:
 # This ensures only one evaluation runs at a time across all repos
 # New evaluations will wait in queue rather than cancelling running ones
 concurrency:
-  group: cmu-lti-ogma-evaluation
+  group: on-demand-evaluation
   cancel-in-progress: false
 
 jobs:
