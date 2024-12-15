@@ -40,20 +40,23 @@ Check out the [docs](./docs/SETUP.md) for more details.
   - Mathematical reasoning
   - Image processing
   - Text comprehension
+- Multiple Agent Interaction
 - Comprehensive scoring system
-- Multiple evaluation methods:
   - Result-based evaluation (primary)
   - Subcheckpoints checking (secondary)
+- Multiple evaluation methods:
   - Deterministic evaluators
   - LLM-based evaluators
 - Simple one-command operations:
   - Complete environment setup in minutes
-  - Quick system reset when needed
+  - Quick system reset in minutes when needed
 - Extensible benchmark framework
-  - Add new tasks in minutes
-  - Add new evaluators in minutes
-  - Add new subcheckpoints in minutes
+  - Add new tasks/evaluators/subcheckpoints in minutes
 
+
+# Contribution
+Currently, we are not accepting task contributions for first version benchmark. But we welcome any contributions to bug fixes, documentation, and other improvements.
+Questions? Please create an issue. Otherwise, you can also contact [Frank F. Xu](https://frankxfz.me/), [Yufan Song](https://github.com/yufansong), [Boxuan Li](https://github.com/li-boxuan) (Email: fangzhex@cs.cmu.edu, yufans@alumni.cmu.edu, boxuanli@alumni.cmu.edu)
 
 ## Cite
 TODO
