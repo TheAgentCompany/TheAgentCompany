@@ -16,6 +16,13 @@ GITHUB_REPO=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f2)
 # Login to GitHub Container Registry
 echo "$GITHUB_TOKEN" | docker login $GITHUB_REGISTRY -u $GITHUB_USERNAME --password-stdin
 
+# Publish task base image
+echo "Building and publishing task base image..."
+image_name="$GITHUB_REGISTRY/$GITHUB_USERNAME/task-base-image"
+docker build -t "$image_name:$VERSION" -t "$image_name:latest" "workspaces/base_image"
+docker push "$image_name:$VERSION"
+docker push "$image_name:latest"
+
 # Build and publish each task image
 for task_dir in workspaces/tasks/*/; do
     task_name=$(basename "$task_dir")

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag for the task images'
+        description: 'Version tag for all task images'
         required: true
         type: string
         default: 'latest'
@@ -27,7 +27,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Make publish script executable
-        run: chmod +x .github/publish-images.sh
+        run: chmod +x .github/publish_task_images.sh
 
       - name: Build and publish images
-        run: .github/publish-images.sh ${{ github.event.inputs.version }}
+        run: .github/publish_task_images.sh ${{ github.event.inputs.version }}
