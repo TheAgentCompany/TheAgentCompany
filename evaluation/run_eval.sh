@@ -87,18 +87,12 @@ for task_dir in */; do
     
     echo "Running evaluation for task: $task_name"
     
-    # Enter task directory
-    cd "$task_dir"
-    
-    # Build task
-    # TODO: use pre-built 1.0.0 image once released
-    echo "Building $task_name..."
-    make build
+    task_image="ghcr.io/theagentcompany/${task_name}-image:${VERSION}"
+    echo "Use released image $task_image..."
     
     # Navigate to evaluation folder and run evaluation
-    echo "Running evaluation for $task_name..."
-    cd ../../../evaluation
-    poetry run python run_eval.py --agent-llm-config $AGENT_LLM_CONFIG --env-llm-config $ENV_LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name "${task_name}-image"
+    cd ../../evaluation
+    poetry run python run_eval.py --agent-llm-config $AGENT_LLM_CONFIG --env-llm-config $ENV_LLM_CONFIG --outputs-path $OUTPUTS_PATH --server-hostname $SERVER_HOSTNAME --task-image-name $task_image
 
     # Prune unused images and volumes
     docker image rm $task_name-image
