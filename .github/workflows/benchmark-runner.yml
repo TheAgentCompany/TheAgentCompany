@@ -108,13 +108,12 @@ jobs:
         
       - name: Run evaluation
         working-directory: ./evaluation
-        # Todo: make server configurable on GitHub settings
         run: |
           poetry install
           poetry run python run_eval.py \
             --agent-llm-config eval \
             --env-llm-config eval \
-            --server-hostname ec2-3-15-39-106.us-east-2.compute.amazonaws.com \
+            --server-hostname ${{ secrets.ON_DEMAND_EVAL_MACHINE_HOSTNAME }} \
             --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
         env:
           TMPDIR: /tmp/github_job_temp
