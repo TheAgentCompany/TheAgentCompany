@@ -20,8 +20,8 @@ def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> fl
         # assuming prompts up to 128k tokens
         return 0.00000125 * prompt_tokens + 0.000005 * completion_tokens
     elif "gemini-2.0-flash-exp" in model.lower():
-        # price unknown for gemini-2.0-flash-exp
-        return 0
+        # price unknown for gemini-2.0-flash-exp, assuming same price as gemini-1.5-pro
+        return 0.00000125 * prompt_tokens + 0.000005 * completion_tokens
     elif "qwen2-72b" in model.lower():
         # assuming hosted on Together
         # https://www.together.ai/pricing, accessed 12/11/2024
