@@ -24,6 +24,12 @@ OUTPUTS_PATH="outputs"
 # including RocketChat, ownCloud, GitLab, and Plane.
 SERVER_HOSTNAME="localhost"
 
+# VERSION is the version of the task images to use
+# If a task doesn't have a published image with this version, it will be skipped
+# 12/15/2024: this is for forward compatibility, in the case where we add new tasks
+# after the 1.0.0 release
+VERSION="1.0.0"
+
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -41,6 +47,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --server-hostname)
             SERVER_HOSTNAME="$2"
+            shift 2
+            ;;
+        --version)
+            VERSION="$2"
             shift 2
             ;;
         *)
