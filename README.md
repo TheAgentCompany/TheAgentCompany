@@ -1,8 +1,59 @@
-# The Agent Company
+<a name="readme-top"></a>
 
-## Installation
+<div align="center">
+  <img src="./docs/TAC_logo.png" alt="Logo" width="200">
+  <h1 align="center">The Agent Company: Benchmarking LLM Agents on Consequential Real World Tasks</h1>
+</div>
 
-## Introduction
+
+<p align="center">
+    <a href="https://www.python.org/">
+        <img alt="Build" src="https://img.shields.io/badge/Python-3.12+-1f425f.svg?color=purple">
+    </a>
+    <a href="https://github.com/TheAgentCompany/TheAgentCompany/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/badge/License-MIT-blue">
+    </a>
+</p>
+
+
+Please refer to the [website]([./docs/paper.pdf](https://the-agent-company.com/)) for more details.
+
+## Overview
+TODO, paste paper content here
+
+
+## Set Up
+Check out the [docs](./docs/SETUP.md) for more details.
+
+## Exciting Features
+
+- Diverse task roles:
+  - Software Engineer
+  - Product Manager
+  - Data Scientist
+  - Human Resource
+  - Financial Staff
+  - Administrator
+- Diverse data types:
+  - Coding tasks
+  - Conversational tasks
+  - Mathematical reasoning
+  - Image processing
+  - Text comprehension
+- Comprehensive scoring system
+- Multiple evaluation methods:
+  - Result-based evaluation (primary)
+  - Subcheckpoints checking (secondary)
+  - Deterministic evaluators
+  - LLM-based evaluators
+- Simple one-command operations:
+  - Complete environment setup in minutes
+  - Quick system reset when needed
+- Extensible benchmark framework
+  - Add new tasks in minutes
+  - Add new evaluators in minutes
+  - Add new subcheckpoints in minutes
+
 
 ## Cite
 TODO
