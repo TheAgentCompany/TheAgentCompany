@@ -27,6 +27,7 @@ from browsing import pre_login
 
 def get_config(
     base_container_image: str,
+    task_short_name: str,
     mount_path_on_host: str,
     llm_config: LLMConfig
 ) -> AppConfig:
@@ -34,7 +35,7 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
-        trajectories_path=os.path.join(mount_path_on_host, f'traj_{base_container_image}.json'),
+        trajectories_path=os.path.join(mount_path_on_host, f'traj_{task_short_name}.json'),
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -231,7 +232,7 @@ if __name__ == '__main__':
         temp_dir = os.path.abspath(os.getenv('TMPDIR'))
     else:
         temp_dir = tempfile.mkdtemp()
-    config: AppConfig = get_config(args.task_image_name, temp_dir, agent_llm_config)
+    config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, agent_llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
 
