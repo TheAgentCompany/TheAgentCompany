@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import logging
 from common import *
-from evaluator import get_plane_all_issue_state
+from helper import get_plane_all_issue_state
 
 def write_json(data, filepath):
     try:
