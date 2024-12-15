@@ -10,7 +10,7 @@ fi
 
 VERSION=$1
 GITHUB_REGISTRY="ghcr.io"
-GITHUB_USERNAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+GITHUB_USERNAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
 GITHUB_REPO=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f2)
 
 # Login to GitHub Container Registry
