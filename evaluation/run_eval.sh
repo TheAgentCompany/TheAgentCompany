@@ -70,7 +70,8 @@ done
 
 # Convert outputs_path to absolute path
 if [[ ! "$OUTPUTS_PATH" = /* ]]; then
-    OUTPUTS_PATH="$SCRIPT_DIR/$OUTPUTS_PATH"
+    # If path is not already absolute (doesn't start with /), make it absolute
+    OUTPUTS_PATH="$(cd "$(dirname "$OUTPUTS_PATH")" 2>/dev/null && pwd)/$(basename "$OUTPUTS_PATH")"
 fi
 
 echo "Using agent LLM config: $AGENT_LLM_CONFIG"
