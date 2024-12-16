@@ -278,6 +278,9 @@ def main():
         print(f"| Average Task Score | {avg_score:.2f} |")
 
         # compute avg score per nature category
+        print("\n## Statistics per Nature Category\n")
+        print("| Metric | Value |")
+        print("|---------|--------|")
         for task_nature in ['sde', 'ds', 'admin', 'hr', 'finance', 'other']:
             num_of_tasks = sum(1 for _, _, _, _, _, nature_category in detailed_results if nature_category == task_nature)
             task_nature_score = sum(score for _, _, _, score, _, nature_category in detailed_results if nature_category == task_nature) / num_of_tasks
@@ -286,6 +289,9 @@ def main():
             print(f"| Perfect Completions for {task_nature} | {perfect_completions}/{num_of_tasks} ({perfect_completions/num_of_tasks*100:.2f}%) |")
 
         # compute avg score per service category
+        print("\n## Statistics per Service Category\n")
+        print("| Metric | Value |")
+        print("|---------|--------|")
         for service_category in ['gitlab', 'plane', 'owncloud', 'rocketchat']:
             num_of_tasks = len(service_to_tasks[service_category])
             service_category_score = sum(score for task_name, _, _, score, _, _ in detailed_results if task_name in service_to_tasks[service_category]) / num_of_tasks
