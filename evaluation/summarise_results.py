@@ -257,7 +257,9 @@ def main():
         for task_nature in ['sde', 'ds', 'admin', 'hr', 'finance', 'other']:
             num_of_tasks = sum(1 for _, _, _, _, _, nature_category in detailed_results if nature_category == task_nature)
             task_nature_score = sum(score for _, _, _, score, _, nature_category in detailed_results if nature_category == task_nature) / num_of_tasks
-            print(f"| Average Score for {task_nature} ({num_of_tasks} tasks) | {task_nature_score:.2f} |")
+            perfect_completions = sum(1 for _, _, _, _, is_perfect, nature_category in detailed_results if nature_category == task_nature and is_perfect)
+            print(f"| Average Score for {task_nature} | {task_nature_score:.2f}")
+            print(f"| Perfect Completions for {task_nature} | {perfect_completions}/{num_of_tasks} ({perfect_completions/num_of_tasks*100:.2f}%) |")
 
 
 if __name__ == "__main__":
