@@ -135,6 +135,16 @@ def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[s
 
     return eval_results, traj_results
 
+def get_task_nature_category(task_name: str) -> str:
+    """
+    Get the nature category of the task.
+    """
+    task_nature = task_name.split('-')[0]
+    if task_nature.lower() in ['sde', 'ds', 'admin', 'hr', 'finance']:
+        return task_nature
+    else:
+        return "other"
+
 def calculate_score(total: int, result: int) -> float:
     """
     Calculate the score as a number between 0 and 1.
@@ -190,7 +200,8 @@ def main():
             total,
             result,
             calculate_score(total, result),
-            is_perfect_completion(total, result)
+            is_perfect_completion(total, result),
+            get_task_nature_category(task_name)
         )
         for task_name, (total, result) in eval_results.items()
     ]
@@ -199,7 +210,7 @@ def main():
     detailed_results.sort(key=lambda x: (-x[3], x[0]))
     
     # Calculate perfect completion stats
-    perfect_completions = sum(1 for _, _, _, _, is_perfect in detailed_results if is_perfect)
+    perfect_completions = sum(1 for _, _, _, _, is_perfect, _ in detailed_results if is_perfect)
     
     # Print header
     print("\n# Evaluation Results Report")
@@ -211,7 +222,7 @@ def main():
     print("|----------|--------|---------|-------|-------|------|")
     
     # Print individual file results
-    for task_name, total, result, score, is_perfect in detailed_results:
+    for task_name, total, result, score, is_perfect, task_nature in detailed_results:
         perfect_marker = " ⭐" if is_perfect else ""
         print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {traj_results[task_name][0]} | {traj_results[task_name][1]:.2f} |")
     
@@ -220,7 +231,7 @@ def main():
     print(f"**Tasks Evaluated:** {len(eval_results)}\n")
     print(f"**Perfect Completions:** {perfect_completions}/{len(eval_results)} ({(perfect_completions/len(eval_results)*100):.2f}%)\n")
     
-    overall_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results) * 100
+    overall_score = sum(score for _, _, _, score, _, _ in detailed_results) / len(detailed_results) * 100
     avg_steps = sum(steps for steps, _ in traj_results.values()) / len(traj_results)
     avg_cost = sum(cost for _, cost in traj_results.values()) / len(traj_results)
     print(f"**Overall Score:** {overall_score:.2f}%\n")
@@ -229,10 +240,10 @@ def main():
 
     # Additional statistics
     if detailed_results:
-        highest_score = max(score for _, _, _, score, _ in detailed_results)
-        lowest_score = min(score for _, _, _, score, _ in detailed_results)
+        highest_score = max(score for _, _, _, score, _, _ in detailed_results)
+        lowest_score = min(score for _, _, _, score, _, _ in detailed_results)
         median_score = detailed_results[len(detailed_results) // 2][3]
-        avg_score = sum(score for _, _, _, score, _ in detailed_results) / len(detailed_results)
+        avg_score = sum(score for _, _, _, score, _, _ in detailed_results) / len(detailed_results)
         
         print("\n## Statistics\n")
         print("| Metric | Value |")
@@ -241,6 +252,13 @@ def main():
         print(f"| Lowest Task Score | {lowest_score:.2f} |")
         print(f"| Median Task Score | {median_score:.2f} |")
         print(f"| Average Task Score | {avg_score:.2f} |")
+
+        # compute avg score per nature category
+        for task_nature in ['sde', 'ds', 'admin', 'hr', 'finance', 'other']:
+            num_of_tasks = sum(1 for _, _, _, _, _, nature_category in detailed_results if nature_category == task_nature)
+            task_nature_score = sum(score for _, _, _, score, _, nature_category in detailed_results if nature_category == task_nature) / num_of_tasks
+            print(f"| Average Score for {task_nature} ({num_of_tasks} tasks) | {task_nature_score:.2f} |")
+
 
 if __name__ == "__main__":
     main()
