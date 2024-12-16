@@ -2,6 +2,7 @@ import json
 import glob
 import re
 import os
+import yaml
 import sys
 from typing import Dict, Tuple
 
@@ -177,6 +178,15 @@ def is_perfect_completion(total: int, result: int) -> bool:
     return total > 0 and total == result
 
 def main():
+    # check if the current directory and 'workspaces' directory are in the same parent directory
+    # this is because we need to access each task's dependencies.yml file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    workspaces_dir = os.path.join(parent_dir, 'workspaces')
+    if not os.path.exists(workspaces_dir):
+        print("Error: 'workspaces' directory not found in the parent directory")
+        sys.exit(1)
+
     if len(sys.argv) != 2:
         print("Usage: python summarise_results.py <folder_path>")
         sys.exit(1)
@@ -192,6 +202,20 @@ def main():
     if not eval_results:
         print(f"No eval_*.json files found in {folder_path}")
         return
+
+    # load all dependencies.yml files
+    # iterate over workspaces/tasks/*/dependencies.yml and load the yaml file
+    service_to_tasks = {}
+    for task_image_name in eval_results.keys():
+        # trim the trailing "-image"
+        task_name = task_image_name.replace("-image", "")
+        dependencies_file = os.path.join(workspaces_dir, 'tasks', task_name, 'dependencies.yml')
+        with open(dependencies_file, 'r') as f:
+            dependencies = yaml.safe_load(f)
+            for service in dependencies or []:
+                if service not in service_to_tasks:
+                    service_to_tasks[service] = []
+                service_to_tasks[service].append(task_image_name)
 
     # Create list of results with completion ratios for sorting
     detailed_results = [
@@ -261,6 +285,13 @@ def main():
             print(f"| Average Score for {task_nature} | {task_nature_score:.2f}")
             print(f"| Perfect Completions for {task_nature} | {perfect_completions}/{num_of_tasks} ({perfect_completions/num_of_tasks*100:.2f}%) |")
 
+        # compute avg score per service category
+        for service_category in ['gitlab', 'plane', 'owncloud', 'rocketchat']:
+            num_of_tasks = len(service_to_tasks[service_category])
+            service_category_score = sum(score for task_name, _, _, score, _, _ in detailed_results if task_name in service_to_tasks[service_category]) / num_of_tasks
+            perfect_completions = sum(1 for task_name, _, _, _, is_perfect, _ in detailed_results if task_name in service_to_tasks[service_category] and is_perfect)
+            print(f"| Average Score for {service_category} | {service_category_score:.2f}")
+            print(f"| Perfect Completions for {service_category} | {perfect_completions}/{num_of_tasks} ({perfect_completions/num_of_tasks*100:.2f}%) |")
 
 if __name__ == "__main__":
     main()
