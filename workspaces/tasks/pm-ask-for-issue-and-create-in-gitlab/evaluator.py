@@ -49,7 +49,7 @@ def grade_checkpoint3():
     due_date = issue.get('due_date')
     due_date = due_date and due_date == DUE_DATE
 
-    return milestone and description and due_date
+    return bool(milestone and description and due_date)
 
     
 def grade_checkpoints(trajectory="") -> Result:

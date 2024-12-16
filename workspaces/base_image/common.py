@@ -36,7 +36,11 @@ def grader(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            return func(*args, **kwargs)
+            result = func(*args, **kwargs)
+            if result is None:
+                logging.warning(f"Grader returns None, using False instead")
+                return False
+            return result
         except Exception as e:
             logging.error(f"Error in {func.__name__}: {str(e)}")
             return False
