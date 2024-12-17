@@ -16,7 +16,7 @@
 </p>
 
 
-Please refer to the [website]([./docs/paper.pdf](https://the-agent-company.com/)) for more details.
+Please refer to the [website](https://the-agent-company.com/) for more details.
 
 ## Overview
 TODO, paste paper content here
@@ -55,7 +55,7 @@ Check out the [docs](./docs/SETUP.md) for more details.
 
 
 # Contribution
-Currently, we are not accepting task contributions for first version benchmark. But we welcome any contributions to bug fixes, documentation, and other improvements.
+We welcome any contributions to bug fixes, documentation, and other improvements.
 Questions? Please create an issue. Otherwise, you can also contact [Frank F. Xu](https://frankxfz.me/), [Yufan Song](https://github.com/yufansong), [Boxuan Li](https://github.com/li-boxuan) (Email: fangzhex@cs.cmu.edu, yufans@alumni.cmu.edu, boxuanli@alumni.cmu.edu)
 
 ## Cite
