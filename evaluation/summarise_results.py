@@ -141,7 +141,7 @@ def get_task_nature_category(task_name: str) -> str:
     Get the nature category of the task.
     """
     task_nature = task_name.split('-')[0]
-    if task_nature.lower() in ['sde', 'ds', 'admin', 'hr', 'finance']:
+    if task_nature.lower() in ['sde', 'pm', 'ds', 'admin', 'hr', 'finance']:
         return task_nature
     else:
         return "other"
@@ -281,7 +281,7 @@ def main():
         print("\n## Statistics per Nature Category\n")
         print("| Metric | Value |")
         print("|---------|--------|")
-        for task_nature in ['sde', 'ds', 'admin', 'hr', 'finance', 'other']:
+        for task_nature in ['sde', 'pm', 'ds', 'admin', 'hr', 'finance', 'other']:
             num_of_tasks = sum(1 for _, _, _, _, _, nature_category in detailed_results if nature_category == task_nature)
             task_nature_score = sum(score for _, _, _, score, _, nature_category in detailed_results if nature_category == task_nature) / num_of_tasks
             perfect_completions = sum(1 for _, _, _, _, is_perfect, nature_category in detailed_results if nature_category == task_nature and is_perfect)
