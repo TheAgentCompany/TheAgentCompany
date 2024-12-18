@@ -3,11 +3,15 @@
 Make sure you have all services launched and running before you start evaluation. If not,
 please refer to the [SERVER SETUP DOC](./SETUP.md) first.
 
-The [below section](#general-steps) describes the general steps to run evaluation. Different platforms might
-require variation on steps, but the general principles should hold. If you'd like to use
-[OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](#run-evaluation-with-openhands) section.
+The [below section](#general-steps) describes the general steps to run evaluation. Different platforms
+or agents might require variation on steps, but the general principles should hold. If you'd like to use
+[OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](#run-evaluation-with-openhands)
+section. You could also use it as a reference to automate your evaluation pipeline.
 
 ## General Steps
+
+TheAgentCompany 1.0.0 evaluation consists of 175 tasks. Each task is a Docker image.
+A complete list of tasks can be found [here](../workspaces/README.md).
 
 ### Step 1: Start Task Container
 
