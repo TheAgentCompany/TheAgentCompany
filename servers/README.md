@@ -3,7 +3,7 @@
 This directory contains code & configs needed to run all services,
 including GitLab, ownCloud, Plane, and RocketChat. All services
 are launched and running on CMU ogma server, but if you'd like
-to launch them by yourself, please refer to [Development Guide](https://github.com/neulab/TheAgentCompany/blob/main/DEVELOPMENT.md).
+to launch them by yourself, please refer to [Development Guide](../docs/DEVELOPMENT.md).
 
 Below are the addresses, usernames, and passwords for each service. Note that you must
 add `<server-ip> the-agent-company.com` to your `/etc/hosts` file. For example, `128.2.205.27`
