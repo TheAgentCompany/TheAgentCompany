@@ -12,7 +12,7 @@ curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/rele
 It will automatically do the following things:
 
 * Check your local docker and docker compose version.
-* Pull image. Actually the image will auto pull in the next step, but the image is pretty large, around 15GB. Better pull it here to check for correctness. 
+* Pull server images. Note: you need at least 30GB available storage space.
 * Wait 120s for service launching until you pass the next step 
 * Check whether service up.
 
