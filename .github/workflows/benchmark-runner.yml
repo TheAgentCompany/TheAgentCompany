@@ -105,12 +105,6 @@ jobs:
           mkdir -p /tmp/github_job_temp
           chmod -R 777 /tmp/github_job_temp
           echo "TMPDIR=/tmp/github_job_temp" >> $GITHUB_ENV
-
-      # Launch services for evaluation
-      - name: Launch services
-        run: |
-          sudo chmod 666 /var/run/docker.sock
-          curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
         
       - name: Run evaluation
         working-directory: ./evaluation
@@ -119,7 +113,7 @@ jobs:
           poetry run python run_eval.py \
             --agent-llm-config eval \
             --env-llm-config eval \
-            --server-hostname localhost \
+            --server-hostname ${{ secrets.ON_DEMAND_EVAL_MACHINE_HOSTNAME }} \
             --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
         env:
           TMPDIR: /tmp/github_job_temp
