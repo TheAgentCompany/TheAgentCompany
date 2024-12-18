@@ -22,8 +22,13 @@ Please refer to the [website](https://the-agent-company.com/) for more details.
 TODO, paste paper content here
 
 
-## Set Up
-Check out the [docs](./docs/SETUP.md) for more details.
+## Quick Start
+
+To use the benchmark, you need to set up the servers first. They can be hosted locally or on the cloud
+in a few minutes. Check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details.
+
+Once you have the servers running, you can start running the benchmark. Check out the [EVALUATION DOC](./docs/EVALUATION.md) for more details.
+
 
 ## Exciting Features
 

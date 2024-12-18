@@ -1,48 +1,17 @@
-## Benchmarking Guidelines
+# Evaluation Guidelines
 
-Target audience of this doc: users that would like to benchmark their agents.
+Make sure you have all services launched and running before you start evaluation. If not,
+please refer to the [SERVER SETUP DOC](./SETUP.md) first.
 
-Make sure you have all services launched and running before you start evaluation.
-This guideline uses [OpenHands](https://github.com/All-Hands-AI/OpenHands) and
-[Example](./workspaces/tasks/example) task. The exact steps might differ among various agents and actual human beings,
-but the general principles should hold.
+The [below section](#general-steps) describes the general steps to run evaluation. Different platforms might
+require variation on steps, but the general principles should hold. If you'd like to use
+[OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](#run-evaluation-with-openhands) section.
 
-### Step 0: Launch All Services
+## General Steps
 
-Please refer to [servers README](./servers/README.md) for instructions.
-In the future we will make this step as automated as possible.
+### Step 1: Start Task Container
 
-### Step 1: Build Base Image
-
-This step only needs to be done once across all tasks. It builds a base image
-that can be used by all exam (task) images.
-
-```bash
-cd workspaces/base_image
-make build
-cd -
-```
-
-### Step 2: Build Exam Image
-
-An exam image is the image used for a specific task. It can be built via:
-
-```bash
-# cd workspaces/tasks/<task_name>
-cd workspaces/tasks/example
-make build
-```
-
-An examinee should finish all its work in a container created out of this image.
-The built image is analagous to a laptop used in an interview or daily work.
-
-Now you need to start the container. You can do this by running:
-
-```
-make run
-```
-
-Alternatively, you can start the container manually by running:
+Start the container manually by running:
 
 ```bash
 docker run \
@@ -128,3 +97,11 @@ but it MUST record all steps conducted by the examinee (no matter it's agent or
 human being). Benchmark users are allowed to inspect checkpoint rubrics to ensure
 the trajectory contains all necessary information used in graders, but examinees
 (e.g. agents) are not allowed to read checkpoint rubrics or evaluation code.
+
+
+## Run Evaluation with OpenHands
+
+[OpenHands](https://github.com/All-Hands-AI/OpenHands) is a platform for software development agents powered by AI. We use it as the baseline for evaluation.
+
+Please enter `evaluation` directory and check out the [README.md](../evaluation/README.md) for more details.
+
