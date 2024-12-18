@@ -19,19 +19,18 @@
 Please refer to the [website](https://the-agent-company.com/) for more details.
 
 ## Overview
+
+We interact with computers on an everyday basis, be it in everyday life or work, and many aspects of work can be done entirely with access to a computer and the Internet.
+At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments.
+But how performant are AI agents at helping to accelerate or even autonomously perform work-related tasks?
+The answer to this question has important implications for both industry looking to adopt AI into their workflows, and for economic policy to understand the effects that adoption of AI may have on the labor market.
+TheAgentCompany measures the progress of these LLM agents' performance on performing real-world professional tasks,
+by providing an extensible benchmark for evaluating AI agents that interact with the world in similar ways to those of a digital worker: by browsing the Web, writing code, running programs, and communicating with other coworkers.
+
 <div align="center">
   <img src="./docs/images/TAC_architecture.png">
 </div>
 
-Today we interact with computers on an everyday basis, be it life or work.
-Today, many aspects of professional work can be done entirely with access to a computer and the Internet.
-At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments.
-But how performant are AI agents 
-To measure the progress of these LLM agents' performance on performing real-world professional tasks,
-in this paper, we introduce tac, an extensible benchmark for evaluating AI agents that interact with the world in similar ways to those of a digital worker: by browsing the Web, writing code, running programs, and communicating with other coworkers.
-We build a self-contained environment with internal web sites and data that mimics a small software company environment, and create a variety of tasks that may be performed by workers in such a company.
-We test baseline agents powered by both closed API-based and open-weights language models (LMs), and find that with the most competitive agent, 24% of the tasks can be completed autonomously.
-This paints a nuanced picture on task automation with LM agents -- in a realistic setting simulating a real workplace, a good portion of simpler tasks could be solved autonomously, but more difficult long-horizon tasks are still beyond the reach of current systems.
 
 ## Quick Start
 
