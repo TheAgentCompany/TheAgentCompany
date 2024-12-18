@@ -55,6 +55,11 @@ Here's a brief explanation of each argument:
 The script is idempotent. If you run it again, it will resume from the last checkpoint.
 It would usually take a few days to finish evaluation.
 
+Note: the script will automatically skip a task if it encounters an error. This usually
+happens when the OpenHands runtime dies due to some unexpected errors. This means even
+if the script finishes, it might not have evaluated all tasks. You can manually resume
+the evaluation by running the script again.
+
 ## Analysis
 
 You can find the evaluation results in the `outputs` directory, including trajectories,
