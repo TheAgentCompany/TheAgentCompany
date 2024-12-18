@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 <div align="center">
-  <img src="./docs/TAC_logo.png" alt="Logo" width="200">
+  <img src="./docs/images/TAC_logo.png" alt="Logo" width="200">
   <h1 align="center">The Agent Company: Benchmarking LLM Agents on Consequential Real World Tasks</h1>
 </div>
 
@@ -19,8 +19,21 @@
 Please refer to the [website](https://the-agent-company.com/) for more details.
 
 ## Overview
-TODO, paste paper content here
+<div align="center">
+  <img src="./docs/images/TAC_architecture.png">
+</div>
 
+
+
+Today we interact with computers on an everyday basis, be it life or work.
+Today, many aspects of professional work can be done entirely with access to a computer and the Internet.
+At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments.
+But how performant are AI agents 
+To measure the progress of these LLM agents' performance on performing real-world professional tasks,
+in this paper, we introduce tac, an extensible benchmark for evaluating AI agents that interact with the world in similar ways to those of a digital worker: by browsing the Web, writing code, running programs, and communicating with other coworkers.
+We build a self-contained environment with internal web sites and data that mimics a small software company environment, and create a variety of tasks that may be performed by workers in such a company.
+We test baseline agents powered by both closed API-based and open-weights language models (LMs), and find that with the most competitive agent, 24% of the tasks can be completed autonomously.
+This paints a nuanced picture on task automation with LM agents -- in a realistic setting simulating a real workplace, a good portion of simpler tasks could be solved autonomously, but more difficult long-horizon tasks are still beyond the reach of current systems.
 
 ## Set Up
 Check out the [docs](./docs/SETUP.md) for more details.
