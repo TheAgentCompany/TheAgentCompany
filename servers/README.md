@@ -8,6 +8,13 @@ add `<server-ip> the-agent-company.com` to your `/etc/hosts` file, since
 we use the synthetic hostname `the-agent-company.com` everywhere among all tasks.
 You could use `127.0.0.1` as the server ip if your services are running locally.
 
+Caveat: `the-agent-company.com` is a real domain where we host the project website
+with the leaderboard. For benchmarking purpose, all tasks assume this domain hosts
+the services. Since this domain does not really host any of the following services,
+you need to change your `/etc/hosts` file to point to your own server ip, if and
+only if you'd like to use your browser to poke around the services. For evaluation
+purpose, the hostname routing is taken care of by the initialization script.
+
 ## GitLab
 * service url: http://the-agent-company.com:8929
 * root email: `root@local`
