@@ -45,7 +45,7 @@ curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/rele
 After a few minutes, you should have all services running, including GitLab, Plane, ownCloud, RocketChat,
 all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide.
 
-### Step 2: Run the benchmark
+### Step 2: Run the Benchmark
 
 Every task is a Docker image with the following structure:
 
@@ -86,7 +86,7 @@ bash run_eval.sh \
 
 Please check out [this doc](./evaluation/README.md) for more details.
 
-#### Benchmark with other platforms
+#### Benchmark with Other Platforms
 
 This applies if you are using agents not from OpenHands, or want to run the benchmark manually by
 human testers.
@@ -96,6 +96,8 @@ human testers.
 ```bash
 docker run --name <container_name> -it <image_name> /bin/bash
 ```
+
+A complete list of 175 task images can be found [here](../workspaces/README.md).
 
 ##### Step 2: Initialize the Task Environment
 
