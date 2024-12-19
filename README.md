@@ -55,7 +55,7 @@ Every task is a Docker image with the following structure:
 
 ```
 /utils
-├── evaluator.py
+├── evaluator.py.enc
 ├── init.sh
 ├── config.py
 ├── common.py
@@ -70,8 +70,8 @@ Every task is a Docker image with the following structure:
 ```
 
 where `/utils/init.sh` is the script you must run to initialize the task environment,
-`/utils/eval.py` is the script to run the evaluation, and
-`/instruction/task.md` is the task instruction for your agent.
+`/utils/eval.py` is the entrypoint to run the grading functions, and
+`/instruction/task.md` is the task instruction for the examinee, i.e. your agent.
 
 #### Benchmark with OpenHands
 
