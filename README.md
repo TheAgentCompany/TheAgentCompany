@@ -32,7 +32,7 @@ by providing an extensible benchmark for evaluating AI agents that interact with
 ## Quick Start
 
 
-### Step 1: Setup the servers
+### Step 1: Setup the Servers
 
 Servers can be hosted locally or on the cloud in a few minutes.
 
@@ -86,20 +86,20 @@ bash run_eval.sh \
 
 Please check out [this doc](./evaluation/README.md) for more details.
 
-#### Benchmark with Other Platforms
+#### Benchmark with other Platforms
 
 This applies if you are using agents not from OpenHands, or want to run the benchmark manually by
 human testers.
 
-##### Step 1: Start Task Container
+##### Step 2.1: Start Task Container
 
 ```bash
 docker run --name <container_name> -it <image_name> /bin/bash
 ```
 
-A complete list of 175 task images can be found [here](../workspaces/README.md).
+A complete list of 175 task images can be found [here](./workspaces/README.md).
 
-##### Step 2: Initialize the Task Environment
+##### Step 2.2: Initialize the Task Environment
 
 ```bash
 LITELLM_API_KEY=<environment_llm_api_key> \
@@ -108,13 +108,13 @@ LITELLM_MODEL=<environment_llm_model_name> \
 bash /utils/init.sh
 ```
 
-##### Step 3: Conduct the Task
+##### Step 2.3: Conduct the Task
 
 Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
 
 > Complete the task in /instruction/task.md
 
-##### Step 4: Evaluate the Result
+##### Step 2.4: Evaluate the Result
 
 ```bash
 LITELLM_API_KEY=<environment_llm_api_key> \
