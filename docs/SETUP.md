@@ -28,7 +28,8 @@ plane is ready!
 All services are up and running!
 ```
 
-Now you are ready to start evaluation. Please refer to the [EVALUATION DOC](./EVALUATION.md) for more details.
+Now you should be able to visit the services in your browser. Check out the [servers/README.md](../servers/README.md) for more details if you'd like to poke around the services.
+Otherwise, ready to start evaluation? Please refer to the [EVALUATION DOC](./EVALUATION.md) for more details.
 
 # Troubleshooting
 
