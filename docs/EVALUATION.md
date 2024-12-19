@@ -3,10 +3,21 @@
 Make sure you have all services launched and running before you start evaluation. If not,
 please refer to the [SERVER SETUP DOC](./SETUP.md) first.
 
+Since many tasks require LLMs to evaluate the results, and/or require
+NPCs backed by LLMs to play the roles of coworkers, we require you to provide an LLM API key as
+"environment LLM config". This LLM API key does not need to be the same as the one you use for your
+agent(s). It needs to be as powerful as or at least close to `claude-3-5-sonnet-20241022` or `gpt-4o`.
+For reference, all baseline results used `claude-3-5-sonnet-20241022` as the environment LLM. Please
+provide the environment LLM model you use when you submit your results to the leaderboard.
+
+To prevent the agent from peeking at the evaluator code, all `/utils/evaluator.py` files, which contain
+the grading functions, are encrypted. The evaluator entrypoint, `/utils/eval.py`, contains the decryption
+code, and you need to pass the decryption key as an environment variable when you run it: `DECRYPTION_KEY='theagentcompany is all you need'`.
+
 The [below section](#general-steps) describes the general steps to run evaluation. Different platforms
 or agents might require variation on steps, but the general principles should hold. If you'd like to use
-[OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](#run-evaluation-with-openhands)
-section. You could also use it as a reference to automate your evaluation pipeline.
+[OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](../evaluation/README.md) doc.
+You could also use it as a reference to automate your evaluation pipeline.
 
 ## General Steps
 
@@ -18,65 +29,59 @@ A complete list of tasks can be found [here](../workspaces/README.md).
 Start the container manually by running:
 
 ```bash
-docker run \
--e "LITELLM_API_KEY=<your_llm_api_key>" \
--e "LITELLM_BASE_URL=<your_llm_base_url>" \
--e "LITELLM_MODEL=<your_llm_model_name>" \
---name <container_name> -it <image_name> /bin/bash
+docker run --name <container_name> -it <image_name> /bin/bash
 ```
 
-The benefit is you can easily pass your LLM API information to the container. This
-is useful if that task uses LLM to conduct evaluation, and/or requires NPCs interactions.
-If in doubt, always pass the LLM environment variables.
-
-Once you start the container, you should run the initialization script:
+### Step 2: Initialize the Task Environment
 
 ```bash
+LITELLM_API_KEY=<environment_llm_api_key> \
+LITELLM_BASE_URL=<environment_llm_base_url> \
+LITELLM_MODEL=<environment_llm_model_name> \
 bash /utils/init.sh
 ```
 
-Now you are ready to launch the agent, OR conduct the task manually.
+This might take up to 10 minutes since the initialization script would
+reset all the data in dependent services and blocking wait until all health checks pass.
 
+Most importantly, the initialization script would add the server's IP to the `/etc/hosts` file,
+so that the agent can visit the services using the synthetic `the-agent-company.com` hostname.
 
 ### Step 3: Conduct the Task
 
-This step varies among examinees. If you are conducting the task manually,
-you can skip this section. We use OpenHands, a platform for software development
-agents powered by AI.
-
-OpenHands requires a sandbox environment that the agent needs to run in. It allows
-users to provide a custom sandbox image, and thus we will use the `example-exam-image`
-we just built.
-
-Note: we are working on a programmatic evaluation harness to run
-the benchmark with OpenHands automatically. As of now, you'd need
-to run OpenHands manually as follows.
-
-Clone `OpenHands` repo and create a `config.toml` in the OpenHands directory:
-
-```toml
-[core]
-workspace_base="/workspace"
-run_as_openhands=true
-sandbox_base_container_image="example-exam-image"
-```
-
-Please note you also need to add LLM keys to `config.toml`. Please follow OpenHands
-documentation to complete the setup.
-
-Finally, you could now prompt the agent running on OpenHands with the task.
-You could prompt the agent with, say,
+Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
+For reference, in the baseline evaluation, we prompt the agent with:
 
 > Complete the task in /instruction/task.md
 
+The task instruction is a markdown file which contains the task description and the task requirements.
+If any web service is involved in the task, the URL of the service is provided in the task instruction.
 
-### Step 4: Run Evaluation
+Caveat: all services require username and password. We allow benchmark users to use whatever
+ways they want to provide the username and password. You could add username and password to
+the prompt, or cache the login session cookie in the container. For reference, in the
+baseline evaluation, we use OpenHands platform to deterministically login to all services
+before letting the agent work on the task. We still provide GitLab username and password
+in the system prompt since running `git` commands sometimes requires the username and password.
+You could refer to the [browsing.py](../evaluation/browsing.py)
+file to see how we login to all services.
 
-Once the examinee has finished its work (as of now, we don't enforce timing),
-run the below command in the exam container to grade the exam:
+You can find usernames and passwords for all services in the [servers/README.md](../servers/README.md).
+
+### Step 4: Evaluate the Result
+
+Once the examinee has finished its work (we don't enforce timing),
+run the below command in the container to grade the exam. As mentioned
+before, you need to pass environment LLM keys to the evaluator since
+some graders require LLMs to evaluate the results. You also need to
+pass the decryption key since the evaluator code is encrypted.
 
 ```bash
-python_default /utils/eval.py
+LITELLM_API_KEY=<environment_llm_api_key> \
+LITELLM_BASE_URL=<environment_llm_base_url> \
+LITELLM_MODEL=<environment_llm_model_name> \
+DECRYPTION_KEY='theagentcompany is all you need' \
+python_default /utils/eval.py --trajectory_path TRAJECTORY_PATH --output_path OUTPUT_PATH
 ```
 
 whose usage is:
@@ -101,11 +106,3 @@ but it MUST record all steps conducted by the examinee (no matter it's agent or
 human being). Benchmark users are allowed to inspect checkpoint rubrics to ensure
 the trajectory contains all necessary information used in graders, but examinees
 (e.g. agents) are not allowed to read checkpoint rubrics or evaluation code.
-
-
-## Run Evaluation with OpenHands
-
-[OpenHands](https://github.com/All-Hands-AI/OpenHands) is a platform for software development agents powered by AI. We use it as the baseline for evaluation.
-
-Please enter `evaluation` directory and check out the [README.md](../evaluation/README.md) for more details.
-

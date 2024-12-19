@@ -7,9 +7,6 @@
 
 
 <p align="center">
-    <a href="https://www.python.org/">
-        <img alt="Build" src="https://img.shields.io/badge/Python-3.12+-1f425f.svg?color=purple">
-    </a>
     <a href="https://github.com/TheAgentCompany/TheAgentCompany/blob/main/LICENSE">
         <img alt="License" src="https://img.shields.io/badge/License-MIT-blue">
     </a>
@@ -34,10 +31,98 @@ by providing an extensible benchmark for evaluating AI agents that interact with
 
 ## Quick Start
 
-To use the benchmark, you need to set up the servers first. They can be hosted locally or on the cloud
-in a few minutes. Check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details.
 
-Once you have the servers running, you can start running the benchmark. Check out the [EVALUATION DOC](./docs/EVALUATION.md) for more details.
+### Step 1: Setup the servers
+
+Servers can be hosted locally or on the cloud in a few minutes.
+
+```bash
+# you should have docker and docker compose installed, and 30+ GB of free disk space
+sudo chmod 666 /var/run/docker.sock
+curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
+```
+
+After a few minutes, you should have all services running, including GitLab, Plane, ownCloud, RocketChat,
+all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide.
+
+### Step 2: Run the benchmark
+
+Every task is a Docker image with the following structure:
+
+```
+/utils
+├── evaluator.py
+├── init.sh
+├── config.py
+├── common.py
+├── eval.py
+├── npc
+├── ...
+/instruction
+├── task.md
+├── ...
+/workspace
+├── ...
+```
+
+where `/utils/init.sh` is the script you must run to initialize the task environment,
+`/utils/eval.py` is the script to run the evaluation, and
+`/instruction/task.md` is the task instruction for your agent.
+
+#### Benchmark with OpenHands
+
+If you want to run the benchmark using the [OpenHands](https://github.com/all-hands-ai/openhands) platform, it's as simple as:
+
+```bash
+cd evaluation
+# set up agent and environment LLM configs in config.toml, omitted
+bash run_eval.sh \
+  --agent-llm-config <group1> \
+  --env-llm-config <group2> \
+  --outputs-path <outputs> \
+  --server-hostname <hostname> \
+  --version 1.0.0
+```
+
+Please check out [this doc](./evaluation/README.md) for more details.
+
+#### Benchmark with other platforms
+
+This applies if you are using agents not from OpenHands, or want to run the benchmark manually by
+human testers.
+
+##### Step 1: Start Task Container
+
+```bash
+docker run --name <container_name> -it <image_name> /bin/bash
+```
+
+##### Step 2: Initialize the Task Environment
+
+```bash
+LITELLM_API_KEY=<environment_llm_api_key> \
+LITELLM_BASE_URL=<environment_llm_base_url> \
+LITELLM_MODEL=<environment_llm_model_name> \
+bash /utils/init.sh
+```
+
+##### Step 3: Conduct the Task
+
+Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
+
+> Complete the task in /instruction/task.md
+
+##### Step 4: Evaluate the Result
+
+```bash
+LITELLM_API_KEY=<environment_llm_api_key> \
+LITELLM_BASE_URL=<environment_llm_base_url> \
+LITELLM_MODEL=<environment_llm_model_name> \
+DECRYPTION_KEY='theagentcompany is all you need' \
+python_default /utils/eval.py --trajectory_path TRAJECTORY_PATH --output_path OUTPUT_PATH
+```
+
+Please check out the [EVALUATION DOC](./docs/EVALUATION.md) for more details.
 
 ## Exciting Features
 

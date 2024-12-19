@@ -6,8 +6,8 @@ are launched and running on CMU ogma server, but if you'd like
 to launch them by yourself, please refer to [Development Guide](../docs/DEVELOPMENT.md).
 
 Below are the addresses, usernames, and passwords for each service. Note that you must
-add `<server-ip> the-agent-company.com` to your `/etc/hosts` file. For example, `128.2.205.27`
-is the IP address of ogma.lti.cs.cmu.edu.
+add `<server-ip> the-agent-company.com` to your `/etc/hosts` file. You could use
+`127.0.0.1` as the server ip if your services are running locally.
 
 ## GitLab
 * service url: http://the-agent-company.com:8929
@@ -24,7 +24,6 @@ is the IP address of ogma.lti.cs.cmu.edu.
 * email: `agent@company.com`
 * password: `theagentcompany`
 * API_KEY:`plane_api_83f868352c6f490aba59b869ffdae1cf`
-* If the API_KEY not work, ping @Yufan Song. And feel free to follow [here](https://developers.plane.so/api-reference/introduction) to create your temporary key to develop. We will always reset the server, so your temporary key may be deleted sometime after reset.
 
 ## RocketChat
 * service url: http://the-agent-company.com:3000
