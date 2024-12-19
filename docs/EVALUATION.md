@@ -14,7 +14,7 @@ To prevent the agent from peeking at the evaluator code, all `/utils/evaluator.p
 the grading functions, are encrypted. The evaluator entrypoint, `/utils/eval.py`, contains the decryption
 code, and you need to pass the decryption key as an environment variable when you run it: `DECRYPTION_KEY='theagentcompany is all you need'`.
 
-The [below section](#general-steps) describes the general steps to run evaluation. Different platforms
+The section below describes the general steps to run evaluation. Different platforms
 or agents might require variation on steps, but the general principles should hold. If you'd like to use
 [OpenHands](https://github.com/All-Hands-AI/OpenHands) for evaluation, please refer to the [RUN EVALUATION WITH OPENHANDS](../evaluation/README.md) doc.
 You could also use it as a reference to automate your evaluation pipeline.
