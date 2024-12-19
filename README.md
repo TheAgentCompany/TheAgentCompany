@@ -68,12 +68,22 @@ Once you have the servers running, you can start running the benchmark. Check ou
   - Add new tasks/evaluators/subcheckpoints in minutes
 
 
-# Contribution
+## Cite
+```
+@misc{xu2024theagentcompanybenchmarkingllmagents,
+      title={TheAgentCompany: Benchmarking LLM Agents on Consequential Real World Tasks}, 
+      author={Frank F. Xu and Yufan Song and Boxuan Li and Yuxuan Tang and Kritanjali Jain and Mengxue Bao and Zora Z. Wang and Xuhui Zhou and Zhitong Guo and Murong Cao and Mingyang Yang and Hao Yang Lu and Amaad Martin and Zhe Su and Leander Maben and Raj Mehta and Wayne Chi and Lawrence Jang and Yiqing Xie and Shuyan Zhou and Graham Neubig},
+      year={2024},
+      eprint={2412.14161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.14161}, 
+}
+```
+
+## Contribution
 We welcome any contributions to bug fixes, documentation, and other improvements.
 Questions? Please create an issue. Otherwise, you can also contact [Frank F. Xu](https://frankxfz.me/), [Yufan Song](https://github.com/yufansong), [Boxuan Li](https://github.com/li-boxuan) (Email: fangzhex@cs.cmu.edu, yufans@alumni.cmu.edu, boxuanli@alumni.cmu.edu)
-
-## Cite
-TODO
 
 ## License
 Distributed under the [MIT](./LICENSE) License. See LICENSE for more information.
