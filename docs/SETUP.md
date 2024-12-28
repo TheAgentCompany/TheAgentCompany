@@ -46,6 +46,6 @@ If the issue persists, please create a GitHub issue.
 
 If you are using Macbook M1, you might see RocketChat never ready due to failure of
 `bitnami/mongodb` container, a component of RocketChat services. This is a [known issue](https://github.com/bitnami/containers/issues/40947)
-with bitnami mongodb, and a workaround is to select QEMU as virtual machine option in Docker Desktop as follows:
+with bitnami mongodb, and a workaround is to select QEMU (Legacy) or Docker VMM (BETA) as virtual machine option in Docker Desktop as follows:
 
 <img width="823" alt="select QEMU virtual machine option in Docker Desktop" src="https://github.com/user-attachments/assets/50461290-7734-4a04-a888-bf7fc4364af9" />
