@@ -35,6 +35,7 @@ Otherwise, ready to start evaluation? Please refer to the [EVALUATION DOC](./EVA
 
 Occasionally, you might see some service stuck in a not ready state. Server issue is usually not too concerning from evaluation
 correctness perspective, as task images all contain health check logic in their initialization scripts.
+They do need human intervention to recover at times. Please find common issues and troubleshooting guide below.
 
 ## Plane not ready
 
