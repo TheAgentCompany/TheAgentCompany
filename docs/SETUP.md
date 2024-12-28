@@ -33,10 +33,19 @@ Otherwise, ready to start evaluation? Please refer to the [EVALUATION DOC](./EVA
 
 # Troubleshooting
 
-Occasionally, you might see some service stuck in a not ready state.
+Occasionally, you might see some service stuck in a not ready state. Server issue is usually not too concerning from evaluation
+correctness perspective, as task images all contain health check logic in their initialization scripts.
+
+## Plane not ready
+
 We have seen cases where plane services fail to start due to some internal errors.
 In this case, you can stop and remove all the containers and run the setup script again.
 If the issue persists, please create a GitHub issue.
 
-Note: server issue is usually not too concerning from evaluation correctness perspective, as task
-images all contain health check logic in their initialization scripts.
+## RocketChat not ready
+
+If you are using Macbook M1, you might see RocketChat never ready due to failure of
+`bitnami/mongodb` container, a component of RocketChat services. This is a [known issue](https://github.com/bitnami/containers/issues/40947)
+with bitnami mongodb, and a workaround is to select QEMU as virtual machine option in Docker Desktop as follows:
+
+<img width="823" alt="Screenshot 2024-12-28 at 3 14 48 PM" src="https://github.com/user-attachments/assets/50461290-7734-4a04-a888-bf7fc4364af9" />
