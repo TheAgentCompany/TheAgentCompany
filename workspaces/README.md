@@ -12,7 +12,8 @@ looks like, and is a blueprint for creating more complicated tasks.
 
 ## Full list of task images
 
-There are 175 task images in total. Here is the full list:
+There are 175 task images in total. Please find the full list below, or download
+the list [here](https://github.com/TheAgentCompany/TheAgentCompany/releases/download/1.0.0/tasks.md).
 
 - ghcr.io/theagentcompany/admin-arrange-meeting-rooms-image:1.0.0
 - ghcr.io/theagentcompany/admin-ask-for-meeting-feedback-image:1.0.0
