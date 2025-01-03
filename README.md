@@ -119,7 +119,7 @@ Now you can prompt the agent to work on the task. The task instruction is in `/i
 
 > Complete the task in /instruction/task.md
 
-##### Step 2.4: Evaluate the Result
+##### Step 2.4: Grade the Result
 
 ```bash
 LITELLM_API_KEY=<environment_llm_api_key> \

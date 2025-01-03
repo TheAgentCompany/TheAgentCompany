@@ -35,6 +35,7 @@ docker run --name <container_name> -it <image_name> /bin/bash
 ### Step 2: Initialize the Task Environment
 
 ```bash
+SERVER_HOSTNAME=<hostname, default value is localhost> \
 LITELLM_API_KEY=<environment_llm_api_key> \
 LITELLM_BASE_URL=<environment_llm_base_url> \
 LITELLM_MODEL=<environment_llm_model_name> \
@@ -46,6 +47,9 @@ reset all the data in dependent services and blocking wait until all health chec
 
 Most importantly, the initialization script would add the server's IP to the `/etc/hosts` file,
 so that the agent can visit the services using the synthetic `the-agent-company.com` hostname.
+
+Your servers could be running locally (in which case `localhost` is used as SERVER_HOSTNAME),
+or remotely (e.g. an AWS host like ec2-ip.us-east-2.compute.amazonaws.com)
 
 ### Step 3: Conduct the Task
 
