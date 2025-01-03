@@ -13,10 +13,9 @@ It will automatically do the following things:
 
 * Check your local docker and docker compose version.
 * Pull server images. Note: you need at least 30GB available storage space.
-* Wait 120s for service launching until you pass the next step 
-* Check whether service up.
+* Start all servers and wait until they are all up and running.
 
-4. Infra setup finished when you see output:
+4. Infra setup is finished when you see output:
 ```
 Checking if api-server is running on port 2999...
 api-server is running on port 2999!
@@ -28,6 +27,8 @@ plane is ready!
 All services are up and running!
 ```
 
+Depending on your server's resources and network bandwidth, this might take from a few minutes to up to 30 minutes at first run.
+
 Now you should be able to visit the services in your browser. Check out the [servers/README.md](../servers/README.md) for more details if you'd like to poke around the services.
 Otherwise, ready to start evaluation? Please refer to the [EVALUATION DOC](./EVALUATION.md) for more details.
 
@@ -36,6 +37,21 @@ Otherwise, ready to start evaluation? Please refer to the [EVALUATION DOC](./EVA
 Occasionally, you might see some service stuck in a not ready state. Server issue is usually not too concerning from evaluation
 correctness perspective, as task images all contain health check logic in their initialization scripts.
 They do need human intervention to recover at times. Please find common issues and troubleshooting guide below.
+
+For reference, once all services are up and running, `docker ps` should show something like this:
+
+<img width="1683" alt="Screenshot of all running containers" src="https://github.com/user-attachments/assets/aedf9aa1-9dfc-44e4-9ecf-b10a2e52c72a" />
+
+
+## api-server waits forever
+
+API-server container is the controller of all services. You might see `Checking if api-server is running on port 2999...` logs
+for a while (from a few minutes to 10+ minutes, depending on your server's resources) since it needs to launch all other services.
+
+If you are using Macbook, you might see api-server waiting to launch indefinitely. In your Docker Desktop, ensure
+`Settings > Resources > Network > Enable host networking` is enabled.
+
+<img width="527" alt="Screenshot showing host networking is enabled" src="https://github.com/user-attachments/assets/3db78fee-84f6-482f-a323-cfcb256a9c92" />
 
 ## Plane not ready
 
