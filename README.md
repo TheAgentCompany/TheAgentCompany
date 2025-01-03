@@ -106,6 +106,7 @@ A complete list of 175 task images can be found [here](./workspaces/README.md).
 ##### Step 2.2: Initialize the Task Environment
 
 ```bash
+SERVER_HOSTNAME=<hostname, default value is localhost> \
 LITELLM_API_KEY=<environment_llm_api_key> \
 LITELLM_BASE_URL=<environment_llm_base_url> \
 LITELLM_MODEL=<environment_llm_model_name> \
