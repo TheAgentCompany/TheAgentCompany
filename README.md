@@ -40,14 +40,30 @@ by providing an extensible benchmark for evaluating AI agents that interact with
 
 Servers can be hosted locally or on the cloud in a few minutes.
 
+<details>
+  <summary>Instruction for Mac and Linux users</summary>
+
 ```bash
 # you should have docker and docker compose installed, and 30+ GB of free disk space
+# Mac users must have host networking enabled
 sudo chmod 666 /var/run/docker.sock
 curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
 ```
+</details>
+
+<details>
+  <summary>Instruction for Windows users</summary>
+
+```bash
+# you should have docker and docker compose installed, and 30+ GB of free disk space
+# you must have host networking enabled
+curl -fsSL -o setup.bat https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.bat && setup.bat
+```
+</details>
+
 
 After a few minutes, you should have all services running, including GitLab, Plane, ownCloud, RocketChat,
-all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide.
+all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide, especially if you are using Mac or Windows.
 
 ### Step 2: Run the Benchmark
 

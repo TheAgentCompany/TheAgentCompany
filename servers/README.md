@@ -1,19 +1,36 @@
 # Intro
 
 This directory contains code & configs needed to run all services,
-including GitLab, ownCloud, Plane, and RocketChat.
-
-Below are the URLs, usernames, and passwords for each service. Note that you must
-add `<server-ip> the-agent-company.com` to your `/etc/hosts` file, since
-we use the synthetic hostname `the-agent-company.com` everywhere among all tasks.
-You could use `127.0.0.1` as the server ip if your services are running locally.
+including GitLab, ownCloud, Plane, and RocketChat. Below are the URLs, usernames,
+and passwords for each service.
 
 Caveat: `the-agent-company.com` is a real domain where we host the project website
 with the leaderboard. For benchmarking purpose, all tasks assume this domain hosts
 the services. Since this domain does not really host any of the following services,
-you need to change your `/etc/hosts` file to point to your own server ip, if and
-only if you'd like to use your browser to poke around the services. For evaluation
+you need to change your `/etc/hosts` file to point to your own server ip, if you'd like to use your browser to poke around the services. For evaluation
 purpose, the hostname routing is taken care of by the initialization script.
+
+<details>
+  <summary>Mac and Linux users</summary>
+
+Please run the following command:
+
+```bash
+sudo echo "<server-ip> the-agent-company.com" >> /etc/hosts
+# e.g. if you are hosting the services on your local machine, use
+# sudo echo "127.0.0.1 the-agent-company.com" >> /etc/hosts
+```
+</details>
+
+<details>
+    <summary>Windows users</summary>
+
+Please use notepad or any other editor with admin privilege to open
+`c:\Windows\System32\Drivers\etc\hosts` file and append `<server-ip> the-agent-company.com`
+to the file. If you are hosting the services on your local machine, use
+`127.0.0.1 the-agent-company.com`.
+
+</details>
 
 ## GitLab
 * service url: http://the-agent-company.com:8929
@@ -47,16 +64,5 @@ might not be able to visit the services using `http` protocol directly.
 Open chrome://settings/security and disable "Always use secure connections". It will disable the redirect in ALL web url.
 
 ### Solution 2:
-* When use open the web using chrome, it will show `Not Secure` beside the url. 
-* Click it, select the "site settings". 
-
-
-<img src="https://github.com/user-attachments/assets/24452c97-f16d-444b-9b24-3bb733622a24" width="300" alt="image">
-
-* Set `Insecure Content` into allow. It will disable the redirect only in this web url.
-
-<img src="https://github.com/user-attachments/assets/e552b6ff-b2c5-408a-930a-8afef3927940" width="300" alt="image">
-
-### Solution 3:
 
 Use incognito mode to open the URLs.
