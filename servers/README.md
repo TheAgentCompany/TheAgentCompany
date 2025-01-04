@@ -16,9 +16,9 @@ purpose, the hostname routing is taken care of by the initialization script.
 Please run the following command:
 
 ```bash
-sudo echo "<server-ip> the-agent-company.com" >> /etc/hosts
+echo "<server-ip> the-agent-company.com" | sudo tee -a /etc/hosts
 # e.g. if you are hosting the services on your local machine, use
-# sudo echo "127.0.0.1 the-agent-company.com" >> /etc/hosts
+# echo "127.0.0.1 the-agent-company.com" | sudo tee -a /etc/hosts
 ```
 </details>
 
