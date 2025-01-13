@@ -72,7 +72,7 @@ If you are using Macbook or Windows, you might see api-server waiting to launch 
 
 <img width="527" alt="Screenshot showing host networking is enabled" src="https://github.com/user-attachments/assets/3db78fee-84f6-482f-a323-cfcb256a9c92" />
 
-On Windows, you may not see `Use kernel networking for UDP` option. Plase ignore it, and make sure you have `Enable host networking` ticked.
+On Windows, you may not see `Use kernel networking for UDP` option. Please ignore it, and make sure you have `Enable host networking` ticked.
 
 After enabling host networking, please stop and delete all running containers and
 restart Docker. Then you can run the setup script again.
