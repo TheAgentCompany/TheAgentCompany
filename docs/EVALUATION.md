@@ -53,17 +53,24 @@ or remotely (e.g. an AWS host like ec2-ip.us-east-2.compute.amazonaws.com)
 
 ### Step 3: Conduct the Task
 
-Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
-For reference, in the baseline evaluation, we prompt the agent with:
+Now you can prompt the agent to work on the task. The task instruction is at `/instruction/task.md`
+in the task container. For reference, in the baseline evaluation, we prompt the agent with:
 
 > Complete the task in /instruction/task.md
 
 The task instruction is a markdown file which contains the task description and the task requirements.
 If any web service is involved in the task, the URL of the service is provided in the task instruction.
 
+Your agent doesn't have to do browsing in the container environment. The baseline agent
+installs a headless chrome in the container for browsing purposes, but your agent doesn't
+have to. It could, for example, use a normal browser on a computer just like what human
+beings do. If you do choose this way, please bear in mind that some tasks involve uploading
+and downloading steps, and you might want to use mounting to transfer files between the
+task container and the host machine.
+
 Caveat: all services require username and password. We allow benchmark users to use whatever
 ways they want to provide the username and password. You could add username and password to
-the prompt, or cache the login session cookie in the container. For reference, in the
+the prompt, or cache the login session cookie in the browser. For reference, in the
 baseline evaluation, we use OpenHands platform to deterministically login to all services
 before letting the agent work on the task. We still provide GitLab username and password
 in the system prompt since running `git` commands sometimes requires the username and password.
