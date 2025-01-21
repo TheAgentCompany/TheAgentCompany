@@ -8,6 +8,7 @@ import threading
 import requests
 import time
 import json
+import logging
 
 
 SERVER_HOSTNAME = os.getenv('SERVER_HOSTNAME') or 'localhost'
