@@ -132,8 +132,11 @@ bash /utils/init.sh
 ##### Step 2.3: Conduct the Task
 
 Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
+In the baseline experiments, the initial prompt is as simple as
 
 > Complete the task in /instruction/task.md
+
+but you could choose to extract the content in `/instruction/task.md` and include in the prompt.
 
 ##### Step 2.4: Grade the Result
 
