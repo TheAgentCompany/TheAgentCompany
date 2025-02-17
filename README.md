@@ -132,11 +132,11 @@ bash /utils/init.sh
 ##### Step 2.3: Conduct the Task
 
 Now you can prompt the agent to work on the task. The task instruction is in `/instruction/task.md`.
-In the baseline experiments, the initial prompt is as simple as
+In the baseline experiments, [the initial prompt](https://github.com/TheAgentCompany/TheAgentCompany/blob/6c4003ce4646dad443059f3958d1327ca5b8738e/evaluation/run_eval.py#L118-L127) is as simple as
 
 > Complete the task in /instruction/task.md
 
-but you could choose to extract the content in `/instruction/task.md` and include in the prompt.
+but you could choose to extract the content in `/instruction/task.md` and include in the system prompt.
 
 ##### Step 2.4: Grade the Result
 
