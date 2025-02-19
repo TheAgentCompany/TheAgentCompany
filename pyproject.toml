@@ -15,5 +15,5 @@ python = "^3.12"
 [tool.poetry.group.evaluation.dependencies]
 # only needed if you want to run the benchmark with OpenHands
 pyyaml = "*"
-openhands-ai = "0.14.2"
+openhands-ai = "0.24.0"
 

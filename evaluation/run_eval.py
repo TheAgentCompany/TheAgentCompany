@@ -16,12 +16,12 @@ from openhands.core.config import (
     get_llm_config_arg,
     get_parser,
 )
+from openhands.core.config.agent_config import AgentConfig
 from openhands.core.logger import openhands_logger as logger
 from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, MessageAction
 from openhands.events.observation import CmdOutputObservation, BrowserOutputObservation
 from openhands.runtime.base import Runtime
-from openhands.runtime.impl.eventstream.eventstream_runtime import EventStreamRuntime
 from openhands.utils.async_utils import call_async_from_sync
 
 from browsing import pre_login
@@ -37,7 +37,7 @@ def get_config(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
-        trajectories_path=os.path.join(mount_path_on_host, f'traj_{task_short_name}.json'),
+        save_trajectory_path=os.path.join(mount_path_on_host, f'traj_{task_short_name}.json'),
         sandbox=SandboxConfig(
             base_container_image=base_container_image,
             enable_auto_lint=True,
@@ -53,6 +53,10 @@ def get_config(
         workspace_mount_path_in_sandbox='/outputs',
     )
     config.set_llm_config(llm_config)
+    agent_config = AgentConfig(
+        enable_prompt_extensions=False,
+    )
+    config.set_agent_config(agent_config)
     return config
 
 
@@ -232,7 +236,6 @@ if __name__ == '__main__':
         config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, LLMConfig())
         runtime: Runtime = create_runtime(config)
         call_async_from_sync(runtime.connect)
-        assert isinstance(runtime, EventStreamRuntime)
         logger.info(f"Finished building runtime image {runtime.runtime_container_image} from base task image {runtime.base_container_image}")
         sys.exit()
 
