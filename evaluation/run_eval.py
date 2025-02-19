@@ -1,6 +1,7 @@
 import asyncio
 import os
 import shutil
+import sys
 from typing import List
 import json
 import yaml
@@ -20,6 +21,7 @@ from openhands.core.main import create_runtime, run_controller
 from openhands.events.action import CmdRunAction, MessageAction
 from openhands.events.observation import CmdOutputObservation, BrowserOutputObservation
 from openhands.runtime.base import Runtime
+from openhands.runtime.impl.eventstream.eventstream_runtime import EventStreamRuntime
 from openhands.utils.async_utils import call_async_from_sync
 
 from browsing import pre_login
@@ -197,7 +199,42 @@ if __name__ == '__main__':
         default=None,
         help='LLM config for evaluation environment (NPC & llm-based evaluator)',
     )
+    parser.add_argument(
+        '--build-image-only',
+        type=bool,
+        default=False,
+        help='Just build an OpenHands runtime image for the given task and then exit',
+    )
     args, _ = parser.parse_known_args()
+
+    if not args.task_image_name or not args.task_image_name.strip():
+        raise ValueError(f'Task image name is invalid!')
+    task_short_name = args.task_image_name.split('/')[-1].split(':')[0]
+    logger.info(f"Task image name is {args.task_image_name}, short name is {task_short_name}")
+
+    # mount a temporary directory to pass trajectory from host to container, and to
+    # pass the evaluation result from container to host
+    # 1) trajectory is dumped by OpenHands library (on host machine), but it's needed by
+    # evaluator (in container), so we mount a temporary directory to pass it in
+    # 2) evaluation result is written by evaluator (in container), but we need to persist
+    # it on host machine, so we mount a temporary directory to pass it out
+    if os.getenv('TMPDIR') and os.path.exists(os.getenv('TMPDIR')):
+        temp_dir = os.path.abspath(os.getenv('TMPDIR'))
+    else:
+        temp_dir = tempfile.mkdtemp()
+
+    # If --build-image-only True, then build an OpenHands runtime image on top of
+    # TheAgentCompany task image, and then exit. This is useful when we don't want
+    # to build OpenHands runtime images on the fly, which is very time-consuming.
+    # Note: OpenHands requires every single task to have their own runtime image.
+    if args.build_image_only:
+        logger.info("build-image-only mode, will build a runtime image and then exit")
+        config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, LLMConfig())
+        runtime: Runtime = create_runtime(config)
+        call_async_from_sync(runtime.connect)
+        assert isinstance(runtime, EventStreamRuntime)
+        logger.info(f"Finished building runtime image {runtime.runtime_container_image} from base task image {runtime.base_container_image}")
+        sys.exit()
 
     agent_llm_config: LLMConfig | None = None
     if args.agent_llm_config:
@@ -219,19 +256,6 @@ if __name__ == '__main__':
     if env_llm_config.api_key is None:
         raise ValueError(f'LLM API key is not set for evaluation environment')
 
-    task_short_name = args.task_image_name.split('/')[-1].split(':')[0]
-    logger.info(f"Task image name is {args.task_image_name}, short name is {task_short_name}")
-
-    # mount a temporary directory to pass trajectory from host to container, and to
-    # pass the evaluation result from container to host
-    # 1) trajectory is dumped by OpenHands library (on host machine), but it's needed by
-    # evaluator (in container), so we mount a temporary directory to pass it in
-    # 2) evaluation result is written by evaluator (in container), but we need to persist
-    # it on host machine, so we mount a temporary directory to pass it out
-    if os.getenv('TMPDIR') and os.path.exists(os.getenv('TMPDIR')):
-        temp_dir = os.path.abspath(os.getenv('TMPDIR'))
-    else:
-        temp_dir = tempfile.mkdtemp()
     config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, agent_llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
