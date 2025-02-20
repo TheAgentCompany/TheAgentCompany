@@ -260,7 +260,7 @@ def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, scre
             browser_action = BrowseInteractiveAction(
                 browser_actions=instruction
             )
-            browser_action.timeout = 10000
+            browser_action.set_hard_timeout(10000)
             logger.info(browser_action, extra={'msg_type': 'ACTION'})
             obs: BrowserOutputObservation = runtime.run_action(browser_action)
             logger.debug(obs, extra={'msg_type': 'OBSERVATION'})
