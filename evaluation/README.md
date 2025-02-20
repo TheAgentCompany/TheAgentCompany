@@ -64,7 +64,7 @@ the evaluation by running the script again.
 
 OpenHands builds a unique runtime image on top of each task image on the fly. If you
 wanted to pre-build all runtime images so that they don't need to be built when running
-evaluation, you could run
+evaluation, you could goto root directory and run
 
 ```bash
 ./evaluation/build_oh_runtime_images.sh
