@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Build and publish each OpenHands runtime image
+# Build and cache each OpenHands runtime image
 for task_dir in workspaces/tasks/*/; do
     task_name=$(basename "$task_dir")
     task_image_name="ghcr.io/theagentcompany/$task_name-image:1.0.0"
