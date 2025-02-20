@@ -88,7 +88,7 @@ def init_task_env(runtime: Runtime, hostname: str, env_llm_config: LLMConfig):
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
-    action.timeout = 900
+    action.set_hard_timeout(900)
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
@@ -142,7 +142,9 @@ def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies
         os.makedirs(screenshots_dir, exist_ok=True)
         for image_id, obs in enumerate(state.history):
             if isinstance(obs, BrowserOutputObservation):
-                image_data = base64.b64decode(obs.screenshot)
+                image_data = base64.b64decode(
+                    obs.screenshot.replace('data:image/png;base64,', '')
+                )
                 with open(os.path.join(screenshots_dir, f'{image_id}.png'), 'wb') as file:
                     file.write(image_data)
 
@@ -163,7 +165,7 @@ def run_evaluator(runtime: Runtime, env_llm_config: LLMConfig, trajectory_path: 
         f"python_default /utils/eval.py --trajectory_path {trajectory_path} --result_path {result_path}"
     )
     action = CmdRunAction(command=command)
-    action.timeout = 600
+    action.set_hard_timeout(600)
     logger.info(action, extra={'msg_type': 'ACTION'})
     obs = runtime.run_action(action)
     logger.info(obs, extra={'msg_type': 'OBSERVATION'})
