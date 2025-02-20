@@ -60,6 +60,19 @@ happens when the OpenHands runtime dies due to some unexpected errors. This mean
 if the script finishes, it might not have evaluated all tasks. You can manually resume
 the evaluation by running the script again.
 
+## Pre-Build Runtime Images
+
+OpenHands builds a unique runtime image on top of each task image on the fly. If you
+wanted to pre-build all runtime images so that they don't need to be built when running
+evaluation, you could run
+
+```bash
+./evaluation/build_oh_runtime_images.sh
+```
+
+which would iterate over all tasks, pull their images, and build OpenHands runtime
+images accordingly.
+
 ## Analysis
 
 You can find the evaluation results in the `outputs` directory, including trajectories,
