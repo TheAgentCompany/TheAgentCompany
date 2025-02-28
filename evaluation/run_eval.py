@@ -55,6 +55,7 @@ def get_config(
     config.set_llm_config(llm_config)
     agent_config = AgentConfig(
         enable_prompt_extensions=False,
+        enable_history_truncation=False,
     )
     config.set_agent_config(agent_config)
     return config
