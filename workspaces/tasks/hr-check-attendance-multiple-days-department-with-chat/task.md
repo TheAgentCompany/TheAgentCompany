@@ -7,4 +7,4 @@ Navigate to the Rocketchat web at http://the-agent-company.com:3000/home.
 
 * Create a report called "department-april-attendace.xlsx" in the local /workspace directory. You must make sure that it is a xlsx file.
 
-* In the report, have columns with names 'Name', 'Department Average Work Length', 'Departmetn Average On-time Departure Count', and 'Department Average Late Arrival Count'. Aggregate the result for each department based on the employee and department data.
+* In the report, have columns with names 'Name', 'Department Average Work Length', 'Department Average On-time Departure Count', and 'Department Average Late Arrival Count'. Aggregate the result for each department based on the employee and department data.
