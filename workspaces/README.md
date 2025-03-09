@@ -1,19 +1,39 @@
-## Workspace directory
+## Workspaces directory
 
-This directory hosts workspaces that are local to the examinee (e.g. agents or actual human users).
+This directory hosts tasks that are local to the examinee (e.g. agents or human testers). It is structured as follows:
 
-Each task will have its own container image and related evaluation code, e.g. LLM-based evaluation or end-to-end tests.
+```
+├── base_image/
+│   ├── Dockerfile
+│   ├── init.sh
+│   ├── eval.py
+│   └── ...
+├── tasks/
+│   └── admin-arrange-meeting-rooms-image/
+│       ├── Dockerfile
+│       ├── evaluator.py
+│       ├── checkpoints.md
+│       ├── dependencies.yml
+│       ├── task.md
+|   └── ...
+```
 
-Highlights:
-- `base_image` folder contains artifacts needed to build the base image. All tasks'
-images are based on the base image.
-- `tasks\example` folder contains a simple example task that demonstrates what a task
-looks like, and is a blueprint for creating more complicated tasks.
+Explanations:
+- base_image is the folder that contains shared functions, evaluation utilities, image build scripts, and other scaffolds.
+- tasks is the folder for definitions of all 175 tasks, within which
+  - Dockerfile defines the environment of each task setup
+  - evaluator.py defines all checkpoint grading functions
+  - checkpoints.md is the documentation for grading functions (for human reference only)
+  - dependencies.yml defines the list of service dependencies
+  - task.md is the task specification, contains background and requirements of each task, and is the **only** file that should be prompted to agents
+
 
 ## Full list of task images
 
-There are 175 task images in total. Please find the full list below, or download
+We built and published all 175 task images. Please find the full list below, or download
 the list [here](https://github.com/TheAgentCompany/TheAgentCompany/releases/download/1.0.0/tasks.md).
+
+If you'd like to learn how task images are built, see [this GitHub workflow](https://github.com/TheAgentCompany/TheAgentCompany/blob/main/.github/workflows/task-release.yml).
 
 - ghcr.io/theagentcompany/admin-arrange-meeting-rooms-image:1.0.0
 - ghcr.io/theagentcompany/admin-ask-for-meeting-feedback-image:1.0.0
