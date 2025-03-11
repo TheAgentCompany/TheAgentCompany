@@ -114,7 +114,7 @@ human testers.
 ##### Step 2.1: Start Task Container
 
 ```bash
-docker run --name <container_name> -it <image_name> /bin/bash
+docker run --name <container_name> --network host -it <image_name> /bin/bash
 ```
 
 A complete list of 175 task images can be found [here](./workspaces/README.md).
