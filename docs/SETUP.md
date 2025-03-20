@@ -83,6 +83,18 @@ We have seen cases where plane services fail to start due to some internal error
 In this case, you can stop and remove all the containers and run the setup script again.
 If the issue persists, please create a GitHub issue.
 
+Many machines in China may face connectivity issues when trying to access GitHub or download Docker images due to network restrictions, requiring a VPN. If you're experiencing problems deploying the application, please verify the following:
+
+1. Check if you can successfully download the Docker image
+2. If you're stuck at the plane launch process, inside the `api-server` container (using `docker exec -it [container name or id] /bin/bash
+`) and verify connectivity by running:
+
+```
+ wget https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
+``` 
+
+If this command fails or blocked, you might need to configure a VPN or proxy to establish the necessary connections for deployment.
+
 ## RocketChat not ready
 
 If you are using Macbook M1, you might see RocketChat never ready due to failure of
