@@ -90,7 +90,7 @@ Many machines in China may face connectivity issues when trying to access GitHub
 `) and verify connectivity by running:
 
 ```
- wget https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
+wget https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
 ``` 
 
 If this command fails or blocked, you might need to configure a VPN or proxy to establish the necessary connections for deployment.
