@@ -45,6 +45,7 @@ Servers can be hosted locally or on the cloud in a few minutes.
 
 ```bash
 # you should have docker and docker compose installed, and 30+ GB of free disk space
+# as a reference, we used Amazon EC2 t3.2xlarge instances for baselines
 # Mac users must have host networking enabled
 sudo chmod 666 /var/run/docker.sock
 curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.sh | sh
