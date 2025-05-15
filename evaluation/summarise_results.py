@@ -27,10 +27,8 @@ def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> fl
             cost *= 2
         return cost
     elif "gemini-2.0-flash-exp" in model.lower():
-        # price unknown for gemini-2.0-flash-exp, assuming same price as gemini-1.5-flash
-        cost = 0.000000075 * prompt_tokens + 0.0000003 * completion_tokens
-        if prompt_tokens > 128000:
-            cost *= 2
+        # https://ai.google.dev/gemini-api/docs/pricing#gemini-2.0-flash, accessed 05/14/2025
+        cost = 0.0000001 * prompt_tokens + 0.0000004 * completion_tokens
         return cost
     elif "gemini-2.5-pro-preview-05-06" in model.lower():
         # https://ai.google.dev/gemini-api/docs/pricing#gemini-2.5-pro-preview, accessed 05/08/2025
