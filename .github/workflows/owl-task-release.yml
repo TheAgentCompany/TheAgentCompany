@@ -1,0 +1,33 @@
+name: Publish Task Images with Owl Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag for all task images with owl environment'
+        required: true
+        type: string
+        default: 'latest'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Make publish script executable
+        run: chmod +x .github/publish_task_images_with_owl.sh
+
+      - name: Build and publish images
+        run: .github/publish_task_images_with_owl.sh ${{ github.event.inputs.version }}

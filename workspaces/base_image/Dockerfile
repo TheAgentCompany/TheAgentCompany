@@ -31,6 +31,14 @@ RUN pip install cryptography==44.0.0
 
 #############################################################
 
+RUN apt-get install libgl1-mesa-glx -y
+
+RUN bash -c "git clone https://github.com/li-boxuan/owl.git && cd owl && python -m venv owl_env && source owl_env/bin/activate && python -m pip install -r requirements.txt && playwright install && playwright install-deps"
+
+################## OWL SETUP ################################
+
+#############################################################
+
 ################## NPC SETUP ################################
 # For simplicity, we set up necessary environments needed
 # by NPCs in the base image, even though some simple tasks
