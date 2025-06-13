@@ -10,7 +10,7 @@ import base64
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
-    AppConfig,
+    OpenHandsConfig,
     SandboxConfig,
     LLMConfig,
     get_llm_config_arg,
@@ -33,8 +33,8 @@ def get_config(
     task_short_name: str,
     mount_path_on_host: str,
     llm_config: LLMConfig
-) -> AppConfig:
-    config = AppConfig(
+) -> OpenHandsConfig:
+    config = OpenHandsConfig(
         run_as_openhands=False,
         max_budget_per_task=4,
         max_iterations=100,
@@ -122,7 +122,7 @@ def codeact_user_response(state: State) -> str:
     return msg
 
 
-def run_solver(runtime: Runtime, task_name: str, config: AppConfig, dependencies: List[str],
+def run_solver(runtime: Runtime, task_name: str, config: OpenHandsConfig, dependencies: List[str],
                save_final_state: bool, state_dir: str,
                save_screenshots: bool, screenshots_dir: str) -> State:
     instruction = "Complete the task in /instruction/task.md"
@@ -239,7 +239,7 @@ if __name__ == '__main__':
     # Note: OpenHands requires every single task to have their own runtime image.
     if args.build_image_only:
         logger.info("build-image-only mode, will build a runtime image and then exit")
-        config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, LLMConfig())
+        config: OpenHandsConfig = get_config(args.task_image_name, task_short_name, temp_dir, LLMConfig())
         runtime: Runtime = create_runtime(config)
         call_async_from_sync(runtime.connect)
         logger.info(f"Finished building runtime image {runtime.runtime_container_image} from base task image {runtime.base_container_image}")
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     if env_llm_config.api_key is None:
         raise ValueError(f'LLM API key is not set for evaluation environment')
 
-    config: AppConfig = get_config(args.task_image_name, task_short_name, temp_dir, agent_llm_config)
+    config: OpenHandsConfig = get_config(args.task_image_name, task_short_name, temp_dir, agent_llm_config)
     runtime: Runtime = create_runtime(config)
     call_async_from_sync(runtime.connect)
 
