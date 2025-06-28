@@ -33,7 +33,7 @@ def grade_checkpoint4(content: list[str]):
 @grader
 def grade_checkpoint5():
     try:
-        response = requests.get('http://localhost:5000/events')
+        response = requests.get('http://localhost:5000/events', timeout=(20,300))
         return "Enterprise-wide user-facing open architecture" in response.text
     except:
         return False
