@@ -43,9 +43,10 @@ bash run_eval.sh \
   --outputs-path outputs \
   --server-hostname localhost \
   --version 1.0.0
+# optionally, add --run-npc-tasks-only
 ```
 
-where `--outputs-path`, `--server-hostname`, and `--version` are optional.
+where `--outputs-path`, `--server-hostname`, `--version`, and `--run-npc-tasks-only` are optional.
 
 Here's a brief explanation of each argument:
 
@@ -54,6 +55,7 @@ Here's a brief explanation of each argument:
 - `--outputs-path`: the path to save trajectories and evaluation results.
 - `--server-hostname`: the hostname of the server that hosts all the web services. It could be `localhost` if you are running the evaluation and services on the same machine. If the services are hosted on a remote machine, you must use the hostname of the remote machine rather than IP address.
 - `--version`: the version of the task images to use. Currently, the only supported version is `1.0.0`.
+- `--run-npc-tasks-only`: when enabled, only runs tasks that have a `scenarios.json` file defined. Tasks without this file will be skipped. This is useful for running only NPC-based tasks.
 
 The script is idempotent. If you run it again, it will resume from the last checkpoint.
 It would usually take a few days to finish evaluation.
