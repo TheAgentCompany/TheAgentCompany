@@ -75,6 +75,12 @@ evaluation, you could goto root directory and run
 ./evaluation/build_oh_runtime_images.sh
 ```
 
+or to build only NPC-based tasks:
+
+```bash
+./evaluation/build_oh_runtime_images.sh --run-npc-tasks-only
+```
+
 which would iterate over all tasks, pull their images, and build OpenHands runtime
 images accordingly.
 
