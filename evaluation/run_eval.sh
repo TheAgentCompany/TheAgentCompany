@@ -38,6 +38,10 @@ SERVER_HOSTNAME="localhost"
 # after the 1.0.0 release
 VERSION="1.0.0"
 
+# RUN_NPC_TASKS_ONLY is a flag to run only tasks that have scenarios.json defined
+# When true, tasks without scenarios.json will be skipped
+RUN_NPC_TASKS_ONLY=false
+
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -61,6 +65,10 @@ while [[ $# -gt 0 ]]; do
             VERSION="$2"
             shift 2
             ;;
+        --run-npc-tasks-only)
+            RUN_NPC_TASKS_ONLY=true
+            shift
+            ;;
         *)
             echo "Unknown argument: $1"
             exit 1
@@ -78,6 +86,7 @@ echo "Using agent LLM config: $AGENT_LLM_CONFIG"
 echo "Using environment LLM config: $ENV_LLM_CONFIG"
 echo "Outputs path: $OUTPUTS_PATH"
 echo "Server hostname: $SERVER_HOSTNAME"
+echo "Run NPC tasks only: $RUN_NPC_TASKS_ONLY"
 
 # Iterate through each directory in tasks
 for task_dir in "$TASKS_DIR"/*/; do
@@ -86,6 +95,12 @@ for task_dir in "$TASKS_DIR"/*/; do
     # Check if evaluation file exists
     if [ -f "$OUTPUTS_PATH/eval_${task_name}-image.json" ]; then
         echo "Skipping $task_name - evaluation file already exists"
+        continue
+    fi
+    
+    # Check if run-npc-tasks-only mode is enabled and task doesn't have scenarios.json
+    if [ "$RUN_NPC_TASKS_ONLY" = true ] && [ ! -f "$task_dir/scenarios.json" ]; then
+        echo "Skipping $task_name - no scenarios.json found (run-npc-tasks-only mode enabled)"
         continue
     fi
     
