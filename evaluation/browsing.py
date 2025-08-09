@@ -148,7 +148,8 @@ def resolve_action(action: BrowserAction, content: str) -> BrowserAction:
                     return ClickAction(new_selector)
             else:
                 logger.error(f"NO MATCH FOUND FOR SELECTOR, {action.selector}")
-                return None
+                # Return the original action instead of None to prevent errors
+                return action
     return action
 
 
@@ -250,8 +251,8 @@ def pre_login(runtime: Runtime, services: List[str], save_screenshots=True, scre
             if obs:
                 action = resolve_action(action, obs.get_agent_obs_text())
 
-            if not action:
-                logger.error(f"FAILED TO RESOLVE ACTION, {action}")
+            if action is None:
+                logger.error(f"FAILED TO RESOLVE ACTION, action is None")
                 raise Exception(f"FAILED TO RESOLVE ACTION, maybe the service is not available")
 
             # Convert the action to an instruction string
