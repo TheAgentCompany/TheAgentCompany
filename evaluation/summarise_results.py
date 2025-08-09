@@ -4,6 +4,7 @@ import re
 import os
 import yaml
 import sys
+import argparse
 from typing import Dict, Tuple
 
 def calculate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> float:
@@ -190,6 +191,13 @@ def is_perfect_completion(total: int, result: int) -> bool:
     return total > 0 and total == result
 
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Summarize evaluation results from JSON files')
+    parser.add_argument('folder_path', help='Path to the folder containing eval_*.json and traj_*.json files')
+    parser.add_argument('--tasks', nargs='+', help='Optional: Only analyze specific tasks')
+    
+    args = parser.parse_args()
+    
     # check if the current directory and 'workspaces' directory are in the same parent directory
     # this is because we need to access each task's dependencies.yml file
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -199,11 +207,7 @@ def main():
         print("Error: 'workspaces' directory not found in the parent directory")
         sys.exit(1)
 
-    if len(sys.argv) != 2:
-        print("Usage: python summarise_results.py <folder_path>")
-        sys.exit(1)
-    
-    folder_path = sys.argv[1]
+    folder_path = args.folder_path
     
     if not os.path.isdir(folder_path):
         print(f"Error: '{folder_path}' is not a valid directory")
@@ -214,6 +218,32 @@ def main():
     if not eval_results:
         print(f"No eval_*.json files found in {folder_path}")
         return
+
+    # Filter results if --tasks is provided
+    if args.tasks:
+        # Convert task names to image names (add -image suffix if not already present)
+        task_images = []
+        for task in args.tasks:
+            if task.endswith("-image"):
+                task_images.append(task)
+            else:
+                task_images.append(f"{task}-image")
+        
+        # Filter eval_results and traj_results to only include specified tasks
+        filtered_eval_results = {k: v for k, v in eval_results.items() if k in task_images}
+        filtered_traj_results = {k: v for k, v in traj_results.items() if k in task_images}
+        
+        # Check if any of the specified tasks were found
+        if not filtered_eval_results:
+            print(f"Error: None of the specified tasks were found in {folder_path}")
+            print(f"Available tasks: {list(eval_results.keys())}")
+            print(f"Requested tasks: {task_images}")
+            sys.exit(1)
+        
+        eval_results = filtered_eval_results
+        traj_results = filtered_traj_results
+        
+        print(f"Analyzing {len(eval_results)} specified tasks: {list(eval_results.keys())}\n")
 
     # load all dependencies.yml files
     # iterate over workspaces/tasks/*/dependencies.yml and load the yaml file
