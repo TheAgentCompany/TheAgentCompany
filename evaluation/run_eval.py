@@ -89,6 +89,7 @@ def init_task_env(runtime: Runtime, hostname: str, env_llm_config: LLMConfig):
         f"LITELLM_API_KEY={env_llm_config.api_key.get_secret_value() if env_llm_config.api_key else None} "
         f"LITELLM_BASE_URL={env_llm_config.base_url} "
         f"LITELLM_MODEL={env_llm_config.model} "
+        "echo "" | sudo tee -a /etc/hosts && "
         "bash /utils/init.sh"
     )
     action = CmdRunAction(command=command)
