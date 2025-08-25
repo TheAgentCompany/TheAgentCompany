@@ -1,0 +1,95 @@
+# TAC-RL Configuration for Qwen 2.5 7B Local Training
+model:
+  name: "qwen-2.5-7b-tacrl-local"
+  base_model_path: "Qwen/Qwen2.5-7B-Instruct"
+  model_type: "qwen"
+  parameter_count: "7B"
+  context_length: 32768
+  supports_function_calling: true
+  
+  # Local training specific
+  device: "cuda"  # Requires GPU
+  load_in_8bit: true  # Memory optimization
+  torch_dtype: "float16"
+
+training:
+  algorithm: "grpo"
+  batch_size: 2  # Smaller for GPU memory
+  learning_rate: 1e-5
+  max_episodes_per_task: 2  # Fewer episodes for faster iteration
+  reward_scale: 1.0
+  
+  # Training phases
+  current_phase: "warmup"
+  tasks_per_phase: 10  # Smaller for faster phase advancement
+  success_threshold: 0.6
+  
+  # Infrastructure
+  max_parallel_tasks: 1  # Sequential execution for memory
+  checkpoint_frequency: 25  # Checkpoint more frequently
+  evaluation_frequency: 10
+  
+  # Paths
+  output_dir: "./outputs"
+  checkpoint_dir: "./checkpoints" 
+  log_dir: "./logs"
+
+# LoRA Configuration for efficient fine-tuning
+lora:
+  r: 8
+  lora_alpha: 16
+  target_modules: ["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+  lora_dropout: 0.1
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Task selection for different phases
+task_phases:
+  warmup:
+    - "admin-make-spreadsheet"
+    - "hr-check-attendance-one-day"
+    - "ds-calculate-spreadsheet-stats"
+  
+  intermediate:
+    - "admin-arrange-meeting-rooms"
+    - "hr-check-attendance-multiple-days"
+    - "finance-budget-variance"
+    
+  advanced:
+    - "pm-create-plane-issue"
+    - "admin-employee-info-reconciliation"
+    - "ds-merge-multiple-sheets"
+    
+  expert:
+    []  # All remaining tasks
+
+# OpenHands configuration for local model
+openhands:
+  max_iterations: 50  # Shorter for faster iteration
+  timeout: 180  # 3 minutes per task
+  enable_auto_lint: true
+  use_host_network: true
+
+# Environment configuration
+environment:
+  server_hostname: "localhost"
+  services:
+    - "gitlab"
+    - "plane" 
+    - "rocketchat"
+    - "owncloud"
+    - "api-server"
+
+# Monitoring and logging
+monitoring:
+  use_wandb: true
+  project_name: "tac-rl-local-training"
+  log_level: "INFO"
+  save_trajectories: true
+  realtime_monitoring: true
+
+# GPU Requirements Check
+requirements:
+  min_gpu_memory_gb: 12
+  recommended_gpu_memory_gb: 16
+  cuda_required: true
