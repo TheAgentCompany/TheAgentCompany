@@ -52,6 +52,20 @@ curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/rele
 ```
 </details>
 
+<details>
+  <summary>Instruction for Windows users</summary>
+
+```bash
+# you should have docker and docker compose installed, and 30+ GB of free disk space
+# you must have host networking enabled
+curl -fsSL -o setup.bat https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.bat && setup.bat
+```
+</details>
+
+
+After a few minutes, you should have all services running, including GitLab, Plane, ownCloud, RocketChat,
+all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide, especially if you are using Mac or Windows.
+
 
 <details>
   <summary>Tips if launch process stalls</summary>
@@ -66,20 +80,6 @@ curl -H 'Cache-Control: no-cache, no-store' -s -o ./restore.sh https://raw.githu
 curl -H 'Cache-Control: no-cache, no-store' -s -o ./plane-data.tar.gz https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/plane-20241031-0351
 ```
 </details>
-
-<details>
-  <summary>Instruction for Windows users</summary>
-
-```bash
-# you should have docker and docker compose installed, and 30+ GB of free disk space
-# you must have host networking enabled
-curl -fsSL -o setup.bat https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/setup-script-20241208/setup.bat && setup.bat
-```
-</details>
-
-
-After a few minutes, you should have all services running, including GitLab, Plane, ownCloud, RocketChat,
-all with pre-baked data. Please check out the [SERVER SETUP DOC](./docs/SETUP.md) for more details and troubleshooting guide, especially if you are using Mac or Windows.
 
 ### Step 2: Run the Benchmark
 
