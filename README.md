@@ -54,7 +54,7 @@ curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/rele
 
 
 <details>
-  <summary>Tips when keep waiting when launch</summary>
+  <summary>Tips if launch process stalls</summary>
 
 When launching The Agent Company, it will attempt to access data from GitHub. This is used to satisfied potential Plane license requirement. If the launch process stalls, please ensure that your Docker environment has access to the following GitHub address.
 
