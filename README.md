@@ -52,6 +52,21 @@ curl -fsSL https://github.com/TheAgentCompany/the-agent-company-backup-data/rele
 ```
 </details>
 
+
+<details>
+  <summary>Tips when keep waiting when launch</summary>
+
+When launching The Agent Company, it will attempt to access data from GitHub. This is used to satisfied potential Plane license requirement. If the launch process stalls, please ensure that your Docker environment has access to the following GitHub address.
+
+```
+curl -H 'Cache-Control: no-cache, no-store' -s -o ./docker-compose.yaml https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
+curl -H 'Cache-Control: no-cache, no-store' -s -o ./plane.env https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/variables.env
+curl -H 'Cache-Control: no-cache, no-store' -s -o ./restore.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore-customized.sh
+
+curl -H 'Cache-Control: no-cache, no-store' -s -o ./plane-data.tar.gz https://github.com/TheAgentCompany/the-agent-company-backup-data/releases/download/plane-20241031-0351
+```
+</details>
+
 <details>
   <summary>Instruction for Windows users</summary>
 
