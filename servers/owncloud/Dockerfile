@@ -6,7 +6,9 @@ ENV OWNCLOUD_ADMIN_USERNAME="theagentcompany"
 ENV OWNCLOUD_ADMIN_PASSWORD="theagentcompany"
 
 COPY ./init.sh /usr/local/bin
-COPY ./owncloud_apps /var/www/html/owncloud_apps
-COPY ./owncloud_data /var/www/html/owncloud_data
+# In the base owncloud image, /var/www/html is declared as VOLUME.
+# To seed initial data and apps, we copy them to a different location (/opt/seed)
+COPY ./owncloud_apps /opt/seed/owncloud_apps
+COPY ./owncloud_data /opt/seed/owncloud_data
 RUN chmod +x /usr/local/bin/init.sh
-RUN sh /usr/local/bin/init.sh
+CMD ["/usr/local/bin/init.sh"]

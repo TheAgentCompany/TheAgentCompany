@@ -12,14 +12,25 @@ curl -X POST "http://localhost/index.php/index.php" \
   -d "dbhost=localhost"
 
 cd /var/www/html
-su -s /bin/bash www-data -c  "php occ config:system:set trusted_domains 1 --value=the-agent-company.com"
+# Set trusted domains according to the OWNCLOUD_TRUSTED_DOMAINS environment variable
+if [ -n "$OWNCLOUD_TRUSTED_DOMAINS" ]; then
+  IFS=',' read -ra DOMAINS <<< "$OWNCLOUD_TRUSTED_DOMAINS"
+  for i in "${!DOMAINS[@]}"; do
+    echo "Setting trusted domain: ${DOMAINS[$i]}"
+    domain="${DOMAINS[$i]}"
+    su -s /bin/bash www-data -c "php occ config:system:set trusted_domains $i --value=$domain"
+  done
+else
+  echo "Setting default trusted domain: the-agent-company.com"
+  su -s /bin/bash www-data -c "php occ config:system:set trusted_domains 1 --value=the-agent-company.com"
+fi
 su -s /bin/bash www-data -c "php occ config:app:set richdocuments wopi_url --value=http://the-agent-company.com:9980"
 
 rm -rf /var/www/html/data/theagentcompany/*
 rm -rf /var/www/html/apps
 
-cp -r /var/www/html/owncloud_data/. /var/www/html/data/theagentcompany
-mv /var/www/html/owncloud_apps /var/www/html/apps
+cp -r /opt/seed/owncloud_data/. /var/www/html/data/theagentcompany
+cp -r /opt/seed/owncloud_apps/. /var/www/html/apps
 
 chmod -R 777 /var/www/html/data/theagentcompany
 chmod -R 777 /var/www/html/apps
