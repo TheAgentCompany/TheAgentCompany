@@ -36,7 +36,7 @@ docker pull docker:27.3.1
 docker pull valkey/valkey:7.2.5-alpine
 docker pull redis/redis-stack-server:7.4.0-v0
 docker pull postgres:15.7-alpine
-docker pull bitnami/mongodb:5.0
+docker pull bitnamilegacy/mongodb:5.0
 docker pull registry.rocket.chat/rocketchat/rocket.chat:5.3.0
 
 ################## setup service ################## 
