@@ -211,6 +211,10 @@ Please check out the [EVALUATION DOC](./docs/EVALUATION.md) for more details.
 }
 ```
 
+## Related external benchmarks
+
+[ClawBench](https://github.com/TIGER-AI-Lab/ClawBench) is a complementary benchmark for AI web agents performing real-world tasks across live websites. It is independent of The Agent Company and is not integrated or supported by this repository; the link is provided for readers comparing interactive-agent evaluation environments.
+
 ## Contribution
 We welcome any contributions to bug fixes, documentation, and other improvements.
 Questions? Please create an issue. Otherwise, you can also contact [Frank F. Xu](https://frankxfz.me/), [Yufan Song](https://github.com/yufansong), [Boxuan Li](https://github.com/li-boxuan) (Email: fangzhex@cs.cmu.edu, yufans@alumni.cmu.edu, boxuanli@alumni.cmu.edu)
