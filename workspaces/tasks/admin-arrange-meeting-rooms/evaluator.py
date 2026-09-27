@@ -6,7 +6,8 @@ from scoring import Result, Checkpoint
 from common import create_rocketchat_client, get_rocketchat_personal_chat_history, grader
 
 
-REFERENCE_ANSWER = 4
+# Engineering, Marketing, Sales, Product and Customer Support overlap from 12:00 to 12:15 PM.
+REFERENCE_ANSWER = 5
 
 rocket_client = create_rocketchat_client()
 
