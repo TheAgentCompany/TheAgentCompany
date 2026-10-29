@@ -41,6 +41,8 @@ def grade_checkpoint3():
         
         return evaluate_with_llm(downloaded_content, predicate, additional_prompt)
             
+    except EvaluationInfrastructureError:
+        raise
     except Exception as e:
         logging.warning(f"Unexpected error in checkpoint3: {e}")
         return False

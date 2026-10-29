@@ -8,11 +8,13 @@ import argparse
 import json
 import sys
 import logging
+import traceback
 
 import cryptography
 from cryptography.fernet import Fernet
 
 from scoring import Result
+from common import EvaluationInfrastructureError
 
 def pad_key(key):
     while len(key) < 32:
@@ -104,6 +106,18 @@ def main():
         with open(args.result_path, 'w') as f:
             json.dump(result_json, f, indent=4)
             
+    except EvaluationInfrastructureError as error:
+        stack = ''.join(traceback.format_exception(
+            type(error), error, error.__traceback__, chain=False
+        ))
+        cause_type = type(error.cause).__name__ if error.cause is not None else 'unknown'
+        logging.error(
+            'Evaluation infrastructure failure [code=%s cause_type=%s]\n%s',
+            error.code,
+            cause_type,
+            stack,
+        )
+        sys.exit(1)
     except Exception:
         logging.error("Failed to grade the task", exc_info=True)
         sys.exit(1)

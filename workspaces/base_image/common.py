@@ -2,7 +2,6 @@ import base64
 import os
 import logging
 import urllib
-import subprocess
 import functools
 import re
 import requests
@@ -32,6 +31,21 @@ class MockRocketChatClient:
         return method
 
 
+class EvaluationInfrastructureError(RuntimeError):
+    """An evaluator dependency failed, rather than a task requirement failing."""
+
+    def __init__(self, code: str, cause: Exception = None):
+        safe_code = (
+            code if re.fullmatch(r'[A-Za-z0-9_.-]{1,64}', code) else 'evaluation_failure'
+        )
+        cause_type = type(cause).__name__ if cause is not None else 'unknown'
+        super().__init__(
+            f'Evaluation infrastructure failed [code={safe_code} cause_type={cause_type}]'
+        )
+        self.code = safe_code
+        self.cause = cause
+
+
 def grader(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -42,6 +56,8 @@ def grader(func):
                 return False
             return result
         except Exception as e:
+            if isinstance(e, EvaluationInfrastructureError):
+                raise
             logging.error(f"Error in {func.__name__}: {str(e)}")
             return False
     return wrapper
@@ -309,6 +325,8 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         
         return evaluate_with_llm(str(messages), predicate)
 
+    except EvaluationInfrastructureError:
+        raise
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False
@@ -421,37 +439,47 @@ def download_owncloud_content(link: str, output_file_path: str):
     if not link:
         return False
 
-    if "download" not in link:
-        command = ["curl", "--output", "/tmp/.tmp_download_link", link.rstrip("\n")]
+    def get_response(url):
         try:
-            subprocess.run(command, capture_output=True, text=True, check=True)
-        except Exception as e:
-            logging.warning(f"Unable to download from link: {link} due to {e}")
+            response = requests.get(url, timeout=30)
+        except (requests.exceptions.InvalidURL, requests.exceptions.MissingSchema,
+                requests.exceptions.InvalidSchema, requests.exceptions.URLRequired):
+            return None
+        except requests.RequestException as cause:
+            raise EvaluationInfrastructureError('owncloud_transport_failure', cause) from cause
+
+        if response.status_code in (401, 403, 404):
+            return None
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as cause:
+            raise EvaluationInfrastructureError(
+                f'owncloud_http_{response.status_code}', cause
+            ) from cause
+        return response
+
+    if "download" not in link:
+        response = get_response(link.rstrip("\n"))
+        if response is None:
             return False
 
         pattern = r'https?://[^\s]*\bdownload\b[^\s]*(?=")'
-
-        download_link: str | None = None
-        with open("/tmp/.tmp_download_link", "r") as f:
-            content = f.read()
-            matches = re.findall(pattern, content, re.MULTILINE)
-            if matches:
-               download_link = matches[0]
-
-        if download_link is None:
-            logging.warning(f"Did not find proper download link")
+        matches = re.findall(pattern, response.text, re.MULTILINE)
+        if not matches:
             return False
+        download_link = matches[0]
     else:
         download_link = link.rstrip("\n")
 
-    try:
-        logging.info(download_link)
-        subprocess.run([f"curl {download_link} --output {output_file_path}"], shell=True)
-    except Exception as e:
-        logging.warning(f"Download from link: {download_link} not successful")
+    response = get_response(download_link)
+    if response is None:
         return False
 
-    logging.info(f"Successfully downloaded from link {download_link}")
+    try:
+        with open(output_file_path, 'wb') as output_file:
+            output_file.write(response.content)
+    except OSError as cause:
+        raise EvaluationInfrastructureError('owncloud_output_write_failed', cause) from cause
     return True
 
 
