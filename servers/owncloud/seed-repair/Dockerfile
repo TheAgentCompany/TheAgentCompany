@@ -8,5 +8,9 @@ ADD --checksum=sha256:3bcc67667327871f3b1b1e71552bbd7b230195cd988d6bfe26586062a8
 
 ADD --checksum=sha256:708c6f4b060b90f962ff24833269301469c314560a0a8a2468f694cf38a8c587 --chown=www-data:www-data --chmod=0644 ["https://github.com/user-attachments/files/17966249/category_rules.txt", "/var/www/html/data/theagentcompany/files/Documents/Financials/Expenses/category_rules.txt"]
 
-# Update ownCloud's existing file index using its native CLI, including after container resets.
-RUN su -s /bin/sh www-data -c 'php /var/www/html/occ files:scan --all'
+# ADD's file mode also affects newly created parent directories. Keep the new folder traversable.
+# Index only the repaired inputs with ownCloud's native CLI; existing seed entries remain intact.
+RUN chmod 0755 "/var/www/html/data/theagentcompany/files/Documents/Human Resources Team/Contracts" \
+    && su -s /bin/sh www-data -c 'php /var/www/html/occ files:scan --path="theagentcompany/files/Documents/Human Resources Team/Contracts"' \
+    && su -s /bin/sh www-data -c 'php /var/www/html/occ files:scan --path="theagentcompany/files/Documents/Research/test_image.jpg"' \
+    && su -s /bin/sh www-data -c 'php /var/www/html/occ files:scan --path="theagentcompany/files/Documents/Financials/Expenses/category_rules.txt"'
