@@ -7,6 +7,7 @@ from common import create_rocketchat_client, get_rocketchat_personal_chat_histor
 
 
 REFERENCE_ANSWER = 4
+ANSWER_PATTERN = re.compile(rf'(?<![\d.:$]){REFERENCE_ANSWER}(?![\d]|[:.]\d)')
 
 rocket_client = create_rocketchat_client()
 
@@ -28,11 +29,14 @@ def grade_checkpoint_1() -> bool:
 
 @grader
 def grade_checkpoint_2() -> bool:
-    history = get_rocketchat_personal_chat_history(rocket_client, 'Chen Xinyi')
-    for msg in history:
-        if str(REFERENCE_ANSWER) in msg:
-            return True
-    return False
+    history = get_rocketchat_personal_chat_history(
+        rocket_client, 'Chen Xinyi', content_only=False
+    )
+    return any(
+        msg.get('u', {}).get('username') == 'theagentcompany'
+        and ANSWER_PATTERN.search(msg.get('msg', ''))
+        for msg in history
+    )
 
 
 def grade_checkpoints(trajectory=""):
