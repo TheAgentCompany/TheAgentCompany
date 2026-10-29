@@ -94,18 +94,31 @@ before, you need to pass environment LLM keys to the evaluator since
 some graders require LLMs to evaluate the results. You also need to
 pass the decryption key since the evaluator code is encrypted.
 
+For checkpoint predicates evaluated through Codex CLI, set `CODEX_JUDGE_MODEL` to the
+explicit Codex model identifier and make Codex CLI available in a trusted evaluator
+runtime, isolated from the examinee. Authenticate that runtime using `codex login --device-auth`
+and keep its credential directory outside the examinee container and workspace. The evaluator
+does not perform interactive authentication. It disables shell, apps, browser, computer,
+subagent and code-mode tools and uses an ephemeral read-only session. Use `CODEX_CLI` to
+select the executable and `CODEX_JUDGE_TIMEOUT_SECONDS` to adjust the per-judgment timeout
+(default: 120 seconds). The mini deployment procedure uses a separate trusted grader container.
+The existing `LITELLM_*` settings remain necessary for NPCs and any other LLM-based runtime
+behavior. Codex judging uses the same yes/no predicate and does not change checkpoint weights
+or scoring strategies.
+
 ```bash
 LITELLM_API_KEY=<environment_llm_api_key> \
 LITELLM_BASE_URL=<environment_llm_base_url> \
 LITELLM_MODEL=<environment_llm_model_name> \
+CODEX_JUDGE_MODEL=<codex_model_id> \
 DECRYPTION_KEY='theagentcompany is all you need' \
-python_default /utils/eval.py --trajectory_path TRAJECTORY_PATH --output_path OUTPUT_PATH
+python_default /utils/eval.py --trajectory_path TRAJECTORY_PATH --result_path RESULT_PATH
 ```
 
 whose usage is:
 
 ```
-usage: eval.py [-h] [--trajectory_path TRAJECTORY_PATH] [--output_path OUTPUT_PATH]
+usage: eval.py [-h] [--trajectory_path TRAJECTORY_PATH] [--result_path RESULT_PATH]
 
 Grade checkpoints from trajectory and save results
 
@@ -113,7 +126,7 @@ options:
   -h, --help            show this help message and exit
   --trajectory_path TRAJECTORY_PATH
                         Path to the trajectory file
-  --output_path OUTPUT_PATH
+  --result_path RESULT_PATH
                         Path to save the output JSON
 ```
 

@@ -6,6 +6,9 @@ import subprocess
 import functools
 import re
 import requests
+import json
+import tempfile
+import uuid
 
 import litellm
 from rocketchat_API.rocketchat import RocketChat
@@ -32,6 +35,17 @@ class MockRocketChatClient:
         return method
 
 
+class CodexJudgeError(RuntimeError):
+    """A Codex judging operation failed and must not count as a negative score."""
+
+    def __init__(self, code: str, correlation_id: str, cause: Exception = None):
+        safe_code = code if re.fullmatch(r'[A-Za-z0-9_.-]{1,64}', code) else 'judge_failure'
+        super().__init__(f'Codex judge failed [code={safe_code} correlation_id={correlation_id}]')
+        self.code = safe_code
+        self.correlation_id = correlation_id
+        self.__cause__ = cause
+
+
 def grader(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -42,6 +56,8 @@ def grader(func):
                 return False
             return result
         except Exception as e:
+            if isinstance(e, CodexJudgeError):
+                raise
             logging.error(f"Error in {func.__name__}: {str(e)}")
             return False
     return wrapper
@@ -59,6 +75,83 @@ def llm_complete(messages):
         model=LITELLM_MODEL,
         messages=messages
     ).json()
+
+
+def codex_judge(prompt: str, image_path: str = None) -> bool:
+    """Run the yes/no checkpoint judge through the configured isolated CLI wrapper."""
+    correlation_id = uuid.uuid4().hex
+    model = os.environ.get('CODEX_JUDGE_MODEL')
+    if not model:
+        raise CodexJudgeError('configuration_missing', correlation_id)
+
+    schema = {
+        "type": "object",
+        "properties": {"answer": {"type": "string", "enum": ["yes", "no"]}},
+        "required": ["answer"],
+        "additionalProperties": False,
+    }
+    with tempfile.TemporaryDirectory(prefix='codex-judge-') as temp_dir:
+        schema_path = os.path.join(temp_dir, 'schema.json')
+        output_path = os.path.join(temp_dir, 'answer.json')
+        with open(schema_path, 'w', encoding='utf-8') as schema_file:
+            json.dump(schema, schema_file)
+        command = [
+            os.environ.get('CODEX_CLI', 'codex'), '--ask-for-approval', 'never',
+            'exec', '--json',
+            '--output-schema', schema_path, '-o', output_path, '--model', model,
+            '--sandbox', 'read-only', '--ephemeral',
+            '--ignore-user-config', '--skip-git-repo-check', '-C', temp_dir,
+            '--disable', 'shell_tool', '--disable', 'apps', '--disable', 'browser_use',
+            '--disable', 'computer_use', '--disable', 'multi_agent',
+            '--disable', 'code_mode_host', '-',
+        ]
+        if image_path:
+            command[-1:-1] = ['--image', image_path]
+        try:
+            completed = subprocess.run(
+                command,
+                input=prompt,
+                text=True,
+                capture_output=True,
+                timeout=int(os.environ.get('CODEX_JUDGE_TIMEOUT_SECONDS', '120')),
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired, ValueError) as error:
+            code = 'timeout' if isinstance(error, subprocess.TimeoutExpired) else 'process_start_failed'
+            raise CodexJudgeError(code, correlation_id, error) from error
+
+        events = []
+        try:
+            for line in completed.stdout.splitlines():
+                events.append(json.loads(line))
+        except (json.JSONDecodeError, AttributeError) as error:
+            raise CodexJudgeError('invalid_event_stream', correlation_id, error) from error
+
+        for event in events:
+            if not isinstance(event, dict):
+                raise CodexJudgeError('invalid_event_stream', correlation_id)
+            if event.get('type') in ('error', 'turn.failed'):
+                code = event['type'].replace('.', '_')
+                details = event.get('error')
+                event_code = event.get('code')
+                if event_code is None and isinstance(details, dict):
+                    event_code = details.get('code')
+                if isinstance(event_code, str) and re.fullmatch(r'[A-Za-z0-9_.-]{1,64}', event_code):
+                    code = f'{code}.{event_code}'
+                raise CodexJudgeError(code, correlation_id)
+        if completed.returncode != 0:
+            cause = subprocess.CalledProcessError(completed.returncode, command[0])
+            raise CodexJudgeError('process_exit', correlation_id, cause) from cause
+        if not any(event.get('type') == 'turn.completed' for event in events):
+            raise CodexJudgeError('turn_not_completed', correlation_id)
+        try:
+            with open(output_path, encoding='utf-8') as result_file:
+                result = json.load(result_file)
+        except (OSError, json.JSONDecodeError) as error:
+            raise CodexJudgeError('invalid_result', correlation_id, error) from error
+        if not isinstance(result, dict) or set(result) != {'answer'} or result['answer'] not in ('yes', 'no'):
+            raise CodexJudgeError('invalid_result', correlation_id)
+        return result['answer'] == 'yes'
 
 
 def create_rocketchat_client(username='theagentcompany', password='theagentcompany'):
@@ -229,12 +322,10 @@ def evaluate_with_llm(content: str, predicate: str, additional_prompt: str = '',
         query = f'Does the following picture indicate {predicate}?'
 
     query += f' Please answer "yes" if it does, or "no" if it does not. {additional_prompt}'
-    content = [
-        {
-            "type": "text",
-            "text": query
-        }
-    ]
+    if os.environ.get('CODEX_JUDGE_MODEL') and not TEST_MODE:
+        return codex_judge(query, image_path)
+
+    content = [{"type": "text", "text": query}]
     if image_path:
         try:
             with open(image_path, "rb") as f:

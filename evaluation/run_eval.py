@@ -7,6 +7,7 @@ import json
 import yaml
 import tempfile
 import base64
+import shlex
 
 from openhands.controller.state.state import State
 from openhands.core.config import (
@@ -162,10 +163,23 @@ def run_solver(runtime: Runtime, task_name: str, config: OpenHandsConfig, depend
 
 
 def run_evaluator(runtime: Runtime, env_llm_config: LLMConfig, trajectory_path: str, result_path: str):
+    codex_judge_model = os.environ.get('CODEX_JUDGE_MODEL')
+    codex_judge_env = (
+        f"CODEX_JUDGE_MODEL={shlex.quote(codex_judge_model)} "
+        if codex_judge_model else ''
+    )
+    codex_cli = os.environ.get('CODEX_CLI')
+    codex_cli_env = f"CODEX_CLI={shlex.quote(codex_cli)} " if codex_cli else ''
+    codex_timeout = os.environ.get('CODEX_JUDGE_TIMEOUT_SECONDS')
+    codex_timeout_env = (
+        f"CODEX_JUDGE_TIMEOUT_SECONDS={shlex.quote(codex_timeout)} "
+        if codex_timeout else ''
+    )
     command = (
         f"LITELLM_API_KEY={env_llm_config.api_key.get_secret_value() if env_llm_config.api_key else None} "
         f"LITELLM_BASE_URL={env_llm_config.base_url} "
         f"LITELLM_MODEL={env_llm_config.model} "
+        f"{codex_judge_env}{codex_cli_env}{codex_timeout_env}"
         f"DECRYPTION_KEY='theagentcompany is all you need' "  # Hardcoded Key
         f"python_default /utils/eval.py --trajectory_path {trajectory_path} --result_path {result_path}"
     )
