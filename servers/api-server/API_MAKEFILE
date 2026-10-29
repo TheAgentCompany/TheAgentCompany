@@ -33,8 +33,10 @@ reset-gitlab: init
 	docker compose -p theagentcompany stop gitlab
 	@echo "remove gitlab container..."
 	docker compose -p theagentcompany rm -f gitlab
-	@echo "start gitlab from clean state..."
-	docker compose -p theagentcompany up gitlab -d
+	@echo "start gitlab and wait for its healthcheck..."
+	docker compose -p theagentcompany up --wait --wait-timeout 900 -d gitlab
+	@echo "renew expired benchmark root-token..."
+	docker compose -p theagentcompany exec -T gitlab gitlab-rails runner 'token = User.find_by!(username: "root").personal_access_tokens.find_by!(name: "root-token"); token.update!(expires_at: 365.days.from_now) if token.expired?'
 
 # Sotopia Redis
 reset-sotopia-redis: init

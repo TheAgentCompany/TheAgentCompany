@@ -105,15 +105,16 @@ class AgentProfile(JsonModel):
         global_key_prefix = ""  # clear prefix
         model_key_prefix = "sotopia.database.persistent_profile.AgentProfile"  # set correct prefix to match sotopia package
 
-def check_url(url):
+def check_url(url, headers=None):
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers, timeout=(5, 15))
         if response.status_code == 200:
             print("Web service is up!")
             return 200, "Web service is up!"
         else:
             return response.status_code, "Web service is not available yet"
-    except requests.ConnectionError:
+    except (requests.ConnectionError, requests.Timeout) as e:
+        logging.warning("Web service health check request failed: %s", e)
         print("Web service is not available yet. Retrying...")
         return 500, "Web service is not available yet"
 
