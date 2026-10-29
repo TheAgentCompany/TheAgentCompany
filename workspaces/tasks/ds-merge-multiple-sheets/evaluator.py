@@ -42,8 +42,8 @@ def found_matching_row(df, sheet: list):
             matching_rows = df[cond]
             if matching_rows.empty:
                 return False
-    except Exception as e:
-        logging.error("Error finding matching row: %s", e)
+    except (AttributeError, TypeError, ValueError, IndexError) as e:
+        logging.warning("Cannot match malformed spreadsheet data (%s)", type(e).__name__)
         return False
     return True
 
