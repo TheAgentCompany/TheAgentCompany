@@ -1,7 +1,7 @@
 """Focused tests for the event-endpoint checkpoint's bounded request."""
 
+import importlib
 import importlib.util
-import functools
 import sys
 import unittest
 from pathlib import Path
@@ -11,29 +11,47 @@ from unittest.mock import patch
 
 TASK_DIR = Path(__file__).resolve().parent
 BASE_IMAGE_DIR = TASK_DIR.parents[1] / "base_image"
-sys.path.insert(0, str(BASE_IMAGE_DIR))
 
 
-def grader(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
+def load_evaluator():
+    """Load the evaluator with the production grader and isolated optional deps."""
+    litellm_stub = ModuleType("litellm")
+    rocketchat_package_stub = ModuleType("rocketchat_API")
+    rocketchat_package_stub.__path__ = []
+    rocketchat_module_stub = ModuleType("rocketchat_API.rocketchat")
+
+    class DummyRocketChat:
+        def __init__(self, *args, **kwargs):
+            pass
+
+    rocketchat_module_stub.RocketChat = DummyRocketChat
+
+    dependencies = {
+        "litellm": litellm_stub,
+        "rocketchat_API": rocketchat_package_stub,
+        "rocketchat_API.rocketchat": rocketchat_module_stub,
+    }
+    with patch.dict(sys.modules, dependencies):
+        original_path = sys.path[:]
+        sys.path.insert(0, str(BASE_IMAGE_DIR))
         try:
-            return func(*args, **kwargs)
-        except Exception:
-            return False
+            # Ensure this import resolves to the task's actual shared common.py,
+            # regardless of what another test has loaded under the same name.
+            sys.modules.pop("common", None)
+            sys.modules.pop("config", None)
+            importlib.import_module("common")
 
-    return wrapper
+            spec = importlib.util.spec_from_file_location(
+                "sde_debug_crashed_server_evaluator", TASK_DIR / "evaluator.py"
+            )
+            evaluator_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(evaluator_module)
+            return evaluator_module
+        finally:
+            sys.path[:] = original_path
 
 
-common_stub = ModuleType("common")
-common_stub.create_rocketchat_client = lambda: object()
-common_stub.get_rocketchat_personal_chat_history = lambda *args, **kwargs: []
-common_stub.grader = grader
-sys.modules["common"] = common_stub
-
-spec = importlib.util.spec_from_file_location("sde_debug_crashed_server_evaluator", TASK_DIR / "evaluator.py")
-evaluator = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(evaluator)
+evaluator = load_evaluator()
 
 
 class GradeCheckpoint5TimeoutTests(unittest.TestCase):
@@ -45,10 +63,15 @@ class GradeCheckpoint5TimeoutTests(unittest.TestCase):
         get.assert_called_once_with("http://localhost:5000/events", timeout=180)
 
     def test_timeout_is_a_failed_checkpoint(self):
-        with patch.object(evaluator.requests, "get", side_effect=evaluator.requests.Timeout("slow endpoint")) as get:
+        with patch.object(
+            evaluator.requests,
+            "get",
+            side_effect=evaluator.requests.Timeout("slow endpoint"),
+        ) as get:
             self.assertFalse(evaluator.grade_checkpoint5())
 
         get.assert_called_once_with("http://localhost:5000/events", timeout=180)
+
 
 if __name__ == "__main__":
     unittest.main()
