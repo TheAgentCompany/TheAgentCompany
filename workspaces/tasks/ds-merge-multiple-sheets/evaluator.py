@@ -44,6 +44,7 @@ def found_matching_row(df, sheet: list):
                 return False
     except Exception as e:
         logging.error("Error finding matching row: %s", e)
+        return False
     return True
 
 def read_sheet(sheet_index: int):
