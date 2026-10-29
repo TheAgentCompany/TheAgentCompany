@@ -400,6 +400,8 @@ def evaluate_chat_history_with_llm(rocket_client, username: str, predicate: str)
         
         return evaluate_with_llm(str(messages), predicate)
 
+    except CodexJudgeError:
+        raise
     except Exception as e:
         logging.error(f"Failed to evaluate chat history for user {username}: {str(e)}", exc_info=True)
         return False

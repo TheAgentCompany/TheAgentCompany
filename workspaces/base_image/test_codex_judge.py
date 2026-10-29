@@ -13,7 +13,13 @@ rocketchat_api.rocketchat = types.SimpleNamespace(RocketChat=object)
 sys.modules.setdefault('rocketchat_API', rocketchat_api)
 sys.modules.setdefault('rocketchat_API.rocketchat', rocketchat_api.rocketchat)
 
-from common import CodexJudgeError, codex_judge, evaluate_with_llm, grader
+from common import (
+    CodexJudgeError,
+    codex_judge,
+    evaluate_chat_history_with_llm,
+    evaluate_with_llm,
+    grader,
+)
 
 
 class CodexJudgeTest(unittest.TestCase):
@@ -149,6 +155,19 @@ class CodexJudgeTest(unittest.TestCase):
         with patch.dict(os.environ, {'CODEX_JUDGE_MODEL': 'configured-luna'}), \
                 patch('common.subprocess.run', side_effect=run):
             self.assertTrue(graded_predicate())
+
+    def test_chat_history_judge_failure_propagates_through_grader(self):
+        @grader
+        def graded_chat_predicate():
+            return evaluate_chat_history_with_llm(object(), 'reviewer', 'the chat satisfies the predicate')
+
+        with patch.dict(os.environ, {'CODEX_JUDGE_MODEL': 'configured-luna'}), \
+                patch('common.get_rocketchat_personal_chat_history', return_value=['evidence']), \
+                patch('common.subprocess.run', return_value=self.completed(
+                    '{"type":"turn.failed","error":{"message":"private detail"}}\n')):
+            with self.assertRaises(CodexJudgeError) as raised:
+                graded_chat_predicate()
+        self.assertEqual(raised.exception.code, 'turn_failed')
 
 
 if __name__ == '__main__':
