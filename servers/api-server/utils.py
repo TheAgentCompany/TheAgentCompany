@@ -118,15 +118,24 @@ def check_url(url):
         return 500, "Web service is not available yet"
 
 def execute_command(command):
+    result = subprocess.run(
+        command,
+        shell=True,
+        check=True,
+        capture_output=True,
+        text=True,
+        cwd=EXECUTION_DIR,
+    )
+    return result.stdout.strip()
+
+
+def _execute_async_command(command):
     try:
-        print(EXECUTION_DIR, command)
-        os.chdir(EXECUTION_DIR)
-        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        return f"Command execute failed: {e}"
-    except Exception as e:
-        return f"Error : {e}"
+        execute_command(command)
+    except Exception:
+        logging.exception("Asynchronous controller command failed")
 
 def async_execute_command(command):
-    threading.Thread(target=execute_command, args=(command,)).start()
+    thread = threading.Thread(target=_execute_async_command, args=(command,))
+    thread.start()
+    return thread

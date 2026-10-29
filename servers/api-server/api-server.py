@@ -8,18 +8,18 @@ def reset_owncloud():
     # owncloud reset is essentially a restart
     # since it takes a while to stop, we need to make sure this is synchronous
     execute_command('make reset-owncloud')
-    return jsonify({"message": "Reset ownCloud command initiated"}), 202
+    return jsonify({"message": "ownCloud reset command completed"}), 200
 
 @app.route('/api/reset-rocketchat', methods=['POST'])
 def reset_rocketchat():
     async_execute_command('make reset-sotopia-redis')
     async_execute_command('make reset-rocketchat')
-    return jsonify({"message": "Reset RocketChat command initiated"}), 202
+    return jsonify({"message": "Rocket.Chat reset accepted"}), 202
 
 @app.route('/api/reset-plane', methods=['POST'])
 def reset_plane():
     async_execute_command('make reset-plane')
-    return jsonify({"message": "Reset Plane command initiated"}), 202
+    return jsonify({"message": "Plane reset accepted"}), 202
 
 @app.route('/api/reset-gitlab', methods=['POST'])
 def reset_gitlab():
@@ -28,7 +28,7 @@ def reset_gitlab():
     # devnote: health check + polling on client side is still needed because
     # gitlab service takes a while to fully function after the container starts
     execute_command('make reset-gitlab')
-    return jsonify({"message": "Reset GitLab command initiated"}), 202
+    return jsonify({"message": "GitLab reset command completed"}), 200
 
 @app.route('/api/healthcheck/owncloud', methods=['GET'])
 def healthcheck_owncloud():
