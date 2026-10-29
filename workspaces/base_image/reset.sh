@@ -8,7 +8,10 @@ reset_services=()
 check_service_health() {
     local service=$1
     local http_status
-    http_status=$(curl -s -o /dev/null -w "%{http_code}" -I "http://the-agent-company.com:2999/api/healthcheck/${service}")
+    http_status=$(curl \
+        --silent --show-error --connect-timeout 5 --max-time 15 \
+        -o /dev/null -w "%{http_code}" -I \
+        "http://the-agent-company.com:2999/api/healthcheck/${service}")
     echo "Service $service healthcheck status: $http_status"
     [ "$http_status" = "200" ]
 }
@@ -50,7 +53,9 @@ wait_for_services() {
 for service in rocketchat plane gitlab owncloud; do
     if grep -q "$service" /utils/dependencies.yml; then
         echo "Resetting $service..."
-        curl -X POST "http://the-agent-company.com:2999/api/reset-${service}"
+        curl \
+            --fail-with-body --silent --show-error --connect-timeout 10 --max-time 1800 \
+            -X POST "http://the-agent-company.com:2999/api/reset-${service}"
         reset_services+=("$service")
     fi
 done
