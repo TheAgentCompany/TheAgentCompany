@@ -1,27 +1,26 @@
-# This file try to download the necessary file when using plane to avoid license problem
-# The backup data should manually put under this directory
+#!/bin/sh
+set -eu
 
-ROOT_PATH=$(git rev-parse --show-toplevel)
-PLANE_INSTALL_DIR=$ROOT_PATH/servers/plane/plane-app
-BRANCH=master
+# Plane is deployed from inside the API-server image, which does not contain
+# the source repository metadata. Resolve the install directory from this file.
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PLANE_INSTALL_DIR="$SCRIPT_DIR/plane-app"
+mkdir -p "$PLANE_INSTALL_DIR"
 
-echo $PLANE_INSTALL_DIR
+TEMP_DIR=$(mktemp -d "$PLANE_INSTALL_DIR/.download.XXXXXX")
+trap 'rm -rf "$TEMP_DIR"' EXIT HUP INT TERM
 
-if [ ! -d "$PLANE_INSTALL_DIR" ]; then
-    echo "Directory $PLANE_INSTALL_DIR does not exist. Creating it."
-    mkdir -p $PLANE_INSTALL_DIR
-fi
+curl -fsSL -H 'Cache-Control: no-cache, no-store' \
+    -o "$TEMP_DIR/docker-compose.yaml" \
+    https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
+curl -fsSL -H 'Cache-Control: no-cache, no-store' \
+    -o "$TEMP_DIR/plane.env" \
+    https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/variables.env
+curl -fsSL -H 'Cache-Control: no-cache, no-store' \
+    -o "$TEMP_DIR/restore.sh" \
+    https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore-customized.sh
 
-rm -rf $PLANE_INSTALL_DIR/docker-compose.yml
-rm -rf $PLANE_INSTALL_DIR/plane.env
-rm -rf $PLANE_INSTALL_DIR/restore.sh
-
-# v0.22-dev
-# Aug 30 2024 latest commit
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/docker-compose.yaml https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/docker-compose.yml
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/plane.env https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/variables.env
-curl -H 'Cache-Control: no-cache, no-store' -s -o $PLANE_INSTALL_DIR/restore.sh https://raw.githubusercontent.com/TheAgentCompany/plane/refs/heads/stable/deploy/selfhost/restore-customized.sh
-
-chmod 777 $PLANE_INSTALL_DIR/docker-compose.yaml
-chmod 777 $PLANE_INSTALL_DIR/plane.env
-chmod 777 $PLANE_INSTALL_DIR/restore.sh
+chmod +x "$TEMP_DIR/restore.sh"
+mv "$TEMP_DIR/docker-compose.yaml" "$PLANE_INSTALL_DIR/docker-compose.yaml"
+mv "$TEMP_DIR/plane.env" "$PLANE_INSTALL_DIR/plane.env"
+mv "$TEMP_DIR/restore.sh" "$PLANE_INSTALL_DIR/restore.sh"
